@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_host">
+    <resultMap id="RM-NebulaPublishHost" type="com.olymtech.nebula.entity.NebulaPublishHost">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_module_id" property="publishModuleId" jdbcType="INTEGER" />
+        <result column="publish_project" property="publishProject" jdbcType="VARCHAR" />
+        <result column="pass_publish_host_name" property="passPublishHostName" jdbcType="VARCHAR" />
+        <result column="pass_publish_host_ip" property="passPublishHostIp" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="NebulaPublishHost-Base-Column-List">
+        id,
+        publish_module_id,
+        publish_project,
+        pass_publish_host_name,
+        pass_publish_host_ip
+    </sql>
+    <select id="Nebula-NebulaPublishHostDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishHost">
+        select
+        <include refid="NebulaPublishHost-Base-Column-List"/>
+        from nebula_publish_host
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishHostDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_host
+    </select>
+    <select id="Nebula-NebulaPublishHostDao-Select-Count-Where" parameterType="NebulaPublishHost" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_host
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishModuleId != null">
+                publish_module_id = #{publishModuleId}
+            </if>
+            <if test="publishProject != null">
+                AND publish_project = #{publishProject}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishHostDao-Select-All-Paging-Where" parameterType="NebulaPublishHost" resultMap="RM-NebulaPublishHost">
+        select <include refid="NebulaPublishHost-Base-Column-List"/> from nebula_publish_host
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishModuleId != null">
+                publish_module_id = #{publishModuleId}
+            </if>
+            <if test="publishProject != null">
+                AND publish_project = #{publishProject}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishHostDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_host
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishHostDao-Insert" parameterType="NebulaPublishHost">
+        insert into nebula_publish_host (
+        id,
+        publish_module_id,
+        publish_project,
+        pass_publish_host_name,
+        pass_publish_host_ip)
+        values (#{id,jdbcType=INTEGER},
+        #{publishModuleId,jdbcType=INTEGER},
+        #{publishProject,jdbcType=VARCHAR},
+        #{passPublishHostName,jdbcType=VARCHAR},
+        #{passPublishHostIp,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishHostDao-Insert-Selective" parameterType="NebulaPublishHost">
+        insert into nebula_publish_host
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="publishModuleId != null" >
+                publish_module_id,
+            </if>
+            <if test="publishProject != null" >
+                publish_project,
+            </if>
+            <if test="passPublishHostName != null" >
+                pass_publish_host_name,
+            </if>
+            <if test="passPublishHostIp != null" >
+                pass_publish_host_ip,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishModuleId != null" >
+                #{publishModuleId,jdbcType=INTEGER},
+            </if>
+            <if test="publishProject != null" >
+                #{publishProject,jdbcType=VARCHAR},
+            </if>
+            <if test="passPublishHostName != null" >
+                #{passPublishHostName,jdbcType=VARCHAR},
+            </if>
+            <if test="passPublishHostIp != null" >
+                #{passPublishHostIp,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishHostDao-Update-By-Id-Selective" parameterType="NebulaPublishHost">
+        update nebula_publish_host
+        <set>
+            <if test="publishModuleId != null" >
+                publish_module_id = #{publishModuleId,jdbcType=INTEGER},
+            </if>
+            <if test="publishProject != null" >
+                publish_project = #{publishProject,jdbcType=VARCHAR},
+            </if>
+            <if test="passPublishHostName != null" >
+                pass_publish_host_name = #{passPublishHostName,jdbcType=VARCHAR},
+            </if>
+            <if test="passPublishHostIp != null" >
+                pass_publish_host_ip = #{passPublishHostIp,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishHostDao-Update-By-Id" parameterType="NebulaPublishHost">
+        update nebula_publish_host set
+        publish_module_id = #{publishModuleId,jdbcType=INTEGER},
+        publish_project = #{publishProject,jdbcType=VARCHAR},
+        pass_publish_host_name = #{passPublishHostName,jdbcType=VARCHAR},
+        pass_publish_host_ip = #{passPublishHostIp,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

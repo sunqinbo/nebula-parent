@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_script_group_relation">
+    <resultMap id="RM-NebulaScriptGroupRelation" type="com.olymtech.nebula.entity.NebulaScriptGroupRelation">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="script_group_id" property="scriptGroupId" jdbcType="INTEGER" />
+        <result column="script_id" property="scriptId" jdbcType="INTEGER" />
+        <result column="script_seq" property="scriptSeq" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="NebulaScriptGroupRelation-Base-Column-List">
+        id,
+        script_group_id,
+        script_id,
+        script_seq
+    </sql>
+    <select id="Nebula-NebulaScriptGroupRelationDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaScriptGroupRelation">
+        select
+        <include refid="NebulaScriptGroupRelation-Base-Column-List"/>
+        from nebula_script_group_relation
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaScriptGroupRelationDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_script_group_relation
+    </select>
+    <select id="Nebula-NebulaScriptGroupRelationDao-Select-Count-Where" parameterType="NebulaScriptGroupRelation" resultType="java.lang.Integer">
+        select count(id) from nebula_script_group_relation
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="scriptGroupId != null">
+                script_group_id = #{scriptGroupId}
+            </if>
+            <if test="scriptId != null">
+                AND script_id = #{scriptId}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaScriptGroupRelationDao-Select-All-Paging-Where" parameterType="NebulaScriptGroupRelation" resultMap="RM-NebulaScriptGroupRelation">
+        select <include refid="NebulaScriptGroupRelation-Base-Column-List"/> from nebula_script_group_relation
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="scriptGroupId != null">
+                script_group_id = #{scriptGroupId}
+            </if>
+            <if test="scriptId != null">
+                AND script_id = #{scriptId}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaScriptGroupRelationDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_script_group_relation
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaScriptGroupRelationDao-Insert" parameterType="NebulaScriptGroupRelation">
+        insert into nebula_script_group_relation (
+        id,
+        script_group_id,
+        script_id,
+        script_seq)
+        values (#{id,jdbcType=INTEGER},
+        #{scriptGroupId,jdbcType=INTEGER},
+        #{scriptId,jdbcType=INTEGER},
+        #{scriptSeq,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaScriptGroupRelationDao-Insert-Selective" parameterType="NebulaScriptGroupRelation">
+        insert into nebula_script_group_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="scriptGroupId != null" >
+                script_group_id,
+            </if>
+            <if test="scriptId != null" >
+                script_id,
+            </if>
+            <if test="scriptSeq != null" >
+                script_seq,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="scriptGroupId != null" >
+                #{scriptGroupId,jdbcType=INTEGER},
+            </if>
+            <if test="scriptId != null" >
+                #{scriptId,jdbcType=INTEGER},
+            </if>
+            <if test="scriptSeq != null" >
+                #{scriptSeq,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaScriptGroupRelationDao-Update-By-Id-Selective" parameterType="NebulaScriptGroupRelation">
+        update nebula_script_group_relation
+        <set>
+            <if test="scriptGroupId != null" >
+                script_group_id = #{scriptGroupId,jdbcType=INTEGER},
+            </if>
+            <if test="scriptId != null" >
+                script_id = #{scriptId,jdbcType=INTEGER},
+            </if>
+            <if test="scriptSeq != null" >
+                script_seq = #{scriptSeq,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaScriptGroupRelationDao-Update-By-Id" parameterType="NebulaScriptGroupRelation">
+        update nebula_script_group_relation set
+        script_group_id = #{scriptGroupId,jdbcType=INTEGER},
+        script_id = #{scriptId,jdbcType=INTEGER},
+        script_seq = #{scriptSeq,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_svn_baseline">
+    <resultMap id="RM-NebulaPublishSvnBaseline" type="com.olymtech.nebula.entity.NebulaPublishSvnBaseline">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="product_src_svn" property="productSrcSvn" jdbcType="VARCHAR" />
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
+        <result column="src_svn_version" property="srcSvnVersion" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="NebulaPublishSvnBaseline-Base-Column-List">
+        id,
+        product_name,
+        product_src_svn,
+        publish_event_id,
+        src_svn_version
+    </sql>
+    <select id="Nebula-NebulaPublishSvnBaselineDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishSvnBaseline">
+        select
+        <include refid="NebulaPublishSvnBaseline-Base-Column-List"/>
+        from nebula_publish_svn_baseline
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishSvnBaselineDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_svn_baseline
+    </select>
+    <select id="Nebula-NebulaPublishSvnBaselineDao-Select-Count-Where" parameterType="NebulaPublishSvnBaseline" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_svn_baseline
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="productName != null">
+                product_name = #{productName}
+            </if>
+            <if test="publishEventId != null">
+                AND publish_event_id = #{publishEventId}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishSvnBaselineDao-Select-All-Paging-Where" parameterType="NebulaPublishSvnBaseline" resultMap="RM-NebulaPublishSvnBaseline">
+        select <include refid="NebulaPublishSvnBaseline-Base-Column-List"/> from nebula_publish_svn_baseline
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="productName != null">
+                product_name = #{productName}
+            </if>
+            <if test="publishEventId != null">
+                AND publish_event_id = #{publishEventId}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishSvnBaselineDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_svn_baseline
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishSvnBaselineDao-Insert" parameterType="NebulaPublishSvnBaseline">
+        insert into nebula_publish_svn_baseline (
+        id,
+        product_name,
+        product_src_svn,
+        publish_event_id,
+        src_svn_version)
+        values (#{id,jdbcType=INTEGER},
+        #{productName,jdbcType=VARCHAR},
+        #{productSrcSvn,jdbcType=VARCHAR},
+        #{publishEventId,jdbcType=INTEGER},
+        #{srcSvnVersion,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishSvnBaselineDao-Insert-Selective" parameterType="NebulaPublishSvnBaseline">
+        insert into nebula_publish_svn_baseline
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="productName != null" >
+                product_name,
+            </if>
+            <if test="productSrcSvn != null" >
+                product_src_svn,
+            </if>
+            <if test="publishEventId != null" >
+                publish_event_id,
+            </if>
+            <if test="srcSvnVersion != null" >
+                src_svn_version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="productName != null" >
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productSrcSvn != null" >
+                #{productSrcSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="publishEventId != null" >
+                #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="srcSvnVersion != null" >
+                #{srcSvnVersion,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishSvnBaselineDao-Update-By-Id-Selective" parameterType="NebulaPublishSvnBaseline">
+        update nebula_publish_svn_baseline
+        <set>
+            <if test="productName != null" >
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productSrcSvn != null" >
+                product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="srcSvnVersion != null" >
+                src_svn_version = #{srcSvnVersion,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishSvnBaselineDao-Update-By-Id" parameterType="NebulaPublishSvnBaseline">
+        update nebula_publish_svn_baseline set
+        product_name = #{productName,jdbcType=VARCHAR},
+        product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
+        publish_event_id = #{publishEventId,jdbcType=INTEGER},
+        src_svn_version = #{srcSvnVersion,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

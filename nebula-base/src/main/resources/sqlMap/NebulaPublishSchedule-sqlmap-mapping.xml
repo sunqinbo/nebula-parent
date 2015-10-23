@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_schedule">
+    <resultMap id="RM-NebulaPublishSchedule" type="com.olymtech.nebula.entity.NebulaPublishSchedule">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
+        <result column="publish_action" property="publishAction" jdbcType="VARCHAR" />
+        <result column="is_success_action" property="isSuccessAction" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="RM-NebulaPublishSchedule-Long" type="com.olymtech.nebula.entity.NebulaPublishSchedule" extends="RM-NebulaPublishSchedule" >
+        <result column="error_msg" property="errorMsg" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="NebulaPublishSchedule-Base-Column-List">
+        id,
+        publish_event_id,
+        publish_action,
+        is_success_action
+    </sql>
+    <sql id="NebulaPublishSchedule-Long-Column-List" >
+        error_msg
+    </sql>
+    <select id="Nebula-NebulaPublishScheduleDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishSchedule-Long">
+        select
+        <include refid="NebulaPublishSchedule-Base-Column-List"/>
+        ,
+        <include refid="NebulaPublishSchedule-Long-Column-List" />
+        from nebula_publish_schedule
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishScheduleDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_schedule
+    </select>
+    <select id="Nebula-NebulaPublishScheduleDao-Select-Count-Where" parameterType="NebulaPublishSchedule" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_schedule
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishAction != null">
+                AND publish_action = #{publishAction}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishScheduleDao-Select-All-Paging-Where" parameterType="NebulaPublishSchedule" resultMap="RM-NebulaPublishSchedule-Long">
+        select <include refid="NebulaPublishSchedule-Base-Column-List"/> from nebula_publish_schedule
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishAction != null">
+                AND publish_action = #{publishAction}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishScheduleDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_schedule
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishScheduleDao-Insert" parameterType="NebulaPublishSchedule">
+        insert into nebula_publish_schedule (
+        iid,
+        publish_event_id,
+        publish_action,
+        is_success_action,
+        error_msg)
+        values (#{id,jdbcType=INTEGER},
+        #{publishEventId,jdbcType=INTEGER},
+        #{publishAction,jdbcType=VARCHAR},
+        #{isSuccessAction,jdbcType=INTEGER},
+        #{errorMsg,jdbcType=LONGVARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishScheduleDao-Insert-Selective" parameterType="NebulaPublishSchedule">
+        insert into nebula_publish_schedule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="publishEventId != null" >
+                publish_event_id,
+            </if>
+            <if test="publishAction != null" >
+                publish_action,
+            </if>
+            <if test="isSuccessAction != null" >
+                is_success_action,
+            </if>
+            <if test="errorMsg != null" >
+                error_msg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishEventId != null" >
+                #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishAction != null" >
+                #{publishAction,jdbcType=VARCHAR},
+            </if>
+            <if test="isSuccessAction != null" >
+                #{isSuccessAction,jdbcType=INTEGER},
+            </if>
+            <if test="errorMsg != null" >
+                #{errorMsg,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishScheduleDao-Update-By-Id-Selective" parameterType="NebulaPublishSchedule">
+        update nebula_publish_schedule
+        <set>
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishAction != null" >
+                publish_action = #{publishAction,jdbcType=VARCHAR},
+            </if>
+            <if test="isSuccessAction != null" >
+                is_success_action = #{isSuccessAction,jdbcType=INTEGER},
+            </if>
+            <if test="errorMsg != null" >
+                error_msg = #{errorMsg,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishScheduleDao-Update-By-Id" parameterType="NebulaPublishSchedule">
+        update nebula_publish_schedule set
+        publish_event_id = #{publishEventId,jdbcType=INTEGER},
+        publish_action = #{publishAction,jdbcType=VARCHAR},
+        is_success_action = #{isSuccessAction,jdbcType=INTEGER},
+        error_msg = #{errorMsg,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

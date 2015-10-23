@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_event_log">
+    <resultMap id="RM-NebulaPublishEventLog" type="com.olymtech.nebula.entity.NebulaPublishEventLog">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
+        <result column="log_action" property="logAction" jdbcType="VARCHAR" />
+        <result column="log_info" property="logInfo" jdbcType="VARCHAR" />
+        <result column="log_datetime" property="logDatetime" jdbcType="TIMESTAMP" />
+        <result column="opt_emp_id" property="optEmpId" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="NebulaPublishEventLog-Base-Column-List">
+        id,
+        publish_event_id,
+        log_action,
+        log_info,
+        log_datetime,
+        opt_emp_id
+    </sql>
+    <select id="Nebula-NebulaPublishEventLogDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishEventLog">
+        select
+        <include refid="NebulaPublishEventLog-Base-Column-List"/>
+        from nebula_publish_event_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishEventLogDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_event_log
+    </select>
+    <select id="Nebula-NebulaPublishEventLogDao-Select-Count-Where" parameterType="NebulaPublishEventLog" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_event_log
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="optEmpId != null">
+                opt_emp_id = #{optEmpId}
+            </if>
+            <if test="publishEventId != null">
+                AND publish_event_id = #{publishEventId}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishEventLogDao-Select-All-Paging-Where" parameterType="NebulaPublishEventLog" resultMap="RM-NebulaPublishEventLog">
+        select <include refid="NebulaPublishEventLog-Base-Column-List"/> from nebula_publish_event_log
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="optEmpId != null">
+                opt_emp_id = #{optEmpId}
+            </if>
+            <if test="publishEventId != null">
+                AND publish_event_id = #{publishEventId}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishEventLogDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_event_log
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishEventLogDao-Insert" parameterType="NebulaPublishEventLog">
+        insert into nebula_publish_event_log (
+        id,
+        publish_event_id,
+        log_action,
+        log_info,
+        log_datetime,
+        opt_emp_id)
+        values (#{id,jdbcType=INTEGER},
+        #{publishEventId,jdbcType=INTEGER},
+        #{logAction,jdbcType=VARCHAR},
+        #{logInfo,jdbcType=VARCHAR},
+        #{logDatetime,jdbcType=TIMESTAMP},
+        #{optEmpId,jdbcType=INTEGER})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishEventLogDao-Insert-Selective" parameterType="NebulaPublishEventLog">
+        insert into nebula_publish_event_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="publishEventId != null" >
+                publish_event_id,
+            </if>
+            <if test="logAction != null" >
+                log_action,
+            </if>
+            <if test="logInfo != null" >
+                log_info,
+            </if>
+            <if test="logDatetime != null" >
+                log_datetime,
+            </if>
+            <if test="optEmpId != null" >
+                opt_emp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishEventId != null" >
+                #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="logAction != null" >
+                #{logAction,jdbcType=VARCHAR},
+            </if>
+            <if test="logInfo != null" >
+                #{logInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="logDatetime != null" >
+                #{logDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="optEmpId != null" >
+                #{optEmpId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishEventLogDao-Update-By-Id-Selective" parameterType="NebulaPublishEventLog">
+        update nebula_publish_event_log
+        <set>
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="logAction != null" >
+                log_action = #{logAction,jdbcType=VARCHAR},
+            </if>
+            <if test="logInfo != null" >
+                log_info = #{logInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="logDatetime != null" >
+                log_datetime = #{logDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="optEmpId != null" >
+                opt_emp_id = #{optEmpId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishEventLogDao-Update-By-Id" parameterType="NebulaPublishEventLog">
+        update nebula_publish_event_log set
+        publish_event_id = #{publishEventId,jdbcType=INTEGER},
+        log_action = #{logAction,jdbcType=VARCHAR},
+        log_info = #{logInfo,jdbcType=VARCHAR},
+        log_datetime = #{logDatetime,jdbcType=TIMESTAMP},
+        opt_emp_id = #{optEmpId,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

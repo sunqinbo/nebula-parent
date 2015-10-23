@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_script_edit_log">
+    <resultMap id="RM-NebulaScriptEditLog" type="com.olymtech.nebula.entity.NebulaScriptEditLog">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="script_id" property="scriptId" jdbcType="INTEGER" />
+        <result column="log_action" property="logAction" jdbcType="VARCHAR" />
+        <result column="log_info" property="logInfo" jdbcType="VARCHAR" />
+        <result column="log_datetime" property="logDatetime" jdbcType="TIMESTAMP" />
+        <result column="opt_emp_id" property="optEmpId" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="NebulaScriptEditLog-Base-Column-List">
+        id,
+        script_id,
+        log_action,
+        log_info,
+        log_datetime,
+        opt_emp_id
+    </sql>
+    <select id="Nebula-NebulaScriptEditLogDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaScriptEditLog">
+        select
+        <include refid="NebulaScriptEditLog-Base-Column-List"/>
+        from nebula_script_edit_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaScriptEditLogDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_script_edit_log
+    </select>
+    <select id="Nebula-NebulaScriptEditLogDao-Select-Count-Where" parameterType="NebulaScriptEditLog" resultType="java.lang.Integer">
+        select count(id) from nebula_script_edit_log
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="scriptId != null">
+                script_id = #{scriptId}
+            </if>
+            <if test="logAction != null">
+                AND log_action = #{logAction}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaScriptEditLogDao-Select-All-Paging-Where" parameterType="NebulaScriptEditLog" resultMap="RM-NebulaScriptEditLog">
+        select <include refid="NebulaScriptEditLog-Base-Column-List"/> from nebula_script_edit_log
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="scriptId != null">
+                script_id = #{scriptId}
+            </if>
+            <if test="logAction != null">
+                AND log_action = #{logAction}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaScriptEditLogDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_script_edit_log
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaScriptEditLogDao-Insert" parameterType="NebulaScriptEditLog">
+        insert into nebula_script_edit_log (
+        id,
+        script_id,
+        log_action,
+        log_info,
+        log_datetime,
+        opt_emp_id)
+        values (#{id,jdbcType=INTEGER},
+        #{scriptId,jdbcType=INTEGER},
+        #{logAction,jdbcType=VARCHAR},
+        #{logInfo,jdbcType=VARCHAR},
+        #{logDatetime,jdbcType=TIMESTAMP},
+        #{optEmpId,jdbcType=INTEGER})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaScriptEditLogDao-Insert-Selective" parameterType="NebulaScriptEditLog">
+        insert into nebula_script_edit_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="scriptId != null" >
+                script_id,
+            </if>
+            <if test="logAction != null" >
+                log_action,
+            </if>
+            <if test="logInfo != null" >
+                log_info,
+            </if>
+            <if test="logDatetime != null" >
+                log_datetime,
+            </if>
+            <if test="optEmpId != null" >
+                opt_emp_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="scriptId != null" >
+                #{scriptId,jdbcType=INTEGER},
+            </if>
+            <if test="logAction != null" >
+                #{logAction,jdbcType=VARCHAR},
+            </if>
+            <if test="logInfo != null" >
+                #{logInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="logDatetime != null" >
+                #{logDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="optEmpId != null" >
+                #{optEmpId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaScriptEditLogDao-Update-By-Id-Selective" parameterType="NebulaScriptEditLog">
+        update nebula_script_edit_log
+        <set>
+            <if test="scriptId != null" >
+                script_id = #{scriptId,jdbcType=INTEGER},
+            </if>
+            <if test="logAction != null" >
+                log_action = #{logAction,jdbcType=VARCHAR},
+            </if>
+            <if test="logInfo != null" >
+                log_info = #{logInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="logDatetime != null" >
+                log_datetime = #{logDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="optEmpId != null" >
+                opt_emp_id = #{optEmpId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaScriptEditLogDao-Update-By-Id" parameterType="NebulaScriptEditLog">
+        update nebula_script_edit_log set
+        script_id = #{scriptId,jdbcType=INTEGER},
+        log_action = #{logAction,jdbcType=VARCHAR},
+        log_info = #{logInfo,jdbcType=VARCHAR},
+        log_datetime = #{logDatetime,jdbcType=TIMESTAMP},
+        opt_emp_id = #{optEmpId,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

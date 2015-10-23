@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_script">
+    <resultMap id="RM-NebulaScript" type="com.olymtech.nebula.entity.NebulaScript">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="script_name" property="scriptName" jdbcType="VARCHAR" />
+        <result column="script_path" property="scriptPath" jdbcType="VARCHAR" />
+        <result column="script_type" property="scriptType" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="RM-NebulaScript-Long" type="com.olymtech.nebula.entity.NebulaScript" extends="RM-NebulaScript" >
+        <result column="script_context" property="scriptContext" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="NebulaScript-Base-Column-List">
+        id,
+        script_name,
+        script_path,
+        script_type
+    </sql>
+    <sql id="NebulaScript-Long-Column-List" >
+        script_context
+    </sql>
+    <select id="Nebula-NebulaScriptDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaScript-Long">
+        select
+        <include refid="NebulaScript-Base-Column-List"/>
+        ,
+        <include refid="NebulaScript-Long-Column-List"/>
+        from nebula_script
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaScriptDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_script
+    </select>
+    <select id="Nebula-NebulaScriptDao-Select-Count-Where" parameterType="NebulaScript" resultType="java.lang.Integer">
+        select count(id) from nebula_script
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="scriptName != null">
+                script_name = #{scriptName}
+            </if>
+            <if test="scriptType != null">
+                AND script_type = #{scriptType}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaScriptDao-Select-All-Paging-Where" parameterType="NebulaScript" resultMap="RM-NebulaScript-Long">
+        select <include refid="NebulaScript-Base-Column-List"/> from nebula_script
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="scriptName != null">
+                script_name = #{scriptName}
+            </if>
+            <if test="scriptType != null">
+                AND script_type = #{scriptType}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaScriptDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_script
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaScriptDao-Insert" parameterType="NebulaScript">
+        insert into nebula_script (
+        id,
+        script_name,
+        script_path,
+        script_type,
+        script_context)
+        values (#{id,jdbcType=INTEGER},
+        #{scriptName,jdbcType=VARCHAR},
+        #{scriptPath,jdbcType=VARCHAR},
+        #{scriptType,jdbcType=VARCHAR},
+        #{scriptContext,jdbcType=LONGVARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaScriptDao-Insert-Selective" parameterType="NebulaScript">
+        insert into nebula_script
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="scriptName != null" >
+                script_name,
+            </if>
+            <if test="scriptPath != null" >
+                script_path,
+            </if>
+            <if test="scriptType != null" >
+                script_type,
+            </if>
+            <if test="scriptContext != null" >
+                script_context,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="scriptName != null" >
+                #{scriptName,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptPath != null" >
+                #{scriptPath,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptType != null" >
+                #{scriptType,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptContext != null" >
+                #{scriptContext,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaScriptDao-Update-By-Id-Selective" parameterType="NebulaScript">
+        update nebula_script
+        <set>
+            <if test="scriptName != null" >
+                script_name = #{scriptName,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptPath != null" >
+                script_path = #{scriptPath,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptType != null" >
+                script_type = #{scriptType,jdbcType=VARCHAR},
+            </if>
+            <if test="scriptContext != null" >
+                script_context = #{scriptContext,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaScriptDao-Update-By-Id" parameterType="NebulaScript">
+        update nebula_script set
+        script_name = #{scriptName,jdbcType=VARCHAR},
+        script_path = #{scriptPath,jdbcType=VARCHAR},
+        script_type = #{scriptType,jdbcType=VARCHAR},
+        script_context = #{scriptContext,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

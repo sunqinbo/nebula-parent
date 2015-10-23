@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_event">
+    <resultMap id="RM-NebulaPublishEvent" type="com.olymtech.nebula.entity.NebulaPublishEvent">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR" />
+        <result column="publish_product_cname" property="publishProductCname" jdbcType="VARCHAR" />
+        <result column="publish_env" property="publishEnv" jdbcType="VARCHAR" />
+        <result column="publish_svn" property="publishSvn" jdbcType="VARCHAR" />
+        <result column="product_src_svn" property="productSrcSvn" jdbcType="VARCHAR" />
+        <result column="publish_product_key" property="publishProductKey" jdbcType="VARCHAR" />
+        <result column="publish_datetime" property="publishDatetime" jdbcType="TIMESTAMP" />
+        <result column="submit_datetime" property="submitDatetime" jdbcType="TIMESTAMP" />
+        <result column="submit_emp_id" property="submitEmpId" jdbcType="INTEGER" />
+        <result column="is_success_publish" property="isSuccessPublish" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="NebulaPublishEvent-Base-Column-List">
+        id,
+        publish_product_name,
+        publish_product_cname,
+        publish_env,
+        publish_svn,
+        product_src_svn,
+        publish_product_key,
+        publish_datetime,
+        submit_datetime,
+        submit_emp_id,
+        is_success_publish
+    </sql>
+    <select id="Nebula-NebulaPublishEventDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishEvent">
+        select
+        <include refid="NebulaPublishEvent-Base-Column-List"/>
+        from nebula_publish_event
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishEventDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_event
+    </select>
+    <select id="Nebula-NebulaPublishEventDao-Select-Count-Where" parameterType="NebulaPublishEvent" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_event
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEnv != null">
+                publish_env = #{publishEnv}
+            </if>
+            <if test="publishProductName != null">
+                AND publish_product_name = #{publishProductName}
+            </if>
+            <if test="isSuccessPublish != null">
+                AND is_success_publish = #{isSuccessPublish}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-Where" parameterType="NebulaPublishEvent" resultMap="RM-NebulaPublishEvent">
+        select <include refid="NebulaPublishEvent-Base-Column-List"/> from nebula_publish_event
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEnv != null">
+                publish_env = #{publishEnv}
+            </if>
+            <if test="publishProductName != null">
+                AND publish_product_name = #{publishProductName}
+            </if>
+            <if test="isSuccessPublish != null">
+                AND is_success_publish = #{isSuccessPublish}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishEventDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_event
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishEventDao-Insert" parameterType="NebulaPublishEvent">
+        insert into nebula_publish_event (
+        id,
+        publish_product_name,
+        publish_product_cname,
+        publish_env, publish_svn,
+        product_src_svn,
+        publish_product_key,
+        publish_datetime,
+        submit_datetime,
+        submit_emp_id,
+        is_success_publish)
+        values (#{id,jdbcType=INTEGER},
+        #{publishProductName,jdbcType=VARCHAR},
+        #{publishProductCname,jdbcType=VARCHAR},
+        #{publishEnv,jdbcType=VARCHAR},
+        #{publishSvn,jdbcType=VARCHAR},
+        #{productSrcSvn,jdbcType=VARCHAR},
+        #{publishProductKey,jdbcType=VARCHAR},
+        #{publishDatetime,jdbcType=TIMESTAMP},
+        #{submitDatetime,jdbcType=TIMESTAMP},
+        #{submitEmpId,jdbcType=INTEGER},
+        #{isSuccessPublish,jdbcType=INTEGER})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishEventDao-Insert-Selective" parameterType="NebulaPublishEvent">
+        insert into nebula_publish_event
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="publishProductName != null" >
+                publish_product_name,
+            </if>
+            <if test="publishProductCname != null" >
+                publish_product_cname,
+            </if>
+            <if test="publishEnv != null" >
+                publish_env,
+            </if>
+            <if test="publishSvn != null" >
+                publish_svn,
+            </if>
+            <if test="productSrcSvn != null" >
+                product_src_svn,
+            </if>
+            <if test="publishProductKey != null" >
+                publish_product_key,
+            </if>
+            <if test="publishDatetime != null" >
+                publish_datetime,
+            </if>
+            <if test="submitDatetime != null" >
+                submit_datetime,
+            </if>
+            <if test="submitEmpId != null" >
+                submit_emp_id,
+            </if>
+            <if test="isSuccessPublish != null" >
+                is_success_publish,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishProductName != null" >
+                #{publishProductName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishProductCname != null" >
+                #{publishProductCname,jdbcType=VARCHAR},
+            </if>
+            <if test="publishEnv != null" >
+                #{publishEnv,jdbcType=VARCHAR},
+            </if>
+            <if test="publishSvn != null" >
+                #{publishSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="productSrcSvn != null" >
+                #{productSrcSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="publishProductKey != null" >
+                #{publishProductKey,jdbcType=VARCHAR},
+            </if>
+            <if test="publishDatetime != null" >
+                #{publishDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="submitDatetime != null" >
+                #{submitDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="submitEmpId != null" >
+                #{submitEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="isSuccessPublish != null" >
+                #{isSuccessPublish,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishEventDao-Update-By-Id-Selective" parameterType="NebulaPublishEvent">
+        update nebula_publish_event
+        <set>
+            <if test="publishProductName != null" >
+                publish_product_name = #{publishProductName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishProductCname != null" >
+                publish_product_cname = #{publishProductCname,jdbcType=VARCHAR},
+            </if>
+            <if test="publishEnv != null" >
+                publish_env = #{publishEnv,jdbcType=VARCHAR},
+            </if>
+            <if test="publishSvn != null" >
+                publish_svn = #{publishSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="productSrcSvn != null" >
+                product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="publishProductKey != null" >
+                publish_product_key = #{publishProductKey,jdbcType=VARCHAR},
+            </if>
+            <if test="publishDatetime != null" >
+                publish_datetime = #{publishDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="submitDatetime != null" >
+                submit_datetime = #{submitDatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="submitEmpId != null" >
+                submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="isSuccessPublish != null" >
+                is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishEventDao-Update-By-Id" parameterType="NebulaPublishEvent">
+        update nebula_publish_event set
+        publish_product_name = #{publishProductName,jdbcType=VARCHAR},
+        publish_product_cname = #{publishProductCname,jdbcType=VARCHAR},
+        publish_env = #{publishEnv,jdbcType=VARCHAR},
+        publish_svn = #{publishSvn,jdbcType=VARCHAR},
+        product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
+        publish_product_key = #{publishProductKey,jdbcType=VARCHAR},
+        publish_datetime = #{publishDatetime,jdbcType=TIMESTAMP},
+        submit_datetime = #{submitDatetime,jdbcType=TIMESTAMP},
+        submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
+        is_success_publish = #{isSuccessPublish,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
