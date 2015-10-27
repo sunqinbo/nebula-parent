@@ -22,6 +22,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.*;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * Created by Gavin on 2015-10-21 16:05.
@@ -45,7 +46,7 @@ public class SvnUtils {
         FSRepositoryFactory.setup();
     }
 
-    public static final SVNClientManager createSvnClientManager(String svnUrl, String username,
+    public static SVNClientManager createSvnClientManager(String svnUrl, String username,
                                                           String password){
         initSvnLibrary();
 
