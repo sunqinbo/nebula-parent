@@ -1,0 +1,10 @@
+<!doctype html>
+
+    #parse("head/header.vm")
+    #parse("head/sidebar.vm")
+    #parse("head/navbar.vm")
+
+
+<div id="map"></div>
+
+    #parse("head/footer.vm")
