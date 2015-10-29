@@ -1,6 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-    #parse("sidebar.vm")
-    #parse("header.vm")
+<!doctype html>
+
+    #parse("head/sidebar.vm")
+    #parse("head/header.vm")
+
 
 <div class="content">
     <div class="container-fluid">
@@ -203,4 +205,4 @@
     </div>
 </div>
 
-    #parse("footer.vm")
+    #parse("head/footer.vm")

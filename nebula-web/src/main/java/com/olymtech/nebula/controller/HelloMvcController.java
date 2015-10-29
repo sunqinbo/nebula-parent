@@ -1,4 +1,4 @@
-package com.olym.nebula.controller;
+package com.olymtech.nebula.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
-@RequestMapping("/hello")
+@Controller("helloMvcController")
+@RequestMapping("/")
 public class HelloMvcController {	
 
 	
@@ -19,8 +19,7 @@ public class HelloMvcController {
 	HttpServletRequest request;
 	
 	
-	@RequestMapping(value="/mvc",method=RequestMethod.GET)
-	//响应host:8080/hello/mvc
+	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String helloMvc(){
 		return "index";
 	}
