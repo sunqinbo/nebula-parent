@@ -36,15 +36,6 @@
     <mvc:resources mapping="/public/**" location="/WEB-INF/public/" />
 
 
-
-    <!--<bean-->
-            <!--class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-        <!--<property name="viewClass"-->
-                  <!--value="org.springframework.web.servlet.view.JstlView" />-->
-        <!--<property name="prefix" value="/WEB-INF/pages/head/" />-->
-        <!--<property name="suffix" value=".vm" />-->
-    <!--</bean>-->
-
     <bean id="jacksonMessageConverter"
           class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <property name="supportedMediaTypes">

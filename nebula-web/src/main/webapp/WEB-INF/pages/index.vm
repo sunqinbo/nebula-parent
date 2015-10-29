@@ -1,7 +1,8 @@
 <!doctype html>
 
-    #parse("head/sidebar.vm")
     #parse("head/header.vm")
+    #parse("head/sidebar.vm")
+    #parse("head/navbar.vm")
 
 
 <div class="content">
