@@ -8,7 +8,7 @@
     <!-- Spring应用上下文， 理解层次化的ApplicationContext -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:applicationContext*.xml</param-value>
+        <param-value>classpath*:spring.config.xml</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
@@ -63,15 +63,15 @@
     <servlet>
         <servlet-name>velocityView</servlet-name>
         <servlet-class>org.apache.velocity.tools.view.servlet.VelocityViewServlet</servlet-class>
-        <init-param>
-            <param-name>org.apache.velocity.toolbox</param-name>
-            <param-value>/WEB-INF/toolbox.xml</param-value>
-        </init-param>
+        <!--<init-param>-->
+            <!--<param-name>org.apache.velocity.toolbox</param-name>-->
+            <!--<param-value>/WEB-INF/toolbox.xml</param-value>-->
+        <!--</init-param>-->
 
-        <init-param>
-            <param-name>org.apache.velocity.properties</param-name>
-            <param-value>/WEB-INF/velocity.properties</param-value>
-        </init-param>
+        <!--<init-param>-->
+            <!--<param-name>org.apache.velocity.properties</param-name>-->
+            <!--<param-value>/WEB-INF/velocity.properties</param-value>-->
+        <!--</init-param>-->
 
         <load-on-startup>10</load-on-startup>
     </servlet>
