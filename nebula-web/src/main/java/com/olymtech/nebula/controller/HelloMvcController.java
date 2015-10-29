@@ -23,5 +23,33 @@ public class HelloMvcController {
 	public String helloMvc(){
 		return "index";
 	}
+
+	@RequestMapping(value="/user.html",method=RequestMethod.GET)
+	public String UserInfo(){
+		return "user";
+	}
+
+	@RequestMapping(value="/icons.html",method=RequestMethod.GET)
+	public String icons(){
+		return "icons";
+	}
+
+	@RequestMapping(value="/maps.html",method=RequestMethod.GET)
+	public String maps(){
+		return "maps";
+	}
+	@RequestMapping(value="/notifications.html",method=RequestMethod.GET)
+	public String notifications(){
+		return "notifications";
+	}
+	@RequestMapping(value="/table.html",method=RequestMethod.GET)
+	public String table(){
+		return "table";
+	}
+
+	@RequestMapping(value="/typography.html",method=RequestMethod.GET)
+	public String typography(){
+		return "typography";
+	}
 }
 
