@@ -75,7 +75,7 @@ public class SaltClientFactory {
             return client;
         }
 
-        if (token.getExpire().getTime()>System.currentTimeMillis()){
+        if (token.getExpire().getTime()<=System.currentTimeMillis()){
             token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
         }
 

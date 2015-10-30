@@ -26,7 +26,10 @@ public class Test {
             }
         }
 
-        saltClient.getMinions();
+        SaltStackClient saltClient22 = SaltClientFactory.getSaltClient();
+
+        saltClient22.getMinions();
+
 
     }
 }
