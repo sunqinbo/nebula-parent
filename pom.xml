@@ -325,6 +325,13 @@
                 <version>${svnkit.version}</version>
             </dependency>
 
+            <!--salt-->
+            <dependency>
+                <groupId>com.suse.saltstack</groupId>
+                <artifactId>saltstack-netapi-client</artifactId>
+                <version>${salt.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -356,6 +363,7 @@
         <aspectjweaver.version>1.7.4</aspectjweaver.version>
         <cglib.version>3.1</cglib.version>
         <svnkit.version>1.8.11</svnkit.version>
+        <salt.version>0.6.0</salt.version>
     </properties>
 
     <build>
