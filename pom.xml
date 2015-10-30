@@ -14,11 +14,12 @@
         <module>nebula-script</module>
         <module>nebula-monitor</module>
         <module>nebula-web</module>
-        <module>nebula-verify-file</module>
         <module>nebula-security</module>
         <module>nebula-api</module>
         <module>nebula-svn</module>
         <module>nebula-salt</module>
+        <module>nebula-file-analyze</module>
+        <module>nebula-file-verify</module>
     </modules>
 
     <profiles>
