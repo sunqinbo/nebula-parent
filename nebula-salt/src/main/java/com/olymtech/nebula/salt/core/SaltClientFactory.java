@@ -7,6 +7,7 @@ package com.olymtech.nebula.salt.core;
 import com.suse.saltstack.netapi.AuthModule;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.Token;
+import com.suse.saltstack.netapi.exception.SaltStackException;
 
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -36,7 +37,7 @@ public class SaltClientFactory {
     protected static Properties conf;
 
     // SINGLETON
-    public static synchronized SaltStackClient getSaltClient() throws Exception {
+    public static synchronized SaltStackClient getSaltClient() {
 
         if (client == null) {
 
@@ -70,13 +71,21 @@ public class SaltClientFactory {
             URI uri = URI.create(conf.get(SALT_URI) + ":" + conf.getProperty(PORT));
             client = new SaltStackClient(uri);
 
-            token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
+            try {
+                token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
+            } catch (SaltStackException e) {
+                e.printStackTrace();
+            }
 
             return client;
         }
 
         if (token.getExpire().getTime()<=System.currentTimeMillis()){
-            token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
+            try {
+                token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
+            } catch (SaltStackException e) {
+                e.printStackTrace();
+            }
         }
 
         return client;
