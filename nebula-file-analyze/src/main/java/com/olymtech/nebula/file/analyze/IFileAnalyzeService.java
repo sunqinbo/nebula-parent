@@ -9,7 +9,7 @@ import java.util.Map;
 public interface IFileAnalyzeService {
     /**
      *
-     * @param dirPath Ö¸¶¨Ä¿Â¼Â·¾¶£»
+     * @param dirPath ç›®æ ‡ç›®å½•çš„è·¯å¾„
      * @return
      */
     public List<String> getFileListByDirPath(String dirPath);

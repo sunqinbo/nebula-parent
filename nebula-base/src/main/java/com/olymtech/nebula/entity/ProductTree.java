@@ -8,7 +8,6 @@ package com.olymtech.nebula.entity;
  * Created by Gavin on 2015-11-02 10:32.
  */
 public class ProductTree extends BaseDO {
-    private Integer id;
 
     private String nodeName;
 
@@ -26,14 +25,6 @@ public class ProductTree extends BaseDO {
 
     public void setTreeLevel(Integer treeLevel) {
         this.treeLevel = treeLevel;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getNodeName() {
