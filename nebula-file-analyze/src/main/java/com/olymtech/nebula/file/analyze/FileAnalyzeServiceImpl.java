@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by liwenji on 2015/10/30.
  */
-public class FileAnalyzeServiceImpl {
+public class FileAnalyzeServiceImpl implements IFileAnalyzeService{
     public List<String> getFileListByDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
         File file = new File(dirPath);
