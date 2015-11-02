@@ -20,6 +20,7 @@
         <module>nebula-salt</module>
         <module>nebula-file-analyze</module>
         <module>nebula-file-verify</module>
+        <module>nebula-service</module>
     </modules>
 
     <profiles>
