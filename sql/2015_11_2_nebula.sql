@@ -11,7 +11,7 @@
  Target Server Version : 50173
  File Encoding         : utf-8
 
- Date: 11/02/2015 09:48:45 AM
+ Date: 11/02/2015 14:53:33 PM
 */
 
 SET NAMES utf8;
@@ -88,6 +88,19 @@ CREATE TABLE `nebula_publish_schedule` (
   `is_success_action` int(255) DEFAULT NULL COMMENT '动作是否成功，0/1  失败/成功',
   `error_msg` longtext COMMENT '错误信息，如果不成功，返回不成功的msg',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `nebula_publish_sequence`
+-- ----------------------------
+DROP TABLE IF EXISTS `nebula_publish_sequence`;
+CREATE TABLE `nebula_publish_sequence` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action_name` varchar(50) NOT NULL COMMENT '发布动作名称',
+  `action_desc` varchar(50) DEFAULT NULL COMMENT '发布动作描述',
+  `action_seq_id` int(5) DEFAULT NULL COMMENT '发布顺序',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_action_seq_id` (`action_seq_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
