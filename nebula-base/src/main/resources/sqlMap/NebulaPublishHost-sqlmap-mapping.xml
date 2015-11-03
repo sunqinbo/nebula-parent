@@ -4,14 +4,14 @@
     <resultMap id="RM-NebulaPublishHost" type="com.olymtech.nebula.entity.NebulaPublishHost">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="publish_module_id" property="publishModuleId" jdbcType="INTEGER" />
-        <result column="publish_project" property="publishProject" jdbcType="VARCHAR" />
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
         <result column="pass_publish_host_name" property="passPublishHostName" jdbcType="VARCHAR" />
         <result column="pass_publish_host_ip" property="passPublishHostIp" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="NebulaPublishHost-Base-Column-List">
         id,
         publish_module_id,
-        publish_project,
+        publish_event_id,
         pass_publish_host_name,
         pass_publish_host_ip
     </sql>
@@ -30,8 +30,8 @@
             <if test="publishModuleId != null">
                 publish_module_id = #{publishModuleId}
             </if>
-            <if test="publishProject != null">
-                AND publish_project = #{publishProject}
+            <if test="publishEventId != null">
+                AND publish_event_id = #{publishEventId}
             </if>
         </trim>
     </select>
@@ -41,8 +41,8 @@
             <if test="publishModuleId != null">
                 publish_module_id = #{publishModuleId}
             </if>
-            <if test="publishProject != null">
-                AND publish_project = #{publishProject}
+            <if test="publishEventId != null">
+                AND publish_event_id = #{publishEventId}
             </if>
         </trim>
         group by id order by id desc
@@ -55,12 +55,12 @@
         insert into nebula_publish_host (
         id,
         publish_module_id,
-        publish_project,
+        publish_event_id,
         pass_publish_host_name,
         pass_publish_host_ip)
         values (#{id,jdbcType=INTEGER},
         #{publishModuleId,jdbcType=INTEGER},
-        #{publishProject,jdbcType=VARCHAR},
+        #{publishEventId,jdbcType=INTEGER},
         #{passPublishHostName,jdbcType=VARCHAR},
         #{passPublishHostIp,jdbcType=VARCHAR})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
@@ -76,8 +76,8 @@
             <if test="publishModuleId != null" >
                 publish_module_id,
             </if>
-            <if test="publishProject != null" >
-                publish_project,
+            <if test="publishEventId != null" >
+                publish_event_id,
             </if>
             <if test="passPublishHostName != null" >
                 pass_publish_host_name,
@@ -93,8 +93,8 @@
             <if test="publishModuleId != null" >
                 #{publishModuleId,jdbcType=INTEGER},
             </if>
-            <if test="publishProject != null" >
-                #{publishProject,jdbcType=VARCHAR},
+            <if test="publishEventId != null" >
+                #{publishEventId,jdbcType=VARCHAR},
             </if>
             <if test="passPublishHostName != null" >
                 #{passPublishHostName,jdbcType=VARCHAR},
@@ -110,8 +110,8 @@
             <if test="publishModuleId != null" >
                 publish_module_id = #{publishModuleId,jdbcType=INTEGER},
             </if>
-            <if test="publishProject != null" >
-                publish_project = #{publishProject,jdbcType=VARCHAR},
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
             </if>
             <if test="passPublishHostName != null" >
                 pass_publish_host_name = #{passPublishHostName,jdbcType=VARCHAR},
@@ -125,7 +125,7 @@
     <update id="Nebula-NebulaPublishHostDao-Update-By-Id" parameterType="NebulaPublishHost">
         update nebula_publish_host set
         publish_module_id = #{publishModuleId,jdbcType=INTEGER},
-        publish_project = #{publishProject,jdbcType=VARCHAR},
+        publish_event_id = #{publishEventId,jdbcType=INTEGER},
         pass_publish_host_name = #{passPublishHostName,jdbcType=VARCHAR},
         pass_publish_host_ip = #{passPublishHostIp,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}

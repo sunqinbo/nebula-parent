@@ -4,7 +4,7 @@ public class NebulaPublishHost extends BaseDO {
 
     private Integer publishModuleId;
 
-    private String publishProject;
+    private Integer publishEventId;
 
     private String passPublishHostName;
 
@@ -18,12 +18,12 @@ public class NebulaPublishHost extends BaseDO {
         this.publishModuleId = publishModuleId;
     }
 
-    public String getPublishProject() {
-        return publishProject;
+    public Integer getPublishEventId() {
+        return publishEventId;
     }
 
-    public void setPublishProject(String publishProject) {
-        this.publishProject = publishProject == null ? null : publishProject.trim();
+    public void setPublishEventId(Integer publishEventId) {
+        this.publishEventId = publishEventId;
     }
 
     public String getPassPublishHostName() {

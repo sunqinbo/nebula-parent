@@ -1,6 +1,7 @@
 package com.olymtech.nebula.entity;
 
-public class NebulaPublishModule extends BaseDO {
+public class NebulaPublishBase {
+    private Integer id;
 
     private Integer publishEventId;
 
@@ -10,7 +11,15 @@ public class NebulaPublishModule extends BaseDO {
 
     private String publishModuleKey;
 
-    private String moduleSrcSvn;
+    private Integer isSuccessPublish;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getPublishEventId() {
         return publishEventId;
@@ -25,7 +34,7 @@ public class NebulaPublishModule extends BaseDO {
     }
 
     public void setPublishProductName(String publishProductName) {
-        this.publishProductName = publishProductName;
+        this.publishProductName = publishProductName == null ? null : publishProductName.trim();
     }
 
     public String getPublishModuleName() {
@@ -33,7 +42,7 @@ public class NebulaPublishModule extends BaseDO {
     }
 
     public void setPublishModuleName(String publishModuleName) {
-        this.publishModuleName = publishModuleName;
+        this.publishModuleName = publishModuleName == null ? null : publishModuleName.trim();
     }
 
     public String getPublishModuleKey() {
@@ -44,11 +53,11 @@ public class NebulaPublishModule extends BaseDO {
         this.publishModuleKey = publishModuleKey == null ? null : publishModuleKey.trim();
     }
 
-    public String getModuleSrcSvn() {
-        return moduleSrcSvn;
+    public Integer getIsSuccessPublish() {
+        return isSuccessPublish;
     }
 
-    public void setModuleSrcSvn(String moduleSrcSvn) {
-        this.moduleSrcSvn = moduleSrcSvn == null ? null : moduleSrcSvn.trim();
+    public void setIsSuccessPublish(Integer isSuccessPublish) {
+        this.isSuccessPublish = isSuccessPublish;
     }
 }
