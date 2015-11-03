@@ -21,6 +21,13 @@
         <module>nebula-file-analyze</module>
         <module>nebula-file-verify</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+    </dependencies>
 
     <profiles>
         <profile>
