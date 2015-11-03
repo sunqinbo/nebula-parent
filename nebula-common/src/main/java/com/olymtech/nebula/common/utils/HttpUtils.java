@@ -141,4 +141,41 @@ public class HttpUtils {
         return sbf.toString();
     }
 
+    public static String getResponesEncodeUTF8ByURL(String url, String... method) throws HttpException,
+            IOException {
+        HttpClient httpClient = new HttpClient();
+        logger.info("HTTP REQUEST:" + url);
+        HttpMethod getMethod = null;
+        // 如果url不是以“http//”开头的话加上 http：//
+        if (!url.startsWith("http://")) {
+            url = "http://" + url;
+        }
+        // 默认为get方法
+        if (method.length > 0 && method[0].equals("post")) {
+            getMethod = new PostMethod(url);
+        } else {
+            getMethod = new GetMethod(url);
+        }
+        httpClient.setTimeout(30000);
+        httpClient.executeMethod(getMethod);
+        return inputStream2StringEncodeUTF8(getMethod.getResponseBodyAsStream());
+    }
+
+    public static String inputStream2StringEncodeUTF8(InputStream inputStream){
+    	/*转码*/
+        try {
+            byte bytes[] = new byte[4096];
+            StringBuffer sb = new StringBuffer();
+            int size = 0;
+            while ((size = inputStream.read(bytes)) > 0) {
+                String str = new String(bytes, 0, size, "UTF-8");
+                sb.append(str);
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            logger.error("inputStream2StringEncodeUTF8 error:",e);
+        }
+        return null;
+    }
+
 }
