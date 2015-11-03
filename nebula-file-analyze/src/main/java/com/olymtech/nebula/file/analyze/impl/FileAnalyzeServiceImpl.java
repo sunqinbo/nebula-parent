@@ -1,4 +1,6 @@
-package com.olymtech.nebula.file.analyze;
+package com.olymtech.nebula.file.analyze.impl;
+
+import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ import java.util.Map;
 /**
  * Created by liwenji on 2015/10/30.
  */
-public class FileAnalyzeServiceImpl implements IFileAnalyzeService{
+public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     public List<String> getFileListByDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
         File file = new File(dirPath);

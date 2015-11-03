@@ -1,9 +1,10 @@
-package com.olymtech.nebula.service;
+package com.olymtech.nebula.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.olymtech.nebula.common.utils.HttpUtils;
 import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by liwenji on 2015/11/2.
  */
-public class AnalyzeArsenalApiImpl implements IAnalyzeArsenalApi {
+public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
     private String serverHost = "localhost:8080";

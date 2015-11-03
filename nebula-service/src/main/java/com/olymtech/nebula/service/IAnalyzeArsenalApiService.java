@@ -7,6 +7,11 @@ import java.util.List;
 /**
  * Created by liwenji on 2015/11/2.
  */
-public interface IAnalyzeArsenalApi {
+public interface IAnalyzeArsenalApiService {
+    /**
+     *根据父id获取产品树结点
+     * @param pid 父id
+     * @return
+     */
     public List<ProductTree> getProductTreeListByPid(Integer pid);
 }
