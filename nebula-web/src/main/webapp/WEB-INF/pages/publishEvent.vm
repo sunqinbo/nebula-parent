@@ -1,0 +1,27 @@
+<!doctype html>
+
+    #parse("head/header.vm")
+    #parse("head/sidebar.vm")
+    #parse("head/navbar.vm")
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="header">
+                        <button type="button" class="btn btn-default navbar-btn">用户名</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table ">
+
+    </table>
+</div>
+
+
+
+#parse("head/footer.vm")

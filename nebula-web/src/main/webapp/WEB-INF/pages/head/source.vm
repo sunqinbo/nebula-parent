@@ -34,13 +34,16 @@
 <script src="public/assets/js/bootstrap-notify.js"></script>
 
 <!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="../../public/assets/js/js.js?sensor=false"></script>
+<script src="../../public/assets/js/main.js"></script>
 
 <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
 <script src="public/assets/js/light-bootstrap-dashboard.js"></script>
 
 <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 <script src="public/assets/js/demo.js"></script>
+
+
 
 <script type="text/javascript">
     $(document).ready(function(){
