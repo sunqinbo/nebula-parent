@@ -1,21 +1,12 @@
 package com.olymtech.nebula.entity;
 
-public class NebulaPublishApp {
-    private Integer id;
+public class NebulaPublishApp extends BaseDO{
 
     private Integer publishEventId;
 
     private Integer publishModuleId;
 
     private String publishAppName;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getPublishEventId() {
         return publishEventId;

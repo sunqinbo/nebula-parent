@@ -4,8 +4,16 @@
  */
 package com.olymtech.nebula.dao;
 
+import com.olymtech.nebula.entity.NebulaPublishModule;
+
+import java.util.List;
+
 /**
  * Created by Gavin on 2015-10-23 14:23.
  */
 public interface INebulaPublishModuleDao extends IBaseDao {
+
+    public List<NebulaPublishModule> selectModulesByEventId(Integer publishEventId);
+
+
 }

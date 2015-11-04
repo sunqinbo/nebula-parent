@@ -1,6 +1,7 @@
 package com.olymtech.nebula.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class NebulaPublishEvent extends BaseDO {
 
@@ -23,6 +24,16 @@ public class NebulaPublishEvent extends BaseDO {
     private Integer submitEmpId;
 
     private Integer isSuccessPublish;
+
+    private List<NebulaPublishModule> publishModules;
+
+    public List<NebulaPublishModule> getPublishModules() {
+        return publishModules;
+    }
+
+    public void setPublishModules(List<NebulaPublishModule> publishModules) {
+        this.publishModules = publishModules;
+    }
 
     public String getPublishProductName() {
         return publishProductName;

@@ -5,11 +5,20 @@
 package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
+import com.olymtech.nebula.entity.NebulaPublishModule;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Created by Gavin on 2015-10-23 14:31.
  */
 @Repository("nebulaPublishModuleDao")
 public class NebulaPublishModuleDaoImpl extends BaseDaoImpl implements INebulaPublishModuleDao {
+
+    @Override
+    public List<NebulaPublishModule> selectModulesByEventId(Integer publishEventId){
+        return getSqlSession().selectList(CLASS_NAME + "-Select-By-PublishEventId", publishEventId);
+    }
+
 }
