@@ -18,13 +18,12 @@ public class Action3 extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        System.out.println(this.getActionName());
         System.out.println("salt动作");
         return true;
     }
 
     @Override
     public void doFailure(NebulaPublishEvent event) {
-        System.out.println("salt动作失败");
+        System.out.println("回滚salt动作");
     }
 }

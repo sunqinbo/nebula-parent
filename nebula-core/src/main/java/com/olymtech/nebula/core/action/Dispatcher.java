@@ -15,27 +15,42 @@ public class Dispatcher {
 
     private ActionChain actionChain = null;
 
+    private int actionIndex = 0;
+
     public Dispatcher(ActionChain actionChain) {
         this.actionChain = actionChain;
     }
 
 
-    public void doDispatch(NebulaPublishEvent event) throws  Exception{
+    public void doDispatch(NebulaPublishEvent event) throws Exception {
         List<Action> actions = actionChain.getActions();
         if (actions != null || actions.size() == 0) {
             try {
-                for (Action action : actions) {
-                    if (!action.doAction(event)) {
-                        action.doFailure(event);
+                for (int i = 0; i < actions.size(); i++) {
+                    if (!actions.get(i).doAction(event)) {
+                        triggerFailure(event);
                         return;
                     }
+                    actionIndex = i;
                 }
-            } catch (Exception ex) {
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }else{
+        } else {
 
             throw new Exception("动作为空");
+        }
+
+    }
+
+    public void triggerFailure(NebulaPublishEvent event) {
+        List<Action> actions = actionChain.getActions();
+        try {
+            for (int i = actionIndex; i >= 0; i--) {
+                actions.get(i).doFailure(event);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
     }

@@ -13,6 +13,7 @@ public interface Action {
 
     /**
      * 发布动作
+     *
      * @param event
      * @return
      * @throws Exception
@@ -21,9 +22,10 @@ public interface Action {
 
     /**
      * 发布动作失败后执行动作
+     *
      * @param event
      */
-    public void doFailure(NebulaPublishEvent event);
+    public void doFailure(NebulaPublishEvent event) throws Exception;
 
 
 }

@@ -27,10 +27,7 @@ public class ActionChain {
     }
 
     public ActionChain addActions(List<Action> actions) {
-
         this.actions.addAll(actions);
-
-
         return this;
     }
 

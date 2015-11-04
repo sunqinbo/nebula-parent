@@ -26,23 +26,22 @@ public class ActoinTest {
         ActionChain chain = new ActionChain();
         chain.addAction(new Action1("dir")).addAction(new Action2("svn")).addAction(new Action3("salt"));
 
-        Action1 action1 = new Action1("111");
-        Action2 action2 = new Action2("222");
-        Action3 action3 = new Action3("333");
-
-        List<Action> list = new ArrayList<Action>();
-        list.add(action1);
-        list.add(action2);
-        list.add(action3);
-
-        chain.addActions(list);
+//        Action1 action1 = new Action1("111");
+//        Action2 action2 = new Action2("222");
+//        Action3 action3 = new Action3("333");
+//
+//        List<Action> list = new ArrayList<Action>();
+//        list.add(action1);
+//        list.add(action2);
+//        list.add(action3);
+//
+//        chain.addActions(list);
         //创建拦截器
         Dispatcher dispatcher = new Dispatcher(chain);
 
         try {
             //执行拦截器
             dispatcher.doDispatch(new NebulaPublishEvent());
-
 
         } catch (Exception e) {
             e.printStackTrace();

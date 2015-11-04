@@ -18,13 +18,12 @@ public class Action1 extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        System.out.println(this.getActionName());
         System.out.println("创建文件夹");
         return true;
     }
 
     @Override
     public void doFailure(NebulaPublishEvent event) {
-        System.out.println("创建文件夹失败");
+        System.out.println("回滚创建文件夹");
     }
 }
