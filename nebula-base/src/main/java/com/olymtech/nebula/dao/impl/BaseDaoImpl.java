@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BaseDaoImpl extends SqlSessionDaoSupport implements IBaseDao {
 
-    public String   CLASS_NAME = ("Arsenal-" + this.getClass().getSimpleName().replace("Impl", ""));
+    public String   CLASS_NAME = ("Nebula-" + this.getClass().getSimpleName().replace("Impl", ""));
 
     @Override
     public int insert(BaseDO baseDO) {
