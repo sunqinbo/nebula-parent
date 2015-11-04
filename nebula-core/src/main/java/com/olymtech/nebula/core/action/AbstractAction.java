@@ -14,6 +14,9 @@ public abstract class AbstractAction implements Action {
     protected String actionName;
 
     public String getActionName() {
+        if (actionName == null) {
+            return this.getClass().getSimpleName();
+        }
         return actionName;
     }
 
@@ -22,7 +25,7 @@ public abstract class AbstractAction implements Action {
     }
 
     @Override
-    public abstract boolean  doAction(NebulaPublishEvent event) throws Exception;
+    public abstract boolean doAction(NebulaPublishEvent event) throws Exception;
 
     @Override
     public abstract void doFailure(NebulaPublishEvent event);

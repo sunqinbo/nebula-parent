@@ -12,12 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
  */
 public class Action1 extends AbstractAction {
 
-
-    public Action1() {
-        this.actionName = this.getClass().getSimpleName();
-    }
-
-    public Action1( String actionName) {
+    public Action1(String actionName) {
         this.actionName = actionName;
     }
 
@@ -25,9 +20,6 @@ public class Action1 extends AbstractAction {
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         System.out.println(this.getActionName());
         System.out.println("创建文件夹");
-
-
-        
         return true;
     }
 

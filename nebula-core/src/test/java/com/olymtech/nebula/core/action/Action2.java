@@ -12,14 +12,10 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
  */
 public class Action2 extends AbstractAction {
 
-
-    public Action2() {
-        this.actionName = this.getClass().getSimpleName();
-    }
-
-    public Action2( String actionName) {
+    public Action2(String actionName) {
         this.actionName = actionName;
     }
+
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         System.out.println(this.getActionName());

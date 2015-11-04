@@ -39,7 +39,6 @@ public class ActoinTest {
         //创建拦截器
         Dispatcher dispatcher = new Dispatcher(chain);
 
-
         try {
             //执行拦截器
             dispatcher.doDispatch(new NebulaPublishEvent());
