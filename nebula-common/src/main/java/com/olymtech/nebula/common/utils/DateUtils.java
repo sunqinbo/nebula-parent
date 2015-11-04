@@ -59,6 +59,9 @@ public class DateUtils {
     public static final String simpleISO8601 = "yyyy-MM-dd\'T\'HH:mm:ss\'Z\'";
     public static final String simpleFormatISO8601 = "yyyy-MM-dd\'T\'HH:mm\'Z\'";
 
+    /** 时间key格式*/
+    public static final String SimpleKey="yyyyMMdd.HHmmss";
+
     /**
      * 获取格式
      *
@@ -80,6 +83,13 @@ public class DateUtils {
             return "";
         }
         return getFormat(simple).format(date);
+    }
+
+    public static final String getKeyDate(Date date){
+        if(date==null){
+            return "";
+        }
+        return getFormat(SimpleKey).format( date );
     }
 
     /**
