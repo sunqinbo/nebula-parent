@@ -14,11 +14,11 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 /**
  * Created by Gavin on 2015-11-04 19:31.
  */
-public class getPublishSvnAction extends AbstractAction {
+public class GetPublishSvnAction extends AbstractAction {
 
 //    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public getPublishSvnAction(){
+    public GetPublishSvnAction(){
         super();
     }
 

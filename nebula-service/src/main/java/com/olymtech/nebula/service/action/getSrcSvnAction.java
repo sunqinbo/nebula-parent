@@ -12,7 +12,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 /**
  * Created by Gavin on 2015-11-04 20:12.
  */
-public class getSrcSvnAction extends AbstractAction {
+public class GetSrcSvnAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
@@ -22,7 +22,7 @@ public class getSrcSvnAction extends AbstractAction {
             SvnUtils.checkout(svnClientManager,svnUrl,"/Users/saas/deploy_tmp/" + event.getPublishProductKey() + "/src_svn/");
             return true;
         }catch (Exception e){
-//            logger.error("getPublishSvnAction error:",e);
+//            logger.error("GetPublishSvnAction error:",e);
         }
         return false;
     }
