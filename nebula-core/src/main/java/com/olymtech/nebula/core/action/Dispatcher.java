@@ -1,0 +1,50 @@
+/**
+ * Olymtech.com Inc.
+ * Copyright (c) 2002-2015 All Rights Reserved
+ */
+package com.olymtech.nebula.core.action;
+
+import com.olymtech.nebula.entity.NebulaPublishEvent;
+
+import java.util.List;
+
+/**
+ * @author taoshanchang 15/11/4
+ */
+public class Dispatcher {
+
+    private ActionChain actionChain = null;
+
+    public Dispatcher(ActionChain actionChain) {
+        this.actionChain = actionChain;
+    }
+
+
+    public void doDispatch(NebulaPublishEvent event) throws  Exception{
+        List<Action> actions = actionChain.getActions();
+        if (actions != null || actions.size() == 0) {
+            try {
+                for (Action action : actions) {
+                    if (!action.doAction(event)) {
+                        action.doFailure(event);
+                        return;
+                    }
+                }
+            } catch (Exception ex) {
+
+            }
+        }else{
+
+            throw new Exception("动作为空");
+        }
+
+    }
+
+    public ActionChain getActionChain() {
+        return actionChain;
+    }
+
+    public void setActionChain(ActionChain actionChain) {
+        this.actionChain = actionChain;
+    }
+}

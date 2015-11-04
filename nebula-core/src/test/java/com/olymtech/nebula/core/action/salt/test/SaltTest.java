@@ -2,10 +2,10 @@
  * Olymtech.com Inc.
  * Copyright (c) 2002-2015 All Rights Reserved
  */
-package com.olymtech.nebula.core.salt.test;
+package com.olymtech.nebula.core.action.salt.test;
 
-import com.olymtech.nebula.core.salt.SaltStackServiceImpl;
-import com.olymtech.nebula.core.salt.core.SaltClientFactory;
+import com.olymtech.nebula.core.action.salt.SaltStackServiceImpl;
+import com.olymtech.nebula.core.action.salt.core.SaltClientFactory;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * @author taoshanchang 15/10/30
  */
-public class ServiceTest {
+public class SaltTest {
     private SaltStackServiceImpl service;
 
     @Before

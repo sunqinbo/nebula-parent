@@ -2,7 +2,7 @@
  * Olymtech.com Inc.
  * Copyright (c) 2002-2015 All Rights Reserved
  */
-package com.olymtech.nebula.core.salt.core;
+package com.olymtech.nebula.core.action.salt.core;
 
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.Token;
