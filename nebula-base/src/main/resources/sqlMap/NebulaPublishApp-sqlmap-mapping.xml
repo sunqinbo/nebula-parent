@@ -110,7 +110,8 @@
                 publish_module_id = #{publishModuleId,jdbcType=INTEGER},
             </if>
             <if test="publishAppName != null" >
-            publish_a
+                publish_app_name = #{publishAppName,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
