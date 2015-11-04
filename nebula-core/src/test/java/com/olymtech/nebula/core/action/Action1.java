@@ -13,7 +13,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 public class Action1 extends AbstractAction {
 
     public Action1(String actionName) {
-        this.actionName = actionName;
+        super.setActionName(actionName);
     }
 
     @Override

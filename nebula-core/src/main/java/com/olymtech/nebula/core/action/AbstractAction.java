@@ -11,7 +11,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
  */
 public abstract class AbstractAction implements Action {
 
-    protected String actionName;
+    private String actionName;
 
     public String getActionName() {
         if (actionName == null) {
