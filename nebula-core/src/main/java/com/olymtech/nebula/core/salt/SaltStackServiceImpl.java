@@ -11,13 +11,11 @@ import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * @author taoshanchang 15/10/30
- */
-
+@Service
 public class SaltStackServiceImpl implements ISaltStackService {
 
     SaltStackClient saltClient = SaltClientFactory.getSaltClient();
