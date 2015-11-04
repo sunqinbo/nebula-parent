@@ -1,6 +1,7 @@
 package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
+import com.olymtech.nebula.dao.INebulaPublishAppDao;
 import com.olymtech.nebula.dao.INebulaPublishHostDao;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.dao.impl.NebulaPublishAppDaoImpl;
@@ -11,6 +12,8 @@ import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.file.analyze.impl.FileAnalyzeServiceImpl;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.impl.AnalyzeArsenalApiServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -22,31 +25,25 @@ import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
 /**
  * Created by liwenji on 2015/11/4.
  */
-public class PublishRelationService extends AbstractAction {
+public class PublishRelationAction extends AbstractAction {
 
-//    @Resource
-//    IAnalyzeArsenalApiService analyzeArsenalApiService;
-//
-//    @Resource
-//    IFileAnalyzeService fileAnalyzeService;
-//
-//    @Resource
-//    INebulaPublishModuleDao nebulaPublishModuleDao;
-//
-//    @Resource
-//    INebulaPublishHostDao nebulaPublishHostDao;
+    @Autowired
+    IAnalyzeArsenalApiService analyzeArsenalApiService;
 
-    AnalyzeArsenalApiServiceImpl analyzeArsenalApiService=new AnalyzeArsenalApiServiceImpl();
+    @Resource
+    IFileAnalyzeService fileAnalyzeService;
 
-    FileAnalyzeServiceImpl fileAnalyzeService=new FileAnalyzeServiceImpl();
+    @Resource
+    INebulaPublishModuleDao nebulaPublishModuleDao;
 
-    NebulaPublishModuleDaoImpl nebulaPublishModuleDao=new NebulaPublishModuleDaoImpl();
+    @Resource
+    INebulaPublishHostDao nebulaPublishHostDao;
 
-    NebulaPublishHostDaoImpl nebulaPublishHostDao=new NebulaPublishHostDaoImpl();
+    @Resource
+    INebulaPublishAppDao nebulaPublishAppDaoImpl;
 
-    NebulaPublishAppDaoImpl nebulaPublishAppDaoImpl=new NebulaPublishAppDaoImpl();
 
-    public PublishRelationService(String actionName) {
+    public PublishRelationAction(String actionName) {
         super();
     }
 
@@ -61,8 +58,8 @@ public class PublishRelationService extends AbstractAction {
             String appname=appNameList.get(i).replace(".war","");
             appNames+=appname+",";
         }
-        appNameList.get(appNameNum-1).replace(".war","");
-        appNames+=appNameList.get(appNameNum-1);
+        String appname=appNameList.get(appNameNum - 1).replace(".war","");
+        appNames+=appname;
         try {
             List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames);
             for (ProductTree productTree : productTrees) {
@@ -89,7 +86,7 @@ public class PublishRelationService extends AbstractAction {
                     nebulaPublishApp.setPublishAppName(productTree.getApps().get(i));
                     nebulaPublishApp.setPublishEventId(event.getId());
                     nebulaPublishApp.setPublishModuleId(nebulaPublishModule.getId());
-//                    nebulaPublishAppDaoImpl.insert(nebulaPublishApp);
+                    nebulaPublishAppDaoImpl.insert(nebulaPublishApp);
                 }
             }
         }catch (Exception e){

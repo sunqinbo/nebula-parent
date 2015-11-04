@@ -5,10 +5,12 @@
 package com.olymtech.nebula.core.action;
 
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import org.springframework.stereotype.Service;
 
 /**
  * @author taoshanchang 15/11/4
  */
+@Service
 public abstract class AbstractAction implements Action {
 
     private String actionName;

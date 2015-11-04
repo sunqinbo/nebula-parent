@@ -8,6 +8,7 @@ import com.olymtech.nebula.entity.SimpleHost;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by liwenji on 2015/11/2.
  */
+@Service
 public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
