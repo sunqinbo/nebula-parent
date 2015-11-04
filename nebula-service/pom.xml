@@ -17,6 +17,13 @@
             <artifactId>nebula-base</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.olymtech.nebula</groupId>
+            <artifactId>nebula-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.olymtech.nebula</groupId>
             <artifactId>nebula-common</artifactId>
