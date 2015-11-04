@@ -14,4 +14,12 @@ public interface IAnalyzeArsenalApiService {
      * @return
      */
     public List<ProductTree> getProductTreeListByPid(Integer pid);
+
+    /**
+     * 根据产品名，应用名获取树节点
+     * @param productName 产品名
+     * @param appNames 发布的应用名列表
+     * @return
+     */
+    public List<ProductTree> getSimpleHostListByProductAndModule(String productName,String appNames);
 }
