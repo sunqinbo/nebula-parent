@@ -14,6 +14,16 @@ public class NebulaPublishSequence extends BaseDO {
 
     private Integer actionSeqId;
 
+    private String actionGroup;
+
+    public String getActionGroup() {
+        return actionGroup;
+    }
+
+    public void setActionGroup(String actionGroup) {
+        this.actionGroup = actionGroup;
+    }
+
     public String getActionName() {
         return actionName;
     }

@@ -4,14 +4,16 @@
     <resultMap id="RM-NebulaPublishModule" type="com.olymtech.nebula.entity.NebulaPublishModule">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
-        <result column="publish_module" property="publishModule" jdbcType="VARCHAR" />
+        <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR" />
+        <result column="publish_module_name" property="publishModuleName" jdbcType="VARCHAR" />
         <result column="publish_module_key" property="publishModuleKey" jdbcType="VARCHAR" />
         <result column="module_src_svn" property="moduleSrcSvn" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="NebulaPublishModule-Base-Column-List">
         id,
         publish_event_id,
-        publish_module,
+        publish_product_name,
+        publish_module_name,
         publish_module_key,
         module_src_svn
     </sql>
@@ -30,8 +32,8 @@
             <if test="publishEventId != null">
                 publish_event_id = #{publishEventId}
             </if>
-            <if test="publishModule != null">
-                AND publish_module = #{publishModule}
+            <if test="publishModuleName != null">
+                AND publish_module_name = #{publishModuleName}
             </if>
         </trim>
     </select>
@@ -41,8 +43,8 @@
             <if test="publishEventId != null">
                 publish_event_id = #{publishEventId}
             </if>
-            <if test="publishModule != null">
-                AND publish_module = #{publishModule}
+            <if test="publishModuleName != null">
+                AND publish_module_name = #{publishModuleName}
             </if>
         </trim>
         group by id order by id desc
@@ -55,12 +57,14 @@
         insert into nebula_publish_module (
         id,
         publish_event_id,
-        publish_module,
+        publish_product_name,
+        publish_module_name,
         publish_module_key,
         module_src_svn)
         values (#{id,jdbcType=INTEGER},
         #{publishEventId,jdbcType=INTEGER},
-        #{publishModule,jdbcType=VARCHAR},
+        #{publishProductName,jdbcType=VARCHAR},
+        #{publishModuleName,jdbcType=VARCHAR},
         #{publishModuleKey,jdbcType=VARCHAR},
         #{moduleSrcSvn,jdbcType=VARCHAR})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
@@ -76,8 +80,11 @@
             <if test="publishEventId != null" >
                 publish_event_id,
             </if>
-            <if test="publishModule != null" >
-                publish_module,
+            <if test="publishProductName != null" >
+                publish_product_name,
+            </if>
+            <if test="publishModuleName != null" >
+                publish_module_name,
             </if>
             <if test="publishModuleKey != null" >
                 publish_module_key,
@@ -93,8 +100,11 @@
             <if test="publishEventId != null" >
                 #{publishEventId,jdbcType=INTEGER},
             </if>
-            <if test="publishModule != null" >
-                #{publishModule,jdbcType=VARCHAR},
+            <if test="publishProductName != null" >
+                #{publishProductName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishModuleName != null" >
+                #{publishModuleName,jdbcType=VARCHAR},
             </if>
             <if test="publishModuleKey != null" >
                 #{publishModuleKey,jdbcType=VARCHAR},
@@ -110,8 +120,11 @@
             <if test="publishEventId != null" >
                 publish_event_id = #{publishEventId,jdbcType=INTEGER},
             </if>
-            <if test="publishModule != null" >
-                publish_module = #{publishModule,jdbcType=VARCHAR},
+            <if test="publishProductName != null" >
+                publish_product_name = #{publishProductName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishModuleName != null" >
+                publish_module_name = #{publishModuleName,jdbcType=VARCHAR},
             </if>
             <if test="publishModuleKey != null" >
                 publish_module_key = #{publishModuleKey,jdbcType=VARCHAR},
@@ -125,7 +138,8 @@
     <update id="Nebula-NebulaPublishModuleDao-Update-By-Id" parameterType="NebulaPublishModule">
         update nebula_publish_module set
         publish_event_id = #{publishEventId,jdbcType=INTEGER},
-        publish_module = #{publishModule,jdbcType=VARCHAR},
+        publish_product_name = #{publishProductName,jdbcType=VARCHAR},
+        publish_module_name = #{publishModuleName,jdbcType=VARCHAR},
         publish_module_key = #{publishModuleKey,jdbcType=VARCHAR},
         module_src_svn = #{moduleSrcSvn,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}

@@ -16,11 +16,9 @@
         <module>nebula-web</module>
         <module>nebula-security</module>
         <module>nebula-api</module>
-        <module>nebula-svn</module>
-        <module>nebula-salt</module>
-        <module>nebula-file-analyze</module>
-        <module>nebula-file-verify</module>
         <module>nebula-service</module>
+        <module>nebula-core</module>
+        <module>nebula-file</module>
     </modules>
     <dependencies>
         <dependency>

@@ -4,6 +4,8 @@
  */
 package com.olymtech.nebula.entity;
 
+import java.util.List;
+
 /**
  * Created by Gavin on 2015-11-02 10:32.
  */
@@ -18,6 +20,10 @@ public class ProductTree extends BaseDO {
     private Integer pid;
 
     private Integer treeLevel;
+
+    private List<SimpleHost> hosts;
+
+    private List<String> apps;
 
     public Integer getTreeLevel() {
         return treeLevel;
@@ -54,4 +60,20 @@ public class ProductTree extends BaseDO {
     public String getSrcSvn() {return srcSvn;}
 
     public void setSrcSvn(String srcSvn) {this.srcSvn = srcSvn;}
+
+    public List<SimpleHost> getHosts() {
+        return hosts;
+    }
+
+    public void setHosts(List<SimpleHost> hosts) {
+        this.hosts = hosts;
+    }
+
+    public List<String> getApps() {
+        return apps;
+    }
+
+    public void setApps(List<String> apps) {
+        this.apps = apps;
+    }
 }
