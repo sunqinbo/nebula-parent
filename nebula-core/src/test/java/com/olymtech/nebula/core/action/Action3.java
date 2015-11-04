@@ -2,7 +2,7 @@
  * Olymtech.com Inc.
  * Copyright (c) 2002-2015 All Rights Reserved
  */
-package com.olymtech.nebula.core.action.salt.test;
+package com.olymtech.nebula.core.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.entity.NebulaPublishEvent;

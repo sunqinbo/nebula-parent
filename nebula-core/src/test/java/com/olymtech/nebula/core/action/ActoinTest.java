@@ -2,11 +2,8 @@
  * Olymtech.com Inc.
  * Copyright (c) 2002-2015 All Rights Reserved
  */
-package com.olymtech.nebula.core.action.salt.test;
+package com.olymtech.nebula.core.action;
 
-import com.olymtech.nebula.core.action.Action;
-import com.olymtech.nebula.core.action.ActionChain;
-import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.junit.Before;
 import org.junit.Test;
