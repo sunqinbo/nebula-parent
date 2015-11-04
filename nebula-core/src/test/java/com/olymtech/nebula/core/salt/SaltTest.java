@@ -4,8 +4,7 @@
  */
 package com.olymtech.nebula.core.salt;
 
-import com.olymtech.nebula.core.action.salt.SaltStackServiceImpl;
-import com.olymtech.nebula.core.action.salt.core.SaltClientFactory;
+import com.olymtech.nebula.core.salt.core.SaltClientFactory;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.exception.SaltStackException;
