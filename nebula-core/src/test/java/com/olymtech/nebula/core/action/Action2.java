@@ -18,6 +18,8 @@ public class Action2 extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+
+
         System.out.println("svn动作");
         return false;
     }

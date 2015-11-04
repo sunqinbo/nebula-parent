@@ -20,6 +20,13 @@ public abstract class AbstractAction implements Action {
         return actionName;
     }
 
+    public AbstractAction() {
+    }
+
+    public AbstractAction(String actionName) {
+        this.actionName = actionName;
+    }
+
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
