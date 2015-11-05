@@ -1,6 +1,7 @@
 package com.olymtech.nebula.file.analyze.impl;
 
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * Created by liwenji on 2015/10/30.
  */
+@Service
 public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     public List<String> getFileListByDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
@@ -23,7 +25,7 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
         }
         return fileList;
     }
-
+    @Override
     public List<String> getFileListByRecursionDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
         File file = new File(dirPath);

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.olymtech.nebula" />
+
+    <!-- 引入jdbc配置文件 -->
+    <context:property-placeholder location="classpath*:jdbc.properties"/>
+
+    <!-- 扫描注解Bean -->
+    <context:component-scan base-package="com.olymtech.nebula">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <!-- 创建jdbc数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${aliyun.api.driver}"/>
+        <property name="jdbcUrl" value="${aliyun.api.url}"/>
+        <property name="user" value="${aliyun.api.username}"/>
+        <property name="password" value="${aliyun.api.password}"/>
+        <property name="maxPoolSize" value="${pool.maxPoolSize}"/>
+        <property name="minPoolSize" value="${pool.minPoolSize}"/>
+        <property name="checkoutTimeout" value="${pool.checkoutTimeout}"/>
+        <property name="maxIdleTime" value="${pool.maxIdleTime}"/>
+        <property name="maxIdleTimeExcessConnections" value="${pool.maxIdleTimeExcessConnections}" />
+        <property name="acquireIncrement" value="${pool.acquireIncrement}" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="typeAliasesPackage" value="com.olymtech.nebula.entity"/>
+        <property name="mapperLocations" value="classpath:/sqlMap/**/*.xml"/>
+        <property name="configLocation"  value="classpath:mybatis.xml"/>
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+    <bean name="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+</beans>

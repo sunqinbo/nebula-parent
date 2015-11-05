@@ -1,5 +1,7 @@
 package com.olymtech.nebula.entity;
 
+import java.util.List;
+
 public class NebulaPublishModule extends BaseDO {
 
     private Integer publishEventId;
@@ -11,6 +13,26 @@ public class NebulaPublishModule extends BaseDO {
     private String publishModuleKey;
 
     private String moduleSrcSvn;
+
+    private List<NebulaPublishHost> publishHosts;
+
+    private List<NebulaPublishApp>  publishApps;
+
+    public List<NebulaPublishHost> getPublishHosts() {
+        return publishHosts;
+    }
+
+    public void setPublishHosts(List<NebulaPublishHost> publishHosts) {
+        this.publishHosts = publishHosts;
+    }
+
+    public List<NebulaPublishApp> getPublishApps() {
+        return publishApps;
+    }
+
+    public void setPublishApps(List<NebulaPublishApp> publishApps) {
+        this.publishApps = publishApps;
+    }
 
     public Integer getPublishEventId() {
         return publishEventId;

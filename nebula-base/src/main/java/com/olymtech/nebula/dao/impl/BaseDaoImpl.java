@@ -4,59 +4,67 @@
  */
 package com.olymtech.nebula.dao.impl;
 
+import com.github.pagehelper.Page;
 import com.olymtech.nebula.dao.IBaseDao;
+import com.olymtech.nebula.dao.mybatis.SqlSessionDaoSupport;
 import com.olymtech.nebula.entity.BaseDO;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import java.awt.print.Pageable;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Gavin on 2015-10-23 14:17.
  */
-public class BaseDaoImpl extends SqlSessionDaoSupport implements IBaseDao {
+public class BaseDaoImpl<T extends BaseDO, ID extends Serializable> extends SqlSessionDaoSupport implements IBaseDao<T, ID>  {
 
-    public String   CLASS_NAME = ("Arsenal-" + this.getClass().getSimpleName().replace("Impl", ""));
+    public String   CLASS_NAME = ("Nebula-" + this.getClass().getSimpleName().replace("Impl", ""));
 
     @Override
-    public int insert(BaseDO baseDO) {
+    public int insert(T baseDO) {
         getSqlSession().insert(CLASS_NAME + "-Insert", baseDO);
         return baseDO.getId();
     }
 
     @Override
-    public int insertSelective(BaseDO baseDO) {
+    public int insertSelective(T baseDO) {
         getSqlSession().insert(CLASS_NAME + "-Insert-Selective", baseDO);
         return baseDO.getId();
     }
 
     @Override
-    public BaseDO selectById(Integer id) {
-        return (BaseDO) getSqlSession().selectOne(CLASS_NAME + "-Select-By-Id", id);
+    public T selectById(ID id) {
+        return getSqlSession().selectOne(CLASS_NAME + "-Select-By-Id", id);
     }
 
     @Override
-    public void update(BaseDO baseDO){
+    public void update(T baseDO){
         getSqlSession().update(CLASS_NAME + "-Update", baseDO);
     }
 
     @Override
-    public void updateByIdSelective(BaseDO baseDO){
+    public void updateByIdSelective(T baseDO){
         getSqlSession().update(CLASS_NAME + "-Update-By-Id-Selective", baseDO);
     }
 
     @Override
-    public void deleteById(Integer id){
+    public void deleteById(ID id){
         getSqlSession().delete(CLASS_NAME + "-Delete-By-Id", id);
     }
 
     @Override
-    public <T extends BaseDO> List<T> selectAllPaging(T t) {
+    public List<T> selectAllPaging(T t) {
 //        t.getPage().setSumPage(this.selectCount(t));
         return getSqlSession().selectList(CLASS_NAME + "-Select-All-Paging-Where", t);
     }
 
     @Override
-    public <T extends BaseDO> List<T> selectAll() {
+    public Page<T> selectAll(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public List<T> selectAll() {
         return getSqlSession().selectList(CLASS_NAME + "-Select-All");
     }
 
@@ -67,7 +75,7 @@ public class BaseDaoImpl extends SqlSessionDaoSupport implements IBaseDao {
     }
 
     @Override
-    public <T extends BaseDO> int selectCount(T t){
+    public int selectCount(T t){
         return (Integer) getSqlSession().selectOne(CLASS_NAME + "-Select-Count-Where", t);
     }
 }

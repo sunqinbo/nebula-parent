@@ -4,32 +4,37 @@
  */
 package com.olymtech.nebula.dao;
 
+import com.github.pagehelper.Page;
 import com.olymtech.nebula.entity.BaseDO;
 
+import java.awt.print.Pageable;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Gavin on 2015-10-23 14:16.
  */
-public interface IBaseDao {
+public interface IBaseDao<T extends BaseDO, ID extends Serializable> {
 
-    public int insert(BaseDO baseDO);
+    public int insert(T baseDO);
 
-    public BaseDO selectById(Integer id);
+    public T selectById(ID id);
 
-    public void update(BaseDO baseDO);
+    public void update(T baseDO);
 
-    public void updateByIdSelective(BaseDO baseDO);
+    public void updateByIdSelective(T baseDO);
 
-    public void deleteById(Integer id);
+    public void deleteById(ID id);
 
-    public <T extends BaseDO> List<T> selectAllPaging(T t);
+    public List<T> selectAllPaging(T t);
 
-    public <T extends BaseDO> List<T> selectAll();
+    public List<T> selectAll();
+
+    public Page<T> selectAll(Pageable pageable);
 
     public int selectCount();
 
-    public <T extends BaseDO> int selectCount(T t);
+    public int selectCount(T t);
 
-    public int insertSelective(BaseDO baseDO);
+    public int insertSelective(T baseDO);
 }

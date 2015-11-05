@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_app">
+    <resultMap id="RM-NebulaPublishApp" type="com.olymtech.nebula.entity.NebulaPublishApp">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
+        <result column="publish_module_id" property="publishModuleId" jdbcType="INTEGER" />
+        <result column="publish_app_name" property="publishAppName" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="NebulaPublishApp-Base-Column-List">
+        id, 
+        publish_event_id, 
+        publish_module_id, 
+        publish_app_name
+    </sql>
+    <select id="Nebula-NebulaPublishAppDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishApp">
+        select
+        <include refid="NebulaPublishApp-Base-Column-List"/>
+        from nebula_publish_app
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishAppDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_app
+    </select>
+    <select id="Nebula-NebulaPublishAppDao-Select-Count-Where" parameterType="NebulaPublishApp" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_app
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishModuleId != null">
+                AND publish_module_id = #{publishModuleId}
+            </if>
+            <if test="publishAppName != null">
+                AND publish_app_name = #{publishAppName}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishAppDao-Select-All-Paging-Where" parameterType="NebulaPublishApp" resultMap="RM-NebulaPublishApp">
+        select <include refid="NebulaPublishApp-Base-Column-List"/> from nebula_publish_app
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishModuleId != null">
+                AND publish_module_id = #{publishModuleId}
+            </if>
+            <if test="publishAppName != null">
+                AND publish_app_name = #{publishAppName}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishAppDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_app
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishAppDao-Insert" parameterType="NebulaPublishApp">
+        insert into nebula_publish_app (
+        id,
+        publish_event_id,
+        publish_module_id,
+        publish_app_name)
+        values (#{id,jdbcType=INTEGER},
+        #{publishEventId,jdbcType=INTEGER},
+        #{publishModuleId,jdbcType=INTEGER},
+        #{publishAppName,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishAppDao-Insert-Selective" parameterType="NebulaPublishApp">
+        insert into nebula_publish_app
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="publishEventId != null" >
+                publish_event_id,
+            </if>
+            <if test="publishModuleId != null" >
+                publish_module_id,
+            </if>
+            <if test="publishAppName != null" >
+                publish_app_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishEventId != null" >
+                #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishModuleId != null" >
+                #{publishModuleId,jdbcType=INTEGER},
+            </if>
+            <if test="publishAppName != null" >
+                #{publishAppName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishAppDao-Update-By-Id-Selective" parameterType="NebulaPublishApp">
+        update nebula_publish_app
+        <set>
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishModuleId != null" >
+                publish_module_id = #{publishModuleId,jdbcType=INTEGER},
+            </if>
+            <if test="publishAppName != null" >
+                publish_app_name = #{publishAppName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishAppDao-Update-By-Id" parameterType="NebulaPublishApp">
+        update nebula_publish_app set
+        publish_event_id = #{publishEventId,jdbcType=INTEGER},
+        publish_module_id = #{publishModuleId,jdbcType=INTEGER},
+        publish_app_name = #{publishAppName,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

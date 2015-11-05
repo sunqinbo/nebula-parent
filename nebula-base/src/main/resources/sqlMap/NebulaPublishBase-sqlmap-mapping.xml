@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nebula_publish_base">
+    <resultMap id="RM-NebulaPublishBase" type="com.olymtech.nebula.entity.NebulaPublishBase">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
+        <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR" />
+        <result column="publish_module_name" property="publishModuleName" jdbcType="VARCHAR" />
+        <result column="publish_module_key" property="publishModuleKey" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="NebulaPublishBase-Base-Column-List">
+        id,
+        publish_event_id,
+        publish_product_name,
+        publish_module_name,
+        publish_module_key
+    </sql>
+    <select id="Nebula-NebulaPublishBaseDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishBase">
+        select
+        <include refid="NebulaPublishBase-Base-Column-List"/>
+        from nebula_publish_base
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishBaseDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_base
+    </select>
+    <select id="Nebula-NebulaPublishBaseDao-Select-Count-Where" parameterType="NebulaPublishBase" resultType="java.lang.Integer">
+        select count(id) from nebula_publish_base
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishProductName != null">
+                AND publish_product_name = #{publishProductName}
+            </if>
+            <if test="publishModuleName != null">
+                AND publish_module_name = #{publishModuleName}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishBaseDao-Select-All-Paging-Where" parameterType="NebulaPublishBase" resultMap="RM-NebulaPublishBase">
+        select <include refid="NebulaPublishBase-Base-Column-List"/> from nebula_publish_base
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishProductName != null">
+                AND publish_product_name = #{publishProductName}
+            </if>
+            <if test="publishModuleName != null">
+                AND publish_module_name = #{publishModuleName}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishBaseDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_base
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-NebulaPublishBaseDao-Insert" parameterType="NebulaPublishBase">
+        insert into nebula_publish_base (
+        id,
+        publish_event_id,
+        publish_product_name,
+        publish_module_name,
+        publish_module_key)
+        values (#{id,jdbcType=INTEGER},
+        #{publishEventId,jdbcType=INTEGER},
+        #{publishProductName,jdbcType=VARCHAR},
+        #{publishModuleName,jdbcType=VARCHAR},
+        #{publishModuleKey,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishBaseDao-Insert-Selective" parameterType="NebulaPublishBase">
+        insert into nebula_publish_base
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="publishEventId != null" >
+                publish_event_id,
+            </if>
+            <if test="publishProductName != null" >
+                publish_product_name,
+            </if>
+            <if test="publishModuleName != null" >
+                publish_module_name,
+            </if>
+            <if test="publishModuleKey != null" >
+                publish_module_key,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishEventId != null" >
+                #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishProductName != null" >
+                #{publishProductName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishModuleName != null" >
+                #{publishModuleName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishModuleKey != null" >
+                #{publishModuleKey,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishBaseDao-Update-By-Id-Selective" parameterType="NebulaPublishBase">
+        update nebula_publish_base
+        <set>
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishProductName != null" >
+                publish_product_name = #{publishProductName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishModuleName != null" >
+                publish_module_name = #{publishModuleName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishModuleKey != null" >
+                publish_module_key = #{publishModuleKey,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishBaseDao-Update-By-Id" parameterType="NebulaPublishBase">
+        update nebula_publish_base set
+        publish_event_id = #{publishEventId,jdbcType=INTEGER},
+        publish_product_name = #{publishProductName,jdbcType=VARCHAR},
+        publish_module_name = #{publishModuleName,jdbcType=VARCHAR},
+        publish_module_key = #{publishModuleKey,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

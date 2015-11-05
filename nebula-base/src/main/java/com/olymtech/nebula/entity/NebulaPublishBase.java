@@ -1,7 +1,6 @@
 package com.olymtech.nebula.entity;
 
-public class NebulaPublishBase {
-    private Integer id;
+public class NebulaPublishBase extends BaseDO{
 
     private Integer publishEventId;
 
@@ -10,16 +9,6 @@ public class NebulaPublishBase {
     private String publishModuleName;
 
     private String publishModuleKey;
-
-    private Integer isSuccessPublish;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getPublishEventId() {
         return publishEventId;
@@ -53,11 +42,4 @@ public class NebulaPublishBase {
         this.publishModuleKey = publishModuleKey == null ? null : publishModuleKey.trim();
     }
 
-    public Integer getIsSuccessPublish() {
-        return isSuccessPublish;
-    }
-
-    public void setIsSuccessPublish(Integer isSuccessPublish) {
-        this.isSuccessPublish = isSuccessPublish;
-    }
 }

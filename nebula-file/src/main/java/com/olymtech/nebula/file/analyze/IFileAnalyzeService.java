@@ -1,11 +1,13 @@
 package com.olymtech.nebula.file.analyze;
 
+
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by liwenji on 2015/11/2.
  */
+
 public interface IFileAnalyzeService {
     /**
      *
