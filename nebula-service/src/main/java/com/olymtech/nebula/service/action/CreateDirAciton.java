@@ -5,10 +5,16 @@
 package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
+import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.service.IPublishEventService;
+import com.olymtech.nebula.entity.NebulaPublishHost;
+import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author taoshanchang 15/11/4
@@ -18,8 +24,7 @@ import org.springframework.stereotype.Service;
 public class CreateDirAciton extends AbstractAction {
 
     @Autowired
-    private IPublishEventService publishEventService;
-
+    private ISaltStackService saltStackService;
 
     public CreateDirAciton() {
 
@@ -27,11 +32,22 @@ public class CreateDirAciton extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        System.out.println("CreateDirAciton");
-        System.out.println(publishEventService);
+        List<NebulaPublishModule> publishModules = event.getPublishModules();
 
+        for (NebulaPublishModule publishModule : publishModules) {
+            List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
+            List<String> targes = new ArrayList<String>();
+            for (NebulaPublishHost nebulaPublishHost : publishHosts) {
+                targes.add(nebulaPublishHost.getPassPublishHostIp());
+            }
 
+            boolean warsResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_wars/"+publishModule.getPublishModuleKey(), true);
+            boolean etcResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_etcs/"+publishModule.getPublishModuleKey(), true);
 
+            if (!warsResult||!etcResult) {
+                return false;
+            }
+        }
 
         return true;
     }

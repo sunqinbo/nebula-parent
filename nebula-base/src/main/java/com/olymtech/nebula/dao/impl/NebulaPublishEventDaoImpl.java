@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
  * Created by Gavin on 2015-10-23 14:28.
  */
 @Repository("nebulaPublishEventDao")
-public class NebulaPublishEventDaoImpl extends BaseDaoImpl implements INebulaPublishEventDao {
+public class NebulaPublishEventDaoImpl extends BaseDaoImpl<NebulaPublishEvent,Integer> implements INebulaPublishEventDao {
 
 }
