@@ -19,6 +19,26 @@ public interface ISaltStackService {
 
 
     /**
+     * 远程文件拷贝接口
+     * @param target 目标机
+     * @param from master指定文件
+     * @param to minion指定文件
+     * @return
+     * @throws SaltStackException
+     */
+    public <T> ResultInfoSet cpFileRemote(final Target<T> target, String from, String to ) throws SaltStackException;
+
+    /**
+     * 远程拷贝文件夹
+     * @param target 目标机
+     * @param from master指定目录
+     * @param to minion指定目录
+     * @return
+     * @throws SaltStackException
+     */
+    public <T> ResultInfoSet cpDirRemote(final Target<T> target, String from, String to ) throws SaltStackException;
+
+    /**
      * 文件拷贝接口
      * @param target 目标机
      * @param from master指定文件
@@ -26,17 +46,17 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpFile(final Target<T> target, String from, String to ) throws SaltStackException;
+    public <T> boolean cpFile(final Target<T> target, String from, String to ) throws SaltStackException;
 
     /**
-     *
+     * 拷贝文件夹
      * @param target 目标机
      * @param from master指定目录
      * @param to minion指定目录
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpDir(final Target<T> target, String from, String to ) throws SaltStackException;
+    public <T> boolean cpDir(final Target<T> target, String from, String to ) throws SaltStackException;
 
     /**
      * 创建文件夹并选择自动建立好那些尚不存在的目录
