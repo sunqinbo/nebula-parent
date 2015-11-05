@@ -34,7 +34,6 @@
 <script src="public/assets/js/bootstrap-notify.js"></script>
 
 <!--  Google Maps Plugin    -->
-<script type="text/javascript" src="../../public/assets/js/js.js?sensor=false"></script>
 <script src="../../public/assets/js/main.js"></script>
 
 <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
