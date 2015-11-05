@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Gavin on 2015-10-23 14:23.
  */
-public interface INebulaPublishModuleDao extends IBaseDao {
+public interface INebulaPublishModuleDao extends IBaseDao<NebulaPublishModule,Integer> {
 
     public List<NebulaPublishModule> selectModulesByEventId(Integer publishEventId);
 

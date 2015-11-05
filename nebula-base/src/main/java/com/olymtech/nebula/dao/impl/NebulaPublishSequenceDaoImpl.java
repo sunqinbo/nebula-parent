@@ -5,10 +5,11 @@
 package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.INebulaPublishSequenceDao;
+import com.olymtech.nebula.entity.NebulaPublishSequence;
 
 /**
  * Created by Gavin on 2015-11-02 14:13.
  */
-public class NebulaPublishSequenceDaoImpl extends BaseDaoImpl implements INebulaPublishSequenceDao {
+public class NebulaPublishSequenceDaoImpl extends BaseDaoImpl<NebulaPublishSequence,Integer> implements INebulaPublishSequenceDao {
 
 }

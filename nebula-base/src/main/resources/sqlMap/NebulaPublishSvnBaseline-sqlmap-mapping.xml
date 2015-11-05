@@ -4,6 +4,7 @@
     <resultMap id="RM-NebulaPublishSvnBaseline" type="com.olymtech.nebula.entity.NebulaPublishSvnBaseline">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="product_env" property="productEnv" jdbcType="VARCHAR" />
         <result column="product_src_svn" property="productSrcSvn" jdbcType="VARCHAR" />
         <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
         <result column="src_svn_version" property="srcSvnVersion" jdbcType="VARCHAR" />
@@ -11,6 +12,7 @@
     <sql id="NebulaPublishSvnBaseline-Base-Column-List">
         id,
         product_name,
+        product_env,
         product_src_svn,
         publish_event_id,
         src_svn_version
@@ -30,6 +32,9 @@
             <if test="productName != null">
                 product_name = #{productName}
             </if>
+            <if test="productEnv != null">
+                AND product_env = #{productEnv}
+            </if>
             <if test="publishEventId != null">
                 AND publish_event_id = #{publishEventId}
             </if>
@@ -40,6 +45,9 @@
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="productName != null">
                 product_name = #{productName}
+            </if>
+            <if test="productEnv != null">
+                AND product_env = #{productEnv}
             </if>
             <if test="publishEventId != null">
                 AND publish_event_id = #{publishEventId}
@@ -55,11 +63,13 @@
         insert into nebula_publish_svn_baseline (
         id,
         product_name,
+        product_env,
         product_src_svn,
         publish_event_id,
         src_svn_version)
         values (#{id,jdbcType=INTEGER},
         #{productName,jdbcType=VARCHAR},
+        #{productEnv,jdbcType=VARCHAR},
         #{productSrcSvn,jdbcType=VARCHAR},
         #{publishEventId,jdbcType=INTEGER},
         #{srcSvnVersion,jdbcType=VARCHAR})
@@ -75,6 +85,9 @@
             </if>
             <if test="productName != null" >
                 product_name,
+            </if>
+            <if test="productEnv != null" >
+                product_env,
             </if>
             <if test="productSrcSvn != null" >
                 product_src_svn,
@@ -93,6 +106,9 @@
             <if test="productName != null" >
                 #{productName,jdbcType=VARCHAR},
             </if>
+            <if test="productEnv != null" >
+                #{productEnv,jdbcType=VARCHAR},
+            </if>
             <if test="productSrcSvn != null" >
                 #{productSrcSvn,jdbcType=VARCHAR},
             </if>
@@ -110,6 +126,9 @@
             <if test="productName != null" >
                 product_name = #{productName,jdbcType=VARCHAR},
             </if>
+            <if test="productEnv != null" >
+                product_env = #{productEnv,jdbcType=VARCHAR},
+            </if>
             <if test="productSrcSvn != null" >
                 product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
             </if>
@@ -125,6 +144,7 @@
     <update id="Nebula-NebulaPublishSvnBaselineDao-Update-By-Id" parameterType="NebulaPublishSvnBaseline">
         update nebula_publish_svn_baseline set
         product_name = #{productName,jdbcType=VARCHAR},
+        product_env = #{productEnv,jdbcType=VARCHAR},
         product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
         publish_event_id = #{publishEventId,jdbcType=INTEGER},
         src_svn_version = #{srcSvnVersion,jdbcType=VARCHAR}

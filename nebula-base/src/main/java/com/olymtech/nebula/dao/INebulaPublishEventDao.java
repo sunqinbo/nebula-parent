@@ -9,6 +9,6 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 /**
  * Created by Gavin on 2015-10-23 14:19.
  */
-public interface INebulaPublishEventDao extends IBaseDao<NebulaPublishEvent, Integer> {
+public interface INebulaPublishEventDao extends IBaseDao {
 
 }

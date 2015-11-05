@@ -7,7 +7,7 @@ package com.olymtech.nebula.entity;
 /**
  * Created by Gavin on 2015-10-23 14:57.
  */
-public class NebulaScript {
+public class NebulaScript extends BaseDO{
 
     private String scriptName;
 

@@ -4,6 +4,7 @@
     <resultMap id="RM-NebulaPublishBase" type="com.olymtech.nebula.entity.NebulaPublishBase">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
+        <result column="publish_product_env" property="publishProductEnv" jdbcType="VARCHAR" />
         <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR" />
         <result column="publish_module_name" property="publishModuleName" jdbcType="VARCHAR" />
         <result column="publish_module_key" property="publishModuleKey" jdbcType="VARCHAR" />
@@ -11,6 +12,7 @@
     <sql id="NebulaPublishBase-Base-Column-List">
         id,
         publish_event_id,
+        publish_product_env,
         publish_product_name,
         publish_module_name,
         publish_module_key
@@ -36,6 +38,9 @@
             <if test="publishModuleName != null">
                 AND publish_module_name = #{publishModuleName}
             </if>
+            <if test="publishProductEnv != null">
+                AND publish_product_env = #{publishProductEnv}
+            </if>
         </trim>
     </select>
     <select id="Nebula-NebulaPublishBaseDao-Select-All-Paging-Where" parameterType="NebulaPublishBase" resultMap="RM-NebulaPublishBase">
@@ -50,6 +55,9 @@
             <if test="publishModuleName != null">
                 AND publish_module_name = #{publishModuleName}
             </if>
+            <if test="publishProductEnv != null">
+                AND publish_product_env = #{publishProductEnv}
+            </if>
         </trim>
         group by id order by id desc
     </select>
@@ -61,11 +69,13 @@
         insert into nebula_publish_base (
         id,
         publish_event_id,
+        publish_product_env,
         publish_product_name,
         publish_module_name,
         publish_module_key)
         values (#{id,jdbcType=INTEGER},
         #{publishEventId,jdbcType=INTEGER},
+        #{publishProductEnv,jdbcType=VARCHAR},
         #{publishProductName,jdbcType=VARCHAR},
         #{publishModuleName,jdbcType=VARCHAR},
         #{publishModuleKey,jdbcType=VARCHAR})
@@ -81,6 +91,9 @@
             </if>
             <if test="publishEventId != null" >
                 publish_event_id,
+            </if>
+            <if test="publishProductEnv != null" >
+                publish_product_env,
             </if>
             <if test="publishProductName != null" >
                 publish_product_name,
@@ -99,6 +112,9 @@
             <if test="publishEventId != null" >
                 #{publishEventId,jdbcType=INTEGER},
             </if>
+            <if test="publishProductEnv != null" >
+                #{publishProductEnv,jdbcType=VARCHAR},
+            </if>
             <if test="publishProductName != null" >
                 #{publishProductName,jdbcType=VARCHAR},
             </if>
@@ -116,6 +132,9 @@
             <if test="publishEventId != null" >
                 publish_event_id = #{publishEventId,jdbcType=INTEGER},
             </if>
+            <if test="publishProductEnv != null" >
+                publish_product_env = #{publishProductEnv,jdbcType=VARCHAR},
+            </if>
             <if test="publishProductName != null" >
                 publish_product_name = #{publishProductName,jdbcType=VARCHAR},
             </if>
@@ -131,6 +150,7 @@
     <update id="Nebula-NebulaPublishBaseDao-Update-By-Id" parameterType="NebulaPublishBase">
         update nebula_publish_base set
         publish_event_id = #{publishEventId,jdbcType=INTEGER},
+        publish_product_env = #{publishProductEnv,jdbcType=VARCHAR},
         publish_product_name = #{publishProductName,jdbcType=VARCHAR},
         publish_module_name = #{publishModuleName,jdbcType=VARCHAR},
         publish_module_key = #{publishModuleKey,jdbcType=VARCHAR}
