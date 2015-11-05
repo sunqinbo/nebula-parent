@@ -27,9 +27,6 @@ import java.util.List;
 public class PublicAction extends AbstractAction {
 
     @Autowired
-    private IPublishBaseService publishBaseService;
-
-    @Autowired
     private IPublishAppService publishAppService;
 
     @Autowired
@@ -38,8 +35,7 @@ public class PublicAction extends AbstractAction {
     public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
     public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
 
-    public static final String LocalWarDirPrefix = "/home/saas/deploy_tmp/";
-    public static final String LocalEtcDirPrefix = "/home/saas/deploy_tmp/";
+    public static final String LocalBaseDir = "/home/saas/deploy_tmp/";
 
 
     public PublicAction() {
@@ -57,8 +53,8 @@ public class PublicAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            String warFromBase = LocalWarDirPrefix + event.getPublishProductKey() + "/publish_war/";
-            String etcFrom = LocalWarDirPrefix + event.getPublishProductKey() + "/src_svn/etc/";
+            String warFromBase = LocalBaseDir + event.getPublishProductKey() + "/publish_war/";
+            String etcFrom = LocalBaseDir + event.getPublishProductKey() + "/src_svn/etc/";
 
             List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
 
