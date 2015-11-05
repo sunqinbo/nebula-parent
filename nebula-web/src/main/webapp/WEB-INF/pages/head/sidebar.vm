@@ -2,84 +2,57 @@
 
 <div class="sidebar" data-color="purple" data-image="public/assets/img/sidebar-5.jpg">
 
-    <!--
+        <!--
 
-        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
-        Tip 2: you can also add an image using data-image tag
+            Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+            Tip 2: you can also add an image using data-image tag
 
-    -->
+        -->
 
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="#">
+            <a href="#" class="simple-text">
+                <i class="pe-7s-box1"></i>
                 发布系统
             </a>
         </div>
-
         <ul class="nav">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    发布申请
-                    <i class="pe-7s-box1"></i>
-                    <span class="caret"></span>
+            <li>
+                <a href="#">
+                    <i class="pe-7s-upload"></i>
+                    <p>发布申请</p>
                 </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#">提交发布单</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    我的发布
-                    <i class="pe-7s-paint"></i>
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#">应用发布</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    发布数据
-                    <i class="pe-7s-paint"></i>
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">提交发布单</a></li>
-                    <li><a href="#">错误日志</a></li>
-                    <li><a href="#">发布报表</a></li>
-                </ul>
             </li>
             <li>
                 <a href="#">
-                    <i class="pe-7s-news-paper"></i>
-
+                    <i class="pe-7s-user"></i>
+                    <p>我的发布</p>
+                </a>
+            </li>
+            <li >
+                <a href="#">
+                    <i class="pe-7s-note2"></i>
+                    <p>发布数据</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="pe-7s-config"></i>
                     <p>发布配置</p>
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <i class="pe-7s-science"></i>
-
+                    <i class="pe-7s-lock"></i>
                     <p>权限管理</p>
                 </a>
             </li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    发布工具
-                    <i class="pe-7s-paint"></i>
-                    <span class="caret"></span>
+            <li>
+                <a href="#">
+                    <i class="pe-7s-tools"></i>
+                    <p>发布工具</p>
                 </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#">检测发布主机</a>
-                    </li>
-                </ul>
             </li>
-
         </ul>
     </div>
 </div>
