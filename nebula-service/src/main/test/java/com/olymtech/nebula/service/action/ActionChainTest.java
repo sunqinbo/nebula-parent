@@ -34,7 +34,7 @@ public class ActionChainTest {
 
         ActionChain actionChain = new ActionChain( );
 
-        actionChain.addAction(SpringUtils.getBean(CpEtcAction.class));
+        actionChain.addAction(SpringUtils.getBean(CpEtcWarAction.class));
         actionChain.addAction(SpringUtils.getBean(CreateDirAciton.class));
 
         try {

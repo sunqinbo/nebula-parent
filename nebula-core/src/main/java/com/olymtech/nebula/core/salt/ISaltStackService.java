@@ -26,7 +26,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpFileRemote(final Target<T> target, String from, String to ) throws SaltStackException;
+    public <T> boolean cpFileRemote(final Target<T> target, String from, String to) throws SaltStackException;
 
     /**
      * 远程拷贝文件夹
@@ -36,7 +36,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpDirRemote(final Target<T> target, String from, String to ) throws SaltStackException;
+    public <T> boolean cpDirRemote(final Target<T> target, String from, String to) throws SaltStackException;
 
     /**
      * 文件拷贝接口
