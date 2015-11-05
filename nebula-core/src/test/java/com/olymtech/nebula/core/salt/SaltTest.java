@@ -76,7 +76,7 @@ public class SaltTest {
         SaltStackServiceImpl service = new SaltStackServiceImpl();
 
         List<Object> args1 = new ArrayList<>();
-        args1.add("ls");
+        args1.add("mkdir /home/saas/tomcat/public_wars1/1");
 
         Map<String, Object> kwargs = new LinkedHashMap<>();
 
@@ -87,6 +87,17 @@ public class SaltTest {
             System.out.println(info.getMinions());
             System.out.println(info.getStartTime());
         }
+    }
+
+    @Test
+    public void cmdMakeDir() throws SaltStackException {
+
+        SaltStackServiceImpl service = new SaltStackServiceImpl();
+
+        boolean b = service.mkDir(new Glob(), "/home/saas/tomcat/public_etcs/test4", false);
+
+        System.out.print(b);
+
     }
 
 }

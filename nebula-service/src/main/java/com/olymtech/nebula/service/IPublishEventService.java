@@ -1,5 +1,6 @@
 package com.olymtech.nebula.service;
 
+import com.olymtech.nebula.entity.BaseDO;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 
 /**
@@ -8,4 +9,6 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 public interface IPublishEventService {
 
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent);
+
+    public BaseDO getPublishEventById(Integer id);
 }

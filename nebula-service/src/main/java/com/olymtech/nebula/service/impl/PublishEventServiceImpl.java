@@ -28,4 +28,9 @@ public class PublishEventServiceImpl implements IPublishEventService {
         nebulaPublishEvent.setSubmitDatetime(now);
         return nebulaPublishEventDao.insert(nebulaPublishEvent);
     }
+
+    @Override
+    public NebulaPublishEvent getPublishEventById(Integer id) {
+        return nebulaPublishEventDao.selectById(id);
+    }
 }
