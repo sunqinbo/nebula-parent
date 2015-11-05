@@ -5,11 +5,12 @@
 package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.INebulaScriptHistoryDao;
+import com.olymtech.nebula.entity.NebulaScriptHistory;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by Gavin on 2015-10-23 14:37.
  */
 @Repository("nebulaScriptHistoryDao")
-public class NebulaScriptHistoryDaoImpl extends BaseDaoImpl implements INebulaScriptHistoryDao {
+public class NebulaScriptHistoryDaoImpl extends BaseDaoImpl<NebulaScriptHistory,Integer> implements INebulaScriptHistoryDao {
 }

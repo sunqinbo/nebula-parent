@@ -5,11 +5,12 @@
 package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.INebulaPublishEventLogDao;
+import com.olymtech.nebula.entity.NebulaPublishEventLog;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by Gavin on 2015-10-23 14:30.
  */
 @Repository("nebulaPublishEventLogDao")
-public class NebulaPublishEventLogDaoImpl extends BaseDaoImpl implements INebulaPublishEventLogDao {
+public class NebulaPublishEventLogDaoImpl extends BaseDaoImpl<NebulaPublishEventLog,Integer> implements INebulaPublishEventLogDao {
 }
