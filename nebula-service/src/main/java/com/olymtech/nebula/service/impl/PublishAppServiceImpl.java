@@ -7,9 +7,12 @@ package com.olymtech.nebula.service.impl;
 import com.olymtech.nebula.dao.INebulaPublishAppDao;
 import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.service.IPublishAppService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,15 +20,23 @@ import java.util.List;
  */
 @Service("publishAppService")
 public class PublishAppServiceImpl implements IPublishAppService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private INebulaPublishAppDao nebulaPublishAppDao;
 
     @Override
     public List<NebulaPublishApp> selectByEventIdAndModuleId(Integer eventId, Integer moduleId){
-        NebulaPublishApp nebulaPublishApp = new NebulaPublishApp();
-        nebulaPublishApp.setPublishEventId(eventId);
-        nebulaPublishApp.setPublishModuleId(moduleId);
-        return nebulaPublishAppDao.selectAllPaging(nebulaPublishApp);
+        List<NebulaPublishApp> nebulaPublishApps = new ArrayList<>();
+        try{
+            NebulaPublishApp nebulaPublishApp = new NebulaPublishApp();
+            nebulaPublishApp.setPublishEventId(eventId);
+            nebulaPublishApp.setPublishModuleId(moduleId);
+            nebulaPublishApps = nebulaPublishAppDao.selectAllPaging(nebulaPublishApp);
+        }catch (Exception e){
+            logger.error("selectByEventIdAndModuleId error:",e);
+        }
+        return nebulaPublishApps;
     }
 
 

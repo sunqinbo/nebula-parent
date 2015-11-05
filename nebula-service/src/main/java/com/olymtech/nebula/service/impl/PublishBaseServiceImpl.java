@@ -10,6 +10,8 @@ import com.olymtech.nebula.entity.NebulaPublishBase;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.trilead.ssh2.packets.PacketUserauthBanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,23 +22,29 @@ import java.util.List;
  */
 @Service("publishBaseService")
 public class PublishBaseServiceImpl implements IPublishBaseService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     private INebulaPublishBaseDao   nebulaPublishBaseDao;
 
     @Override
     public String selectLastModuleKeyByPublishEvent(NebulaPublishEvent event,String moduleName){
         String publishKey = null;
-        NebulaPublishBase baseSearch = new NebulaPublishBase();
-        baseSearch.setPublishModuleName(moduleName);
-        baseSearch.setPublishProductName(event.getPublishProductName());
-        baseSearch.setPublishProductEnv(event.getPublishEnv());
-        PageHelper.startPage(0, 10);
-        List<NebulaPublishBase> nebulaPublishBases = nebulaPublishBaseDao.selectAllPaging(baseSearch);
-        if(nebulaPublishBases != null){
-            NebulaPublishBase nebulaPublishBase = nebulaPublishBases.get(0);
-            if(nebulaPublishBase != null){
-                publishKey = nebulaPublishBase.getPublishModuleKey();
+        try{
+            NebulaPublishBase baseSearch = new NebulaPublishBase();
+            baseSearch.setPublishModuleName(moduleName);
+            baseSearch.setPublishProductName(event.getPublishProductName());
+            baseSearch.setPublishProductEnv(event.getPublishEnv());
+            PageHelper.startPage(1, 10);
+            List<NebulaPublishBase> nebulaPublishBases = nebulaPublishBaseDao.selectAllPaging(baseSearch);
+            if(nebulaPublishBases != null && nebulaPublishBases.size()>0){
+                NebulaPublishBase nebulaPublishBase = nebulaPublishBases.get(0);
+                if(nebulaPublishBase != null){
+                    publishKey = nebulaPublishBase.getPublishModuleKey();
+                }
             }
+        }catch (Exception e){
+            logger.error("selectLastModuleKeyByPublishEvent error:",e);
         }
         return publishKey;
     }
