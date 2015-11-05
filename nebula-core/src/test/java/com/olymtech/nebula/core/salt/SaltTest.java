@@ -7,6 +7,7 @@ package com.olymtech.nebula.core.salt;
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.target.Glob;
+import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -46,28 +47,14 @@ public class SaltTest {
 
     @Test
     public void cpFileTest() throws SaltStackException {
-        ResultInfoSet resultInfos = service.cpFile(new Glob(), "backup/111", "/root/111");
-        List<ResultInfo> infoList = resultInfos.getInfoList();
-        for (ResultInfo info : infoList) {
-
-            System.out.println(info.getResults());
-            System.out.println(info.getMinions());
-            System.out.println(info.getStartTime());
-
-        }
+        boolean b = service.cpFile(new Glob(), "backup/111", "/root/111");
 
     }
 
     @Test
     public void cpDirTest() throws SaltStackException {
         service = new SaltStackServiceImpl();
-        ResultInfoSet resultInfos = service.cpDir(new Glob(), "backup/dir", "/root/dir");
-        List<ResultInfo> infoList = resultInfos.getInfoList();
-        for (ResultInfo info : infoList) {
-            System.out.println(info.getResults());
-            System.out.println(info.getMinions());
-            System.out.println(info.getStartTime());
-        }
+        boolean b = service.cpDir(new Glob(), "backup/dir", "/root/dir");
     }
 
     @Test
@@ -76,7 +63,7 @@ public class SaltTest {
         SaltStackServiceImpl service = new SaltStackServiceImpl();
 
         List<Object> args1 = new ArrayList<>();
-        args1.add("ls");
+        args1.add("mkdir /home/saas/tomcat/public_wars1/1");
 
         Map<String, Object> kwargs = new LinkedHashMap<>();
 
@@ -87,6 +74,28 @@ public class SaltTest {
             System.out.println(info.getMinions());
             System.out.println(info.getStartTime());
         }
+    }
+
+    @Test
+    public void cmdMakeDir() throws SaltStackException {
+
+        SaltStackServiceImpl service = new SaltStackServiceImpl();
+
+        boolean b = service.mkDir(new Glob(), "/home/saas/tomcat/public_etcs/test4", false);
+
+        System.out.print(b);
+
+    }
+
+    @Test
+    public void cp() throws SaltStackException {
+
+        SaltStackServiceImpl service = new SaltStackServiceImpl();
+
+        boolean b = service.cpDir(new Glob(), "/home/saas/tomcat/public_etcs/test", "/home/saas/tomcat/public_wars/");
+
+        System.out.print(b);
+
     }
 
 }

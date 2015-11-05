@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Gavin on 2015-10-23 14:31.
  */
 @Repository("nebulaPublishModuleDao")
-public class NebulaPublishModuleDaoImpl extends BaseDaoImpl implements INebulaPublishModuleDao {
+public class NebulaPublishModuleDaoImpl extends BaseDaoImpl<NebulaPublishModule,Integer> implements INebulaPublishModuleDao {
 
     @Override
     public List<NebulaPublishModule> selectModulesByEventId(Integer publishEventId){
