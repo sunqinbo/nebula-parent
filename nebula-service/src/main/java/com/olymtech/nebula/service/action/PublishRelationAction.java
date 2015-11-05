@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,7 @@ public class PublishRelationAction extends AbstractAction {
         String appname=appNameList.get(appNameNum - 1).replace(".war","");
         appNames+=appname;
         try {
+            List<NebulaPublishModule> modules=new ArrayList<>();
             List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames);
             for (ProductTree productTree : productTrees) {
                 NebulaPublishModule nebulaPublishModule = new NebulaPublishModule();
@@ -74,12 +76,15 @@ public class PublishRelationAction extends AbstractAction {
                 String key = event.getPublishEnv() + "." + event.getPublishProductName() + "." + nebulaPublishModule.getPublishModuleName() + "." + date;
                 nebulaPublishModule.setPublishModuleKey(key);
                 nebulaPublishModuleDao.insert(nebulaPublishModule);
+                List<NebulaPublishHost> hosts=new ArrayList<>();
                 for (SimpleHost simpleHost : productTree.getHosts()) {
                     NebulaPublishHost nebulaPublishHost = new NebulaPublishHost();
                     nebulaPublishHost.setPassPublishHostName(simpleHost.getHostName());
                     nebulaPublishHost.setPassPublishHostIp(simpleHost.getHostIp());
                     nebulaPublishHostDao.insert(nebulaPublishHost);
+                    hosts.add(nebulaPublishHost);
                 }
+                List<NebulaPublishApp> apps=new ArrayList<>();
                 int n = productTree.getApps().size();
                 for (int i = 0; i < n; i++) {
                     NebulaPublishApp nebulaPublishApp = new NebulaPublishApp();
@@ -87,8 +92,13 @@ public class PublishRelationAction extends AbstractAction {
                     nebulaPublishApp.setPublishEventId(event.getId());
                     nebulaPublishApp.setPublishModuleId(nebulaPublishModule.getId());
                     nebulaPublishAppDaoImpl.insert(nebulaPublishApp);
+                    apps.add(nebulaPublishApp);
                 }
+                nebulaPublishModule.setPublishHosts(hosts);
+                nebulaPublishModule.setPublishApps(apps);
+                modules.add(nebulaPublishModule);
             }
+            event.setPublishModules(modules);
         }catch (Exception e){
             e.printStackTrace();
         }
