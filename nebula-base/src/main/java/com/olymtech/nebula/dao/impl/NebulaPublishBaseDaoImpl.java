@@ -5,9 +5,12 @@
 package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.INebulaPublishBaseDao;
+import com.olymtech.nebula.entity.NebulaPublishBase;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by Gavin on 2015-11-03 15:44.
  */
-public class NebulaPublishBaseDaoImpl extends BaseDaoImpl implements INebulaPublishBaseDao {
+@Repository("nebulaPublishBaseDao")
+public class NebulaPublishBaseDaoImpl extends BaseDaoImpl<NebulaPublishBase,Integer> implements INebulaPublishBaseDao {
 }

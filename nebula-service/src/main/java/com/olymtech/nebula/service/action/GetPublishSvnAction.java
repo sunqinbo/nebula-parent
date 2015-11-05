@@ -16,7 +16,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
  */
 public class GetPublishSvnAction extends AbstractAction {
 
-//    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public GetPublishSvnAction(){
         super();
@@ -27,10 +27,10 @@ public class GetPublishSvnAction extends AbstractAction {
         String svnUrl = event.getPublishSvn();
         SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, "gavin", "hellomonitor");
         try{
-            SvnUtils.checkout(svnClientManager,svnUrl,"/Users/saas/deploy_tmp/" + event.getPublishProductKey());
+            SvnUtils.checkout(svnClientManager,svnUrl,"/Users/saas/deploy_tmp/" + event.getPublishProductKey() + "/publish_war/" );
             return true;
         }catch (Exception e){
-//            logger.error("GetPublishSvnAction error:",e);
+            logger.error("GetPublishSvnAction error:",e);
         }
         return false;
     }
