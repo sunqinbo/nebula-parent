@@ -195,4 +195,89 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         return jobResult;
     }
+
+    @Override
+    public <T> ResultInfoSet doCommand(Target<T> target, String commandPath) throws SaltStackException {
+        List<Object> args = new ArrayList<>();
+        args.add("sh " + commandPath);
+
+        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+
+        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        return jobResult;
+    }
+
+
+    @Override
+    public <T> boolean deleteFile(Target<T> target, List<String> pathList, boolean recursion) throws SaltStackException {
+        List<Object> args = new ArrayList<>();
+        StringBuffer paths = new StringBuffer();
+        for (String path : pathList) {
+            paths.append(" " + path);
+        }
+        if (recursion) {
+            args.add("rf -rf " + paths);
+        } else {
+            args.add("rf " + paths);
+        }
+
+        int succeedCount = 0;
+
+        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+
+        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+
+        if (jobResult.getInfoList().size() == 1) {
+            ResultInfo resultInfo = jobResult.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+
+                if (entry.getValue().equals("")) {
+                    succeedCount++;
+                } else {
+                    throw new SaltStackException(entry.getValue().toString());
+                }
+            }
+
+        } else {
+            return false;
+        }
+
+        logger.debug("成功执行" + succeedCount + "台机器");
+
+        return true;
+    }
+
+    @Override
+    public <T> boolean makeLn(Target<T> target, String from, String to) throws SaltStackException {
+        List<Object> args = new ArrayList<>();
+        args.add("ln -s " + from + " " + to);
+
+        int succeedCount = 0;
+
+        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+
+        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+
+        if (jobResult.getInfoList().size() == 1) {
+            ResultInfo resultInfo = jobResult.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+
+                if (entry.getValue().equals("")) {
+                    succeedCount++;
+                } else {
+                    throw new SaltStackException(entry.getValue().toString());
+                }
+            }
+
+        } else {
+            return false;
+        }
+
+        logger.debug("成功执行" + succeedCount + "台机器");
+
+        return true;
+    }
+
 }
