@@ -9,8 +9,10 @@ import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishEventService;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class CpEtcWarAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
+
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
     public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
     public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
@@ -53,10 +58,11 @@ public class CpEtcWarAction extends AbstractAction {
             boolean etcResult = saltStackService.cpDir(new MinionList(targes), EtcDirPrefix + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()), EtcDirPrefix + publishModule.getPublishModuleKey());
 
             if (!warsResult || !etcResult) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, false ,"error message");
                 return false;
             }
         }
-
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, true ,"");
         return true;
     }
 

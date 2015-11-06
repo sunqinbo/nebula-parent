@@ -29,7 +29,7 @@ public class ActoinTest {
     public void actionTest(){
         //创建任务队列
         ActionChain chain = new ActionChain();
-        chain.addAction(new PublishRelationAction("dir"));
+        chain.addAction(new PublishRelationAction());
 
         Dispatcher dispatcher = new Dispatcher(chain);
 

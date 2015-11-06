@@ -1,12 +1,14 @@
 package com.olymtech.nebula.entity;
 
+import com.olymtech.nebula.entity.enums.PublishAction;
+
 public class NebulaPublishSchedule extends BaseDO{
 
     private Integer publishEventId;
 
-    private String publishAction;
+    private PublishAction publishAction;
 
-    private Integer isSuccessAction;
+    private Boolean isSuccessAction;
 
     private String errorMsg;
 
@@ -18,19 +20,19 @@ public class NebulaPublishSchedule extends BaseDO{
         this.publishEventId = publishEventId;
     }
 
-    public String getPublishAction() {
+    public PublishAction getPublishAction() {
         return publishAction;
     }
 
-    public void setPublishAction(String publishAction) {
-        this.publishAction = publishAction == null ? null : publishAction.trim();
+    public void setPublishAction(PublishAction publishAction) {
+        this.publishAction = publishAction;
     }
 
-    public Integer getIsSuccessAction() {
+    public Boolean getIsSuccessAction() {
         return isSuccessAction;
     }
 
-    public void setIsSuccessAction(Integer isSuccessAction) {
+    public void setIsSuccessAction(Boolean isSuccessAction) {
         this.isSuccessAction = isSuccessAction;
     }
 

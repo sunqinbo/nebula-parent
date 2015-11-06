@@ -8,9 +8,11 @@ import com.olymtech.nebula.dao.impl.NebulaPublishAppDaoImpl;
 import com.olymtech.nebula.dao.impl.NebulaPublishHostDaoImpl;
 import com.olymtech.nebula.dao.impl.NebulaPublishModuleDaoImpl;
 import com.olymtech.nebula.entity.*;
+import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.file.analyze.impl.FileAnalyzeServiceImpl;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.olymtech.nebula.service.impl.AnalyzeArsenalApiServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,10 +46,12 @@ public class PublishRelationAction extends AbstractAction {
     @Resource
     INebulaPublishAppDao nebulaPublishAppDaoImpl;
 
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
-    public PublishRelationAction(String actionName) {
-        super();
-    }
+//    public PublishRelationAction(String actionName) {
+//        super();
+//    }
 
     public PublishRelationAction(){
 
@@ -105,11 +109,13 @@ public class PublishRelationAction extends AbstractAction {
                 modules.add(nebulaPublishModule);
             }
             event.setPublishModules(modules);
+            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, true, "");
+            return true;
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        return true;
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, false, "");
+        return false;
     }
 
     @Override
