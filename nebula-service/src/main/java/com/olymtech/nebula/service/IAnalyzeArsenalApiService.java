@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Created by liwenji on 2015/11/2.
  */
-@Service
 public interface IAnalyzeArsenalApiService {
     /**
      *根据父id获取产品树结点

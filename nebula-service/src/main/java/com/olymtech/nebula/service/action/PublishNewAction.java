@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 @Service
-public class PublicAction extends AbstractAction {
+public class PublishNewAction extends AbstractAction {
 
     @Autowired
     private IPublishAppService publishAppService;
@@ -43,7 +43,7 @@ public class PublicAction extends AbstractAction {
     public static final String LocalBaseDir = "/home/saas/deploy_tmp/";
 
 
-    public PublicAction() {
+    public PublishNewAction() {
     }
 
     @Override

@@ -49,6 +49,10 @@
         </trim>
         group by id order by id desc
     </select>
+    <select id="Nebula-NebulaPublishModuleDao-Select-By-PublishEventId" parameterType="NebulaPublishModule" resultMap="RM-NebulaPublishModule">
+        select <include refid="NebulaPublishModule-Base-Column-List"/> from nebula_publish_module
+        where publish_event_id = #{publishEventId}
+    </select>
     <delete id="Nebula-NebulaPublishModuleDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from nebula_publish_module
         where id = #{id,jdbcType=INTEGER}
