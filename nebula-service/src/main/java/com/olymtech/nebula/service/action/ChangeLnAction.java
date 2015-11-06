@@ -12,6 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * @author taoshanchang 15/11/6
  */
+@Service
 public class ChangeLnAction extends AbstractAction {
 
     @Autowired

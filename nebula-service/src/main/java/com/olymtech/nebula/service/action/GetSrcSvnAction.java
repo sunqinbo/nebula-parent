@@ -9,11 +9,13 @@ import com.olymtech.nebula.core.svn.SvnUtils;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 
 /**
  * Created by Gavin on 2015-11-04 20:12.
  */
+@Service
 public class GetSrcSvnAction extends AbstractAction {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 

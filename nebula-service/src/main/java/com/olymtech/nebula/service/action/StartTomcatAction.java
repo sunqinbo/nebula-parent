@@ -14,6 +14,7 @@ import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
 /**
  * @author taoshanchang 15/11/6
  */
+@Service
 public class StartTomcatAction extends AbstractAction {
 
     @Autowired
