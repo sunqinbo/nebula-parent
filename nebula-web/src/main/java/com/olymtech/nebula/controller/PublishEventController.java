@@ -35,6 +35,11 @@ public class PublishEventController extends BaseController{
         return "publishList";
     }
 
+    @RequestMapping(value="/publishProcess.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String publishProcess(){
+        return "publishProcess";
+    }
+
     @RequestMapping(value="/createPublishEvent.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent){
