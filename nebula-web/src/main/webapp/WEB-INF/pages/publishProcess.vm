@@ -3,9 +3,8 @@
     #parse("head/header.vm")
     #parse("head/sidebar.vm")
     #parse("head/navbar.vm")
-<!--  SUI  -->
-<link href="http://g.alicdn.com/sj/dpl/1.5.1/css/sui.min.css">
-<link href="http://g.alicdn.com/sj/dpl/1.5.1/css/sui-append.min.css">
+
+
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -13,6 +12,7 @@
                 <div class="card card-plain">
                     <div class="header">
                         发布单详情
+                        <hr/>
                     </div>
                     <div class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">
@@ -21,7 +21,7 @@
                                 <td>
                                     <label>发布产品：</label>
                                     <label>运价2014</label>
-                                <td/>
+                                </td>
                                 <td>
                                     <label>发布模块：</label>
                                     <label>二次发布</label>
@@ -39,10 +39,10 @@
                                 <td>
                                     <label>发布状态：</label>
                                     <label>发布中</label>
-                                <td/>
+                                </td>
                                 <td>
                                     <label>发布结果：</label>
-                                    <label></label>
+                                    <label>成功</label>
                                 </td>
                                 <td>
                                     <label>发布分批：</label>
@@ -55,21 +55,20 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label>发布分批：</label>
-                                    <label>当前1/分1批</label>
-                                <td/>
+                                    <label>发布批次：</label>
+                                    <label>当前1/分一批</label>
+                                </td>
                                 <td>
                                     <label>发布进度：</label>
                                     <label>完成0/总数1</label>
                                 </td>
                                 <td>
                                     <label>发布时间：</label>
-                                    <label>2005-11-05 13：53</label>
+                                    <label>2015-10-05-13.53</label>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -116,42 +115,46 @@
             </div>
             <div class="col-md-12">
                 <div class="card card-plain">
-                    <div class="header">启动预发布</div>
+                    <div class="header">启动正式发布</div>
                     <hr/>
                     <div class="content">
-                        <div class="sui-row">
-                            <div >
-                                <div>
-                                    <button type="button" class="btn btn-default">创建发布目录</button>
-                                </div>
-                                <div class="bar"></div>
-                            </div>
-                            <div >
-                                <div>
-                                    <button type="button" class="btn btn-default">复制原始文件</button>
-                                </div>
-                                <div class="bar"></div>
-                            </div>
-                            <div >
-                                <div>
-                                    <button type="button" class="btn btn-default">发布war/etc</button>
-                                </div>
-                                <div class="bar"></div>
-                            </div>
-                            <div >
-                                <div>
-                                    <button type="button" class="btn btn-default">预发布完成</button>
-                                </div>
-                                <div class="bar"></div>
-                            </div>
-                        </div>
+                        <button type="button" class="btn btn-default">停止tomcat</button>
+                        <button type="button" class="btn btn-default">删除ln</button>
+                        <button type="button" class="btn btn-default">创建ln</button>
+                        <button type="button" class="btn btn-default">启动tomcat</button>
+                        <button type="button" class="btn btn-default">正式发布完成</button>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="col-md-12">
+                <div class="card card-plain">
+                    <div class="header">启动预发布</div>
+                    <hr/>
+                    <div class="content">
+                        <button type="button" class="btn btn-default">创建发布目录</button>
+                        <button type="button" class="btn btn-default">复制原始文件</button>
+                        <button type="button" class="btn btn-default">发布war/etc</button>
+                        <button type="button" class="btn btn-default">预发布完成</button>
+                    </div>
+            </div>
+                </div>
+            <div class="col-md-12">
+                <div class="card card-plain">
+                    <div class="header">启动回滚</div>
+                    <hr/>
+                    <div class="content">
+                        <button type="button" class="btn btn-default">停止tomcat</button>
+                        <button type="button" class="btn btn-default">删除ln</button>
+                        <button type="button" class="btn btn-default">创建ln</button>
+                        <button type="button" class="btn btn-default">启动tomcat</button>
+                        <button type="button" class="btn btn-default">回滚完成</button>
+                    </div>
+                </div>
+            </div>
 
+        </div>
     </div>
 </div>
-</div>
+
 
 #parse("head/footer.vm")

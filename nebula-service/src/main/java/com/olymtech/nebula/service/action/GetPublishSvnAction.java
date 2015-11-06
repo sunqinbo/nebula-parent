@@ -23,9 +23,6 @@ public class GetPublishSvnAction extends AbstractAction {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private IPublishScheduleService publishScheduleService;
-
     public GetPublishSvnAction(){
         super();
     }

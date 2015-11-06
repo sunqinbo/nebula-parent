@@ -28,6 +28,7 @@ import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
 /**
  * Created by liwenji on 2015/11/4.
  */
+@Service
 public class PublishRelationAction extends AbstractAction {
 
     @Autowired
