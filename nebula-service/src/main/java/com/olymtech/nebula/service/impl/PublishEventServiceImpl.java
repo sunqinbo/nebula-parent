@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
 
@@ -32,5 +33,10 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Override
     public NebulaPublishEvent getPublishEventById(Integer id) {
         return nebulaPublishEventDao.selectById(id);
+    }
+
+    @Override
+    public List<NebulaPublishEvent> getPublishEvent() {
+        return nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
     }
 }
