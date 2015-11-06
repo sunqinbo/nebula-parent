@@ -6,8 +6,10 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
+import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.junit.Test;
+import com.olymtech.nebula.service.action.PublishRelationAction;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,7 +31,7 @@ public class ActoinTest {
     public void actionTest(){
         //创建任务队列
         ActionChain chain = new ActionChain();
-        chain.addAction(new PublishRelationAction());
+        chain.addAction(SpringUtils.getBean(PublishRelationAction.class));
 
         Dispatcher dispatcher = new Dispatcher(chain);
 
