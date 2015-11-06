@@ -19,14 +19,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>发布环境</label>
-                                        <input type="text" class="form-control" >
-                                    </div>
-                                </div>
+                                  </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>开始时间</label>
+
+                                          <label>开始时间</label>
                                         <input type="text" class="form-control" >
                                     </div>
                                 </div>
