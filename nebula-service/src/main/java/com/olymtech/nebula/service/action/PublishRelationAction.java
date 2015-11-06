@@ -49,6 +49,11 @@ public class PublishRelationAction extends AbstractAction {
         super();
     }
 
+    public PublishRelationAction(){
+
+
+    }
+
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         String publicWarDirPath="F:\\olym\\test";
