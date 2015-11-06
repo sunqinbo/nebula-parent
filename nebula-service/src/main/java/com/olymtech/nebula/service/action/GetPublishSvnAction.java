@@ -21,6 +21,9 @@ import org.tmatesoft.svn.core.wc.SVNClientManager;
 @Service
 public class GetPublishSvnAction extends AbstractAction {
 
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public GetPublishSvnAction(){

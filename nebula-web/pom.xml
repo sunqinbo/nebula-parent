@@ -15,12 +15,6 @@
 
         <dependency>
             <groupId>com.olymtech.nebula</groupId>
-            <artifactId>nebula-base</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.olymtech.nebula</groupId>
             <artifactId>nebula-service</artifactId>
             <version>${project.version}</version>
         </dependency>

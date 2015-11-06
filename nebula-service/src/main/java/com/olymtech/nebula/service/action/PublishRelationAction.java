@@ -49,9 +49,9 @@ public class PublishRelationAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
-    public PublishRelationAction(String actionName) {
-        super();
-    }
+//    public PublishRelationAction(String actionName) {
+//        super();
+//    }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
