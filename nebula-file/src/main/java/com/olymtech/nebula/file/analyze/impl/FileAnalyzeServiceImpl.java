@@ -36,7 +36,15 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     public Map<String,Boolean> getDirMapByDirPath(String dirPath) {
         Map<String,Boolean> fileList = new HashMap<>();
         File file = new File(dirPath);
-        reverseRecursionMapByDirPath(file,fileList);
+        File[] files = file.listFiles();
+        for (File f:files) {
+            if (!f.isDirectory()){
+                fileList.put(f.getName(), false);
+            }
+            else {
+                fileList.put(f.getName(), true);
+            }
+        }
         return fileList;
     }
 
@@ -53,19 +61,19 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
         }
     }
 
-    public void reverseRecursionMapByDirPath(File file,Map<String,Boolean> fileList){
-        File[] files = file.listFiles();
-        for (File f:files) {
-            if (!f.isDirectory()){
-                fileList.put(f.getName(), false);
-            }
-            else {
-                fileList.put(f.getName(), true);
-                File newfile = new File(f.getAbsolutePath());
-                reverseRecursionMapByDirPath(newfile,fileList);
-            }
-        }
-    }
+//    public void reverseRecursionMapByDirPath(File file,Map<String,Boolean> fileList){
+//        File[] files = file.listFiles();
+//        for (File f:files) {
+//            if (!f.isDirectory()){
+//                fileList.put(f.getName(), false);
+//            }
+//            else {
+//                fileList.put(f.getName(), true);
+//                File newfile = new File(f.getAbsolutePath());
+//                reverseRecursionMapByDirPath(newfile,fileList);
+//            }
+//        }
+//    }
 
 
 //    public static void main(String[] args) throws Exception {

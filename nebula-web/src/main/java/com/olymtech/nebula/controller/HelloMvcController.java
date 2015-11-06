@@ -1,5 +1,6 @@
 package com.olymtech.nebula.controller;
 import com.olymtech.nebula.entity.JsTreeData;
+import com.olymtech.nebula.entity.JsTreeDataRoot;
 import com.olymtech.nebula.entity.JsTreeDataState;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IFileReadService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Controller("helloMvcController")
@@ -78,38 +80,66 @@ public class HelloMvcController extends BaseController{
 	@RequestMapping(value="/fileSave",method=RequestMethod.POST)
 	@ResponseBody
 	public Object fileSaveContent(String path,String filecontent) throws IOException {
-		System.out.println(filecontent);
 		fileReadService.SaveFile(path,filecontent);
 		return returnCallback("success",filecontent);
 	}
 
-	@RequestMapping(value = {"etcList.htm"}, method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = {"/etcList.htm"}, method = {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
-	public Object productList(HttpServletRequest request) {
+	public Object productList(HttpServletRequest request) throws UnsupportedEncodingException {
 		String idString = request.getParameter("id");
-		String id = "F:\\121";
-		Map<String,Boolean> Srcmap=fileAnalyzeService.getDirMapByDirPath(id);
+		idString = new String(idString.getBytes("ISO-8859-1"),"utf-8");
 		/** 初始化页面 加载，有root信息，返回 jsTreeDataRoots */
 		if (idString.equals("#")) {
 			/** 根节点为0 */
-//			String path="F:\\121";
-			List<JsTreeData> jsTreeDataRoots = new ArrayList<JsTreeData>();
-			JsTreeData jsTreeData=new JsTreeData();
-			jsTreeData.setId(id);
-			jsTreeData.setParent("/");
-			jsTreeData.setText("Root");
-			JsTreeDataState jsTreeDataState=new JsTreeDataState(true, false, false);
-			jsTreeData.setState(jsTreeDataState);
-			/** 设置多个 根节点 */
-//			for(ArsenalProductTree arsenalProductTree:arsenalProductTrees){
-//				JsTreeDataRoot jsTreeDataRoot = arsenalProductTreeService.setJsTreeDataRootByTreeId(arsenalProductTree.getId());
-//				jsTreeDataRoots.add(jsTreeDataRoot);
-//			}
+			idString="F:\\121";
+			Map<String,Boolean> Srcmap=fileAnalyzeService.getDirMapByDirPath(idString);
+			List<JsTreeDataRoot> jsTreeDataRoots = new ArrayList<JsTreeDataRoot>();
+			JsTreeDataRoot jsTreeDataRoot=new JsTreeDataRoot();
+			jsTreeDataRoot.setId(idString);
+			jsTreeDataRoot.setText("Root");
+//			jsTreeDataRoot.setData(false);
+			JsTreeDataState jsTreeDataState=new JsTreeDataState(false, false, false);
+			jsTreeDataRoot.setState(jsTreeDataState);
+
+
+			/** 设置子节点列表*/
+
+			List<JsTreeData> Childrens =new ArrayList<>();
+			Set<String> keys=Srcmap.keySet();
+			Iterator<String> it=keys.iterator();
+			while(it.hasNext()) {
+				String path = it.next();
+				JsTreeData Children = new JsTreeData();
+				if(Srcmap.get(path)){
+//					Children.setData(false);
+				}
+				else
+//					Children.setData(true);
+				Children.setId(idString+"\\"+path);
+				Children.setParent(idString);
+				Children.setText(path);
+				JsTreeDataState childtreeDataState = new JsTreeDataState(false, false, false);
+				Children.setState(jsTreeDataState);
+				if(Srcmap.get(path)){
+					Map<String,Boolean> hasChild=fileAnalyzeService.getDirMapByDirPath((String)Children.getId());
+					if(hasChild.size()>0){
+						Children.setChildren(true);
+					}
+					else
+						Children.setChildren(false);
+				}
+				else
+					Children.setChildren(false);
+				Childrens.add(Children);
+			}
+
 			if(Srcmap.size()>0){
-				jsTreeData.setChildren(true);
+				jsTreeDataRoot.setChildren(Childrens);
 			}
 			else
-				jsTreeData.setChildren(false);
+				jsTreeDataRoot.setChildren(Childrens);
+			jsTreeDataRoots.add(jsTreeDataRoot);
 			return jsTreeDataRoots;
 		}
 
@@ -117,17 +147,31 @@ public class HelloMvcController extends BaseController{
 //		if(!idString.equals("#") && StringUtils.isNotEmpty(idString)){
 //			id = Integer.parseInt(idString);
 //		}
+		Map<String,Boolean> childSrcmap=fileAnalyzeService.getDirMapByDirPath(idString);
 		List<JsTreeData> jsTreeDatas =new ArrayList<>();
-		Set<String> keys=Srcmap.keySet();
-		Iterator<String> it=keys.iterator();
-		while(it.hasNext()) {
-			String path=it.next();
+		Set<String> ckey=childSrcmap.keySet();
+		Iterator<String> cit=ckey.iterator();
+		while(cit.hasNext()) {
+			String path=cit.next();
 			JsTreeData jsTreeData=new JsTreeData();
-			jsTreeData.setId(path);
-			jsTreeData.setParent("id");
-			jsTreeData.setText("path");
-			JsTreeDataState jsTreeDataState=new JsTreeDataState(false, false, false);
-			jsTreeData.setState(jsTreeDataState);
+			jsTreeData.setId(idString+"\\"+path);
+			jsTreeData.setParent(idString);
+			jsTreeData.setText(path);
+			JsTreeDataState cjsTreeDataState=new JsTreeDataState(false, false, false);
+			jsTreeData.setState(cjsTreeDataState);
+			if(childSrcmap.get(path)){
+//				jsTreeData.setData(false);
+				Map<String,Boolean> hasChild=fileAnalyzeService.getDirMapByDirPath((String)jsTreeData.getId());
+				if(hasChild.size()>0){
+					jsTreeData.setChildren(true);
+				}
+				else
+					jsTreeData.setChildren(false);
+			}
+			else {
+//				jsTreeData.setData(true);
+				jsTreeData.setChildren(false);
+			}
 			jsTreeDatas.add(jsTreeData);
 		}
 

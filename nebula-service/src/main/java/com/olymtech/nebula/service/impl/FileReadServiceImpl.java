@@ -16,14 +16,14 @@ public class FileReadServiceImpl implements IFileReadService {
     public List<String> ReadFile(String path) throws IOException {
         List<String> filecontent=new ArrayList<>();
         File file=new File(path);
+        FileInputStream fileread=new FileInputStream(file);
         BufferedReader reader = null;
         try {
 //            System.out.println("以行为单位读取文件内容，一次读一整行：");
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new InputStreamReader(fileread,"UTF-8"));
             String tempString = null;
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
-                // 显示行号
                 filecontent.add(tempString);
             }
             reader.close();
