@@ -2,54 +2,60 @@
 
 <div class="sidebar" data-color="purple" data-image="public/assets/img/sidebar-5.jpg">
 
-        <!--
+    <!--
 
-            Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
-            Tip 2: you can also add an image using data-image tag
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
 
-        -->
+    -->
 
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="#" class="simple-text">
+            <a href="http://localhost:8080/" class="simple-text">
                 <i class="pe-7s-box1"></i>
                 发布系统
             </a>
         </div>
         <ul class="nav">
             <li>
-                <a href="#">
+                <a href="http://localhost:8080/publishEvent.htm">
                     <i class="pe-7s-upload"></i>
+
                     <p>发布申请</p>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="http://localhost:8080/publishProcess.htm">
                     <i class="pe-7s-user"></i>
+
                     <p>我的发布</p>
                 </a>
             </li>
-            <li >
-                <a href="#">
+            <li>
+                <a href="http://localhost:8080/publishList.htm">
                     <i class="pe-7s-note2"></i>
+
                     <p>发布数据</p>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class="pe-7s-config"></i>
+
                     <p>发布配置</p>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class="pe-7s-lock"></i>
+
                     <p>权限管理</p>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class="pe-7s-tools"></i>
+
                     <p>发布工具</p>
                 </a>
             </li>

@@ -9,52 +9,65 @@ import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
-import com.olymtech.nebula.entity.enums.PublishAction;
-import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
+import com.suse.saltstack.netapi.exception.SaltStackException;
+import com.suse.saltstack.netapi.results.ResultInfo;
+import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
- * @author taoshanchang 15/11/4
+ * @author taoshanchang 15/11/6
  */
-
 @Service
-public class CreateDirAciton extends AbstractAction {
+public class StartTomcatAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
 
-    @Autowired
-    private IPublishScheduleService publishScheduleService;
-
-    public CreateDirAciton() {
-
-    }
+    public static final String startCommandPath = "/home/saas/tomcat/bin/start_tomcat.sh";
+    public static final String stopCommandPath = "/home/saas/tomcat/bin/killJvm.sh";
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            boolean warsResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_wars/"+publishModule.getPublishModuleKey(), true);
-            boolean etcResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_etcs/"+publishModule.getPublishModuleKey(), true);
+            List<String> pathList = new ArrayList<String>();
+            pathList.add("/home/saas/tomcat/etc");
+            pathList.add("/home/saas/tomcat/webapps");
 
-            if (!warsResult||!etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+            ResultInfoSet resultInfos = saltStackService.doCommand(new MinionList(targes), stopCommandPath);
+
+            if (resultInfos.getInfoList().size() == 1) {
+                ResultInfo resultInfo = resultInfos.get(0);
+                Map<String, Object> results = resultInfo.getResults();
+                for (Map.Entry<String, Object> entry : results.entrySet()) {
+
+                    if (entry.getValue().equals("")) {
+
+
+                    } else {
+                        throw new SaltStackException(entry.getValue().toString());
+                    }
+                }
+            } else {
                 return false;
             }
+
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, true ,"error message");
+
         return true;
     }
 

@@ -59,7 +59,7 @@
     </delete>
     <insert id="Nebula-NebulaPublishScheduleDao-Insert" parameterType="NebulaPublishSchedule">
         insert into nebula_publish_schedule (
-        iid,
+        id,
         publish_event_id,
         publish_action,
         is_success_action,

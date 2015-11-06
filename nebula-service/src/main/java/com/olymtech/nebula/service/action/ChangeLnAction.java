@@ -6,11 +6,10 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
-import com.olymtech.nebula.entity.enums.PublishAction;
-import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,42 +18,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author taoshanchang 15/11/4
+ * @author taoshanchang 15/11/6
  */
-
 @Service
-public class CreateDirAciton extends AbstractAction {
+public class ChangeLnAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
 
-    @Autowired
-    private IPublishScheduleService publishScheduleService;
-
-    public CreateDirAciton() {
-
-    }
+    public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
+    public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            boolean warsResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_wars/"+publishModule.getPublishModuleKey(), true);
-            boolean etcResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_etcs/"+publishModule.getPublishModuleKey(), true);
+            List<String> pathList = new ArrayList<String>();
+            pathList.add("/home/saas/tomcat/etc");
+            pathList.add("/home/saas/tomcat/webapps");
 
-            if (!warsResult||!etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+            boolean etcResult = saltStackService.deleteFile(new MinionList(targes), pathList, true);
+
+            boolean result = saltStackService.makeLn(new MinionList(targes), WarDirPrefix + publishModule.getPublishModuleKey(), "/home/saas/tomcat/webapps");
+            boolean result2 = saltStackService.makeLn(new MinionList(targes), EtcDirPrefix + publishModule.getPublishModuleKey(), "/home/saas/tomcat/etc");
+
+            if (!etcResult||!result||!result2) {
                 return false;
             }
+
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, true ,"error message");
+
         return true;
     }
 

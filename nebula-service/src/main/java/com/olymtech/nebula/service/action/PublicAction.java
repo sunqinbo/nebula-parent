@@ -10,8 +10,10 @@ import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.service.IPublishAppService;
 import com.olymtech.nebula.service.IPublishBaseService;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,9 @@ public class PublicAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
+
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
     public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
     public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
@@ -62,6 +67,7 @@ public class PublicAction extends AbstractAction {
             for (NebulaPublishApp app : appList) {
                 boolean result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), WarDirPrefix + publishModule.getPublishModuleKey());
                 if (!result) {
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
                     return false;
                 }
             }
@@ -70,13 +76,13 @@ public class PublicAction extends AbstractAction {
             boolean etcResult = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, EtcDirPrefix + publishModule.getPublishModuleKey() + ".war");
 
             if (!etcResult) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
                 return false;
             }
 
         }
-
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, true, "");
         return true;
-
     }
 
     @Override
