@@ -42,7 +42,10 @@
         </trim>
     </select>
     <select id="Nebula-NebulaPublishScheduleDao-Select-All-Paging-Where" parameterType="NebulaPublishSchedule" resultMap="RM-NebulaPublishSchedule-Long">
-        select <include refid="NebulaPublishSchedule-Base-Column-List"/> from nebula_publish_schedule
+        select
+        <include refid="NebulaPublishSchedule-Base-Column-List"/>
+        ,
+        <include refid="NebulaPublishSchedule-Long-Column-List" /> from nebula_publish_schedule
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="publishEventId != null">
                 publish_event_id = #{publishEventId}
@@ -52,6 +55,13 @@
             </if>
         </trim>
         group by id order by id desc
+    </select>
+    <select id="Nebula-NebulaPublishScheduleDao-Select-By-Event-Id" parameterType="NebulaPublishSchedule" resultMap="RM-NebulaPublishSchedule-Long">
+        select
+        <include refid="NebulaPublishSchedule-Base-Column-List"/>
+        ,
+        <include refid="NebulaPublishSchedule-Long-Column-List" /> from nebula_publish_schedule
+        where publish_event_id = #{publishEventId}
     </select>
     <delete id="Nebula-NebulaPublishScheduleDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from nebula_publish_schedule
