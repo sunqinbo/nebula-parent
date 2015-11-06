@@ -7,9 +7,8 @@ package com.olymtech.nebula.entity;
 /**
  * Created by Gavin on 2015-09-25 17:01.
  */
-public class JsTreeData {
-    private Object id;
-    private String parent;
+public class JsTreeDataRoot {
+    private String id;
     private String text;
     private Object children;
     private JsTreeDataState state;
@@ -30,20 +29,12 @@ public class JsTreeData {
         this.children = children;
     }
 
-    public Object getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getParent() {
-        return parent;
-    }
-
-    public void setParent(String parent) {
-        this.parent = parent;
     }
 
     public String getText() {
