@@ -63,7 +63,7 @@ public class SaltTest {
         SaltStackServiceImpl service = new SaltStackServiceImpl();
 
         List<Object> args1 = new ArrayList<>();
-        args1.add("mkdir /home/saas/tomcat/public_wars1/1");
+        args1.add("rm -rf /home/saas/tomcat/public_wars/a /home/saas/tomcat/public_wars/b");
 
         Map<String, Object> kwargs = new LinkedHashMap<>();
 
@@ -96,6 +96,44 @@ public class SaltTest {
 
         System.out.print(b);
 
+    }
+
+    @Test
+    public void startTomcatTest() throws SaltStackException {
+
+        SaltStackServiceImpl service = new SaltStackServiceImpl();
+
+        List<Object> args1 = new ArrayList<>();
+        args1.add("sh /home/saas/tomcat/bin/start_tomcat.sh");
+
+        Map<String, Object> kwargs = new LinkedHashMap<>();
+
+        ResultInfoSet resultInfos = service.cmdRun(new Glob(), args1, kwargs);
+        List<ResultInfo> infoList = resultInfos.getInfoList();
+        for (ResultInfo info : infoList) {
+            System.out.println(info.getResults());
+            System.out.println(info.getMinions());
+            System.out.println(info.getStartTime());
+        }
+    }
+
+    @Test
+    public void lnTest() throws SaltStackException {
+
+        SaltStackServiceImpl service = new SaltStackServiceImpl();
+
+        List<Object> args1 = new ArrayList<>();
+        args1.add("ln -s /home/saas/tomcat/public_wars/a /home/saas/tomcat/webapps");
+
+        Map<String, Object> kwargs = new LinkedHashMap<>();
+
+        ResultInfoSet resultInfos = service.cmdRun(new Glob(), args1, kwargs);
+        List<ResultInfo> infoList = resultInfos.getInfoList();
+        for (ResultInfo info : infoList) {
+            System.out.println(info.getResults());
+            System.out.println(info.getMinions());
+            System.out.println(info.getStartTime());
+        }
     }
 
 }

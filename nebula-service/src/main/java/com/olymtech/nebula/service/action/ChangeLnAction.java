@@ -10,7 +10,6 @@ import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
-import com.olymtech.nebula.service.IPublishAppService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,26 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author taoshanchang 15/11/5
+ * @author taoshanchang 15/11/6
  */
-
 @Service
-public class PublicAction extends AbstractAction {
-
-    @Autowired
-    private IPublishAppService publishAppService;
+public class ChangeLnAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
 
     public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
     public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
-
-    public static final String LocalBaseDir = "/home/saas/deploy_tmp/";
-
-
-    public PublicAction() {
-    }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
@@ -52,35 +41,26 @@ public class PublicAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            String warFromBase = LocalBaseDir + event.getPublishProductKey() + "/publish_war/";
-            String etcFrom = LocalBaseDir + event.getPublishProductKey() + "/src_svn/etc/";
+            List<String> pathList = new ArrayList<String>();
+            pathList.add("/home/saas/tomcat/etc");
+            pathList.add("/home/saas/tomcat/webapps");
 
-            List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
+            boolean etcResult = saltStackService.deleteFile(new MinionList(targes), pathList, true);
 
+            boolean result = saltStackService.makeLn(new MinionList(targes), WarDirPrefix + publishModule.getPublishModuleKey(), "/home/saas/tomcat/webapps");
+            boolean result2 = saltStackService.makeLn(new MinionList(targes), EtcDirPrefix + publishModule.getPublishModuleKey(), "/home/saas/tomcat/etc");
 
-            for (NebulaPublishApp app : appList) {
-                boolean result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), WarDirPrefix + publishModule.getPublishModuleKey());
-                if (!result) {
-                    return false;
-                }
-            }
-
-
-            boolean etcResult = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, EtcDirPrefix + publishModule.getPublishModuleKey() + ".war");
-
-            if (!etcResult) {
+            if (!etcResult||!result||!result2) {
                 return false;
             }
 
         }
 
         return true;
-
     }
 
     @Override
     public void doFailure(NebulaPublishEvent event) {
 
     }
-
 }
