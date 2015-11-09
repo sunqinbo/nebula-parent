@@ -4,16 +4,11 @@ import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.dao.INebulaPublishAppDao;
 import com.olymtech.nebula.dao.INebulaPublishHostDao;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
-import com.olymtech.nebula.dao.impl.NebulaPublishAppDaoImpl;
-import com.olymtech.nebula.dao.impl.NebulaPublishHostDaoImpl;
-import com.olymtech.nebula.dao.impl.NebulaPublishModuleDaoImpl;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
-import com.olymtech.nebula.file.analyze.impl.FileAnalyzeServiceImpl;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.olymtech.nebula.service.impl.AnalyzeArsenalApiServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +16,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
 
@@ -49,30 +43,24 @@ public class PublishRelationAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
-//    public PublishRelationAction(String actionName) {
-//        super();
-//    }
-
-    public PublishRelationAction(){
-
+    public PublishRelationAction() {
 
     }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        String publicWarDirPath="F:\\olym\\test";
-        List<String> appNameList=fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
-        String appNames="";
-        int appNameNum=appNameList.size();
-        for (int i=0;i<appNameNum-1;i++)
-        {
-            String appname=appNameList.get(i).replace(".war","");
-            appNames+=appname+",";
+        String publicWarDirPath = "/Users/taoshanchang/Desktop/test";
+        List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
+        String appNames = "";
+        int appNameNum = appNameList.size();
+        for (int i = 0; i < appNameNum - 1; i++) {
+            String appname = appNameList.get(i).replace(".war", "");
+            appNames += appname + ",";
         }
-        String appname=appNameList.get(appNameNum - 1).replace(".war","");
-        appNames+=appname;
+        String appname = appNameList.get(appNameNum - 1).replace(".war", "");
+        appNames += appname;
         try {
-            List<NebulaPublishModule> modules=new ArrayList<>();
+            List<NebulaPublishModule> modules = new ArrayList<>();
             List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames);
             for (ProductTree productTree : productTrees) {
                 NebulaPublishModule nebulaPublishModule = new NebulaPublishModule();
@@ -86,7 +74,7 @@ public class PublishRelationAction extends AbstractAction {
                 String key = event.getPublishEnv() + "." + event.getPublishProductName() + "." + nebulaPublishModule.getPublishModuleName() + "." + date;
                 nebulaPublishModule.setPublishModuleKey(key);
                 nebulaPublishModuleDao.insert(nebulaPublishModule);
-                List<NebulaPublishHost> hosts=new ArrayList<>();
+                List<NebulaPublishHost> hosts = new ArrayList<>();
                 for (SimpleHost simpleHost : productTree.getHosts()) {
                     NebulaPublishHost nebulaPublishHost = new NebulaPublishHost();
                     nebulaPublishHost.setPassPublishHostName(simpleHost.getHostName());
@@ -94,7 +82,7 @@ public class PublishRelationAction extends AbstractAction {
                     nebulaPublishHostDao.insert(nebulaPublishHost);
                     hosts.add(nebulaPublishHost);
                 }
-                List<NebulaPublishApp> apps=new ArrayList<>();
+                List<NebulaPublishApp> apps = new ArrayList<>();
                 int n = productTree.getApps().size();
                 for (int i = 0; i < n; i++) {
                     NebulaPublishApp nebulaPublishApp = new NebulaPublishApp();
@@ -111,7 +99,7 @@ public class PublishRelationAction extends AbstractAction {
             event.setPublishModules(modules);
             publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, true, "");
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, false, "");
