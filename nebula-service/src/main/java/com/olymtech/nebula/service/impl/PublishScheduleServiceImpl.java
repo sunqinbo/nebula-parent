@@ -11,6 +11,7 @@ import com.olymtech.nebula.service.IPublishScheduleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by Gavin on 2015-11-06 15:51.
@@ -29,6 +30,11 @@ public class PublishScheduleServiceImpl implements IPublishScheduleService {
         nebulaPublishSchedule.setIsSuccessAction(isSuccessAction);
         nebulaPublishSchedule.setErrorMsg(errorMsg);
         return nebulaPublishScheduleDao.insert(nebulaPublishSchedule);
+    }
+
+    @Override
+    public List<NebulaPublishSchedule> selectByEventId(Integer eventId){
+        return nebulaPublishScheduleDao.selectByEventId(eventId);
     }
 
 }

@@ -11,4 +11,8 @@ public interface IPublishEventService {
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent);
 
     public BaseDO getPublishEventById(Integer id);
+
+    public NebulaPublishEvent selectById(Integer eventId);
+
+    public NebulaPublishEvent selectWithChildByEventId(Integer eventId);
 }
