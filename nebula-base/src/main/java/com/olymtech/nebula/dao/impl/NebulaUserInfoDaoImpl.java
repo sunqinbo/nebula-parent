@@ -6,6 +6,7 @@ package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.INebulaUserInfoDao;
 import com.olymtech.nebula.entity.NebulaUserInfo;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +14,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("nebulaUserInfoDao")
 public class NebulaUserInfoDaoImpl extends BaseDaoImpl<NebulaUserInfo,Integer> implements INebulaUserInfoDao {
+    @Override
+    public NebulaUserInfo selectByUsername(String username) {
+        SqlSession sqlSession = getSqlSession();
+
+        NebulaUserInfo user = sqlSession.selectOne(CLASS_NAME + "-Select-By-UserName", username);
+        System.out.println(user);
+
+        return user;
+    }
 }
