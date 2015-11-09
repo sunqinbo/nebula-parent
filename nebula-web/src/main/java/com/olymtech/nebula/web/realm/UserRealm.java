@@ -41,8 +41,6 @@ public class UserRealm extends AuthorizingRealm {
         String username = (String)token.getPrincipal();
         NebulaUserInfo user = userService.findByUsername(username);
 
-        System.out.println("user:"+user);
-
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
         }
