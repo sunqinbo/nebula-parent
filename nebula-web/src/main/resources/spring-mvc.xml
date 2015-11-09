@@ -47,10 +47,6 @@
         <property name="toolboxConfigLocation" value="/WEB-INF/classes/velocity-toolbox.xml" />
     </bean>
 
-    <!-- <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-        p:prefix="pages" p:suffix=".jsp" /> -->
-    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 </beans>

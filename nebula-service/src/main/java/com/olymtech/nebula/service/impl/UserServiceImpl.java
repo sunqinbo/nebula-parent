@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,11 +35,17 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Set<String> findRoles(String username) {
-        return null;
+        Set<String> roles = new HashSet<String>();
+        roles.add("admin");
+        roles.add("user");
+        return roles;
     }
 
     @Override
     public Set<String> findPermissions(String username) {
-        return null;
+        Set<String> permissions = new HashSet<String>();
+        permissions.add("add");
+        permissions.add("delete");
+        return permissions;
     }
 }
