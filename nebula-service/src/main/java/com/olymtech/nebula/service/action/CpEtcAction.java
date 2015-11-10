@@ -51,7 +51,7 @@ public class CpEtcAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, PublishActionGroup.PRE_MINION, null ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC, PublishActionGroup.PRE_MINION, null ,"");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -75,15 +75,16 @@ public class CpEtcAction extends AbstractAction {
                     if (entry.getValue().equals("")) {
                         //todo 每台机子的执行信息处理
                     } else {
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,PublishActionGroup.PRE_MINION, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES,PublishActionGroup.PRE_MINION, false, "error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,PublishActionGroup.PRE_MINION, false, "error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES,PublishActionGroup.PRE_MINION, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 

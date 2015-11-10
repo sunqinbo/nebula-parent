@@ -48,7 +48,7 @@ public class CreateDirAciton extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, null ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, true ,"");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -72,24 +72,18 @@ public class CreateDirAciton extends AbstractAction {
                     if (entry.getValue().equals("")) {
                         //todo 每台机子的执行信息处理
                     } else {
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, false ,"error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
-<<<<<<< HEAD
-            if (!warsResult||!etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
-                return false;
-            }
-        }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
-=======
+
             } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, false ,"error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
->>>>>>> origin/master
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, true ,"");
         return true;
     }
 

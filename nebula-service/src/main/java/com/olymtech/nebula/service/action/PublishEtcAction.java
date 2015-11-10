@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishAppService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
@@ -44,7 +45,7 @@ public class PublishEtcAction extends AbstractAction {
     private String BaseWarDir;
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
-    @Value("${master_war_dir}")
+    @Value("${master_deploy_dir}")
     private String MasterWarDir;
 
 
@@ -53,6 +54,8 @@ public class PublishEtcAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, PublishActionGroup.PRE_MINION, null, "");
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -78,11 +81,11 @@ public class PublishEtcAction extends AbstractAction {
                     }
                 }
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, PublishActionGroup.PRE_MINION, false, "");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC,PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 

@@ -9,6 +9,9 @@ import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
@@ -28,12 +31,16 @@ public class StartTomcatAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
     public static final String startCommandPath = "/home/saas/tomcat/bin/start_tomcat.sh";
     public static final String stopCommandPath = "/home/saas/tomcat/bin/killJvm.sh";
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, null, "");
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -59,15 +66,17 @@ public class StartTomcatAction extends AbstractAction {
 
 
                     } else {
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
             } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
                 return false;
             }
 
         }
-
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, true, "");
         return true;
     }
 
