@@ -71,6 +71,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
             publishModule.setPublishApps(publishApps);
             publishModule.setPublishHosts(publishHosts);
         }
+        nebulaPublishEvent.setPublishModules(publishModules);
         return nebulaPublishEvent;
     }
 

@@ -16,7 +16,8 @@ $(document).ready(function(){
                                 "</td><td>"+data[i]["submitDatetime"]+
                                 "</td><td>"+""+
                                 "</td><td>"+data[i]["isSuccessPublish"]+
-                                "</td><td>"+""+"</td><td>"+"详情</td>"
+                                "</td><td>"+""+"</td><td><a href='/publishProcess.htm?id="+
+                                data[i]["id"]+"'>详情</a></td>"
                         }
                         $("tbody").html(tbString);
                     },
@@ -26,25 +27,4 @@ $(document).ready(function(){
                 })
     };
     gettb();
-    //$("#query_btn").click(function(){
-    //    var productname=$("#productname").val();
-    //    var begintime=$("#begintime").val();
-    //    var endtime=$("#endtime").val();
-    //    $.ajax({
-    //        type: "post",
-    //        url: "/PublishList",
-    //        data: {
-    //            "productname": productname,
-    //            "begintime": begintime,
-    //            "endtime": endtime,
-    //        },
-    //        datetype: "json",
-    //        success: function (data) {
-    //            alert("成功返回");
-    //        },
-    //        error: function (XMLHttpRequest, textStatus, errorThrown) {
-    //            alert("很抱歉，文件打开失败，原因：" + errorThrown);
-    //        }
-    //    })
-    //})
 })
