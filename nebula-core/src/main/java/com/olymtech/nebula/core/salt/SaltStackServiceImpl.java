@@ -144,9 +144,14 @@ public class SaltStackServiceImpl implements ISaltStackService {
     }
 
     @Override
-    public <T> ResultInfoSet doCommand(Target<T> target, String commandPath) throws SaltStackException {
+    public <T> ResultInfoSet doCommand(Target<T> target, List<String> pathList) throws SaltStackException {
         List<Object> args = new ArrayList<>();
-        args.add("sh " + commandPath);
+        StringBuffer paths = new StringBuffer();
+        for (String path : pathList) {
+            paths.append(" " + path);
+        }
+
+        args.add("sh " + paths);
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 

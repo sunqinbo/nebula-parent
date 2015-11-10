@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div style="text-align: center">
-                    <button type="button" class="btn btn-info">关闭并返回</button>
+                    <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
                 </div>
             </div>
         </div>

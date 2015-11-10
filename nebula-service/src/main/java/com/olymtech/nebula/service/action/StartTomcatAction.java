@@ -17,6 +17,7 @@ import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,8 +35,10 @@ public class StartTomcatAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
-    public static final String startCommandPath = "/home/saas/tomcat/bin/start_tomcat.sh";
-    public static final String stopCommandPath = "/home/saas/tomcat/bin/killJvm.sh";
+    @Value("${start_command_path}")
+    private String startCommandPath;
+    @Value("${stop_command_path}")
+    private String stopCommandPath;
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
@@ -52,10 +55,10 @@ public class StartTomcatAction extends AbstractAction {
             }
 
             List<String> pathList = new ArrayList<String>();
-            pathList.add("/home/saas/tomcat/etc");
-            pathList.add("/home/saas/tomcat/webapps");
+            pathList.add(stopCommandPath);
+            pathList.add(startCommandPath);
 
-            ResultInfoSet resultInfos = saltStackService.doCommand(new MinionList(targes), stopCommandPath);
+            ResultInfoSet resultInfos = saltStackService.doCommand(new MinionList(targes), pathList);
 
             if (resultInfos.getInfoList().size() == 1) {
                 ResultInfo resultInfo = resultInfos.get(0);
@@ -64,7 +67,7 @@ public class StartTomcatAction extends AbstractAction {
 
                     if (entry.getValue().equals("")) {
 
-
+                        //todo 每台机子的执行信息处理
                     } else {
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());

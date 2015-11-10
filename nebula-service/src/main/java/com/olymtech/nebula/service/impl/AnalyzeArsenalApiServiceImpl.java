@@ -50,7 +50,7 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
     public List<ProductTree> getSimpleHostListByProductAndModule(String productName, String appNames) {
         List<ProductTree> productTrees=new ArrayList<>();
         try {
-            String url = DESCRIBE_INSTANCES_API+"/arsenal-api/productName/"+productName+"/appNames/"+appNames;
+            String url = DESCRIBE_INSTANCES_API+"/arsenal-api/productName/"+productName+"/appNames/"+appNames+"/publishEnv"+publishEnv;
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url);
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {
