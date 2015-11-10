@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -20,15 +21,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author taoshanchang 15/11/4
  */
-
 @Service
-public class CreateDirAciton extends AbstractAction {
+public class CpWarAction extends AbstractAction {
+
+    @Autowired
+    private IPublishBaseService publishBaseService;
 
     @Autowired
     private ISaltStackService saltStackService;
@@ -41,26 +45,26 @@ public class CreateDirAciton extends AbstractAction {
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
 
-    public CreateDirAciton() {
-
+    public CpWarAction() {
     }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            List<String> pathList = new ArrayList<String >();
-            pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
-            pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put(BaseWarDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()) + "/*.war", BaseEtcDir + publishModule.getPublishModuleKey());
 
-            ResultInfoSet result = saltStackService.mkDir(new MinionList(targes), pathList, true);
+            ResultInfoSet result = saltStackService.cpFile(new MinionList(targes), map);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
@@ -72,12 +76,12 @@ public class CreateDirAciton extends AbstractAction {
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
-
             } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, false, "error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, true, "");
         return true;
     }
 

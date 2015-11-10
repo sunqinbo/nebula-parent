@@ -10,13 +10,15 @@ import com.suse.saltstack.netapi.datatypes.ScheduledJob;
 import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
-import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by taoshanchang on 15/10/30.
@@ -34,157 +36,102 @@ public class SaltStackServiceImpl implements ISaltStackService {
     public static final String CommandCmdRun = "cmd.run";
 
     @Override
-    public <T> boolean cpFileRemote(Target<T> target, String from, String to) throws SaltStackException {
+    public <T> ResultInfoSet cpFileRemote(Target<T> target, String from, String to) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         args.add(BaseDirPrefix + from);
         args.add(to);
-
-        int succeedCount = 0;
 
         ScheduledJob job = saltClient.startCommand(new Glob(), CommandCpFile, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
-        if (jobResult.getInfoList().size() == 1) {
-            ResultInfo resultInfo = jobResult.get(0);
-            Map<String, Object> results = resultInfo.getResults();
-            for (Map.Entry<String, Object> entry : results.entrySet()) {
-                if (entry.getValue().equals(to)) {
-                    succeedCount++;
-                } else {
-                    throw new SaltStackException(entry.getValue().toString());
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        logger.debug("成功执行" + succeedCount + "台机器");
-
-        return true;
+        return jobResult;
     }
 
     @Override
-    public <T> boolean cpDirRemote(Target<T> target, String from, String to) throws SaltStackException {
+    public <T> ResultInfoSet cpDirRemote(Target<T> target, String from, String to) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        int succeedCount = 0;
-
         ScheduledJob job = saltClient.startCommand(new Glob(), CommandCpDir, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
-
-        if (jobResult.getInfoList().size() == 1) {
-            ResultInfo resultInfo = jobResult.get(0);
-            Map<String, Object> results = resultInfo.getResults();
-            for (Map.Entry<String, Object> entry : results.entrySet()) {
-                if (entry.getValue().equals(to)) {
-                    succeedCount++;
-                } else {
-                    throw new SaltStackException(entry.getValue().toString());
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        logger.debug("成功执行" + succeedCount + "台机器");
-
-        return true;
+        return jobResult;
     }
 
     @Override
-    public <T> boolean cpFile(Target<T> target, String from, String to) throws SaltStackException {
-        return this.cp(target, from, to, false);
+    public <T> ResultInfoSet cpFile(Target<T> target, HashMap<String, String> keyValue) throws SaltStackException {
+        return this.cp(target, keyValue, false);
     }
 
     @Override
-    public <T> boolean cpDir(Target<T> target, String from, String to) throws SaltStackException {
-        return this.cp(target, from, to, true);
+    public <T> ResultInfoSet cpDir(Target<T> target, HashMap<String, String> keyValue) throws SaltStackException {
+        return this.cp(target, keyValue, true);
     }
 
-    private <T> boolean cp(Target<T> target, String from, String to, boolean isDir) throws SaltStackException {
+    private <T> ResultInfoSet cp(Target<T> target, HashMap<String, String> keyValue, boolean isDir) throws SaltStackException {
         List<Object> args = new ArrayList<>();
+        StringBuffer buffer = new StringBuffer();
+        int i = 0;
         if (isDir) {
-            args.add("cp -R " + from + " " + to);
+            for (Map.Entry<String, String> entry : keyValue.entrySet()) {
+                if (i == 0) {
+                    buffer.append("cp -R " + entry.getKey() + " " + entry.getValue());
+                    i = 1;
+                } else {
+                    buffer.append("&& cp -R " + entry.getKey() + " " + entry.getValue());
+                }
+            }
         } else {
-            args.add("cp " + from + " " + to);
+            for (Map.Entry<String, String> entry : keyValue.entrySet()) {
+                if (i == 0) {
+                    buffer.append("cp " + entry.getKey() + " " + entry.getValue());
+                    i = 1;
+                } else {
+                    buffer.append("&& cp " + entry.getKey() + " " + entry.getValue());
+                }
+            }
         }
+        args.add(buffer.toString());
 
-        int succeedCount = 0;
+        System.out.println(buffer.toString());
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
-        if (jobResult.getInfoList().size() == 1) {
-            ResultInfo resultInfo = jobResult.get(0);
-            Map<String, Object> results = resultInfo.getResults();
-            for (Map.Entry<String, Object> entry : results.entrySet()) {
-                if (entry.getValue().equals("")) {
-                    succeedCount++;
-                } else {
-                    throw new SaltStackException(entry.getValue().toString());
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        logger.debug("成功执行" + succeedCount + "台机器");
-
-        return true;
+        return jobResult;
     }
 
     @Override
-    public <T> boolean mkDir(Target<T> target, String path, boolean parents) throws SaltStackException {
+    public <T> ResultInfoSet mkDir(Target<T> target, List<String> pathList, boolean parents) throws SaltStackException {
         List<Object> args = new ArrayList<>();
-        if (parents) {
-            args.add("mkdir -p " + path);
-        } else {
-            args.add("mkdir " + path);
+        StringBuffer paths = new StringBuffer();
+        for (String path : pathList) {
+            paths.append(" " + path);
         }
-
-        int succeedCount = 0;
+        if (parents) {
+            args.add("mkdir -p " + paths);
+        } else {
+            args.add("mkdir " + paths);
+        }
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
-        if (jobResult.getInfoList().size() == 1) {
-            ResultInfo resultInfo = jobResult.get(0);
-            Map<String, Object> results = resultInfo.getResults();
-            for (Map.Entry<String, Object> entry : results.entrySet()) {
-
-                if (entry.getValue().equals("")) {
-                    succeedCount++;
-                } else {
-                    throw new SaltStackException(entry.getValue().toString());
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        logger.debug("成功执行" + succeedCount + "台机器");
-
-        return true;
+        return jobResult;
     }
 
     @Override
-    public <T> boolean mkDir(Target<T> target, String path) throws SaltStackException {
-        return this.mkDir(target, path, false);
+    public <T> ResultInfoSet mkDir(Target<T> target, List<String> pathList) throws SaltStackException {
+        return this.mkDir(target, pathList, false);
     }
 
     @Override
-    public <T> boolean mkDirWithParents(Target<T> target, String path) throws SaltStackException {
-        return this.mkDir(target, path, true);
+    public <T> ResultInfoSet mkDirWithParents(Target<T> target, List<String> pathList) throws SaltStackException {
+        return this.mkDir(target, pathList, true);
     }
 
     @Override
@@ -209,7 +156,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
 
     @Override
-    public <T> boolean deleteFile(Target<T> target, List<String> pathList, boolean recursion) throws SaltStackException {
+    public <T> ResultInfoSet deleteFile(Target<T> target, List<String> pathList, boolean recursion) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
@@ -221,63 +168,38 @@ public class SaltStackServiceImpl implements ISaltStackService {
             args.add("rf " + paths);
         }
 
-        int succeedCount = 0;
-
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
-        if (jobResult.getInfoList().size() == 1) {
-            ResultInfo resultInfo = jobResult.get(0);
-            Map<String, Object> results = resultInfo.getResults();
-            for (Map.Entry<String, Object> entry : results.entrySet()) {
-
-                if (entry.getValue().equals("")) {
-                    succeedCount++;
-                } else {
-                    throw new SaltStackException(entry.getValue().toString());
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        logger.debug("成功执行" + succeedCount + "台机器");
-
-        return true;
+        return jobResult;
     }
 
     @Override
-    public <T> boolean makeLn(Target<T> target, String from, String to) throws SaltStackException {
+    public <T> ResultInfoSet makeLn(Target<T> target, HashMap<String, String> keyValue) throws SaltStackException {
         List<Object> args = new ArrayList<>();
-        args.add("ln -s " + from + " " + to);
+        StringBuffer buffer = new StringBuffer();
+        int i = 0;
+        for (Map.Entry<String, String> entry : keyValue.entrySet()) {
+            if (i == 0) {
+                buffer.append("rm -rf " + entry.getValue());
+                i = 1;
+            } else {
+                buffer.append("&& rm -rf " + entry.getValue());
+            }
+            buffer.append(" && ln -s " + entry.getKey() + " " + entry.getValue());
 
-        int succeedCount = 0;
+        }
+
+        args.add(buffer.toString());
+
+        System.out.println(buffer.toString());
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
-        if (jobResult.getInfoList().size() == 1) {
-            ResultInfo resultInfo = jobResult.get(0);
-            Map<String, Object> results = resultInfo.getResults();
-            for (Map.Entry<String, Object> entry : results.entrySet()) {
-
-                if (entry.getValue().equals("")) {
-                    succeedCount++;
-                } else {
-                    throw new SaltStackException(entry.getValue().toString());
-                }
-            }
-
-        } else {
-            return false;
-        }
-
-        logger.debug("成功执行" + succeedCount + "台机器");
-
-        return true;
+        return jobResult;
     }
 
 }

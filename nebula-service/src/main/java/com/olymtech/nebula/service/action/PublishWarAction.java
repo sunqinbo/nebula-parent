@@ -6,10 +6,12 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.service.IPublishAppService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -24,11 +26,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author taoshanchang 15/11/4
+ * @author taoshanchang 15/11/5
  */
 
 @Service
-public class CreateDirAciton extends AbstractAction {
+public class PublishWarAction extends AbstractAction {
+
+    @Autowired
+    private IPublishAppService publishAppService;
 
     @Autowired
     private ISaltStackService saltStackService;
@@ -40,9 +45,11 @@ public class CreateDirAciton extends AbstractAction {
     private String BaseWarDir;
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
+    @Value("${master_war_dir}")
+    private String MasterWarDir;
 
-    public CreateDirAciton() {
 
+    public PublishWarAction() {
     }
 
     @Override
@@ -50,34 +57,37 @@ public class CreateDirAciton extends AbstractAction {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            List<String> pathList = new ArrayList<String >();
-            pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
-            pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
+            String warFromBase = MasterWarDir + event.getPublishProductKey() + "/publish_war/";
 
-            ResultInfoSet result = saltStackService.mkDir(new MinionList(targes), pathList, true);
+            List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
 
-            if (result.getInfoList().size() == 1) {
-                ResultInfo resultInfo = result.get(0);
-                Map<String, Object> results = resultInfo.getResults();
-                for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    if (entry.getValue().equals("")) {
-                        //todo 每台机子的执行信息处理
-                    } else {
-                        throw new SaltStackException(entry.getValue().toString());
+            for (NebulaPublishApp app : appList) {
+                ResultInfoSet result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), BaseWarDir + publishModule.getPublishModuleKey());
+
+                if (result.getInfoList().size() == 1) {
+                    ResultInfo resultInfo = result.get(0);
+                    Map<String, Object> results = resultInfo.getResults();
+                    for (Map.Entry<String, Object> entry : results.entrySet()) {
+                        if (entry.getValue().equals("")) {
+                            //todo 每台机子的执行信息处理
+                        } else {
+                            throw new SaltStackException(entry.getValue().toString());
+                        }
                     }
+                } else {
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
+                    return false;
                 }
-
-            } else {
-                return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, true, "");
         return true;
     }
 
@@ -85,4 +95,5 @@ public class CreateDirAciton extends AbstractAction {
     public void doFailure(NebulaPublishEvent event) {
 
     }
+
 }

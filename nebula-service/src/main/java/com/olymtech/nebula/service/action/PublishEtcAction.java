@@ -6,27 +6,30 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.service.IPublishAppService;
-import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
+import com.suse.saltstack.netapi.exception.SaltStackException;
+import com.suse.saltstack.netapi.results.ResultInfo;
+import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taoshanchang 15/11/5
  */
 
 @Service
-public class PublishNewAction extends AbstractAction {
+public class PublishEtcAction extends AbstractAction {
 
     @Autowired
     private IPublishAppService publishAppService;
@@ -37,13 +40,15 @@ public class PublishNewAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
-    public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
-    public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
+    @Value("${base_war_dir}")
+    private String BaseWarDir;
+    @Value("${base_etc_dir}")
+    private String BaseEtcDir;
+    @Value("${master_war_dir}")
+    private String MasterWarDir;
 
-    public static final String LocalBaseDir = "/home/saas/deploy_tmp/";
 
-
-    public PublishNewAction() {
+    public PublishEtcAction() {
     }
 
     @Override
@@ -58,28 +63,24 @@ public class PublishNewAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            String warFromBase = LocalBaseDir + event.getPublishProductKey() + "/publish_war/";
-            String etcFrom = LocalBaseDir + event.getPublishProductKey() + "/src_svn/etc/";
+            String etcFrom = MasterWarDir + event.getPublishProductKey() + "/src_svn/etc";
 
-            List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
+            ResultInfoSet result = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, BaseEtcDir + publishModule.getPublishModuleKey());
 
-
-            for (NebulaPublishApp app : appList) {
-                boolean result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), WarDirPrefix + publishModule.getPublishModuleKey());
-                if (!result) {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
-                    return false;
+            if (result.getInfoList().size() == 1) {
+                ResultInfo resultInfo = result.get(0);
+                Map<String, Object> results = resultInfo.getResults();
+                for (Map.Entry<String, Object> entry : results.entrySet()) {
+                    if (entry.getValue().equals("")) {
+                        //todo 每台机子的执行信息处理
+                    } else {
+                        throw new SaltStackException(entry.getValue().toString());
+                    }
                 }
-            }
-
-
-            boolean etcResult = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, EtcDirPrefix + publishModule.getPublishModuleKey() + ".war");
-
-            if (!etcResult) {
+            } else {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
                 return false;
             }
-
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, true, "");
         return true;
