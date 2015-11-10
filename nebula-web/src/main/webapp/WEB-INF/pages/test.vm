@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=GBK"
+pageEncoding="GBK"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+    <script type="text/javascript" src="../../static/js/jquery-1.8.0.min.js"></script>
+    <title >streaming test</title>
+</head>
+<body>
+<div id="message"></div>
+</body>
+<script type="text/javascript">
+    try {
+        var request = new XMLHttpRequest();
+    } catch (e) {
+        alert("Browser doesn't support window.XMLHttpRequest");
+    }
+
+    var pos = 0;
+    request.onreadystatechange = function () {
+        if (request.readyState === 3) {
+            var data = request.responseText;
+            $("#message").append(data.substring(pos));
+            pos = data.length;
+        }
+    };
+    request.open("POST", "/test", true);
+    request.send(null);
+</script>
+</html>

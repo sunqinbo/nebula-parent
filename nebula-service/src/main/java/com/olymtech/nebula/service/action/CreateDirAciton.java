@@ -48,7 +48,7 @@ public class CreateDirAciton extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, true ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, null ,"");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -72,18 +72,24 @@ public class CreateDirAciton extends AbstractAction {
                     if (entry.getValue().equals("")) {
                         //todo 每台机子的执行信息处理
                     } else {
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, false ,"error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
-
-            } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, false ,"error message");
+<<<<<<< HEAD
+            if (!warsResult||!etcResult) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR,PublishActionGroup.PRE_MINION, true ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
+=======
+            } else {
+                return false;
+            }
+        }
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+>>>>>>> origin/master
         return true;
     }
 
