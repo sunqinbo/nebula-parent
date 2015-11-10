@@ -52,6 +52,11 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     @Override
+    public List<NebulaPublishEvent> getPublishEvent() {
+        return nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
+    }
+
+    @Override
     public NebulaPublishEvent selectById(Integer id){
         return  nebulaPublishEventDao.selectById(id);
     }
@@ -66,6 +71,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
             publishModule.setPublishApps(publishApps);
             publishModule.setPublishHosts(publishHosts);
         }
+        nebulaPublishEvent.setPublishModules(publishModules);
         return nebulaPublishEvent;
     }
 

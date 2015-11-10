@@ -9,7 +9,9 @@ import com.olymtech.nebula.service.IPublishEventService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.olymtech.nebula.service.action.*;
 import org.apache.commons.lang.StringUtils;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -114,8 +116,8 @@ public class PublishEventController extends BaseController{
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(new CreateDirAciton());
-        chain.addAction(new CpEtcAction());
-        chain.addAction(new PublishWarAction());
+        chain.addAction(new CpEtcWarAction());
+        chain.addAction(new PublishNewAction());
 
         try {
             Dispatcher dispatcher = new Dispatcher(chain);

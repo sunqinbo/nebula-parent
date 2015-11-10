@@ -18,7 +18,7 @@ public class NebulaPublishScheduleDaoImpl extends BaseDaoImpl<NebulaPublishSched
 
 
     @Override
-    public List<NebulaPublishSchedule> selectByEventId(Integer eventId) {
-        return getSqlSession().selectList(CLASS_NAME + "-Select-By-Event-Id");
+    public List<NebulaPublishSchedule> selectByEventId(Integer publishEventId) {
+        return getSqlSession().selectList(CLASS_NAME + "-Select-By-Event-Id",publishEventId);
     }
 }

@@ -74,7 +74,6 @@ public class HelloMvcController extends BaseController{
 	@RequestMapping(value="/filePath",method=RequestMethod.POST)
 	@ResponseBody
 	public Object fileContent(String path) throws IOException {
-//		path+="成功了hahahaha！";
 		List<String> filecontent=fileReadService.ReadFile(path);
 		return returnCallback("success",filecontent);
 	}
@@ -113,10 +112,10 @@ public class HelloMvcController extends BaseController{
 			while(it.hasNext()) {
 				String path = it.next();
 				JsTreeData Children = new JsTreeData();
-				if(Srcmap.get(path)){
-//					Children.setData(false);
-				}
-				else
+//				if(Srcmap.get(path)){
+////					Children.setData(false);
+//				}
+//				else
 //					Children.setData(true);
 				Children.setId(idString+"\\"+path);
 				Children.setParent(idString);
