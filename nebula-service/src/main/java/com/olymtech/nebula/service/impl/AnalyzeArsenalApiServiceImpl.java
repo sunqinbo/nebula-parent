@@ -47,10 +47,10 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
     }
 
     @Override
-    public List<ProductTree> getSimpleHostListByProductAndModule(String productName, String appNames) {
+    public List<ProductTree> getSimpleHostListByProductAndModule(String productName, String appNames,String publishEnv) {
         List<ProductTree> productTrees=new ArrayList<>();
         try {
-            String url = DESCRIBE_INSTANCES_API+"/productName/"+productName+"/appNames/"+appNames;
+            String url = DESCRIBE_INSTANCES_API+"/productName/"+productName+"/appNames/"+appNames+"/publishEnv"+publishEnv;
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url);
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {

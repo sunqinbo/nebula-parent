@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,8 +72,8 @@ public class PublishEventController extends BaseController{
                 case "pre_master":whichstep=0;break;
                 case "pre_minion":whichstep=1;break;
                 case "publishReal":whichstep=2;break;
-                case "success_clear":whichstep=3;break;
-                case "fail_clear":whichstep=-1;break;
+                case "fail_clear":whichstep=3;break;
+                case "success_clear":whichstep=-1;break;
             }
             model.addAttribute("whichstep",whichstep);
             model.addAttribute("action",action);
