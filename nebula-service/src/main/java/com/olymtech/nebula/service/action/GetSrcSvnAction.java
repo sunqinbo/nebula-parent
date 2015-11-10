@@ -12,6 +12,7 @@ import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
@@ -27,13 +28,20 @@ public class GetSrcSvnAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
+    @Value("${master_deploy_dir}")
+    private String MasterWarDir;
+    @Value("${svn_username}")
+    private String SvnUsername;
+    @Value("${svn_password}")
+    private String SvnPassword;
+
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_PUBLISH_SVN, PublishActionGroup.PRE_MASTER, null, "");
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
-        SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, "gavin", "hellomonitor");
+        SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SvnUsername, SvnPassword);
         try{
-            SvnUtils.checkout(svnClientManager,svnUrl,"/Users/saas/deploy_tmp/" + event.getPublishProductKey() + "/src_svn/");
+            SvnUtils.checkout(svnClientManager,svnUrl,MasterWarDir + event.getPublishProductKey() + "/src_svn/");
             publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_PUBLISH_SVN, PublishActionGroup.PRE_MASTER, true, "");
             return true;
         }catch (Exception e){

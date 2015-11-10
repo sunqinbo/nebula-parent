@@ -76,11 +76,20 @@ public class CreateDirAciton extends AbstractAction {
                     }
                 }
 
+<<<<<<< HEAD
+            if (!warsResult||!etcResult) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
+                return false;
+            }
+        }
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
+=======
             } else {
                 return false;
             }
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+>>>>>>> origin/master
         return true;
     }
 
