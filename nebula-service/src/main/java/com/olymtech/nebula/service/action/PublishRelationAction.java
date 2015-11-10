@@ -10,6 +10,8 @@ import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IPublishScheduleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
  */
 @Service
 public class PublishRelationAction extends AbstractAction {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     IAnalyzeArsenalApiService analyzeArsenalApiService;
@@ -102,7 +106,8 @@ public class PublishRelationAction extends AbstractAction {
             publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, true, "");
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, true, "");
+            logger.error("PublishRelationAction error:",e);
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, false, "error message");
         return false;
