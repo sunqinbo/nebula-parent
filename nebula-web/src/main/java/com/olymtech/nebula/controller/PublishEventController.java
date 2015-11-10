@@ -91,11 +91,11 @@ public class PublishEventController extends BaseController{
             NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(action);
             int whichstep = -2;
             switch (nebulaPublishSequence.getActionGroup()){
-                case "pre_master":whichstep=0;break;
-                case "pre_minion":whichstep=1;break;
-                case "publishReal":whichstep=2;break;
-                case "fail_clear":whichstep=3;break;
-                case "success_clear":whichstep=-1;break;
+                case "PRE_MASTER":whichstep=0;break;
+                case "PRE_MINION":whichstep=1;break;
+                case "PUBLISH_REAL":whichstep=2;break;
+                case "FAIL_CLEAR":whichstep=3;break;
+                case "SUCCESS_CLEAR":whichstep=-1;break;
             }
             model.addAttribute("whichstep",whichstep);
             model.addAttribute("action",action);
@@ -223,11 +223,11 @@ public class PublishEventController extends BaseController{
             NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
             int whichstep = -2;
             switch (nebulaPublishSequence.getActionGroup()){
-                case "pre_master":whichstep=0;break;
-                case "pre_minion":whichstep=1;break;
-                case "publishReal":whichstep=2;break;
-                case "fail_clear":whichstep=3;break;
-                case "success_clear":whichstep=-1;break;
+                case "PRE_MASTER":whichstep=0;break;
+                case "PRE_MINION":whichstep=1;break;
+                case "PUBLISH_REAL":whichstep=2;break;
+                case "FAIL_CLEAR":whichstep=3;break;
+                case "SUCCESS_CLEAR":whichstep=-1;break;
             }
             map.put("actionName",actionName);
             map.put("actionState",actionState);

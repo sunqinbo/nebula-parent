@@ -134,7 +134,7 @@ function actionStep(step){
                         break;
                     case case3:
                         $("#processbar"+step).setStep(4);
-                        if (actionState == "null") {
+                        if (actionState == "") {
                             var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
                                 "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
                             $("#etc_btns").html(etc_btn);
