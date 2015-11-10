@@ -55,7 +55,7 @@ public class PublishWarAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, PublishActionGroup.PRE_MINION, null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -72,23 +72,7 @@ public class PublishWarAction extends AbstractAction {
             List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
 
             for (NebulaPublishApp app : appList) {
-<<<<<<< HEAD:nebula-service/src/main/java/com/olymtech/nebula/service/action/PublishNewAction.java
-                boolean result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), WarDirPrefix + publishModule.getPublishModuleKey());
-                if (!result) {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, false, "");
-                    return false;
-                }
-            }
 
-
-            boolean etcResult = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, EtcDirPrefix + publishModule.getPublishModuleKey() + ".war");
-
-            if (!etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, false, "error message");
-                return false;
-            }
-
-=======
                 ResultInfoSet result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), BaseWarDir + publishModule.getPublishModuleKey());
 
                 if (result.getInfoList().size() == 1) {
@@ -102,13 +86,12 @@ public class PublishWarAction extends AbstractAction {
                         }
                     }
                 } else {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, PublishActionGroup.PRE_MINION, false, "");
                     return false;
                 }
             }
->>>>>>> origin/master:nebula-service/src/main/java/com/olymtech/nebula/service/action/PublishWarAction.java
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES,PublishActionGroup.PRE_MINION, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 
