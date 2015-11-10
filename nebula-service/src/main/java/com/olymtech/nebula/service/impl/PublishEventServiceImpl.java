@@ -43,8 +43,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Override
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         Date now = new Date();
-        String date=getKeyDate(now);
-        String key=nebulaPublishEvent.getPublishEnv()+"."+nebulaPublishEvent.getPublishProductName()+"."+date;
+        String dateKey=getKeyDate(now);
+        String key=nebulaPublishEvent.getPublishEnv()+"."+nebulaPublishEvent.getPublishProductName()+"."+dateKey;
         nebulaPublishEvent.setPublishProductKey(key);
         nebulaPublishEvent.setSubmitDatetime(now);
         Integer id = nebulaPublishEventDao.insert(nebulaPublishEvent);

@@ -5,11 +5,14 @@ import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
+import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IPublishEventService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.olymtech.nebula.service.action.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,17 +30,31 @@ public class PublishEventController extends BaseController{
 
     @Resource
     IPublishEventService publishEventService;
-
     @Resource
     IPublishScheduleService publishScheduleService;
-
+    @Resource
+    IAnalyzeArsenalApiService analyzeArsenalApiService;
 
     @Resource
     HttpServletRequest request;
 
     @RequestMapping(value="/publishEvent.htm",method= {RequestMethod.POST,RequestMethod.GET})
-     public String publishEvent(){
+    public String publishEvent(Model model){
+        List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
+        model.addAttribute("productTrees",productTrees);
         return "publishEvent";
+    }
+
+    @RequestMapping(value="/publish_event/getProductTreeListByPid.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public Callback getProductTreeListByPid(Integer pid){
+        try{
+            List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(pid);
+            return returnCallback("Success",productTrees);
+        }catch (Exception e){
+            logger.error("getProductTreeListByPid error:",e);
+        }
+        return returnCallback("Error","服务端错误");
     }
 
     @RequestMapping(value="/publishList.htm",method= {RequestMethod.POST,RequestMethod.GET})
@@ -56,16 +73,19 @@ public class PublishEventController extends BaseController{
     @RequestMapping(value="/createPublishEvent.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent){
-        if (publishEventService.createPublishEvent(nebulaPublishEvent)<1) {
+        try{
+            publishEventService.createPublishEvent(nebulaPublishEvent);
+            return returnCallback("Success","create Success");
+        }catch (Exception e){
+            logger.error("createPublishEvent error:",e);
             return returnCallback("Error", "create failure");
         }
-        return returnCallback("Success","create Success");
     }
 
     /**
      * public schedule
      * */
-    @RequestMapping(value="/publish/checkPublishSchedule.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/checkPublishSchedule.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback checkPublishScheduleByEventId(HttpServletRequest request){
         String idString = request.getParameter("id");
@@ -77,7 +97,7 @@ public class PublishEventController extends BaseController{
         return returnCallback("Success",nebulaPublishSchedules);
     }
 
-    @RequestMapping(value="/publish/prePublishMaster.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/prePublishMaster.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback prePublishMaster(HttpServletRequest request){
         String idString = request.getParameter("id");
@@ -102,7 +122,7 @@ public class PublishEventController extends BaseController{
         return returnCallback("Success","发布准备完成");
     }
 
-    @RequestMapping(value="/publish/prePublishMinion.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/prePublishMinion.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback prePublishMinion(HttpServletRequest request){
         String idString = request.getParameter("id");
@@ -127,7 +147,7 @@ public class PublishEventController extends BaseController{
         return returnCallback("Success","预发布完成");
     }
 
-    @RequestMapping(value="/publish/publishReal.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/publishReal.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishReal(HttpServletRequest request){
         String idString = request.getParameter("id");

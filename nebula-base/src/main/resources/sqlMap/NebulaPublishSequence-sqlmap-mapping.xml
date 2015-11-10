@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="action_name" property="actionName" jdbcType="VARCHAR" />
         <result column="action_desc" property="actionDesc" jdbcType="VARCHAR" />
+        <result column="action_class" property="actionClass" jdbcType="VARCHAR" />
         <result column="action_seq_id" property="actionSeqId" jdbcType="INTEGER" />
         <result column="action_group" property="actionGroup" jdbcType="VARCHAR" />
     </resultMap>
@@ -12,6 +13,7 @@
         id,
         action_name,
         action_desc,
+        action_class,
         action_seq_id,
         action_group
     </sql>
@@ -62,11 +64,13 @@
         id,
         action_name,
         action_desc,
+        action_class,
         action_seq_id,
         action_group)
         values (#{id,jdbcType=INTEGER},
         #{actionName,jdbcType=VARCHAR},
         #{actionDesc,jdbcType=VARCHAR},
+        #{actionClass,jdbcType=VARCHAR},
         #{actionSeqId,jdbcType=INTEGER},
         #{actionGroup,jdbcType=VARCHAR})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
@@ -85,6 +89,9 @@
             <if test="actionDesc != null" >
                 action_desc,
             </if>
+            <if test="actionClass != null" >
+                action_class,
+            </if>
             <if test="actionSeqId != null" >
                 action_seq_id,
             </if>
@@ -101,6 +108,9 @@
             </if>
             <if test="actionDesc != null" >
                 #{actionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="actionClass != null" >
+                #{actionClass,jdbcType=VARCHAR},
             </if>
             <if test="actionSeqId != null" >
                 #{actionSeqId,jdbcType=INTEGER},
@@ -119,6 +129,9 @@
             <if test="actionDesc != null" >
                 action_desc = #{actionDesc,jdbcType=VARCHAR},
             </if>
+            <if test="actionClass != null" >
+                action_class = #{actionClass,jdbcType=VARCHAR},
+            </if>
             <if test="actionSeqId != null" >
                 action_seq_id = #{actionSeqId,jdbcType=INTEGER},
             </if>
@@ -132,6 +145,7 @@
         update nebula_publish_sequence set
         action_name = #{actionName,jdbcType=VARCHAR},
         action_desc = #{actionDesc,jdbcType=VARCHAR},
+        action_class = #{actionClass,jdbcType=VARCHAR},
         action_seq_id = #{actionSeqId,jdbcType=INTEGER},
         action_group = #{actionGroup,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
