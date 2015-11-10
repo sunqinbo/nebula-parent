@@ -11,6 +11,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishAppService;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
@@ -48,6 +49,8 @@ public class PublishNewAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, null, "");
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -67,7 +70,7 @@ public class PublishNewAction extends AbstractAction {
             for (NebulaPublishApp app : appList) {
                 boolean result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), WarDirPrefix + publishModule.getPublishModuleKey());
                 if (!result) {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, false, "");
                     return false;
                 }
             }
@@ -76,12 +79,12 @@ public class PublishNewAction extends AbstractAction {
             boolean etcResult = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, EtcDirPrefix + publishModule.getPublishModuleKey() + ".war");
 
             if (!etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, false, "error message");
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES,PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 

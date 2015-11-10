@@ -4,7 +4,8 @@
     <resultMap id="RM-NebulaPublishSchedule" type="com.olymtech.nebula.entity.NebulaPublishSchedule">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER" />
-        <result column="publish_action" property="publishAction" jdbcType="VARCHAR" />
+        <result column="publish_action" property="publishAction" />
+        <result column="publish_action_group" property="publishActionGroup" />
         <result column="is_success_action" property="isSuccessAction" jdbcType="INTEGER" />
     </resultMap>
     <resultMap id="RM-NebulaPublishSchedule-Long" type="com.olymtech.nebula.entity.NebulaPublishSchedule" extends="RM-NebulaPublishSchedule" >
@@ -14,6 +15,7 @@
         id,
         publish_event_id,
         publish_action,
+        publish_action_group,
         is_success_action
     </sql>
     <sql id="NebulaPublishSchedule-Long-Column-List" >
@@ -39,6 +41,9 @@
             <if test="publishAction != null">
                 AND publish_action = #{publishAction}
             </if>
+            <if test="publishActionGroup != null">
+                AND publish_action_group = #{publishActionGroup}
+            </if>
         </trim>
     </select>
     <select id="Nebula-NebulaPublishScheduleDao-Select-All-Paging-Where" parameterType="NebulaPublishSchedule" resultMap="RM-NebulaPublishSchedule-Long">
@@ -52,6 +57,9 @@
             </if>
             <if test="publishAction != null">
                 AND publish_action = #{publishAction}
+            </if>
+            <if test="publishActionGroup != null">
+                AND publish_action_group = #{publishActionGroup}
             </if>
         </trim>
         group by id order by id desc
@@ -72,11 +80,13 @@
         id,
         publish_event_id,
         publish_action,
+        publish_action_group,
         is_success_action,
         error_msg)
         values (#{id,jdbcType=INTEGER},
         #{publishEventId,jdbcType=INTEGER},
         #{publishAction,jdbcType=VARCHAR},
+        #{publishActionGroup,jdbcType=VARCHAR},
         #{isSuccessAction,jdbcType=INTEGER},
         #{errorMsg,jdbcType=LONGVARCHAR})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
@@ -95,6 +105,9 @@
             <if test="publishAction != null" >
                 publish_action,
             </if>
+            <if test="publishActionGroup != null" >
+                publish_action_group,
+            </if>
             <if test="isSuccessAction != null" >
                 is_success_action,
             </if>
@@ -110,7 +123,10 @@
                 #{publishEventId,jdbcType=INTEGER},
             </if>
             <if test="publishAction != null" >
-                #{publishAction,jdbcType=VARCHAR},
+                #{publishAction},
+            </if>
+            <if test="publishActionGroup != null" >
+                #{publishActionGroup},
             </if>
             <if test="isSuccessAction != null" >
                 #{isSuccessAction,jdbcType=INTEGER},
@@ -127,7 +143,10 @@
                 publish_event_id = #{publishEventId,jdbcType=INTEGER},
             </if>
             <if test="publishAction != null" >
-                publish_action = #{publishAction,jdbcType=VARCHAR},
+                publish_action = #{publishAction},
+            </if>
+            <if test="publishActionGroup != null" >
+                publish_action_group = #{publishActionGroup},
             </if>
             <if test="isSuccessAction != null" >
                 is_success_action = #{isSuccessAction,jdbcType=INTEGER},
@@ -138,10 +157,11 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="Nebula-NebulaPublishScheduleDao-Update-By-Id" parameterType="NebulaPublishSchedule">
+    <update id="Nebula-NebulaPublishScheduleDao-Update" parameterType="NebulaPublishSchedule">
         update nebula_publish_schedule set
         publish_event_id = #{publishEventId,jdbcType=INTEGER},
         publish_action = #{publishAction,jdbcType=VARCHAR},
+        publish_action_group = #{publishActionGroup,jdbcType=VARCHAR},
         is_success_action = #{isSuccessAction,jdbcType=INTEGER},
         error_msg = #{errorMsg,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=INTEGER}

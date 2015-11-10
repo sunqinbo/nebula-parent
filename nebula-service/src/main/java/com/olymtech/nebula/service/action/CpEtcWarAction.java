@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishEventService;
 import com.olymtech.nebula.service.IPublishScheduleService;
@@ -43,6 +44,7 @@ public class CpEtcWarAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, PublishActionGroup.PRE_MINION, null ,"");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -58,11 +60,11 @@ public class CpEtcWarAction extends AbstractAction {
             boolean etcResult = saltStackService.cpDir(new MinionList(targes), EtcDirPrefix + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()), EtcDirPrefix + publishModule.getPublishModuleKey());
 
             if (!warsResult || !etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, false ,"error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, PublishActionGroup.PRE_MINION, false ,"error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, true ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, PublishActionGroup.PRE_MINION, true ,"");
         return true;
     }
 

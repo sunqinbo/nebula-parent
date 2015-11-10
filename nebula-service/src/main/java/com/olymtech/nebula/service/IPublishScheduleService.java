@@ -6,6 +6,7 @@ package com.olymtech.nebula.service;
 
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface IPublishScheduleService {
 
-    public Integer logScheduleByAction(Integer eventId, PublishAction publishAction, Boolean isSuccessAction, String errorMsg);
+    public Integer logScheduleByAction(Integer eventId, PublishAction publishAction, PublishActionGroup publishActionGroup, Boolean isSuccessAction, String errorMsg);
 
     public List<NebulaPublishSchedule> selectByEventId(Integer eventId);
 
