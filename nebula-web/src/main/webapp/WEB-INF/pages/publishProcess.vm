@@ -3,6 +3,12 @@
     #parse("head/header.vm")
     #parse("head/sidebar.vm")
     #parse("head/navbar.vm")
+<link rel="stylesheet" href="public/assets/processbar/css/ystep.css" type="text/css" />
+<!-- 引入jquery -->
+<script type="text/javascript" src="public/assets/processbar/js/jquery.min.js"></script>
+<!-- 引入ystep插件 -->
+<script type="text/javascript" src="public/assets/processbar/js/ystep.js"></script>
+<script type="text/javascript" src="public/assets/js/publishProcess.js"></script>
 
 
 <div class="content">
@@ -20,7 +26,12 @@
                             <tr>
                                 <td>
                                     <label>发布产品：</label>
-                                    <label>运价2014</label>
+##                                    <label>运价2014</label>
+                                    <label>$!{Event.publishProductName}</label>
+                                    <input id="eventId" style="display:none" type="text" value=$!{Event.id}>
+                                    <input id="btncontrol" style="display:none" type="text" value=$!{whichstep}>
+                                    <input id="action" style="display:none" type="text" value=$!{action}>
+                                    <input id="actionState" style="display:none" type="text" value=$!{actionState}>
                                 </td>
                                 <td>
                                     <label>发布模块：</label>
@@ -28,7 +39,7 @@
                                 </td>
                                 <td>
                                     <label>发布环境：</label>
-                                    <label>测试</label>
+                                    <label>$!{Event.publishEnv}</label>
                                 </td>
                                 <td>
                                     <label>发布类型：</label>
@@ -42,7 +53,7 @@
                                 </td>
                                 <td>
                                     <label>发布结果：</label>
-                                    <label>成功</label>
+                                    <label>$!{Event.isSuccessPublish}</label>
                                 </td>
                                 <td>
                                     <label>发布分批：</label>
@@ -50,7 +61,7 @@
                                 </td>
                                 <td>
                                     <label>发布人：</label>
-                                    <label>小王</label>
+                                    <label>$!{Event.submitEmpId}</label>
                                 </td>
                             </tr>
                             <tr>
@@ -64,7 +75,7 @@
                                 </td>
                                 <td>
                                     <label>发布时间：</label>
-                                    <label>2015-10-05-13.53</label>
+                                    <label>$!{Event.publishDatetime}</label>
                                 </td>
                             </tr>
                             </tbody>
@@ -82,20 +93,30 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
+                                <th>模块</th>
                                 <th>主机名</th>
                                 <th>环境</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tbody>
-                            <tr>
-                                <td>P_main1</td>
-                                <td>测试</td>
-                            </tr>
-                            <tr>
-                                <td>P_main2</td>
-                                <td>测试</td>
-                            </tr>
+                        #foreach($module in ${Event.publishModules})
+                            #foreach($host in ${module.publishHosts})
+                             <tr>
+                                 <td>$!{module.publishModuleName}</td>
+                                 <td>$!{host.passPublishHostName}</td>
+                                 <td></td>
+                             </tr>
+                            #end
+                        #end
+##                            <tr>
+##                                <td>P_main1</td>
+##                                <td>测试</td>
+##                            </tr>
+##                            <tr>
+##                                <td>P_main2</td>
+##                                <td>测试</td>
+##                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -106,49 +127,59 @@
                     <div class="header">发布操作</div>
                     <hr/>
                     <div class="content">
-                        <button type="button" class="btn btn-default">发布准备</button>
-                        <button type="button" class="btn btn-default">启动预发布</button>
-                        <button type="button" class="btn btn-default">启动正式发布</button>
-                        <button type="button" class="btn btn-default">我要回滚</button>
+                        <button type="button" id="publishPrepare" class="btn btn-default">发布准备</button>
+                        <button type="button" id="startPublish" class="btn btn-default">启动预发布</button>
+                        <button type="button" id="startRepublish" class="btn btn-default">启动正式发布</button>
+                        <button type="button" id="publishBack" class="btn btn-default">我要回滚</button>
                     </div>
-                </div>
             </div>
-            <div class="col-md-12">
-                <div class="card card-plain">
-                    <div class="header">启动正式发布</div>
+            </div>
+            <div id="etc_edit" class="col-md-12">
+                <div id="step0" class="card card-plain">
+                    <div class="header">发布准备</div>
                     <hr/>
-                    <div class="content">
-                        <button type="button" class="btn btn-default">停止tomcat</button>
-                        <button type="button" class="btn btn-default">删除ln</button>
-                        <button type="button" class="btn btn-default">创建ln</button>
-                        <button type="button" class="btn btn-default">启动tomcat</button>
-                        <button type="button" class="btn btn-default">正式发布完成</button>
-                    </div>
+                    <div id="processbar0" class="ystep4"></div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card card-plain">
+                <div id="step1" class="card card-plain">
                     <div class="header">启动预发布</div>
                     <hr/>
-                    <div class="content">
-                        <button type="button" class="btn btn-default">创建发布目录</button>
-                        <button type="button" class="btn btn-default">复制原始文件</button>
-                        <button type="button" class="btn btn-default">发布war/etc</button>
-                        <button type="button" class="btn btn-default">预发布完成</button>
-                    </div>
+##                    <div class="content">
+##                        <button type="button" class="btn btn-default">创建发布目录</button>
+##                        <button type="button" class="btn btn-default">复制原始文件</button>
+##                        <button type="button" class="btn btn-default">发布war/etc</button>
+##                        <button type="button" class="btn btn-default">预发布完成</button>
+##                    </div>
+                    <div id="processbar1" class="ystep4"></div>
             </div>
                 </div>
             <div class="col-md-12">
-                <div class="card card-plain">
+                <div id="step2" class="card card-plain">
+                    <div class="header">启动正式发布</div>
+                    <hr/>
+                ##                    <div class="content">
+                ##                        <button type="button" class="btn btn-default">停止tomcat</button>
+                ##                        <button type="button" class="btn btn-default">删除ln</button>
+                ##                        <button type="button" class="btn btn-default">创建ln</button>
+                ##                        <button type="button" class="btn btn-default">启动tomcat</button>
+                ##                        <button type="button" class="btn btn-default">正式发布完成</button>
+                ##                    </div>
+                    <div id="processbar2" class="ystep4"></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div id="step3" class="card card-plain">
                     <div class="header">启动回滚</div>
                     <hr/>
-                    <div class="content">
-                        <button type="button" class="btn btn-default">停止tomcat</button>
-                        <button type="button" class="btn btn-default">删除ln</button>
-                        <button type="button" class="btn btn-default">创建ln</button>
-                        <button type="button" class="btn btn-default">启动tomcat</button>
-                        <button type="button" class="btn btn-default">回滚完成</button>
-                    </div>
+##                    <div class="content">
+##                        <button type="button" class="btn btn-default">停止tomcat</button>
+##                        <button type="button" class="btn btn-default">删除ln</button>
+##                        <button type="button" class="btn btn-default">创建ln</button>
+##                        <button type="button" class="btn btn-default">启动tomcat</button>
+##                        <button type="button" class="btn btn-default">回滚完成</button>
+##                    </div>
+                    <div id="processbar3" class="ystep4"></div>
                 </div>
             </div>
 

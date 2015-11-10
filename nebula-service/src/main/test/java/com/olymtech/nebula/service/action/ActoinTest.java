@@ -9,7 +9,6 @@ import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.junit.Test;
-import com.olymtech.nebula.service.action.PublishRelationAction;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

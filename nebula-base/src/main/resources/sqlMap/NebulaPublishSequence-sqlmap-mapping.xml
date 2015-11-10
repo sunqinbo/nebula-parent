@@ -21,6 +21,12 @@
         from nebula_publish_sequence
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="Nebula-NebulaPublishSequenceDao-Select-By-ActionName" parameterType="java.lang.String" resultMap="RM-NebulaPublishSequence">
+        select
+        <include refid="NebulaPublishSequence-Base-Column-List"/>
+        from nebula_publish_sequence
+        where action_name = #{actionname,jdbcType=VARCHAR}
+    </select>
     <select id="Nebula-NebulaPublishSequenceDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from nebula_publish_sequence
     </select>

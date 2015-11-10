@@ -9,6 +9,7 @@
 
     <context:component-scan base-package="com.olymtech.nebula" />
 
-
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:salt.properties" />
 
 </beans>

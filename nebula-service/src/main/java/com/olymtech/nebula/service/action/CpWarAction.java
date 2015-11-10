@@ -9,6 +9,9 @@ import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.service.IPublishBaseService;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
@@ -23,25 +26,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author taoshanchang 15/11/6
+ * @author taoshanchang 15/11/4
  */
 @Service
-public class ChangeLnAction extends AbstractAction {
+public class CpWarAction extends AbstractAction {
+
+    @Autowired
+    private IPublishBaseService publishBaseService;
 
     @Autowired
     private ISaltStackService saltStackService;
+
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
-    @Value("${etc_link}")
-    private String EtcLink;
-    @Value("${war_link}")
-    private String WarLink;
+
+    public CpWarAction() {
+    }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -52,10 +61,10 @@ public class ChangeLnAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            HashMap<String, String> lnMap = new HashMap<String, String>();
-            lnMap.put(BaseWarDir + publishModule.getPublishModuleKey(), WarLink);
-            lnMap.put(BaseEtcDir + publishModule.getPublishModuleKey(), EtcLink);
-            ResultInfoSet result = saltStackService.makeLn(new MinionList(targes), lnMap);
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put(BaseWarDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()) + "/*.war", BaseEtcDir + publishModule.getPublishModuleKey());
+
+            ResultInfoSet result = saltStackService.cpFile(new MinionList(targes), map);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
@@ -67,13 +76,12 @@ public class ChangeLnAction extends AbstractAction {
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
-
             } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, false, "error message");
                 return false;
             }
-
         }
-
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, true, "");
         return true;
     }
 

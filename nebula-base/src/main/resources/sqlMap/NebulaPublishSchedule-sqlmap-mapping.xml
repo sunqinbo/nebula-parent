@@ -64,7 +64,7 @@
         </trim>
         group by id order by id desc
     </select>
-    <select id="Nebula-NebulaPublishScheduleDao-Select-By-Event-Id" parameterType="NebulaPublishSchedule" resultMap="RM-NebulaPublishSchedule-Long">
+    <select id="Nebula-NebulaPublishScheduleDao-Select-By-Event-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishSchedule-Long">
         select
         <include refid="NebulaPublishSchedule-Base-Column-List"/>
         ,

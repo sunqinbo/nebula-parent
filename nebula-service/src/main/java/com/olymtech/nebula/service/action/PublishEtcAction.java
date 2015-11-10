@@ -9,6 +9,9 @@ import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.service.IPublishAppService;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
@@ -18,27 +21,35 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author taoshanchang 15/11/6
+ * @author taoshanchang 15/11/5
  */
+
 @Service
-public class ChangeLnAction extends AbstractAction {
+public class PublishEtcAction extends AbstractAction {
+
+    @Autowired
+    private IPublishAppService publishAppService;
 
     @Autowired
     private ISaltStackService saltStackService;
+
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
-    @Value("${etc_link}")
-    private String EtcLink;
-    @Value("${war_link}")
-    private String WarLink;
+    @Value("${master_war_dir}")
+    private String MasterWarDir;
+
+
+    public PublishEtcAction() {
+    }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
@@ -52,10 +63,9 @@ public class ChangeLnAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            HashMap<String, String> lnMap = new HashMap<String, String>();
-            lnMap.put(BaseWarDir + publishModule.getPublishModuleKey(), WarLink);
-            lnMap.put(BaseEtcDir + publishModule.getPublishModuleKey(), EtcLink);
-            ResultInfoSet result = saltStackService.makeLn(new MinionList(targes), lnMap);
+            String etcFrom = MasterWarDir + event.getPublishProductKey() + "/src_svn/etc";
+
+            ResultInfoSet result = saltStackService.cpDirRemote(new MinionList(targes), etcFrom, BaseEtcDir + publishModule.getPublishModuleKey());
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
@@ -67,13 +77,12 @@ public class ChangeLnAction extends AbstractAction {
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
-
             } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
                 return false;
             }
-
         }
-
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, true, "");
         return true;
     }
 
@@ -81,4 +90,5 @@ public class ChangeLnAction extends AbstractAction {
     public void doFailure(NebulaPublishEvent event) {
 
     }
+
 }

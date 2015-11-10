@@ -11,4 +11,5 @@ import com.olymtech.nebula.entity.NebulaPublishSequence;
  * Created by Gavin on 2015-11-02 14:12.
  */
 public interface INebulaPublishSequenceDao extends IBaseDao<NebulaPublishSequence,Integer> {
+    public NebulaPublishSequence selectByActionName(String actionname);
 }
