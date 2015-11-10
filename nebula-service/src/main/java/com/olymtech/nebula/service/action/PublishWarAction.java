@@ -86,7 +86,7 @@ public class PublishWarAction extends AbstractAction {
                         }
                     }
                 } else {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, false, "");
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "");
                     return false;
                 }
             }
