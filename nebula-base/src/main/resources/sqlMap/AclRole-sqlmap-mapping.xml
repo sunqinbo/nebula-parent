@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="acl_role">
+    <resultMap id="RM-AclRole" type="com.olymtech.nebula.entity.AclRole">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="AclRole-Base-Column-List">
+        id,
+        role_name,
+        role_desc
+    </sql>
+    <select id="Nebula-AclRoleDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-AclRole">
+        select
+        <include refid="AclRole-Base-Column-List"/>
+        from acl_role
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-AclRoleDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from acl_role
+    </select>
+    <select id="Nebula-AclRoleDao-Select-Count-Where" parameterType="AclRole" resultType="java.lang.Integer">
+        select count(id) from acl_role
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="roleName != null">
+                role_name = #{roleName}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-AclRoleDao-Select-All-Paging-Where" parameterType="AclRole" resultMap="RM-AclRole">
+        select <include refid="AclRole-Base-Column-List"/> from acl_role
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="roleName != null">
+                role_name = #{roleName}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-AclRoleDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from acl_role
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-AclRoleDao-Insert" parameterType="AclRole">
+        insert into acl_role (
+        id,
+        role_name,
+        role_desc)
+        values (#{id,jdbcType=INTEGER},
+        #{roleName,jdbcType=VARCHAR},
+        #{roleDesc,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-AclRoleDao-Insert-Selective" parameterType="AclRole">
+        insert into acl_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleName != null" >
+                role_name,
+            </if>
+            <if test="roleDesc != null" >
+                role_desc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleName != null" >
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleDesc != null" >
+                #{roleDesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-AclRoleDao-Update-By-Id-Selective" parameterType="AclRole">
+        update acl_role
+        <set>
+            <if test="roleName != null" >
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleDesc != null" >
+                role_desc = #{roleDesc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-AclRoleDao-Update-By-Id" parameterType="AclRole">
+        update acl_role set
+        role_name = #{roleName,jdbcType=VARCHAR},
+        role_desc = #{roleDesc,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

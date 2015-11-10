@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="acl_role_permission">
+    <resultMap id="RM-AclRolePermission" type="com.olymtech.nebula.entity.AclRolePermission">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_id" property="roleId" jdbcType="INTEGER" />
+        <result column="permission_id" property="permissionId" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="AclRolePermission-Base-Column-List">
+        id,
+        role_id,
+        permission_id
+    </sql>
+    <select id="Nebula-AclRolePermissionDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-AclRolePermission">
+        select
+        <include refid="AclRolePermission-Base-Column-List"/>
+        from acl_role_permission
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-AclRolePermissionDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from acl_role_permission
+    </select>
+    <select id="Nebula-AclRolePermissionDao-Select-Count-Where" parameterType="AclRolePermission" resultType="java.lang.Integer">
+        select count(id) from acl_role_permission
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="roleId != null">
+                role_id = #{roleId}
+            </if>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-AclRolePermissionDao-Select-All-Paging-Where" parameterType="AclRolePermission" resultMap="RM-AclRolePermission">
+        select <include refid="AclRolePermission-Base-Column-List"/> from acl_role_permission
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="roleId != null">
+                role_id = #{roleId}
+            </if>
+            <if test="permissionId != null">
+                AND permission_id = #{permissionId}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-AclRolePermissionDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from acl_role_permission
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-AclRolePermissionDao-Insert" parameterType="AclRolePermission">
+        insert into acl_role_permission (
+        id,
+        role_id,
+        permission_id)
+        values (#{id,jdbcType=INTEGER},
+        #{roleId,jdbcType=INTEGER},
+        #{permissionId,jdbcType=INTEGER})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-AclRolePermissionDao-Insert-Selective" parameterType="AclRolePermission">
+        insert into acl_role_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="permissionId != null" >
+                permission_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null" >
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="permissionId != null" >
+                #{permissionId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-AclRolePermissionDao-Update-By-Id-Selective" parameterType="AclRolePermission">
+        update acl_role_permission
+        <set>
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="permissionId != null" >
+                permission_id = #{permissionId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-AclRolePermissionDao-Update-By-Id" parameterType="AclRolePermission">
+        update acl_role_permission set
+        role_id = #{roleId,jdbcType=INTEGER},
+        permission_id = #{permissionId,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
