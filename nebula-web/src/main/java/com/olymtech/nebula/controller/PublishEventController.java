@@ -116,9 +116,8 @@ public class PublishEventController extends BaseController{
             return returnCallback("Success","create Success");
         }catch (Exception e){
             logger.error("createPublishEvent error:",e);
-            return returnCallback("Error", "create failure");
         }
-        return returnCallback("Success","create Success");
+        return returnCallback("Error","create Success");
     }
 
     /**
@@ -173,8 +172,9 @@ public class PublishEventController extends BaseController{
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(new CreateDirAciton());
-        chain.addAction(new CpEtcWarAction());
-        chain.addAction(new PublishNewAction());
+        chain.addAction(new CpEtcAction());
+        chain.addAction(new CpWarAction());
+        chain.addAction(new PublishWarAction());
 
         try {
             Dispatcher dispatcher = new Dispatcher(chain);

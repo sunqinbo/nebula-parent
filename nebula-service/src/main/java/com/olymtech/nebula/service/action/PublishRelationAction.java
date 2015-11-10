@@ -67,7 +67,7 @@ public class PublishRelationAction extends AbstractAction {
         appNames += appname;
         try {
             List<NebulaPublishModule> modules = new ArrayList<>();
-            List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames);
+            List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames,event.getPublishEnv());
             for (ProductTree productTree : productTrees) {
                 NebulaPublishModule nebulaPublishModule = new NebulaPublishModule();
                 nebulaPublishModule.setId(productTree.getId());
