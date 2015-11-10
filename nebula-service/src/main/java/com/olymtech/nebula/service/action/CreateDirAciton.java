@@ -80,7 +80,7 @@ public class CreateDirAciton extends AbstractAction {
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
         return true;
     }
 

@@ -55,7 +55,7 @@ public class PublishWarAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES, PublishActionGroup.PRE_MINION, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, PublishActionGroup.PRE_MINION, null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -72,6 +72,7 @@ public class PublishWarAction extends AbstractAction {
             List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
 
             for (NebulaPublishApp app : appList) {
+
                 ResultInfoSet result = saltStackService.cpFileRemote(new MinionList(targes), warFromBase + app.getPublishAppName(), BaseWarDir + publishModule.getPublishModuleKey());
 
                 if (result.getInfoList().size() == 1) {
@@ -90,7 +91,7 @@ public class PublishWarAction extends AbstractAction {
                 }
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_FILES,PublishActionGroup.PRE_MINION, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 
