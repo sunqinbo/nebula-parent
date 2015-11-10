@@ -4,7 +4,6 @@
  */
 package com.olymtech.nebula.core.action;
 
-import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 
 /**
@@ -18,9 +17,17 @@ public class Action2 extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        try {
+            System.out.println("svn动作");
+            int a = 12/0;
+        } catch (Exception e) {
+
+            System.out.println("Action2 Exception");
+            throw new Exception("xxx");
+
+        }
 
 
-        System.out.println("svn动作");
         return false;
     }
 
