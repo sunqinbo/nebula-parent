@@ -108,16 +108,16 @@ public class PublishEventController extends BaseController{
     /**
      * public event
      * */
-    @RequestMapping(value="/createPublishEvent.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/createPublishEvent.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent){
         try{
-            publishEventService.createPublishEvent(nebulaPublishEvent);
-            return returnCallback("Success","create Success");
+            int id = publishEventService.createPublishEvent(nebulaPublishEvent);
+            return returnCallback("Success",id);
         }catch (Exception e){
             logger.error("createPublishEvent error:",e);
         }
-        return returnCallback("Error","create Success");
+        return returnCallback("Error","create Error");
     }
 
     /**
