@@ -25,16 +25,12 @@ public class Dispatcher {
     public void doDispatch(NebulaPublishEvent event) throws Exception {
         List<Action> actions = actionChain.getActions();
         if (actions != null || actions.size() == 0) {
-            try {
-                for (int i = 0; i < actions.size(); i++) {
-                    if (!actions.get(i).doAction(event)) {
-                        triggerFailure(event);
-                        return;
-                    }
-                    actionIndex = i;
+            for (int i = 0; i < actions.size(); i++) {
+                if (!actions.get(i).doAction(event)) {
+                    triggerFailure(event);
+                    return;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                actionIndex = i;
             }
         } else {
 
@@ -49,7 +45,7 @@ public class Dispatcher {
             for (int i = actionIndex; i >= 0; i--) {
                 actions.get(i).doFailure(event);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

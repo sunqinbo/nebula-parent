@@ -6,16 +6,24 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
+import com.suse.saltstack.netapi.exception.SaltStackException;
+import com.suse.saltstack.netapi.results.ResultInfo;
+import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taoshanchang 15/11/6
@@ -25,12 +33,22 @@ public class ChangeLnAction extends AbstractAction {
 
     @Autowired
     private ISaltStackService saltStackService;
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
 
-    public static final String WarDirPrefix = "/home/saas/tomcat/public_wars/";
-    public static final String EtcDirPrefix = "/home/saas/tomcat/public_etcs/";
+    @Value("${base_war_dir}")
+    private String BaseWarDir;
+    @Value("${base_etc_dir}")
+    private String BaseEtcDir;
+    @Value("${etc_link}")
+    private String EtcLink;
+    @Value("${war_link}")
+    private String WarLink;
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, null, "");
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -41,21 +59,30 @@ public class ChangeLnAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            List<String> pathList = new ArrayList<String>();
-            pathList.add("/home/saas/tomcat/etc");
-            pathList.add("/home/saas/tomcat/webapps");
+            HashMap<String, String> lnMap = new HashMap<String, String>();
+            lnMap.put(BaseWarDir + publishModule.getPublishModuleKey(), WarLink);
+            lnMap.put(BaseEtcDir + publishModule.getPublishModuleKey(), EtcLink);
+            ResultInfoSet result = saltStackService.makeLn(new MinionList(targes), lnMap);
 
-            boolean etcResult = saltStackService.deleteFile(new MinionList(targes), pathList, true);
+            if (result.getInfoList().size() == 1) {
+                ResultInfo resultInfo = result.get(0);
+                Map<String, Object> results = resultInfo.getResults();
+                for (Map.Entry<String, Object> entry : results.entrySet()) {
+                    if (entry.getValue().equals("")) {
+                        //todo 每台机子的执行信息处理
+                    } else {
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, false, "error message");
+                        throw new SaltStackException(entry.getValue().toString());
+                    }
+                }
 
-            boolean result = saltStackService.makeLn(new MinionList(targes), WarDirPrefix + publishModule.getPublishModuleKey(), "/home/saas/tomcat/webapps");
-            boolean result2 = saltStackService.makeLn(new MinionList(targes), EtcDirPrefix + publishModule.getPublishModuleKey(), "/home/saas/tomcat/etc");
-
-            if (!etcResult||!result||!result2) {
+            } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, false, "error message");
                 return false;
             }
 
         }
-
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, true, "");
         return true;
     }
 

@@ -10,13 +10,19 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
+import com.suse.saltstack.netapi.exception.SaltStackException;
+import com.suse.saltstack.netapi.results.ResultInfo;
+import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taoshanchang 15/11/4
@@ -31,12 +37,19 @@ public class CreateDirAciton extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
+    @Value("${base_war_dir}")
+    private String BaseWarDir;
+    @Value("${base_etc_dir}")
+    private String BaseEtcDir;
+
     public CreateDirAciton() {
 
     }
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, null ,"");
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -46,15 +59,30 @@ public class CreateDirAciton extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            boolean warsResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_wars/"+publishModule.getPublishModuleKey(), true);
-            boolean etcResult = saltStackService.mkDir(new MinionList(targes), "/home/saas/tomcat/public_etcs/"+publishModule.getPublishModuleKey(), true);
+            List<String> pathList = new ArrayList<String >();
+            pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
+            pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
 
-            if (!warsResult||!etcResult) {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+            ResultInfoSet result = saltStackService.mkDir(new MinionList(targes), pathList, true);
+
+            if (result.getInfoList().size() == 1) {
+                ResultInfo resultInfo = result.get(0);
+                Map<String, Object> results = resultInfo.getResults();
+                for (Map.Entry<String, Object> entry : results.entrySet()) {
+                    if (entry.getValue().equals("")) {
+                        //todo 每台机子的执行信息处理
+                    } else {
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
+                        throw new SaltStackException(entry.getValue().toString());
+                    }
+                }
+
+            } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, true ,"error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
         return true;
     }
 

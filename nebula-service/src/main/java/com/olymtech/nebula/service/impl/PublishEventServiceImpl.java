@@ -6,10 +6,10 @@ import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
-import com.olymtech.nebula.service.INebulaPublishModuleService;
-import com.olymtech.nebula.service.IPublishAppService;
-import com.olymtech.nebula.service.IPublishEventService;
-import com.olymtech.nebula.service.IPublishHostService;
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +36,10 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Resource
     IPublishHostService publishHostService;
 
+    @Autowired
+    private IPublishScheduleService publishScheduleService;
+
+
     @Override
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         Date now = new Date();
@@ -43,7 +47,9 @@ public class PublishEventServiceImpl implements IPublishEventService {
         String key=nebulaPublishEvent.getPublishEnv()+"."+nebulaPublishEvent.getPublishProductName()+"."+date;
         nebulaPublishEvent.setPublishProductKey(key);
         nebulaPublishEvent.setSubmitDatetime(now);
-        return nebulaPublishEventDao.insert(nebulaPublishEvent);
+        Integer id = nebulaPublishEventDao.insert(nebulaPublishEvent);
+        publishScheduleService.logScheduleByAction(id, PublishAction.CREATE_PUBLISH_EVENT, PublishActionGroup.PRE_MASTER, true, "");
+        return id;
     }
 
     @Override

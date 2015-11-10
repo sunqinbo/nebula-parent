@@ -6,9 +6,12 @@ import com.olymtech.nebula.dao.INebulaPublishHostDao;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IPublishScheduleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
  */
 @Service
 public class PublishRelationAction extends AbstractAction {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     IAnalyzeArsenalApiService analyzeArsenalApiService;
@@ -49,6 +54,7 @@ public class PublishRelationAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, null, "");
         String publicWarDirPath = "/Users/taoshanchang/Desktop/test";
         List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
         String appNames = "";
@@ -97,12 +103,13 @@ public class PublishRelationAction extends AbstractAction {
                 modules.add(nebulaPublishModule);
             }
             event.setPublishModules(modules);
-            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, true, "");
+            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, true, "");
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, false, "error message");
+            logger.error("PublishRelationAction error:",e);
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, false, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, false, "error message");
         return false;
     }
 

@@ -8,9 +8,6 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author taoshanchang 15/11/4
  */
@@ -21,7 +18,7 @@ public class ActoinTest {
     }
 
     @Test
-    public void actionTest(){
+    public void actionTest() throws Exception {
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(new Action1("dir")).addAction(new Action2("svn")).addAction(new Action3("salt"));
@@ -37,14 +34,6 @@ public class ActoinTest {
 //
 //        chain.addActions(list);
         //创建拦截器
-        Dispatcher dispatcher = new Dispatcher(chain);
-
-        try {
-            //执行拦截器
-            dispatcher.doDispatch(new NebulaPublishEvent());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new Dispatcher(chain).doDispatch(new NebulaPublishEvent());
     }
 }
