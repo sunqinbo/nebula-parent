@@ -101,15 +101,14 @@ public interface ISaltStackService {
     public <T> ResultInfoSet cmdRun(final Target<T> target, List<Object> args, Map<String, Object> kwargs) throws SaltStackException;
 
     /**
-     * 停止tomcat
-     *
+     * 远程运行cmd命令
      * @param target
-     * @param commandPath
+     * @param pathList 命令路径列表
      * @param <T>
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet doCommand(final Target<T> target, String commandPath) throws SaltStackException;
+    public <T> ResultInfoSet doCommand(final Target<T> target, List<String> pathList) throws SaltStackException;
 
     /**
      * 删除文件或文件

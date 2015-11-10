@@ -46,7 +46,7 @@ public class PublishWarAction extends AbstractAction {
     private String BaseWarDir;
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
-    @Value("${master_war_dir}")
+    @Value("${master_deploy_dir}")
     private String MasterWarDir;
 
 
