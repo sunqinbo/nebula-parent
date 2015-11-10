@@ -1,6 +1,7 @@
 package com.olymtech.nebula.entity;
 
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 
 public class NebulaPublishSchedule extends BaseDO{
 
@@ -8,9 +9,45 @@ public class NebulaPublishSchedule extends BaseDO{
 
     private PublishAction publishAction;
 
+    private PublishActionGroup publishActionGroup;
+
     private Boolean isSuccessAction;
 
     private String errorMsg;
+
+    public NebulaPublishSchedule(){
+        super();
+    }
+
+    public NebulaPublishSchedule(Integer publishEventId,
+                                 PublishAction publishAction,
+                                 PublishActionGroup publishActionGroup,
+                                 Boolean isSuccessAction,
+                                 String errorMsg){
+        super();
+        this.publishEventId = publishEventId;
+        this.publishAction = publishAction;
+        this.publishActionGroup = publishActionGroup;
+        this.isSuccessAction = isSuccessAction;
+        this.errorMsg = errorMsg;
+    }
+
+    public NebulaPublishSchedule(Integer publishEventId,
+                                 PublishAction publishAction,
+                                 PublishActionGroup publishActionGroup){
+        super();
+        this.publishEventId = publishEventId;
+        this.publishAction = publishAction;
+        this.publishActionGroup = publishActionGroup;
+    }
+
+    public PublishActionGroup getPublishActionGroup() {
+        return publishActionGroup;
+    }
+
+    public void setPublishActionGroup(PublishActionGroup publishActionGroup) {
+        this.publishActionGroup = publishActionGroup;
+    }
 
     public Integer getPublishEventId() {
         return publishEventId;

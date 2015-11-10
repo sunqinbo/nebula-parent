@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -47,6 +48,8 @@ public class CreateDirAciton extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, null ,"");
+
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -73,11 +76,20 @@ public class CreateDirAciton extends AbstractAction {
                     }
                 }
 
+<<<<<<< HEAD
+            if (!warsResult||!etcResult) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
+                return false;
+            }
+        }
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
+=======
             } else {
                 return false;
             }
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, false ,"error message");
+>>>>>>> origin/master
         return true;
     }
 

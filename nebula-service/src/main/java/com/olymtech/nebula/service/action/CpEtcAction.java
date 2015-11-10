@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.datatypes.target.MinionList;
@@ -50,6 +51,7 @@ public class CpEtcAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, PublishActionGroup.PRE_MINION, null ,"");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -77,11 +79,11 @@ public class CpEtcAction extends AbstractAction {
                     }
                 }
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, false, "error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES,PublishActionGroup.PRE_MINION, false, "error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_FILES,PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 

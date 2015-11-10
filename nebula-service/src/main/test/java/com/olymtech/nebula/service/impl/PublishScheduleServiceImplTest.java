@@ -1,6 +1,7 @@
 package com.olymtech.nebula.service.impl;
 
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import org.junit.After;
@@ -37,7 +38,12 @@ public class PublishScheduleServiceImplTest {
 
     @Test
     public void testLogScheduleByAction() throws Exception {
-        Integer id = publishScheduleService.logScheduleByAction(2, PublishAction.CLEAR_HISTORY_DIR, false, "error message");
+        Integer id = publishScheduleService.logScheduleByAction(2, PublishAction.CLEAR_HISTORY_DIR, PublishActionGroup.SUCCESS_CLEAR, false, "error message");
         System.out.println(id);
+    }
+
+    @Test
+    public void testSelectByEventId() throws Exception {
+
     }
 }
