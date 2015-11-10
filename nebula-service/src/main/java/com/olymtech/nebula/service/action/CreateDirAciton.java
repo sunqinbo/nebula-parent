@@ -72,15 +72,17 @@ public class CreateDirAciton extends AbstractAction {
                     if (entry.getValue().equals("")) {
                         //todo 每台机子的执行信息处理
                     } else {
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
             } else {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
         return true;
     }
 

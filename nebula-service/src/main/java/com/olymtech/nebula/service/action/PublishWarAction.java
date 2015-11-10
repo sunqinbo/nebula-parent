@@ -82,11 +82,12 @@ public class PublishWarAction extends AbstractAction {
                         if (entry.getValue().equals("")) {
                             //todo 每台机子的执行信息处理
                         } else {
+                            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "error message");
                             throw new SaltStackException(entry.getValue().toString());
                         }
                     }
                 } else {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "");
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "error message");
                     return false;
                 }
             }
