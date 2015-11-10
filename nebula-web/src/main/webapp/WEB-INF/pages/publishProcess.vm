@@ -139,6 +139,7 @@
                     <div class="header">发布准备</div>
                     <hr/>
                     <div id="processbar0" class="ystep4"></div>
+                    <div id="etc_btns"></div>
                 </div>
             </div>
             <div class="col-md-12">
