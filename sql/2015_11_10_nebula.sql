@@ -11,7 +11,7 @@
  Target Server Version : 50173
  File Encoding         : utf-8
 
- Date: 11/10/2015 17:47:58 PM
+ Date: 11/10/2015 20:59:20 PM
 */
 
 SET NAMES utf8;
@@ -113,6 +113,9 @@ COMMIT;
 DROP TABLE IF EXISTS `nebula_publish_event`;
 CREATE TABLE `nebula_publish_event` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '发布事件id',
+  `publish_subject` varchar(100) DEFAULT NULL COMMENT '标题',
+  `publish_bu_name` varchar(50) DEFAULT NULL COMMENT '事业部名称',
+  `publish_bu_cname` varchar(50) DEFAULT NULL COMMENT '事业部中文名称',
   `publish_product_name` varchar(50) DEFAULT NULL COMMENT '发布产品英文名称',
   `publish_product_cname` varchar(50) DEFAULT NULL COMMENT '发布产品中文名称',
   `publish_env` varchar(50) DEFAULT NULL COMMENT '发布环境，test/stage/product',
@@ -150,6 +153,10 @@ CREATE TABLE `nebula_publish_host` (
   `publish_module_id` int(11) DEFAULT NULL COMMENT '发布模块id',
   `pass_publish_host_name` varchar(100) DEFAULT NULL COMMENT '被发布机名称',
   `pass_publish_host_ip` varchar(50) DEFAULT NULL COMMENT '被发布机ip',
+  `action_name` varchar(100) DEFAULT NULL COMMENT '动作名称',
+  `action_group` varchar(100) DEFAULT NULL COMMENT '动作组',
+  `is_success_action` int(5) DEFAULT NULL COMMENT '是否成功',
+  `action_result` text COMMENT '动作执行结果',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_module_id_project` (`publish_module_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -197,11 +204,19 @@ CREATE TABLE `nebula_publish_sequence` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `action_name` varchar(50) NOT NULL COMMENT '发布动作名称',
   `action_desc` varchar(50) DEFAULT NULL COMMENT '发布动作描述',
+  `action_class` varchar(255) DEFAULT NULL COMMENT '发布action类名',
   `action_seq_id` int(5) DEFAULT NULL COMMENT '发布顺序',
   `action_group` varchar(50) DEFAULT NULL COMMENT '发布过程分组',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_action_seq_id` (`action_seq_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `nebula_publish_sequence`
+-- ----------------------------
+BEGIN;
+INSERT INTO `nebula_publish_sequence` VALUES ('1', 'CREATE_PUBLISH_EVENT', null, null, '1', 'PRE_MASTER'), ('2', 'GET_PUBLISH_SVN', null, null, '2', 'PRE_MASTER'), ('3', 'ANALYZE_PROJECT', null, null, '3', 'PRE_MASTER'), ('4', 'GET_SRC_SVN', null, null, '4', 'PRE_MASTER'), ('5', 'UPDATE_ETC', null, null, '5', 'PRE_MASTER'), ('6', 'CREATE_PUBLISH_DIR', null, null, '6', 'PRE_MINION'), ('7', 'COPY_PUBLISH_OLD_ETC', null, null, '7', 'PRE_MINION'), ('8', 'COPY_PUBLISH_OLD_ETC', null, null, '8', 'PRE_MINION'), ('9', 'PUBLISH_NEW_ETC', null, null, '9', 'PRE_MINION'), ('10', 'PUBLISH_NEW_WAR', null, null, '10', 'PRE_MINION'), ('11', 'STOP_TOMCAT', null, null, '11', 'PRE_MINION'), ('12', 'CHANGE_LN', null, null, '12', 'PUBLISH_REAL'), ('13', 'START_TOMCAT', null, null, '13', 'PUBLISH_REAL'), ('14', 'CLEAR_HISTORY_DIR', null, null, null, 'SUCCESS_CLEAR'), ('15', 'UPDATE_SRC_SVN', null, null, null, 'SUCCESS_CLEAR'), ('17', 'FSTOP_TOMCAT', null, null, null, 'FAIL_CLEAR'), ('18', 'FCHANGE_LN', null, null, null, 'FAIL_CLEAR'), ('19', 'FSTART_TOMCAT', null, null, null, 'FAIL_CLEAR'), ('20', 'FCLEAR_PUBLISH_DIR', null, null, null, 'FAIL_CLEAR'), ('22', 'CLEAR_PUBLISH_DIR', null, null, null, 'FAIL_CLEAR');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `nebula_publish_svn_baseline`
@@ -301,6 +316,13 @@ CREATE TABLE `nebula_user_info` (
   `security_key` varchar(100) DEFAULT NULL COMMENT '安全key',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_emp_id` (`emp_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `nebula_user_info`
+-- ----------------------------
+BEGIN;
+INSERT INTO `nebula_user_info` VALUES ('1', 'admin', '18066265836', 'tsc19930816', '1074021573', 'taoshanchang@foxmail.com', 'babydance', 'yunwei', 'yunwei', '1', '1', '1', 'd3c59d25033dbf980d29554025c23a75', '8d78869f470951332959580424d4bf4f');
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
