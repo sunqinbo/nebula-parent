@@ -48,7 +48,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
         nebulaPublishEvent.setPublishProductKey(key);
         nebulaPublishEvent.setSubmitDatetime(now);
         Integer id = nebulaPublishEventDao.insert(nebulaPublishEvent);
-        publishScheduleService.logScheduleByAction(id, PublishAction.CREATE_PUBLISH_EVENT, PublishActionGroup.PRE_MASTER, null, "");
+        publishScheduleService.logScheduleByAction(id, PublishAction.CREATE_PUBLISH_EVENT, PublishActionGroup.PRE_MASTER, true, "");
         return id;
     }
 
