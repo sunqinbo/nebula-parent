@@ -216,7 +216,24 @@ public class PublishEventController extends BaseController{
     public Object publishProcessGetStep(Integer eventId){
         List<NebulaPublishSchedule> nebulaPublishSchedules=publishScheduleService.selectByEventId(eventId);
         int last=nebulaPublishSchedules.size();
-        return returnCallback("Success",nebulaPublishSchedules.get(last-1).getPublishAction());
+        Map<String, Object> map = new HashMap<>();
+        if(last>0) {
+            String actionName= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
+            Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
+            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
+            int whichstep = -2;
+            switch (nebulaPublishSequence.getActionGroup()){
+                case "pre_master":whichstep=0;break;
+                case "pre_minion":whichstep=1;break;
+                case "publishReal":whichstep=2;break;
+                case "fail_clear":whichstep=3;break;
+                case "success_clear":whichstep=-1;break;
+            }
+            map.put("actionName",actionName);
+            map.put("actionState",actionState);
+            map.put("whichstep",whichstep);
+        }
+        return returnCallback("Success",map);
     }
 
 //    @RequestMapping(value="/whichStep.htm",method= {RequestMethod.POST,RequestMethod.GET})
