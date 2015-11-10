@@ -131,4 +131,8 @@ public class NebulaUserInfo extends BaseDO{
     public void setSecurityKey(String securityKey) {
         this.securityKey = securityKey == null ? null : securityKey.trim();
     }
+
+    public String getCredentialsSalt() {
+        return username + securityKey;
+    }
 }

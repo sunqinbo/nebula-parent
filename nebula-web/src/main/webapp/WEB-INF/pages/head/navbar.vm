@@ -43,11 +43,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="">
-                            用户登入
+                            用户登入$shiro.hasRole("adminxx")
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/logout">
                             退出
                         </a>
                     </li>

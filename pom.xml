@@ -346,6 +346,39 @@
                 <version>${salt.version}</version>
             </dependency>
 
+
+            <!-- shiro -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.web.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.ehcache.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-quartz</artifactId>
+                <version>${shiro.quartz.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.spring.version}</version>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -378,6 +411,12 @@
         <cglib.version>3.1</cglib.version>
         <svnkit.version>1.8.11</svnkit.version>
         <salt.version>0.6.0</salt.version>
+        <!-- shiro -->
+        <shiro.core.version>1.2.2</shiro.core.version>
+        <shiro.web.version>1.2.2</shiro.web.version>
+        <shiro.ehcache.version>1.2.2</shiro.ehcache.version>
+        <shiro.quartz.version>1.2.2</shiro.quartz.version>
+        <shiro.spring.version>1.2.2</shiro.spring.version>
     </properties>
 
     <build>

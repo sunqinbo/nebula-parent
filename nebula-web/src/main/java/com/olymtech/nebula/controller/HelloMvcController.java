@@ -2,9 +2,10 @@ package com.olymtech.nebula.controller;
 import com.olymtech.nebula.entity.JsTreeData;
 import com.olymtech.nebula.entity.JsTreeDataRoot;
 import com.olymtech.nebula.entity.JsTreeDataState;
+import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IFileReadService;
-import org.apache.commons.lang.StringUtils;
+import com.olymtech.nebula.web.utils.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,7 @@ public class HelloMvcController extends BaseController{
 	
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String helloMvc(){
+		NebulaUserInfo user = (NebulaUserInfo)request.getAttribute(Constants.CURRENT_USER);
 		return "index";
 	}
 

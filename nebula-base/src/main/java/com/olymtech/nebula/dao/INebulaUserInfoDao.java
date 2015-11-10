@@ -10,4 +10,6 @@ import com.olymtech.nebula.entity.NebulaUserInfo;
  * Created by Gavin on 2015-10-23 14:27.
  */
 public interface INebulaUserInfoDao extends IBaseDao<NebulaUserInfo,Integer> {
+
+    NebulaUserInfo selectByUsername(String username);
 }

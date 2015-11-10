@@ -39,6 +39,12 @@
         from nebula_user_info
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="Nebula-NebulaUserInfoDao-Select-By-UserName" parameterType="java.lang.Integer" resultMap="RM-NebulaUserInfo">
+        select
+        <include refid="NebulaUserInfo-Base-Column-List"/>
+        from nebula_user_info
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
     <select id="Nebula-NebulaUserInfoDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from nebula_user_info
     </select>

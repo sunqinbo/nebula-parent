@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tools>
-    <toolbox scope="session">
-        <tool key="map" class="java.util.HashMap"/>
-    </toolbox>
-</tools>
+<toolbox scope="session">
+    <tool key="map" class="java.util.HashMap"/>
+    <tool>
+        <key>shiro</key>
+        <scope>application</scope>
+        <class>com.olymtech.nebula.web.utils.Permission</class>
+    </tool>
+</toolbox>

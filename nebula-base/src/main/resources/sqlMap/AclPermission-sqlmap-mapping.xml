@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="acl_permission">
+    <resultMap id="RM-AclPermission" type="com.olymtech.nebula.entity.AclPermission">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="permission_name" property="permissionName" jdbcType="VARCHAR" />
+        <result column="permission_desc" property="permissionDesc" jdbcType="VARCHAR" />
+        <result column="permission" property="permission" jdbcType="VARCHAR" />
+        <result column="permission_type" property="permissionType" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+        <result column="pids" property="pids" jdbcType="VARCHAR" />
+        <result column="is_enable" property="isEnable" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="AclPermission-Base-Column-List">
+        id,
+        permission_name,
+        permission_desc,
+        permission,
+        permission_type,
+        url,
+        pid,
+        pids,
+        is_enable
+    </sql>
+    <select id="Nebula-AclPermissionDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-AclPermission">
+        select
+        <include refid="AclPermission-Base-Column-List"/>
+        from acl_permission
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-AclPermissionDao-Select-Count" resultType="java.lang.Integer">
+        select count(id) from acl_permission
+    </select>
+    <select id="Nebula-AclPermissionDao-Select-Count-Where" parameterType="AclPermission" resultType="java.lang.Integer">
+        select count(id) from acl_permission
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="permissionName != null">
+                permission_name = #{permissionName}
+            </if>
+            <if test="permission != null">
+                AND permission = #{permission}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-AclPermissionDao-Select-All-Paging-Where" parameterType="AclPermission" resultMap="RM-AclPermission">
+        select <include refid="AclPermission-Base-Column-List"/> from acl_permission
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="permissionName != null">
+                permission_name = #{permissionName}
+            </if>
+            <if test="permission != null">
+                AND permission = #{permission}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-AclPermissionDao-Delete-By-Id" parameterType="java.lang.Integer">
+        delete from acl_permission
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="Nebula-AclPermissionDao-Insert" parameterType="AclPermission">
+        insert into acl_permission (
+        id,
+        permission_name,
+        permission_desc,
+        permission,
+        permission_type,
+        url,
+        pid,
+        pids,
+        is_enable)
+        values (#{id,jdbcType=INTEGER},
+        #{permissionName,jdbcType=VARCHAR},
+        #{permissionDesc,jdbcType=VARCHAR},
+        #{permission,jdbcType=VARCHAR},
+        #{permissionType,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR},
+        #{pid,jdbcType=INTEGER},
+        #{pids,jdbcType=VARCHAR},
+        #{isEnable,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-AclPermissionDao-Insert-Selective" parameterType="AclPermission">
+        insert into acl_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="permissionName != null" >
+                permission_name,
+            </if>
+            <if test="permissionDesc != null" >
+                permission_desc,
+            </if>
+            <if test="permission != null" >
+                permission,
+            </if>
+            <if test="permissionType != null" >
+                permission_type,
+            </if>
+            <if test="url != null" >
+                url,
+            </if>
+            <if test="pid != null" >
+                pid,
+            </if>
+            <if test="pids != null" >
+                pids,
+            </if>
+            <if test="isEnable != null" >
+                is_enable,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="permissionName != null" >
+                #{permissionName,jdbcType=VARCHAR},
+            </if>
+            <if test="permissionDesc != null" >
+                #{permissionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null" >
+                #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="permissionType != null" >
+                #{permissionType,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null" >
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="pids != null" >
+                #{pids,jdbcType=VARCHAR},
+            </if>
+            <if test="isEnable != null" >
+                #{isEnable,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-AclPermissionDao-Update-By-Id-Selective" parameterType="AclPermission">
+        update acl_permission
+        <set>
+            <if test="permissionName != null" >
+                permission_name = #{permissionName,jdbcType=VARCHAR},
+            </if>
+            <if test="permissionDesc != null" >
+                permission_desc = #{permissionDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null" >
+                permission = #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="permissionType != null" >
+                permission_type = #{permissionType,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null" >
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null" >
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="pids != null" >
+                pids = #{pids,jdbcType=VARCHAR},
+            </if>
+            <if test="isEnable != null" >
+                is_enable = #{isEnable,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-AclPermissionDao-Update-By-Id" parameterType="AclPermission">
+        update acl_permission set
+        permission_name = #{permissionName,jdbcType=VARCHAR},
+        permission_desc = #{permissionDesc,jdbcType=VARCHAR},
+        permission = #{permission,jdbcType=VARCHAR},
+        permission_type = #{permissionType,jdbcType=VARCHAR},
+        url = #{url,jdbcType=VARCHAR},
+        pid = #{pid,jdbcType=INTEGER},
+        pids = #{pids,jdbcType=VARCHAR},
+        is_enable = #{isEnable,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
