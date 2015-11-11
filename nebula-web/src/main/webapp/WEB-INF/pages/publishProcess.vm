@@ -8,6 +8,8 @@
 <script type="text/javascript" src="public/assets/processbar/js/jquery.min.js"></script>
 <!-- 引入ystep插件 -->
 <script type="text/javascript" src="public/assets/processbar/js/ystep.js"></script>
+<script src="public/assets/js/demo.js"></script>
+<script src="public/assets/js/bootstrap-notify.js"></script>
 <script type="text/javascript" src="public/assets/js/publishProcess.js"></script>
 
 <script>
