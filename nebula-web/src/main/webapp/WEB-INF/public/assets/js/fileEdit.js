@@ -1,12 +1,16 @@
 $(document).ready(function(){
+    //关闭当前页面
+    $("#btn_close").click(function(){
+        window.close();
+    });
+    //生成jstree
     $('#tree-div')
         .on("changed.jstree", function (e, data) {
             if(data.selected.length) {
                 var selectedObj = data.instance.get_node(data.selected[0]);
                 var textArea = "<textarea id='fileView' disabled=true rows='16' cols='80'></textarea>";
                 var btn = "<button id='edit_btn' type='button' class='btn btn-info'>编辑etc</button>" +
-                    "<button id='save_btn' type='button' style='margin-left: 30px' class='btn btn-info'>保存etc</button>"+
-                        "<button id='close_btn' type='button' style='margin-left: 30px' class='btn btn-info'>关闭并返回</button>";
+                    "<button id='save_btn' type='button' style='margin-left: 30px' class='btn btn-info'>保存etc</button>";
                 $("#textputer").empty().append(textArea);
                 $("#btnputer").empty().append(btn);
                 var path = selectedObj.id;
@@ -27,9 +31,11 @@ $(document).ready(function(){
                         alert("很抱歉，文件打开失败，原因：" + errorThrown);
                     }
                 })
+                //文本设置可编辑
                 $("#edit_btn").click(function(){
                     $("#fileView").attr("disabled",false);
                 });
+                //保存文本更改
                 $("#save_btn").click(function(){
                     $("#fileView").attr("disabled",true);
                     var filecontent=$("#fileView").val();
@@ -49,9 +55,6 @@ $(document).ready(function(){
                             alert("很抱歉，文件保存失败，原因：" + errorThrown);
                         }
                     })
-                });
-                $("#close_btn").click(function(){
-                    window.close();
                 });
             }
         })

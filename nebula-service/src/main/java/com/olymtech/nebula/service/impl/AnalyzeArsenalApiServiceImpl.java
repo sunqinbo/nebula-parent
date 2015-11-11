@@ -20,13 +20,13 @@ import java.util.List;
 public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
-    private String serverHost = "localhost:8080";
+    private String serverHost = "192.168.2.185:8080";
     private String DESCRIBE_INSTANCES_API = "http://"+serverHost;
     @Override
     public  List<ProductTree> getProductTreeListByPid(Integer pid) {
         List<ProductTree> productTrees=new ArrayList<>();
         try {
-            String url = DESCRIBE_INSTANCES_API+"/productpid/"+pid;
+            String url = DESCRIBE_INSTANCES_API+"/arsenal-api/productpid/"+pid;
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url);
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {
@@ -47,10 +47,10 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
     }
 
     @Override
-    public List<ProductTree> getSimpleHostListByProductAndModule(String productName, String appNames) {
+    public List<ProductTree> getSimpleHostListByProductAndModule(String productName, String appNames, String publishEnv) {
         List<ProductTree> productTrees=new ArrayList<>();
         try {
-            String url = DESCRIBE_INSTANCES_API+"/productName/"+productName+"/appNames/"+appNames;
+            String url = DESCRIBE_INSTANCES_API+"/arsenal-api/productName/"+productName+"/appNames/"+appNames+"/publishEnv/"+publishEnv;
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url);
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {

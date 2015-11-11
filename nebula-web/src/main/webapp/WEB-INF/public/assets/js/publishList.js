@@ -22,7 +22,7 @@ $(document).ready(function(){
                         $("tbody").html(tbString);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("很抱歉，文件打开失败，原因：" + errorThrown);
+                        alert("很抱歉，列表查询失败，原因：" + errorThrown);
                     }
                 })
     };

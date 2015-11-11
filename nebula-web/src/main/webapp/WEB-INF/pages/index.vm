@@ -3,7 +3,10 @@
     #parse("head/header.vm")
     #parse("head/sidebar.vm")
     #parse("head/navbar.vm")
-
+<!--  Charts Plugin -->
+<script src="public/assets/js/chartist.min.js"></script>
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="public/assets/js/demo.js"></script>
 
 <div class="content">
     <div class="container-fluid">

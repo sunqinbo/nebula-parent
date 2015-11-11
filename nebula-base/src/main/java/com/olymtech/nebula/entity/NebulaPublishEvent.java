@@ -5,6 +5,12 @@ import java.util.List;
 
 public class NebulaPublishEvent extends BaseDO {
 
+    private String publishSubject;
+
+    private String publishBuName;
+
+    private String publishBuCname;
+
     private String publishProductName;
 
     private String publishProductCname;
@@ -23,7 +29,7 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Integer submitEmpId;
 
-    private Integer isSuccessPublish;
+    private Boolean isSuccessPublish;
 
     private List<NebulaPublishModule> publishModules;
 
@@ -107,11 +113,35 @@ public class NebulaPublishEvent extends BaseDO {
         this.submitEmpId = submitEmpId;
     }
 
-    public Integer getIsSuccessPublish() {
+    public String getPublishSubject() {
+        return publishSubject;
+    }
+
+    public void setPublishSubject(String publishSubject) {
+        this.publishSubject = publishSubject;
+    }
+
+    public String getPublishBuName() {
+        return publishBuName;
+    }
+
+    public void setPublishBuName(String publishBuName) {
+        this.publishBuName = publishBuName;
+    }
+
+    public String getPublishBuCname() {
+        return publishBuCname;
+    }
+
+    public void setPublishBuCname(String publishBuCname) {
+        this.publishBuCname = publishBuCname;
+    }
+
+    public Boolean getIsSuccessPublish() {
         return isSuccessPublish;
     }
 
-    public void setIsSuccessPublish(Integer isSuccessPublish) {
+    public void setIsSuccessPublish(Boolean isSuccessPublish) {
         this.isSuccessPublish = isSuccessPublish;
     }
 }

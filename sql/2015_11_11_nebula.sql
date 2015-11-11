@@ -11,7 +11,7 @@
  Target Server Version : 50173
  File Encoding         : utf-8
 
- Date: 11/10/2015 20:59:20 PM
+ Date: 11/11/2015 09:44:10 AM
 */
 
 SET NAMES utf8;
@@ -127,7 +127,14 @@ CREATE TABLE `nebula_publish_event` (
   `submit_emp_id` int(10) DEFAULT NULL COMMENT '发布事件提交人',
   `is_success_publish` int(11) DEFAULT NULL COMMENT '发布是否成功，0/1  失败/成功',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `nebula_publish_event`
+-- ----------------------------
+BEGIN;
+INSERT INTO `nebula_publish_event` VALUES ('1', '123', 'group', null, 'group_official_web', null, null, null, null, 'null.group_official_web.20151110.212418', null, '2015-11-10 21:24:18', null, null), ('2', '123', 'group', null, 'group_official_web', null, null, null, null, 'null.group_official_web.20151110.212547', null, '2015-11-10 21:25:47', null, null), ('3', '测试', 'gm', 'GM', 'booking_space', '订舱通', null, null, null, 'null.booking_space.20151111.090841', null, '2015-11-11 09:08:41', null, null), ('4', '123', 'gm', 'GM', 'booking_space', '订舱通', null, null, null, 'null.booking_space.20151111.091706', null, '2015-11-11 09:17:06', null, null), ('5', '123', 'pm', 'PM', 'cargo', '咖狗网', 'test', '123', null, 'test.cargo.20151111.091728', null, '2015-11-11 09:17:28', null, null);
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `nebula_publish_event_log`
@@ -187,13 +194,13 @@ CREATE TABLE `nebula_publish_schedule` (
   `is_success_action` int(255) DEFAULT NULL COMMENT '动作是否成功，0/1  失败/成功',
   `error_msg` longtext COMMENT '错误信息，如果不成功，返回不成功的msg',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `nebula_publish_schedule`
 -- ----------------------------
 BEGIN;
-INSERT INTO `nebula_publish_schedule` VALUES ('1', '1', 'CLEAR_HISTORY_DIR', null, '1', ''), ('2', '2', 'CLEAR_HISTORY_DIR', null, '0', 'error message'), ('3', '2', 'CLEAR_HISTORY_DIR', null, '0', 'error message'), ('6', '2', 'CLEAR_HISTORY_DIR', 'PUBLISH_REAL', null, 'error message'), ('7', '2', 'CLEAR_HISTORY_DIR', 'SUCCESS_CLEAR', '0', 'error message');
+INSERT INTO `nebula_publish_schedule` VALUES ('1', '1', 'CLEAR_HISTORY_DIR', null, '1', ''), ('2', '2', 'CLEAR_HISTORY_DIR', null, '0', 'error message'), ('3', '2', 'CLEAR_HISTORY_DIR', null, '0', 'error message'), ('6', '2', 'CLEAR_HISTORY_DIR', 'PUBLISH_REAL', null, 'error message'), ('7', '2', 'CLEAR_HISTORY_DIR', 'SUCCESS_CLEAR', '0', 'error message'), ('8', '1', 'CREATE_PUBLISH_EVENT', 'PRE_MASTER', '1', ''), ('9', '2', 'CREATE_PUBLISH_EVENT', 'PRE_MASTER', '1', ''), ('10', '3', 'CREATE_PUBLISH_EVENT', 'PRE_MASTER', '1', ''), ('11', '4', 'CREATE_PUBLISH_EVENT', 'PRE_MASTER', '1', ''), ('12', '5', 'CREATE_PUBLISH_EVENT', 'PRE_MASTER', '1', '');
 COMMIT;
 
 -- ----------------------------
@@ -215,7 +222,7 @@ CREATE TABLE `nebula_publish_sequence` (
 --  Records of `nebula_publish_sequence`
 -- ----------------------------
 BEGIN;
-INSERT INTO `nebula_publish_sequence` VALUES ('1', 'CREATE_PUBLISH_EVENT', null, null, '1', 'PRE_MASTER'), ('2', 'GET_PUBLISH_SVN', null, null, '2', 'PRE_MASTER'), ('3', 'ANALYZE_PROJECT', null, null, '3', 'PRE_MASTER'), ('4', 'GET_SRC_SVN', null, null, '4', 'PRE_MASTER'), ('5', 'UPDATE_ETC', null, null, '5', 'PRE_MASTER'), ('6', 'CREATE_PUBLISH_DIR', null, null, '6', 'PRE_MINION'), ('7', 'COPY_PUBLISH_OLD_ETC', null, null, '7', 'PRE_MINION'), ('8', 'COPY_PUBLISH_OLD_ETC', null, null, '8', 'PRE_MINION'), ('9', 'PUBLISH_NEW_ETC', null, null, '9', 'PRE_MINION'), ('10', 'PUBLISH_NEW_WAR', null, null, '10', 'PRE_MINION'), ('11', 'STOP_TOMCAT', null, null, '11', 'PRE_MINION'), ('12', 'CHANGE_LN', null, null, '12', 'PUBLISH_REAL'), ('13', 'START_TOMCAT', null, null, '13', 'PUBLISH_REAL'), ('14', 'CLEAR_HISTORY_DIR', null, null, null, 'SUCCESS_CLEAR'), ('15', 'UPDATE_SRC_SVN', null, null, null, 'SUCCESS_CLEAR'), ('17', 'FSTOP_TOMCAT', null, null, null, 'FAIL_CLEAR'), ('18', 'FCHANGE_LN', null, null, null, 'FAIL_CLEAR'), ('19', 'FSTART_TOMCAT', null, null, null, 'FAIL_CLEAR'), ('20', 'FCLEAR_PUBLISH_DIR', null, null, null, 'FAIL_CLEAR'), ('22', 'CLEAR_PUBLISH_DIR', null, null, null, 'FAIL_CLEAR');
+INSERT INTO `nebula_publish_sequence` VALUES ('1', 'CREATE_PUBLISH_EVENT', null, null, '1', 'PRE_MASTER'), ('2', 'GET_PUBLISH_SVN', null, 'GetPublishSvnAction', '2', 'PRE_MASTER'), ('3', 'ANALYZE_PROJECT', null, 'PublishRelationAction', '3', 'PRE_MASTER'), ('4', 'GET_SRC_SVN', null, 'GetSrcSvnAction', '4', 'PRE_MASTER'), ('5', 'UPDATE_ETC', null, null, '5', 'PRE_MASTER'), ('6', 'CREATE_PUBLISH_DIR', null, 'CreateDirAciton', '11', 'PRE_MINION'), ('7', 'COPY_PUBLISH_OLD_ETC', null, 'CpEtcAction', '12', 'PRE_MINION'), ('8', 'COPY_PUBLISH_OLD_WAR', null, 'CpWarAction', '13', 'PRE_MINION'), ('9', 'PUBLISH_NEW_ETC', null, 'PublishEtcAction', '14', 'PRE_MINION'), ('10', 'PUBLISH_NEW_WAR', null, 'PublishWarAction', '15', 'PRE_MINION'), ('11', 'STOP_TOMCAT', null, 'StopTomcatAction', '16', 'PRE_MINION'), ('12', 'CHANGE_LN', null, 'ChangeLnAction', '21', 'PUBLISH_REAL'), ('13', 'START_TOMCAT', null, 'StartTomcatAction', '22', 'PUBLISH_REAL'), ('14', 'CLEAR_HISTORY_DIR', null, null, '31', 'SUCCESS_END'), ('15', 'UPDATE_SRC_SVN', null, null, '32', 'SUCCESS_END'), ('17', 'STOP_TOMCAT', null, 'StopTomcatAction', '41', 'FAIL_END'), ('18', 'CHANGE_LN', null, 'ChangeLnAction', '42', 'FAIL_END'), ('19', 'START_TOMCAT', null, 'StartTomcatAction', '43', 'FAIL_END'), ('20', 'CLEAR_PUBLISH_DIR', null, null, '51', 'CLEAR_END');
 COMMIT;
 
 -- ----------------------------

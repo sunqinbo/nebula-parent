@@ -1,5 +1,8 @@
 package com.olymtech.nebula.entity;
 
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
+
 public class NebulaPublishHost extends BaseDO {
 
     private Integer publishModuleId;
@@ -9,6 +12,46 @@ public class NebulaPublishHost extends BaseDO {
     private String passPublishHostName;
 
     private String passPublishHostIp;
+
+    private PublishAction actionName;
+
+    private PublishActionGroup actionGroup;
+
+    private Boolean isSuccessAction;
+
+    private String actionResult;
+
+    public PublishAction getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(PublishAction actionName) {
+        this.actionName = actionName;
+    }
+
+    public PublishActionGroup getActionGroup() {
+        return actionGroup;
+    }
+
+    public void setActionGroup(PublishActionGroup actionGroup) {
+        this.actionGroup = actionGroup;
+    }
+
+    public Boolean getIsSuccessAction() {
+        return isSuccessAction;
+    }
+
+    public void setIsSuccessAction(Boolean isSuccessAction) {
+        this.isSuccessAction = isSuccessAction;
+    }
+
+    public String getActionResult() {
+        return actionResult;
+    }
+
+    public void setActionResult(String actionResult) {
+        this.actionResult = actionResult;
+    }
 
     public Integer getPublishModuleId() {
         return publishModuleId;

@@ -3,6 +3,9 @@
 <mapper namespace="nebula_publish_event">
     <resultMap id="RM-NebulaPublishEvent" type="com.olymtech.nebula.entity.NebulaPublishEvent">
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="publish_subject" property="publishSubject" jdbcType="VARCHAR" />
+        <result column="publish_bu_name" property="publishBuName" jdbcType="VARCHAR" />
+        <result column="publish_bu_cname" property="publishBuCname" jdbcType="VARCHAR" />
         <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR" />
         <result column="publish_product_cname" property="publishProductCname" jdbcType="VARCHAR" />
         <result column="publish_env" property="publishEnv" jdbcType="VARCHAR" />
@@ -16,6 +19,9 @@
     </resultMap>
     <sql id="NebulaPublishEvent-Base-Column-List">
         id,
+        publish_subject,
+        publish_bu_name,
+        publish_bu_cname,
         publish_product_name,
         publish_product_cname,
         publish_env,
@@ -72,6 +78,9 @@
     <insert id="Nebula-NebulaPublishEventDao-Insert" parameterType="NebulaPublishEvent">
         insert into nebula_publish_event (
         id,
+        publish_subject,
+        publish_bu_name,
+        publish_bu_cname,
         publish_product_name,
         publish_product_cname,
         publish_env, publish_svn,
@@ -82,6 +91,9 @@
         submit_emp_id,
         is_success_publish)
         values (#{id,jdbcType=INTEGER},
+        #{publishSubject,jdbcType=VARCHAR},
+        #{publishBuName,jdbcType=VARCHAR},
+        #{publishBuCname,jdbcType=VARCHAR},
         #{publishProductName,jdbcType=VARCHAR},
         #{publishProductCname,jdbcType=VARCHAR},
         #{publishEnv,jdbcType=VARCHAR},
@@ -101,6 +113,15 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null" >
                 id,
+            </if>
+            <if test="publishSubject != null" >
+                publish_subject,
+            </if>
+            <if test="publishBuName != null" >
+                publish_bu_name,
+            </if>
+            <if test="publishBuCname != null" >
+                publish_bu_cname,
             </if>
             <if test="publishProductName != null" >
                 publish_product_name,
@@ -137,6 +158,15 @@
             <if test="id != null" >
                 #{id,jdbcType=INTEGER},
             </if>
+            <if test="publishSubject != null" >
+                #{publishSubject,jdbcType=VARCHAR},
+            </if>
+            <if test="publishBuName != null" >
+                #{publishBuName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishBuCname != null" >
+                #{publishBuCname,jdbcType=VARCHAR},
+            </if>
             <if test="publishProductName != null" >
                 #{publishProductName,jdbcType=VARCHAR},
             </if>
@@ -172,6 +202,15 @@
     <update id="Nebula-NebulaPublishEventDao-Update-By-Id-Selective" parameterType="NebulaPublishEvent">
         update nebula_publish_event
         <set>
+            <if test="publishSubject != null" >
+                publish_subject = #{publishSubject,jdbcType=VARCHAR},
+            </if>
+            <if test="publishBuName != null" >
+                publish_bu_name = #{publishBuName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishBuCname != null" >
+                publish_bu_cname = #{publishBuCname,jdbcType=VARCHAR},
+            </if>
             <if test="publishProductName != null" >
                 publish_product_name = #{publishProductName,jdbcType=VARCHAR},
             </if>
@@ -207,6 +246,9 @@
     </update>
     <update id="Nebula-NebulaPublishEventDao-Update-By-Id" parameterType="NebulaPublishEvent">
         update nebula_publish_event set
+        publish_subject = #{publishSubject,jdbcType=VARCHAR},
+        publish_bu_name = #{publishBuName,jdbcType=VARCHAR},
+        publish_bu_cname = #{publishBuCname,jdbcType=VARCHAR},
         publish_product_name = #{publishProductName,jdbcType=VARCHAR},
         publish_product_cname = #{publishProductCname,jdbcType=VARCHAR},
         publish_env = #{publishEnv,jdbcType=VARCHAR},

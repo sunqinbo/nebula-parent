@@ -18,21 +18,21 @@
         </div>
         <ul class="nav">
             <li>
-                <a href="http://localhost:8080/publishEvent.htm">
+                <a href="/publishEvent.htm">
                     <i class="pe-7s-upload"></i>
 
                     <p>发布申请</p>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:8080/publishProcess.htm">
+                <a href="/publishList.htm">
                     <i class="pe-7s-user"></i>
 
                     <p>我的发布</p>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:8080/publishList.htm">
+                <a href="/publishList.htm">
                     <i class="pe-7s-note2"></i>
 
                     <p>发布数据</p>

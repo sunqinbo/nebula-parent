@@ -23,6 +23,11 @@ public enum PublishAction {
     START_TOMCAT("启动Tomcat"),
     CLEAR_HISTORY_DIR("清除历史发布目录"),
     UPDATE_SRC_SVN("更新到源SVN"),
+    FDELETE_LN("删除Tomcat原始链接"),
+    FSTOP_TOMCAT("停止Tomcat"),
+    FCREATE_LN("创建Tomcat新链接"),
+    FSTART_TOMCAT("启动Tomcat"),
+    FCLEAR_PUBLISH_DIR("清除临时发布目录"),
     CLEAR_PUBLISH_DIR("清除临时发布目录");
 
     private String description;

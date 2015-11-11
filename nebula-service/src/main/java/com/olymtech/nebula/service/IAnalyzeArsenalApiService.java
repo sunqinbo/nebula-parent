@@ -22,5 +22,5 @@ public interface IAnalyzeArsenalApiService {
      * @param appNames 发布的应用名列表
      * @return
      */
-    public List<ProductTree> getSimpleHostListByProductAndModule(String productName,String appNames);
+    public List<ProductTree> getSimpleHostListByProductAndModule(String productName,String appNames,String publishEnv);
 }
