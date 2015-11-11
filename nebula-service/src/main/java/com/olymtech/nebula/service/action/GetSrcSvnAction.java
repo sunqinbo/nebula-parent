@@ -41,9 +41,11 @@ public class GetSrcSvnAction extends AbstractAction {
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
         SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SvnUsername, SvnPassword);
         try{
-            SvnUtils.checkout(svnClientManager,svnUrl,MasterWarDir + event.getPublishProductKey() + "/src_svn/");
-            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, true, "");
-            return true;
+            Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterWarDir + event.getPublishProductKey() + "/src_svn/");
+            if(svnResult){
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, true, "");
+                return true;
+            }
         }catch (Exception e){
             logger.error("GetPublishSvnAction error:",e);
         }

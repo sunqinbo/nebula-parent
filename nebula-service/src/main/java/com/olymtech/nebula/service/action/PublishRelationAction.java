@@ -13,6 +13,7 @@ import com.olymtech.nebula.service.IPublishScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,6 +49,9 @@ public class PublishRelationAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
+    @Value("${master_deploy_dir}")
+    private String MasterDeployDir;
+
     public PublishRelationAction() {
 
     }
@@ -55,7 +59,7 @@ public class PublishRelationAction extends AbstractAction {
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, null, "");
-        String publicWarDirPath = "/Users/taoshanchang/Desktop/test";
+        String publicWarDirPath = MasterDeployDir+"/"+event.getPublishProductKey()+"/publish_war/";
         List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
         String appNames = "";
         int appNameNum = appNameList.size();
