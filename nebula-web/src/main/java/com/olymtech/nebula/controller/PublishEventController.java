@@ -82,25 +82,6 @@ public class PublishEventController extends BaseController{
     public String publishProcess(HttpServletRequest request,Model model){
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
         NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
-        //判断动作属于哪个组
-        List<NebulaPublishSchedule> nebulaPublishSchedules=publishScheduleService.selectByEventId(id);
-        int last=nebulaPublishSchedules.size();
-        if(last!=0) {
-            String action= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
-            Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
-            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(action);
-            int whichstep = -2;
-            switch (nebulaPublishSequence.getActionGroup()){
-                case "PRE_MASTER":whichstep=0;break;
-                case "PRE_MINION":whichstep=1;break;
-                case "PUBLISH_REAL":whichstep=2;break;
-                case "FAIL_CLEAR":whichstep=3;break;
-                case "SUCCESS_CLEAR":whichstep=-1;break;
-            }
-            model.addAttribute("whichstep",whichstep);
-            model.addAttribute("action",action);
-            model.addAttribute("actionState",actionState);
-        }
         model.addAttribute("Event",nebulaPublishEvent);
         return "publishProcess";
     }
@@ -215,26 +196,38 @@ public class PublishEventController extends BaseController{
     @RequestMapping(value="/publishProcessStep.htm",method= {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public Object publishProcessGetStep(Integer eventId){
+        String[] group1={"GET_PUBLISH_SVN","ANALYZE_PROJECT","GET_SRC_SVN","UPDATE_ETC"};
+        String[] group2={"CREATE_PUBLISH_DIR","COPY_PUBLISH_OLD_ETC","COPY_PUBLISH_OLD_WAR","PUBLISH_NEW_ETC","PUBLISH_NEW_WAR"};
+        String[] group3={"STOP_TOMCAT","CHANGE_LN","START_TOMCAT"};
+        String[] group4={"FDELETE_LN","FSTOP_TOMCAT","FCREATE_LN","FSTART_TOMCAT","FCLEAR_PUBLISH_DIR"};
         List<NebulaPublishSchedule> nebulaPublishSchedules=publishScheduleService.selectByEventId(eventId);
         int last=nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
-        if(last>0) {
-            String actionName= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
-            Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
-            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
-            int whichstep = -2;
-            switch (nebulaPublishSequence.getActionGroup()){
-                case "PRE_MASTER":whichstep=0;break;
-                case "PRE_MINION":whichstep=1;break;
-                case "PUBLISH_REAL":whichstep=2;break;
-                case "FAIL_CLEAR":whichstep=3;break;
-                case "SUCCESS_CLEAR":whichstep=-1;break;
+        if(last!=0) {
+            NebulaPublishSchedule nebulaPublishSchedule=nebulaPublishSchedules.get(last - 1);
+            String actionName= String.valueOf(nebulaPublishSchedule.getPublishAction());
+            Boolean actionState= nebulaPublishSchedule.getIsSuccessAction();
+            int actionGroup = -1;
+            int whichStep=0;
+            String[] group = new String[8];
+            switch (String.valueOf(nebulaPublishSchedule.getPublishActionGroup())){
+                case "PRE_MASTER":actionGroup=1;group=group1;break;
+                case "PRE_MINION":actionGroup=2;group=group2;break;
+                case "PUBLISH_REAL":actionGroup=3;group=group3;break;
+                case "FAIL_CLEAR":actionGroup=4;group=group4;break;
+                case "SUCCESS_CLEAR":actionGroup=0;break;
             }
-            map.put("actionName",actionName);
-            map.put("actionState",actionState);
-            map.put("whichstep",whichstep);
+            for (int i = 0; i < group.length; i++) {
+                if(actionName.equals(group[i])){
+                    whichStep=i+1;
+                }
+            }
+            map.put("actionGroup", actionGroup);
+            map.put("whichStep", whichStep);
+            map.put("actionState", actionState);
         }
-        return returnCallback("Success",map);
+        return returnCallback("Success", map);
+
     }
 
 //    @RequestMapping(value="/whichStep.htm",method= {RequestMethod.POST,RequestMethod.GET})

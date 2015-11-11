@@ -29,9 +29,9 @@
 ##                                    <label>运价2014</label>
                                     <label>$!{Event.publishProductName}</label>
                                     <input id="eventId" style="display:none" type="text" value=$!{Event.id}>
-                                    <input id="btncontrol" style="display:none" type="text" value=$!{whichstep}>
-                                    <input id="action" style="display:none" type="text" value=$!{action}>
-                                    <input id="actionState" style="display:none" type="text" value=$!{actionState}>
+##                                    <input id="actionGroup" style="display:none" type="text" value=$!{actionGroup}>
+##                                    <input id="whichStep" style="display:none" type="text" value=$!{whichStep}>
+##                                    <input id="actionState" style="display:none" type="text" value=$!{actionState}>
                                 </td>
                                 <td>
                                     <label>发布模块：</label>
@@ -127,23 +127,23 @@
                     <div class="header">发布操作</div>
                     <hr/>
                     <div class="content">
-                        <button type="button" id="publishPrepare" class="btn btn-default">发布准备</button>
-                        <button type="button" id="startPublish" class="btn btn-default">启动预发布</button>
-                        <button type="button" id="startRepublish" class="btn btn-default">启动正式发布</button>
-                        <button type="button" id="publishBack" class="btn btn-default">我要回滚</button>
+                        <button type="button" id="btn1" class="btn btn-default">发布准备</button>
+                        <button type="button" id="btn2" class="btn btn-default">启动预发布</button>
+                        <button type="button" id="btn3" class="btn btn-default">启动正式发布</button>
+                        <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
                     </div>
             </div>
             </div>
             <div id="etc_edit" class="col-md-12">
-                <div id="step0" class="card card-plain">
+                <div id="step1" class="card card-plain">
                     <div class="header">发布准备</div>
                     <hr/>
-                    <div id="processbar0" class="ystep4"></div>
-                    <div id="etc_btns"></div>
+                    <div id="processbar1" class="ystep4"></div>
+                    <div id="etc_btns" style="margin-top: 30px"></div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div id="step1" class="card card-plain">
+                <div id="step2" class="card card-plain">
                     <div class="header">启动预发布</div>
                     <hr/>
 ##                    <div class="content">
@@ -152,11 +152,11 @@
 ##                        <button type="button" class="btn btn-default">发布war/etc</button>
 ##                        <button type="button" class="btn btn-default">预发布完成</button>
 ##                    </div>
-                    <div id="processbar1" class="ystep4"></div>
+                    <div id="processbar2" class="ystep4"></div>
             </div>
                 </div>
             <div class="col-md-12">
-                <div id="step2" class="card card-plain">
+                <div id="step3" class="card card-plain">
                     <div class="header">启动正式发布</div>
                     <hr/>
                 ##                    <div class="content">
@@ -166,11 +166,11 @@
                 ##                        <button type="button" class="btn btn-default">启动tomcat</button>
                 ##                        <button type="button" class="btn btn-default">正式发布完成</button>
                 ##                    </div>
-                    <div id="processbar2" class="ystep4"></div>
+                    <div id="processbar3" class="ystep4"></div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div id="step3" class="card card-plain">
+                <div id="step4" class="card card-plain">
                     <div class="header">启动回滚</div>
                     <hr/>
 ##                    <div class="content">
@@ -180,10 +180,10 @@
 ##                        <button type="button" class="btn btn-default">启动tomcat</button>
 ##                        <button type="button" class="btn btn-default">回滚完成</button>
 ##                    </div>
-                    <div id="processbar3" class="ystep4"></div>
+                    <div id="processbar4" class="ystep4"></div>
                 </div>
             </div>
-
+            <div id="false_btn"></div>
         </div>
     </div>
 </div>
