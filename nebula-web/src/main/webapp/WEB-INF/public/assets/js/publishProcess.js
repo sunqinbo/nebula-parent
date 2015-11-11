@@ -184,7 +184,15 @@ function Initialization(){
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("很抱歉，获取进度失败，原因：" + errorThrown);
+            //alert("很抱歉，获取进度失败，原因：" + errorThrown);
+            $.notify({
+                icon: '',
+                message: "很抱歉，获取进度失败，原因"+ errorThrown
+
+            },{
+                type: 'info',
+                timer: 1000
+            });
         }
     });
     //var whichStep=$("#whichStep").val();
