@@ -4,17 +4,20 @@
  */
 package com.olymtech.nebula.entity;
 
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
+
 /**
  * Created by Gavin on 2015-11-02 14:11.
  */
 public class NebulaPublishSequence extends BaseDO {
-    private String actionName;
+    private PublishAction actionName;
 
     private String actionDesc;
 
     private Integer actionSeqId;
 
-    private String actionGroup;
+    private PublishActionGroup actionGroup;
 
     private String actionClass;
 
@@ -26,20 +29,20 @@ public class NebulaPublishSequence extends BaseDO {
         this.actionClass = actionClass;
     }
 
-    public String getActionGroup() {
-        return actionGroup;
-    }
-
-    public void setActionGroup(String actionGroup) {
-        this.actionGroup = actionGroup;
-    }
-
-    public String getActionName() {
+    public PublishAction getActionName() {
         return actionName;
     }
 
-    public void setActionName(String actionName) {
-        this.actionName = actionName == null ? null : actionName.trim();
+    public void setActionName(PublishAction actionName) {
+        this.actionName = actionName;
+    }
+
+    public PublishActionGroup getActionGroup() {
+        return actionGroup;
+    }
+
+    public void setActionGroup(PublishActionGroup actionGroup) {
+        this.actionGroup = actionGroup;
     }
 
     public String getActionDesc() {

@@ -29,6 +29,11 @@
         from nebula_publish_sequence
         where action_name = #{actionname,jdbcType=VARCHAR}
     </select>
+    <select id="Nebula-NebulaPublishSequenceDao-Select-By-ActionGroup" parameterType="java.lang.String" resultMap="RM-NebulaPublishSequence">
+        select <include refid="NebulaPublishSequence-Base-Column-List"/> from nebula_publish_sequence
+        WHERE action_group = #{actionGroup}
+        group by id order by id
+    </select>
     <select id="Nebula-NebulaPublishSequenceDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from nebula_publish_sequence
     </select>
@@ -41,6 +46,9 @@
             <if test="actionSeqId != null">
                 AND action_seq_id = #{actionSeqId}
             </if>
+            <if test="actionGroup != null">
+                AND action_group = #{actionGroup}
+            </if>
         </trim>
     </select>
     <select id="Nebula-NebulaPublishSequenceDao-Select-All-Paging-Where" parameterType="NebulaPublishSequence" resultMap="RM-NebulaPublishSequence">
@@ -51,6 +59,9 @@
             </if>
             <if test="actionSeqId != null">
                 AND action_seq_id = #{actionSeqId}
+            </if>
+            <if test="actionGroup != null">
+                AND action_group = #{actionGroup}
             </if>
         </trim>
         group by id order by id desc

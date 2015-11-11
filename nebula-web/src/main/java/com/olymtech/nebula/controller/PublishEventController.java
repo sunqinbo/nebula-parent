@@ -1,11 +1,15 @@
 package com.olymtech.nebula.controller;
 
+import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
+import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IPublishEventService;
@@ -39,18 +43,14 @@ public class PublishEventController extends BaseController{
 
     @Resource
     IPublishEventService publishEventService;
-
     @Resource
     IPublishScheduleService publishScheduleService;
     @Resource
     IAnalyzeArsenalApiService analyzeArsenalApiService;
-
     @Resource
     IPublishHostService publishHostService;
-
     @Resource
     IPublishSequenceService publishSequenceService;
-
     @Resource
     HttpServletRequest request;
 
@@ -87,15 +87,16 @@ public class PublishEventController extends BaseController{
         int last=nebulaPublishSchedules.size();
         if(last!=0) {
             String action= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
+            PublishAction actionName = PublishAction.valueOf(action);
             Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
-            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(action);
+            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
             int whichstep = -2;
             switch (nebulaPublishSequence.getActionGroup()){
-                case "PRE_MASTER":whichstep=0;break;
-                case "PRE_MINION":whichstep=1;break;
-                case "PUBLISH_REAL":whichstep=2;break;
-                case "FAIL_CLEAR":whichstep=3;break;
-                case "SUCCESS_CLEAR":whichstep=-1;break;
+                case PRE_MASTER:whichstep=0;break;
+                case PRE_MINION:whichstep=1;break;
+                case PUBLISH_REAL:whichstep=2;break;
+                case FAIL_END:whichstep=3;break;
+                case SUCCESS_END:whichstep=-1;break;
             }
             model.addAttribute("whichstep",whichstep);
             model.addAttribute("action",action);
@@ -135,9 +136,9 @@ public class PublishEventController extends BaseController{
         return returnCallback("Success",nebulaPublishSchedules);
     }
 
-    @RequestMapping(value="/publish_event/prePublishMaster.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/preMasterPublish.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback prePublishMaster(HttpServletRequest request){
+    public Callback preMasterPublish(HttpServletRequest request){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -146,23 +147,23 @@ public class PublishEventController extends BaseController{
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
         //创建任务队列
         ActionChain chain = new ActionChain();
-        chain.addAction(new GetPublishSvnAction());
-        chain.addAction(new PublishRelationAction());
-        chain.addAction(new GetSrcSvnAction());
+        chain.addAction(SpringUtils.getBean(GetPublishSvnAction.class));
+        chain.addAction(SpringUtils.getBean(PublishRelationAction.class));
+        chain.addAction(SpringUtils.getBean(GetSrcSvnAction.class));
 
         try {
             Dispatcher dispatcher = new Dispatcher(chain);
             dispatcher.doDispatch(nebulaPublishEvent);
+            return returnCallback("Success","发布准备完成");
         } catch (Exception e) {
             logger.error("prePublishMaster error:",e);
-            return returnCallback("Success","发布准备出现错误");
         }
-        return returnCallback("Success","发布准备完成");
+        return returnCallback("Error","发布准备出现错误");
     }
 
-    @RequestMapping(value="/publish_event/prePublishMinion.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/preMinionPublish.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback prePublishMinion(HttpServletRequest request){
+    public Callback preMinionPublish(HttpServletRequest request){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -207,9 +208,51 @@ public class PublishEventController extends BaseController{
             dispatcher.doDispatch(nebulaPublishEvent);
         } catch (Exception e) {
             logger.error("publishReal error:",e);
-            return returnCallback("Success","预发布出现错误");
+            return returnCallback("Error","预发布出现错误");
         }
         return returnCallback("Success","预发布完成");
+    }
+
+    @RequestMapping(value="/publish_event/publishContinue.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback publishContinue(){
+        String idString = request.getParameter("id");
+        if(!StringUtils.isNotEmpty(idString)){
+            return returnCallback("Error","参数id为空");
+        }
+        Integer eventId = Integer.parseInt(idString);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+        List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
+        if(nebulaPublishSchedules != null){
+            return returnCallback("Error","无法获取发布事件进度");
+        }
+        Integer size = nebulaPublishSchedules.size();
+        NebulaPublishSchedule publishSchedule = nebulaPublishSchedules.get(size - 1);
+        List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(publishSchedule.getPublishActionGroup());
+
+        try{
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            for(NebulaPublishSequence publishSequence:publishSequences){
+                if( (publishSequence.getActionName() == publishSchedule.getPublishAction()) &&
+                        (publishSequence.getActionClass()!=null && !"".equals(publishSequence.getActionClass())) ){
+                    String actionClassName = publishSequence.getActionClass();
+                    Action action =  (Action) SpringUtils.getBean(Class.forName(actionClassName));
+                    chain.addAction(action);
+                }
+            }
+
+            if(chain != null){
+                Dispatcher dispatcher = new Dispatcher(chain);
+                dispatcher.doDispatch(nebulaPublishEvent);
+                return returnCallback("Success","继续发布完成");
+            }else{
+                return returnCallback("Error","继续发布链为空");
+            }
+        }catch (Exception e){
+            logger.error("publishContinue error:",e);
+        }
+        return returnCallback("Error","继续发布出错");
     }
 
     @RequestMapping(value="/publishProcessStep.htm",method= {RequestMethod.POST,RequestMethod.GET})
@@ -219,16 +262,17 @@ public class PublishEventController extends BaseController{
         int last=nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
         if(last>0) {
-            String actionName= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
+            String actionNameString= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
+            PublishAction actionName = PublishAction.valueOf(actionNameString);
             Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
             NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
             int whichstep = -2;
             switch (nebulaPublishSequence.getActionGroup()){
-                case "PRE_MASTER":whichstep=0;break;
-                case "PRE_MINION":whichstep=1;break;
-                case "PUBLISH_REAL":whichstep=2;break;
-                case "FAIL_CLEAR":whichstep=3;break;
-                case "SUCCESS_CLEAR":whichstep=-1;break;
+                case PRE_MASTER:whichstep=0;break;
+                case PRE_MINION:whichstep=1;break;
+                case PUBLISH_REAL:whichstep=2;break;
+                case FAIL_END:whichstep=3;break;
+                case SUCCESS_END:whichstep=-1;break;
             }
             map.put("actionName",actionName);
             map.put("actionState",actionState);

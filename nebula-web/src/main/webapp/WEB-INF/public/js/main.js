@@ -69,6 +69,26 @@ nebula.publish.event.createPublishEvent = function(){
             }
         }
     });
+};
 
+nebula.publish.process={};
 
+nebula.publish.process.main= function () {
+    $(document).ready(function(){
+
+    });
+};
+
+nebula.publish.process.preMasterPublish = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish_event/preMasterPublish.htm",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                alert("success");
+            }
+        }
+    });
 };

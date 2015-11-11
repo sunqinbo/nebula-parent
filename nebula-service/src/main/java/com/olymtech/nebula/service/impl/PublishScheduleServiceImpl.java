@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by Gavin on 2015-11-06 15:51.
  */
-@Service("publishScheduleService")
+@Service
 public class PublishScheduleServiceImpl implements IPublishScheduleService {
 
     @Resource
