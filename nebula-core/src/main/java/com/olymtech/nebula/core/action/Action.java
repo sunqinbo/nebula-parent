@@ -27,5 +27,9 @@ public interface Action {
      */
     public void doFailure(NebulaPublishEvent event) throws Exception;
 
+    public void setObserver(Observer observer);
+
+
+
 
 }

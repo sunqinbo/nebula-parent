@@ -19,7 +19,8 @@ public class Action2 extends AbstractAction {
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         try {
             System.out.println("svn动作");
-            int a = 12/0;
+            this.nodifyObservers("svn动作执行完成");
+            //int a = 12/0;
         } catch (Exception e) {
 
             System.out.println("Action2 Exception");
@@ -28,7 +29,7 @@ public class Action2 extends AbstractAction {
         }
 
 
-        return false;
+        return true;
     }
 
     @Override

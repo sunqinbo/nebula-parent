@@ -1,15 +1,11 @@
 package com.olymtech.nebula.controller;
 
-import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
-import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.ProductTree;
-import com.olymtech.nebula.entity.enums.PublishAction;
-import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IPublishEventService;
@@ -30,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +123,7 @@ public class PublishEventController extends BaseController{
      * */
     @RequestMapping(value="/publish_event/checkPublishSchedule.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback checkPublishScheduleByEventId(HttpServletRequest request){
+    public Callback checkPublishScheduleByEventId(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -138,7 +135,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publish_event/preMasterPublish.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback preMasterPublish(HttpServletRequest request){
+    public Callback prePublishMaster(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -152,7 +149,7 @@ public class PublishEventController extends BaseController{
         chain.addAction(SpringUtils.getBean(GetSrcSvnAction.class));
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain);
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
             return returnCallback("Success","发布准备完成");
         } catch (Exception e) {
@@ -163,7 +160,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publish_event/preMinionPublish.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback preMinionPublish(HttpServletRequest request){
+    public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -179,7 +176,7 @@ public class PublishEventController extends BaseController{
         chain.addAction(new PublishWarAction());
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain);
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
         } catch (Exception e) {
             logger.error("prePublishMinion error:",e);
@@ -190,7 +187,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publish_event/publishReal.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishReal(HttpServletRequest request){
+    public Callback publishReal(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -204,7 +201,7 @@ public class PublishEventController extends BaseController{
         chain.addAction(new StartTomcatAction());
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain);
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
         } catch (Exception e) {
             logger.error("publishReal error:",e);

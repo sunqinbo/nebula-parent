@@ -4,7 +4,7 @@ pageEncoding="GBK"%>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
-    <script type="text/javascript" src="../../static/js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="./public/assets/js/jquery-1.10.2.js"></script>
     <title >streaming test</title>
 </head>
 <body>
@@ -25,7 +25,31 @@ pageEncoding="GBK"%>
             pos = data.length;
         }
     };
-    request.open("POST", "/test", true);
+    request.open("POST", "/test1", true);
     request.send(null);
+
+    createStreamingClient("/test1",);
+
+
+    function createStreamingClient(url,progress,finished){
+        var xhr=createXHR();
+        var received=0;
+        xhr.open("get",url,true);
+        xhr.onreadystatechange = function(){
+            var result;
+            if(xhr.readyState == 3){
+                //取得最新数据并调整计数器
+                result=xhr.responseText.substring(received);
+                received+=result.length;
+                //调用progress回调函数
+                progress(result);
+            }
+            else if(xhr.readyState == 4){
+                finished(xhr.responseText);
+            }
+        };
+        xhr.send(null);
+        return xhr;
+    }
 </script>
 </html>

@@ -32,20 +32,20 @@ public class SaltTest {
 
         Map<String, Map<String, Object>> minions = saltClient.getMinions();
 
-        for(Map.Entry<String, Map<String, Object>> entry:minions.entrySet()){
-            System.out.println(entry.getKey()+"--->"+entry.getValue());
+        for (Map.Entry<String, Map<String, Object>> entry : minions.entrySet()) {
+            System.out.println(entry.getKey() + "--->" + entry.getValue());
 
-            for(Map.Entry<String, Object> entry2:entry.getValue().entrySet()){
-                System.out.println(entry2.getKey()+"--->"+entry2.getValue());
+            for (Map.Entry<String, Object> entry2 : entry.getValue().entrySet()) {
+                System.out.println(entry2.getKey() + "--->" + entry2.getValue());
             }
         }
     }
 
     @Test
     public void cpFileTest() throws SaltStackException {
-        HashMap<String , String > map = new HashMap<String,String>();
-        map.put("/home/saas/*.war","/root");
-        map.put("/home/saas/b","/root/b");
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("/home/saas/*.war", "/root");
+        map.put("/home/saas/b", "/root/b");
 
         ResultInfoSet resultInfos = service.cpFile(new Glob(), map);
         List<ResultInfo> infoList = resultInfos.getInfoList();
@@ -58,11 +58,16 @@ public class SaltTest {
 
     @Test
     public void cpDirTest() throws SaltStackException {
-        HashMap<String , String > map = new HashMap<String,String>();
-        map.put("/home/saas/test","/root/test");
-        map.put(" /home/saas/test2","/root/test");
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("/home/saas/test", "/root/test");
+        map.put(" /home/saas/test2", "/root/test");
 
         ResultInfoSet resultInfos = service.cpDir(new Glob(), map);
+
+        int size = resultInfos.getInfoList().size();
+
+        System.out.println(size);
+
         for (ResultInfo info : resultInfos) {
             System.out.println(info.getResults());
             System.out.println(info.getMinions());
@@ -128,8 +133,9 @@ public class SaltTest {
             System.out.println(info.getStartTime());
         }
     }
+
     @Test
-    public void cpFileRemote() throws SaltStackException{
+    public void cpFileRemote() throws SaltStackException {
         ResultInfoSet resultInfos = service.cpFileRemote(new Glob(), "a.war", "/home/saas/webapps/a.war");
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
