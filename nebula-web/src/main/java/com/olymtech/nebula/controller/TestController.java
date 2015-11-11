@@ -18,13 +18,22 @@ import javax.servlet.http.HttpServletResponse;
 public class TestController {
 
     @RequestMapping(value = "/test")
-    public void test(HttpServletRequest request, HttpServletResponse response){
+    public String test(HttpServletRequest request, HttpServletResponse response) {
+
+        //System.out.println("-----CometAction.streaming.start");
+        //StreamingThread st = new StreamingThread(response);
+        //st.run();
+        //System.out.println("-----CometAction.streaming.end");
+        return "test";
+    }
+
+    @RequestMapping(value = "/test1")
+    public void test1(HttpServletRequest request, HttpServletResponse response) {
 
         System.out.println("-----CometAction.streaming.start");
         StreamingThread st = new StreamingThread(response);
         st.run();
         System.out.println("-----CometAction.streaming.end");
-
     }
 
 

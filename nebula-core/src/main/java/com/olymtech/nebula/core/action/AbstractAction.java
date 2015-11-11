@@ -15,6 +15,16 @@ public abstract class AbstractAction implements Action {
 
     private String actionName;
 
+    private Observer observer;
+
+    public Observer getObserver() {
+        return observer;
+    }
+
+    public void setObserver(Observer observer) {
+        this.observer = observer;
+    }
+
     public String getActionName() {
         if (actionName == null) {
             return this.getClass().getSimpleName();
@@ -31,6 +41,13 @@ public abstract class AbstractAction implements Action {
 
     public void setActionName(String actionName) {
         this.actionName = actionName;
+    }
+
+    /**
+     * 通知注册的观察者对象
+     */
+    public void nodifyObservers(String newState) {
+        observer.update(newState);
     }
 
     @Override

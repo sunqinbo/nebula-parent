@@ -34,6 +34,6 @@ public class ActoinTest {
 //
 //        chain.addActions(list);
         //创建拦截器
-        new Dispatcher(chain).doDispatch(new NebulaPublishEvent());
+        new Dispatcher(chain,null,null).doDispatch(new NebulaPublishEvent());
     }
 }

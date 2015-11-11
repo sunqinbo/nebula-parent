@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -67,7 +68,7 @@ public class PublishEventController extends BaseController{
      * */
     @RequestMapping(value="/publish/checkPublishSchedule.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback checkPublishScheduleByEventId(HttpServletRequest request){
+    public Callback checkPublishScheduleByEventId(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -79,7 +80,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publish/prePublishMaster.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback prePublishMaster(HttpServletRequest request){
+    public Callback prePublishMaster(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -93,7 +94,7 @@ public class PublishEventController extends BaseController{
         chain.addAction(new GetSrcSvnAction());
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain);
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
         } catch (Exception e) {
             logger.error("prePublishMaster error:",e);
@@ -104,7 +105,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publish/prePublishMinion.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback prePublishMinion(HttpServletRequest request){
+    public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -118,7 +119,7 @@ public class PublishEventController extends BaseController{
         //chain.addAction(new PublishNewAction());
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain);
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
         } catch (Exception e) {
             logger.error("prePublishMinion error:",e);
@@ -129,7 +130,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publish/publishReal.htm",method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishReal(HttpServletRequest request){
+    public Callback publishReal(HttpServletRequest request, HttpServletResponse response){
         String idString = request.getParameter("id");
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","id is null");
@@ -143,7 +144,7 @@ public class PublishEventController extends BaseController{
         chain.addAction(new StartTomcatAction());
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain);
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
         } catch (Exception e) {
             logger.error("publishReal error:",e);
