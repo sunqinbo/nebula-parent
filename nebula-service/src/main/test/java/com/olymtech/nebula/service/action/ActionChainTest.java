@@ -38,7 +38,7 @@ public class ActionChainTest {
         actionChain.addAction(SpringUtils.getBean(CreateDirAciton.class));
 
         try {
-            Dispatcher dispatcher = new Dispatcher(actionChain);
+            Dispatcher dispatcher = new Dispatcher(actionChain,null,null);
             dispatcher.doDispatch(new NebulaPublishEvent());
         } catch (Exception e) {
             e.printStackTrace();

@@ -32,7 +32,7 @@ public class ActoinTest {
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(PublishRelationAction.class));
 
-        Dispatcher dispatcher = new Dispatcher(chain);
+        Dispatcher dispatcher = new Dispatcher(chain,null,null);
 
         try {
             //执行拦截器
