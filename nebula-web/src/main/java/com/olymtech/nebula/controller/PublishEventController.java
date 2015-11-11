@@ -154,11 +154,11 @@ public class PublishEventController extends BaseController{
         try {
             Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(nebulaPublishEvent);
-            return returnCallback("Success","发布准备完成");
+            return returnCallback("Success","发布准备执行完成");
         } catch (Exception e) {
             logger.error("prePublishMaster error:",e);
         }
-        return returnCallback("Error","发布准备出现错误");
+        return returnCallback("Error","发布准备执行出现错误");
     }
 
     @RequestMapping(value="/publish_event/preMinionPublish.htm",method = {RequestMethod.POST})
