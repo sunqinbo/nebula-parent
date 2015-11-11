@@ -82,26 +82,6 @@ public class PublishEventController extends BaseController{
     public String publishProcess(HttpServletRequest request,Model model){
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
         NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
-        //判断动作属于哪个组
-        List<NebulaPublishSchedule> nebulaPublishSchedules=publishScheduleService.selectByEventId(id);
-        int last=nebulaPublishSchedules.size();
-        if(last!=0) {
-            String action= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
-            PublishAction actionName = PublishAction.valueOf(action);
-            Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
-            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
-            int whichstep = -2;
-            switch (nebulaPublishSequence.getActionGroup()){
-                case PRE_MASTER:whichstep=0;break;
-                case PRE_MINION:whichstep=1;break;
-                case PUBLISH_REAL:whichstep=2;break;
-                case FAIL_END:whichstep=3;break;
-                case SUCCESS_END:whichstep=-1;break;
-            }
-            model.addAttribute("whichstep",whichstep);
-            model.addAttribute("action",action);
-            model.addAttribute("actionState",actionState);
-        }
         model.addAttribute("Event",nebulaPublishEvent);
         return "publishProcess";
     }
@@ -267,7 +247,7 @@ public class PublishEventController extends BaseController{
         Map<String, Object> map = new HashMap<>();
         if(last!=0) {
             NebulaPublishSchedule nebulaPublishSchedule=nebulaPublishSchedules.get(last - 1);
-            String actionName= String.valueOf(nebulaPublishSchedule.getPublishAction());
+            String actionNameString= String.valueOf(nebulaPublishSchedule.getPublishAction());
             Boolean actionState= nebulaPublishSchedule.getIsSuccessAction();
             int actionGroup = -1;
             int whichStep=0;
@@ -278,21 +258,9 @@ public class PublishEventController extends BaseController{
                 case "PUBLISH_REAL":actionGroup=3;group=group3;break;
                 case "FAIL_CLEAR":actionGroup=4;group=group4;break;
                 case "SUCCESS_CLEAR":actionGroup=0;break;
-        if(last>0) {
-            String actionNameString= String.valueOf(nebulaPublishSchedules.get(last - 1).getPublishAction());
-            PublishAction actionName = PublishAction.valueOf(actionNameString);
-            Boolean actionState= nebulaPublishSchedules.get(last - 1).getIsSuccessAction();
-            NebulaPublishSequence nebulaPublishSequence=publishSequenceService.selectByActionName(actionName);
-            int whichstep = -2;
-            switch (nebulaPublishSequence.getActionGroup()){
-                case PRE_MASTER:whichstep=0;break;
-                case PRE_MINION:whichstep=1;break;
-                case PUBLISH_REAL:whichstep=2;break;
-                case FAIL_END:whichstep=3;break;
-                case SUCCESS_END:whichstep=-1;break;
             }
             for (int i = 0; i < group.length; i++) {
-                if(actionName.equals(group[i])){
+                if(actionNameString.equals(group[i])){
                     whichStep=i+1;
                 }
             }
