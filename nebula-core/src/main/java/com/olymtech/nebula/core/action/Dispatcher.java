@@ -6,19 +6,27 @@ package com.olymtech.nebula.core.action;
 
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
  * @author taoshanchang 15/11/4
  */
-public class Dispatcher {
+public class Dispatcher implements Observer {
 
     private ActionChain actionChain = null;
 
+    private HttpServletRequest request = null;
+
+    private HttpServletResponse response = null;
+
     private int actionIndex = 0;
 
-    public Dispatcher(ActionChain actionChain) {
+    public Dispatcher(ActionChain actionChain, HttpServletRequest request, HttpServletResponse response) {
         this.actionChain = actionChain;
+        this.request = request;
+        this.response = response;
     }
 
 
@@ -26,7 +34,9 @@ public class Dispatcher {
         List<Action> actions = actionChain.getActions();
         if (actions != null || actions.size() == 0) {
             for (int i = 0; i < actions.size(); i++) {
-                if (!actions.get(i).doAction(event)) {
+                Action action= actions.get(i);
+                action.setObserver(this);
+                if (!action.doAction(event)) {
                     triggerFailure(event);
                     return;
                 }
@@ -51,6 +61,27 @@ public class Dispatcher {
 
     }
 
+    @Override
+    public void update(String state) {
+        System.out.println(state);
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public HttpServletResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(HttpServletResponse response) {
+        this.response = response;
+    }
+
     public ActionChain getActionChain() {
         return actionChain;
     }
@@ -58,4 +89,6 @@ public class Dispatcher {
     public void setActionChain(ActionChain actionChain) {
         this.actionChain = actionChain;
     }
+
+
 }

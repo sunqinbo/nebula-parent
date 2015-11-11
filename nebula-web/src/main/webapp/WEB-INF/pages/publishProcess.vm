@@ -10,6 +10,9 @@
 <script type="text/javascript" src="public/assets/processbar/js/ystep.js"></script>
 <script type="text/javascript" src="public/assets/js/publishProcess.js"></script>
 
+<script>
+    nebula.publish.process.main();
+</script>
 
 <div class="content">
     <div class="container-fluid">
@@ -127,7 +130,7 @@
                     <div class="header">发布操作</div>
                     <hr/>
                     <div class="content">
-                        <button type="button" id="btn1" class="btn btn-default">发布准备</button>
+                        <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
                         <button type="button" id="btn2" class="btn btn-default">启动预发布</button>
                         <button type="button" id="btn3" class="btn btn-default">启动正式发布</button>
                         <button type="button" id="btn4" class="btn btn-default">我要回滚</button>

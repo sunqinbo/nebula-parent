@@ -21,6 +21,7 @@ public class Action1 extends AbstractAction {
         try {
             System.out.println("创建文件夹");
             //int a = 12/0;
+            this.nodifyObservers("创建文件夹动作执行完成");
         }catch (Exception e){
 
             System.out.println("Action1 Exception");

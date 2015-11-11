@@ -44,6 +44,12 @@
             <artifactId>svnkit</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- log4j -->
         <dependency>
             <groupId>log4j</groupId>

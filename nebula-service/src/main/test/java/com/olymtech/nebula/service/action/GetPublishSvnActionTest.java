@@ -32,7 +32,7 @@ public class GetPublishSvnActionTest {
         chain.addAction(new GetPublishSvnAction());
         chain.addAction(new GetSrcSvnAction());
 
-        Dispatcher dispatcher = new Dispatcher(chain);
+        Dispatcher dispatcher = new Dispatcher(chain,null,null);
 
         try {
             NebulaPublishEvent event = new NebulaPublishEvent();
