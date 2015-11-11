@@ -1,12 +1,14 @@
 package com.olymtech.nebula.controller;
-import com.olymtech.nebula.entity.JsTreeData;
-import com.olymtech.nebula.entity.JsTreeDataRoot;
-import com.olymtech.nebula.entity.JsTreeDataState;
-import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IFileReadService;
+import com.olymtech.nebula.service.IPublishEventService;
 import com.olymtech.nebula.web.utils.Constants;
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts.mock.MockAction;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,13 +26,16 @@ public class HelloMvcController extends BaseController{
 	
 	@Resource
 	HttpServletRequest request;
-
 	@Resource
 	IFileReadService fileReadService;
-
 	@Resource
 	IFileAnalyzeService fileAnalyzeService;
-	
+	@Resource
+	IPublishEventService publishEventService;
+
+	@Value("${master_deploy_dir}")
+	private String MasterDeployDir;
+
 	
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String helloMvc(){
@@ -67,7 +72,11 @@ public class HelloMvcController extends BaseController{
 	}
 
 	@RequestMapping(value="/fileEdit.html",method=RequestMethod.GET)
-	public String fileEdit(){
+	public String fileEdit(Model model){
+		String idString = request.getParameter("id");
+		if(StringUtils.isNotEmpty(idString)){
+			model.addAttribute("eventId",Integer.parseInt(idString));
+		}
 		return "fileEdit";
 	}
 
@@ -89,11 +98,20 @@ public class HelloMvcController extends BaseController{
 	@ResponseBody
 	public Object productList(HttpServletRequest request) throws UnsupportedEncodingException {
 		String idString = request.getParameter("id");
+		String eventIdString = request.getParameter("eventId");
+
+		if(!StringUtils.isNotEmpty(eventIdString)){
+			return null;
+		}
+		Integer eventId = Integer.parseInt(eventIdString);
+		NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
+
+
 		idString = new String(idString.getBytes("ISO-8859-1"),"utf-8");
 		/** 初始化页面 加载，有root信息，返回 jsTreeDataRoots */
 		if (idString.equals("#")) {
 			/** 根节点为0 */
-			idString="F:\\121";
+			idString= "/Users/saas/deploy_tmp/"+nebulaPublishEvent.getPublishProductKey()+"/src_svn/etc/";
 			Map<String,Boolean> Srcmap=fileAnalyzeService.getDirMapByDirPath(idString);
 			List<JsTreeDataRoot> jsTreeDataRoots = new ArrayList<JsTreeDataRoot>();
 			JsTreeDataRoot jsTreeDataRoot=new JsTreeDataRoot();
@@ -117,7 +135,7 @@ public class HelloMvcController extends BaseController{
 //				}
 //				else
 //					Children.setData(true);
-				Children.setId(idString+"\\"+path);
+				Children.setId(idString+"/"+path);
 				Children.setParent(idString);
 				Children.setText(path);
 				JsTreeDataState childtreeDataState = new JsTreeDataState(false, false, false);

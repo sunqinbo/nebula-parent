@@ -25,6 +25,7 @@
                             <div class="col-md-7">
                                 <div class="box box-success">
                                     <h4 class="box-title">etc列表</h4>
+                                    <input type="hidden" id="event-id" value="$!eventId">
                                     <div class="box-body">
                                         <div id="tree-div">
                                         </div>

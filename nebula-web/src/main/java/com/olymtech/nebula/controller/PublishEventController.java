@@ -9,6 +9,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.ProductTree;
 import com.olymtech.nebula.entity.enums.PublishAction;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IPublishEventService;
@@ -233,6 +234,17 @@ public class PublishEventController extends BaseController{
             logger.error("publishContinue error:",e);
         }
         return returnCallback("Error","继续发布出错");
+    }
+
+    @RequestMapping(value="/publish_event/updateEtcEnd.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback updateEtcEnd(HttpServletRequest request){
+        String eventId = request.getParameter("id");
+        if(!StringUtils.isNotEmpty(eventId)){
+            return returnCallback("Error","id参数为空");
+        }
+        publishScheduleService.logScheduleByAction(Integer.parseInt(eventId), PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+        return returnCallback("Success","完成ETC编辑");
     }
 
     @RequestMapping(value="/publishProcessStep.htm",method= {RequestMethod.POST,RequestMethod.GET})

@@ -70,6 +70,7 @@
         ,
         <include refid="NebulaPublishSchedule-Long-Column-List" /> from nebula_publish_schedule
         where publish_event_id = #{publishEventId}
+        group by id order by id
     </select>
     <delete id="Nebula-NebulaPublishScheduleDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from nebula_publish_schedule

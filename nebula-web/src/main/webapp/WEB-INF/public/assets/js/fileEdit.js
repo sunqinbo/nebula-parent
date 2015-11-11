@@ -63,7 +63,7 @@ $(document).ready(function(){
                 'data' : {
                     "url" : "/etcList.htm",
                     "data" : function (node) {
-                        return { "id" : node.id };
+                        return { "id" : node.id ,"eventId":$("#event-id").val()};
                     }
                 }
             }

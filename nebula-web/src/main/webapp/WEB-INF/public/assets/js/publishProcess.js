@@ -157,11 +157,23 @@ function Initialization(){
                     "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
                 $("#etc_btns").html(etc_btn);
                 $("#etc_btn").click(function () {
-                    window.open('/fileEdit.html');
+                    window.open('/fileEdit.html?id='+$("#eventId").val());
                 })
                 $("#edit_success").click(function () {
                     var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
                     if (ms == true) {
+
+                        $.ajax({
+                            url:"/publish_event/updateEtcEnd.htm",
+                            type:"post",
+                            data:{"id":id},
+                            success:function(jsonData){
+                                if(jsonData.callbackMsg.match(/Success/)){
+                                    alert("success");
+                                }
+                            }
+                        });
+
                         $("#etc_btns").empty();
                     }
                 });
