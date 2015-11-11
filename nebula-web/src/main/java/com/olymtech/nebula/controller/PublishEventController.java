@@ -1,11 +1,14 @@
 package com.olymtech.nebula.controller;
 
+import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
+import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IPublishEventService;
@@ -240,7 +243,7 @@ public class PublishEventController extends BaseController{
             }
 
             if(chain != null){
-                Dispatcher dispatcher = new Dispatcher(chain);
+                Dispatcher dispatcher = new Dispatcher(chain,request,response);
                 dispatcher.doDispatch(nebulaPublishEvent);
                 return returnCallback("Success","继续发布完成");
             }else{
