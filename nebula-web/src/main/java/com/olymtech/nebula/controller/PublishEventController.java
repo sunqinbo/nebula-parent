@@ -174,6 +174,7 @@ public class PublishEventController extends BaseController{
         chain.addAction(new CreateDirAciton());
         chain.addAction(new CpEtcAction());
         chain.addAction(new CpWarAction());
+        chain.addAction(new PublishEtcAction());
         chain.addAction(new PublishWarAction());
 
         try {

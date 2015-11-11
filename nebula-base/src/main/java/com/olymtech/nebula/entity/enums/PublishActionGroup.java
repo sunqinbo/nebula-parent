@@ -11,8 +11,9 @@ public enum PublishActionGroup {
     PRE_MASTER("MASTER准备"),
     PRE_MINION("预发布"),
     PUBLISH_REAL("正式发布"),
-    SUCCESS_CLEAR("成功清理"),
-    FAIL_CLEAR("失败清理");
+    SUCCESS_END("发布成功收尾"),
+    FAIL_END("发布失败收尾"),
+    CLEAR_END("清理发布目录");
 
     private String description;
 

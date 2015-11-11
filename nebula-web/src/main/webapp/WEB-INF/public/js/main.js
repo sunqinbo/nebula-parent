@@ -30,7 +30,7 @@ nebula.publish.event.main = function(){
                         var productTrees = jsonData.responseContext;
                         for(var i=0;i<productTrees.length;i++){
                             var productTree = productTrees[i];
-                            $("#select-product").append("<option value='"+productTree.id+"'>"+productTree.nodeName+"</option>");
+                            $("#select-product").append("<option value-hidden='"+productTree.nodeName+"' value='"+productTree.id+"'>"+productTree.nodeCname+"</option>");
                         }
                     }
                 }
@@ -43,10 +43,12 @@ nebula.publish.event.main = function(){
 
 nebula.publish.event.createPublishEvent = function(){
     var publishSubject = $("#publish-subject").val();
-    var publishBuName = $("#select-bu").find("option:selected").text();
-    var publishProductName = $("#select-product").find("option:selected").text();
-    var publichEnv = $("#select-publich-env").val();
-    var publichSvn = $("#publich-svn").val();
+    var publishBuName = $("#select-bu").find("option:selected").attr("value-hidden");
+    var publishBuCname = $("#select-bu").find("option:selected").text();
+    var publishProductName = $("#select-product").find("option:selected").attr("value-hidden");
+    var publishProductCname = $("#select-product").find("option:selected").text();
+    var publishEnv = $("#select-publich-env").val();
+    var publishSvn = $("#publich-svn").val();
     $.ajax({
         url:"/publish_event/createPublishEvent.htm",
         type:"post",
@@ -54,9 +56,11 @@ nebula.publish.event.createPublishEvent = function(){
             var data={};
             data["publishSubject"]=publishSubject;
             data["publishBuName"]=publishBuName;
+            data["publishBuCname"]=publishBuCname;
             data["publishProductName"]=publishProductName;
-            data["publichEnv"]=publichEnv;
-            data["publichSvn"]=publichSvn;
+            data["publishProductCname"]=publishProductCname;
+            data["publishEnv"]=publishEnv;
+            data["publishSvn"]=publishSvn;
             return data;
         })(),
         success:function(jsonData){
