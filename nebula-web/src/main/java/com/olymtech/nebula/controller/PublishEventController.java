@@ -153,11 +153,11 @@ public class PublishEventController extends BaseController{
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         //创建任务队列
         ActionChain chain = new ActionChain();
-        chain.addAction(new CreateDirAciton());
-        chain.addAction(new CpEtcAction());
-        chain.addAction(new CpWarAction());
-        chain.addAction(new PublishEtcAction());
-        chain.addAction(new PublishWarAction());
+        chain.addAction(SpringUtils.getBean(CreateDirAciton.class));
+        chain.addAction(SpringUtils.getBean(CpEtcAction.class));
+        chain.addAction(SpringUtils.getBean(CpWarAction.class));
+        chain.addAction(SpringUtils.getBean(PublishEtcAction.class));
+        chain.addAction(SpringUtils.getBean(PublishWarAction.class));
 
         try {
             Dispatcher dispatcher = new Dispatcher(chain,request,response);
@@ -180,9 +180,9 @@ public class PublishEventController extends BaseController{
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         //创建任务队列
         ActionChain chain = new ActionChain();
-        chain.addAction(new StopTomcatAction());
-        chain.addAction(new ChangeLnAction());
-        chain.addAction(new StartTomcatAction());
+        chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
+        chain.addAction(SpringUtils.getBean(ChangeLnAction.class));
+        chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
 
         try {
             Dispatcher dispatcher = new Dispatcher(chain,request,response);

@@ -92,3 +92,17 @@ nebula.publish.process.preMasterPublish = function(){
         }
     });
 };
+
+nebula.publish.process.preMinionPublish = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish_event/preMinionPublish.htm",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                alert("success");
+            }
+        }
+    });
+};

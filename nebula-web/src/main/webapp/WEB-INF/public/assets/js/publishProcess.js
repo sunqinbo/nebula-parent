@@ -166,7 +166,7 @@ function Initialization(){
                         $.ajax({
                             url:"/publish_event/updateEtcEnd.htm",
                             type:"post",
-                            data:{"id":id},
+                            data:{"id":$("#eventId").val()},
                             success:function(jsonData){
                                 if(jsonData.callbackMsg.match(/Success/)){
                                     alert("success");
