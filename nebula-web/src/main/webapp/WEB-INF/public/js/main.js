@@ -99,7 +99,13 @@ nebula.publish.process.preMasterPublish = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                alert("success");
+                $.notify({
+                    icon: '',
+                    message: "准备发布成功"
+                },{
+                    type: 'info',
+                    timer: 2000
+                });
             }
         }
     });
@@ -113,7 +119,34 @@ nebula.publish.process.preMinionPublish = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                alert("success");
+                $.notify({
+                    icon: '',
+                    message: "预发布成功"
+                },{
+                    type: 'info',
+                    timer: 2000
+                });
+            }
+        }
+    });
+};
+
+
+nebula.publish.process.publishReal = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish_event/publishReal.htm",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                $.notify({
+                    icon: '',
+                    message: "正式发布成功"
+                },{
+                    type: 'info',
+                    timer: 2000
+                });
             }
         }
     });
