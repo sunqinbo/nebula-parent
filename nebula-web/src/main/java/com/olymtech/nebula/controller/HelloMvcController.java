@@ -40,35 +40,37 @@ public class HelloMvcController extends BaseController{
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String helloMvc(){
 		NebulaUserInfo user = (NebulaUserInfo)request.getAttribute(Constants.CURRENT_USER);
-		return "index";
+		return "event/publishList";
 	}
 
 	@RequestMapping(value="/user.html",method=RequestMethod.GET)
 	public String UserInfo(){
-		return "user";
+		return "unused/user";
 	}
 
 	@RequestMapping(value="/icons.html",method=RequestMethod.GET)
 	public String icons(){
-		return "icons";
+		return "unused/icons";
 	}
 
 	@RequestMapping(value="/maps.html",method=RequestMethod.GET)
 	public String maps(){
-		return "maps";
+		return "unused/maps";
 	}
+
 	@RequestMapping(value="/notifications.html",method=RequestMethod.GET)
 	public String notifications(){
-		return "notifications";
+		return "unused/notifications";
 	}
+
 	@RequestMapping(value="/table.html",method=RequestMethod.GET)
 	public String table(){
-		return "table";
+		return "unused/table";
 	}
 
 	@RequestMapping(value="/typography.html",method=RequestMethod.GET)
 	public String typography(){
-		return "typography";
+		return "unused/typography";
 	}
 
 //	@RequestMapping(value="/fileEdit.html",method=RequestMethod.GET)
