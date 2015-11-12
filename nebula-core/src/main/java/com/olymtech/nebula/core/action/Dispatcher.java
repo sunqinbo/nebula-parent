@@ -4,7 +4,10 @@
  */
 package com.olymtech.nebula.core.action;
 
+import com.olymtech.nebula.core.salt.core.SaltNullTargesException;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.NebulaPublishHost;
+import com.olymtech.nebula.entity.NebulaPublishModule;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,10 +34,18 @@ public class Dispatcher implements Observer {
 
 
     public void doDispatch(NebulaPublishEvent event) throws Exception {
+        List<NebulaPublishModule> publishModules = event.getPublishModules();
+        for (NebulaPublishModule publishModule : publishModules) {
+            List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
+            if (publishHosts == null || 0 == publishHosts.size() ) {
+                throw new SaltNullTargesException(publishModule.getPublishModuleName() + "'s publishHosts is null");
+            }
+        }
+
         List<Action> actions = actionChain.getActions();
         if (actions != null || actions.size() == 0) {
             for (int i = 0; i < actions.size(); i++) {
-                Action action= actions.get(i);
+                Action action = actions.get(i);
                 action.setObserver(this);
                 if (!action.doAction(event)) {
                     triggerFailure(event);

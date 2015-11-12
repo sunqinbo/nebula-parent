@@ -30,7 +30,7 @@ public class SaltClientFactory {
     protected static final String PASSWORD = "password";
 
     private static SaltStackClient client = null;
-    private static Token token;
+    private static Token token = null;
 
     // CONFIG
     protected static Properties conf;
@@ -78,6 +78,17 @@ public class SaltClientFactory {
 
             return client;
         }
+        System.out.println(client);
+
+        if (token==null){
+            try {
+                token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
+            } catch (SaltStackException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(token);
 
         if (token.getExpire().getTime()<=System.currentTimeMillis()){
             try {

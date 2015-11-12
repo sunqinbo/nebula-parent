@@ -14,6 +14,13 @@ $(document).ready(function(){
                 $("#textputer").empty().append(textArea);
                 $("#btnputer").empty().append(btn);
                 var path = selectedObj.id;
+                var fileOrdir=path.substr(path.length-1);
+                path=path.substr(0,path.length-1);
+                if(fileOrdir=="D") {
+                    $("#textputer").empty();
+                    $("#btnputer").empty();
+                    return;
+                }
                 $.ajax({
                     type: "post",
                     url: "/filePath",
