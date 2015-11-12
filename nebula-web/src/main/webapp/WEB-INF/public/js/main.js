@@ -12,6 +12,13 @@ nebula.main = function(){
     });
 };
 
+nebula.common={};
+
+nebula.common.timestapToDate=function(timestap){
+    var now = new Date(parseInt(unix) * 1000);
+    return now.toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+};
+
 nebula.publish = {};
 
 nebula.publish.event = {};

@@ -45,7 +45,7 @@ public class FileController extends BaseController {
         if(StringUtils.isNotEmpty(idString)){
             model.addAttribute("eventId",Integer.parseInt(idString));
         }
-        return "fileEdit";
+        return "event/fileEdit";
     }
 
     @RequestMapping(value="/filePath",method=RequestMethod.POST)
