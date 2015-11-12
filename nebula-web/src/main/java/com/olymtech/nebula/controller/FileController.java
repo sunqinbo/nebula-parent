@@ -114,6 +114,7 @@ public class FileController extends BaseController {
                 else {
                     Children.setChildren(false);
                     Children.setId(idString+"/"+path+"F");
+                    Children.setIcon("jstree-file-icon");
                 }
                 Childrens.add(Children);
             }
@@ -153,6 +154,7 @@ public class FileController extends BaseController {
             else {
                 jsTreeData.setId(idString+"/"+path+"F");
                 jsTreeData.setChildren(false);
+                jsTreeData.setIcon("jstree-file-icon");
             }
             jsTreeDatas.add(jsTreeData);
         }

@@ -9,7 +9,11 @@
 <link rel="stylesheet" href="public/assets/js/jstree/dist/themes/default/style.min.css" />
 ##<script src="public/frame/dialog/bootstrap-dialog.min.js"></script>
 
-
+<style>
+    .jstree-file-icon{
+        background-image: url(public/assets/img/file-icon.png)!important;
+    }
+</style>
 
 <div class="content">
     <div class="container-fluid">
