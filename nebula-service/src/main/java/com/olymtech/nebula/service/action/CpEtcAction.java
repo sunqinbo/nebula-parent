@@ -6,6 +6,7 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -13,7 +14,6 @@ import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -41,8 +41,6 @@ public class CpEtcAction extends AbstractAction {
     @Autowired
     private IPublishScheduleService publishScheduleService;
 
-    @Value("${base_war_dir}")
-    private String BaseWarDir;
     @Value("${base_etc_dir}")
     private String BaseEtcDir;
 
@@ -63,10 +61,17 @@ public class CpEtcAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put(BaseEtcDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()), BaseEtcDir + publishModule.getPublishModuleKey());
+            String oldModule =  publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());
 
-            ResultInfoSet result = saltStackService.cpDir(new MinionList(targes), map);
+            if (oldModule==null){
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,PublishActionGroup.PRE_MINION, true, "");
+                continue;
+            }
+
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put(BaseEtcDir + oldModule + "/*", BaseEtcDir + publishModule.getPublishModuleKey());
+
+            ResultInfoSet result = saltStackService.cpDir(new SaltTarget(targes), map);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);

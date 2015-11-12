@@ -5,6 +5,7 @@
 package com.olymtech.nebula.core.salt;
 
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -97,7 +98,11 @@ public class SaltTest {
         strings.add("/home/saas/tomcat/public_wars/test.yjt2014.yjt2014_m.20151111.132208");
         strings.add("/home/saas/tomcat/public_etcs/test.yjt2014.yjt2014_m.20151111.132208");
 
-        ResultInfoSet infoList = service.mkDir(new Glob(), strings, true);
+        List<String> targes = new ArrayList<String>();
+        targes.add("minion-tiny");
+
+        //ResultInfoSet infoList = service.mkDir(new MinionList(targes), strings, true);
+        ResultInfoSet infoList = service.mkDir(new SaltTarget(targes), strings, true);
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
             System.out.println(info.getMinions());
