@@ -94,8 +94,6 @@ public class SaltStackServiceImpl implements ISaltStackService {
         }
         args.add(buffer.toString());
 
-        System.out.println(buffer.toString());
-
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
