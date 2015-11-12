@@ -11,6 +11,7 @@ public class JsTreeData {
     private Object id;
     private String parent;
     private String text;
+    private String icon;
     private Object children;
     private JsTreeDataState state;
 
@@ -54,4 +55,11 @@ public class JsTreeData {
         this.text = text;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 }
