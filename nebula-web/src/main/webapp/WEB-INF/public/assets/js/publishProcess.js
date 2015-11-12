@@ -162,14 +162,28 @@ function Initialization(){
                 $("#edit_success").click(function () {
                     var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
                     if (ms == true) {
-
                         $.ajax({
                             url:"/publish_event/updateEtcEnd.htm",
                             type:"post",
                             data:{"id":$("#eventId").val()},
+                            beforeSend:function(XMLHttpRequest) {
+                                $("#loading-status").show();
+                            },
+                            complete:function(XMLHttpRequest,textStatus){
+                                $("#loading-status").hide();
+                                $("#step1").hide();
+                            },
+
                             success:function(jsonData){
                                 if(jsonData.callbackMsg.match(/Success/)){
-                                    alert("success");
+                                    $.notify({
+                                        icon: '',
+                                        message: "保存成功"
+
+                                    },{
+                                        type: 'info',
+                                        timer: 1000
+                                    });
                                 }
                             }
                         });
