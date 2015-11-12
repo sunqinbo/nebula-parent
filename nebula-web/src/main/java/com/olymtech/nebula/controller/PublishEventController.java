@@ -59,7 +59,7 @@ public class PublishEventController extends BaseController{
     public String publishEvent(Model model){
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
         model.addAttribute("productTrees",productTrees);
-        return "publishEvent";
+        return "event/publishEvent";
     }
 
     @RequestMapping(value="/publish_event/getProductTreeListByPid.htm",method= {RequestMethod.POST,RequestMethod.GET})
@@ -76,7 +76,7 @@ public class PublishEventController extends BaseController{
 
     @RequestMapping(value="/publishList.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String publishList(){
-        return "publishList";
+        return "event/publishList";
     }
 
     @RequestMapping(value="/publishProcess.htm",method= {RequestMethod.POST,RequestMethod.GET})
@@ -84,7 +84,7 @@ public class PublishEventController extends BaseController{
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
         NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
         model.addAttribute("Event",nebulaPublishEvent);
-        return "publishProcess";
+        return "event/publishProcess";
     }
 
     /**

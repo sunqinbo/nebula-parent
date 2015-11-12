@@ -119,7 +119,7 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
                 for (int j = 0; j <jsonHosts.size() ; j++) {
                     JSONObject jsonObject = (JSONObject) jsonHosts.get(j);
                     SimpleHost simpleHost=new SimpleHost();
-                    simpleHost.setHostName(jsonObject.getString("hostName"));
+                    simpleHost.setHostName(jsonObject.getString("instanceName"));
                     JSONObject ipJson = jsonObject.getJSONObject("innerIpAddress");
                     simpleHost.setHostIp(ipJson.getString("ipAddress"));
                     hosts.add(simpleHost);
