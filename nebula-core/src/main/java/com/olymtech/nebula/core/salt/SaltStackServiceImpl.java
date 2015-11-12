@@ -7,7 +7,6 @@ package com.olymtech.nebula.core.salt;
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.ScheduledJob;
-import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -41,7 +40,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        ScheduledJob job = saltClient.startCommand(new Glob(), CommandCpFile, args, null);
+        ScheduledJob job = saltClient.startCommand(target, CommandCpFile, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
@@ -54,7 +53,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        ScheduledJob job = saltClient.startCommand(new Glob(), CommandCpDir, args, null);
+        ScheduledJob job = saltClient.startCommand(target, CommandCpDir, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
         return jobResult;
@@ -120,7 +119,6 @@ public class SaltStackServiceImpl implements ISaltStackService {
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
-
         return jobResult;
     }
 
@@ -136,7 +134,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
     @Override
     public <T> ResultInfoSet cmdRun(Target<T> target, List<Object> args, Map<String, Object> kwargs) throws SaltStackException {
-        ScheduledJob job = saltClient.startCommand(new Glob(), CommandCmdRun, args, kwargs);
+        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, kwargs);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
 
