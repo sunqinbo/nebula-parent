@@ -1,0 +1,74 @@
+<!doctype html>
+
+    #parse("./head/header.vm")
+    #parse("./head/sidebar.vm")
+    #parse("./head/navbar.vm")
+<script>
+    nebula.publish.event.main();
+</script>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="content">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">发布名称</label>
+                                <div class="col-sm-10">
+                                    <input id="publish-subject" type="text" class="form-control" placeholder="请输入发布名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">发布事件事业部</label>
+                                <div class="col-sm-10">
+                                    <select id="select-bu" class="form-control">
+                                        <option value="">请选择</option>
+                                        #foreach($productTree in $productTrees)
+                                            <option value-hidden="$productTree.nodeName" value="$productTree.id">$productTree.nodeCname</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">发布产品</label>
+                                <div class="col-sm-10">
+                                    <select id="select-product" class="form-control">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">发布环境</label>
+                                <div class="col-sm-10">
+                                    <select id="select-publich-env" class="form-control">
+                                        <option>请选择</option>
+                                        <option value="test">测试</option>
+                                        <option value="stage">准生产</option>
+                                        <option value="product">生产</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">发布svn地址</label>
+                                <div class="col-sm-10">
+                                    <input id="publich-svn" type="text" class="form-control" placeholder="请输入svn地址">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button id="publish-event-submit" class="btn btn-default" onclick="nebula.publish.event.createPublishEvent()">提交</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+#parse("./head/footer.vm")
