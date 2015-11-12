@@ -128,6 +128,7 @@ public class FileController extends BaseController {
         }
 
         /** 后续点击节点 加载，只需要子节点列表，返回 jsTreeDatas */
+        String parentId=idString;
         idString=idString.substring(0,idString.length()-1);
         Map<String,Boolean> childSrcmap=fileAnalyzeService.getDirMapByDirPath(idString);
         List<JsTreeData> jsTreeDatas =new ArrayList<>();
@@ -136,7 +137,7 @@ public class FileController extends BaseController {
         while(cit.hasNext()) {
             String path=cit.next();
             JsTreeData jsTreeData=new JsTreeData();
-            jsTreeData.setParent(idString);
+            jsTreeData.setParent(parentId);
             jsTreeData.setText(path);
             JsTreeDataState cjsTreeDataState=new JsTreeDataState(false, false, false);
             jsTreeData.setState(cjsTreeDataState);
