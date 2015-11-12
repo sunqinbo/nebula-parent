@@ -13,7 +13,6 @@ import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,13 +64,13 @@ public class StartTomcatAction extends AbstractAction {
                 Map<String, Object> results = resultInfo.getResults();
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
 
-                    if (entry.getValue().equals("")) {
-
-                        //todo 每台机子的执行信息处理
-                    } else {
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
-                        throw new SaltStackException(entry.getValue().toString());
-                    }
+                    //if (entry.getValue().equals("")) {
+                    //
+                    //    //todo 每台机子的执行信息处理
+                    //} else {
+                    //    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
+                    //    throw new SaltStackException(entry.getValue().toString());
+                    //}
                 }
             } else {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
