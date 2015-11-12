@@ -73,7 +73,7 @@ $(document).ready(function(){
     });
     //页面初次加载进度条控制
     Initialization();
-    setInterval("Initialization()",2000);
+    setInterval("Initialization()",5000);
     //var btnwhich=${whichstep};
     //btncontrol();
     //按钮点击事件
