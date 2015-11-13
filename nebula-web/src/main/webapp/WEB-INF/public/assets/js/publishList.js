@@ -13,7 +13,7 @@ $(document).ready(function(){
                             tbString=tbString+"<tr><td>"+data[i]["id"]+"</td><td>"+
                                     data[i]["publishEnv"]+"</td><td>"+data[i]["publishProductCname"]+
                                 "</td><td>"+""+
-                                "</td><td>"+nebula.common.timestapToDate(data[i]["submitDatetime"])+
+                                "</td><td>"+data[i]["submitDatetime"]+
                                 "</td><td>"+""+
                                 "</td><td>"+data[i]["isSuccessPublish"]+
                                 "</td><td>"+""+"</td><td><a href='/publishProcess.htm?id="+

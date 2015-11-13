@@ -1,5 +1,10 @@
 package com.olymtech.nebula.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.olymtech.nebula.common.utils.CustomDateSerializer;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -89,6 +94,7 @@ public class NebulaPublishEvent extends BaseDO {
         this.publishProductKey = publishProductKey == null ? null : publishProductKey.trim();
     }
 
+    @JsonSerialize(using = CustomDateSerializer.class)
     public Date getPublishDatetime() {
         return publishDatetime;
     }
@@ -97,6 +103,7 @@ public class NebulaPublishEvent extends BaseDO {
         this.publishDatetime = publishDatetime;
     }
 
+    @JsonSerialize(using = CustomDateSerializer.class)
     public Date getSubmitDatetime() {
         return submitDatetime;
     }
