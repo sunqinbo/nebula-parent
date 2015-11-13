@@ -6,13 +6,13 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -63,7 +63,7 @@ public class CreateDirAciton extends AbstractAction {
             pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
             pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
 
-            ResultInfoSet result = saltStackService.mkDir(new MinionList(targes), pathList, true);
+            ResultInfoSet result = saltStackService.mkDir(new SaltTarget(targes), pathList, true);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);

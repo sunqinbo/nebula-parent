@@ -94,8 +94,6 @@ public class SaltStackServiceImpl implements ISaltStackService {
         }
         args.add(buffer.toString());
 
-        System.out.println(buffer.toString());
-
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
@@ -146,10 +144,10 @@ public class SaltStackServiceImpl implements ISaltStackService {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
-            paths.append(" " + path);
+            paths.append("sh " + path+";");
         }
 
-        args.add("sh " + paths);
+        args.add(paths);
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 

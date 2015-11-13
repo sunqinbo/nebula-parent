@@ -6,13 +6,13 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -54,7 +54,7 @@ public class StopTomcatAction extends AbstractAction {
             List<String> pathList = new ArrayList<String>();
             pathList.add(stopCommandPath);
 
-            ResultInfoSet resultInfos = saltStackService.doCommand(new MinionList(targes), pathList);
+            ResultInfoSet resultInfos = saltStackService.doCommand(new SaltTarget(targes), pathList);
 
             if (resultInfos.getInfoList().size() == 1) {
                 ResultInfo resultInfo = resultInfos.get(0);

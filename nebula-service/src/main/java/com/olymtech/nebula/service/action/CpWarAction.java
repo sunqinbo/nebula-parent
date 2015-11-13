@@ -6,6 +6,7 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -13,7 +14,6 @@ import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -43,8 +43,6 @@ public class CpWarAction extends AbstractAction {
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
-    @Value("${base_etc_dir}")
-    private String BaseEtcDir;
 
     public CpWarAction() {
     }
@@ -63,10 +61,16 @@ public class CpWarAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put(BaseWarDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()) + "/*.war", BaseEtcDir + publishModule.getPublishModuleKey());
+            String oldModule =  publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());
+            if (oldModule==null){
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,PublishActionGroup.PRE_MINION, true, "");
+                continue;
+            }
 
-            ResultInfoSet result = saltStackService.cpFile(new MinionList(targes), map);
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put(BaseWarDir + oldModule + "/*.war", BaseWarDir + publishModule.getPublishModuleKey());
+
+            ResultInfoSet result = saltStackService.cpFile(new SaltTarget(targes), map);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);

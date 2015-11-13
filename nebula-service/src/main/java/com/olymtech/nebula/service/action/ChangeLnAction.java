@@ -6,13 +6,13 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.datatypes.target.MinionList;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -61,8 +61,8 @@ public class ChangeLnAction extends AbstractAction {
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
             lnMap.put(BaseWarDir + publishModule.getPublishModuleKey(), WarLink);
-            lnMap.put(BaseEtcDir + publishModule.getPublishModuleKey(), EtcLink);
-            ResultInfoSet result = saltStackService.makeLn(new MinionList(targes), lnMap);
+            lnMap.put(BaseEtcDir + publishModule.getPublishModuleKey()+"/etc", EtcLink);
+            ResultInfoSet result = saltStackService.makeLn(new SaltTarget(targes), lnMap);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
