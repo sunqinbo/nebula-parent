@@ -194,10 +194,4 @@
     </div>
 </div>
 
-
-<<<<<<< HEAD:nebula-web/src/main/webapp/WEB-INF/pages/publishProcess.vm
-
 #parse("head/footer.vm")
-=======
-#parse("./head/footer.vm")
->>>>>>> origin/master:nebula-web/src/main/webapp/WEB-INF/pages/event/publishProcess.vm
