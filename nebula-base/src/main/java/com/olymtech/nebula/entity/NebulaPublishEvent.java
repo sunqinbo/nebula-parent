@@ -1,6 +1,5 @@
 package com.olymtech.nebula.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.olymtech.nebula.common.utils.CustomDateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
