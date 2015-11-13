@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,8 @@ public class PublishEventController extends BaseController{
     @RequestMapping(value="/publishProcess.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String publishProcess(HttpServletRequest request,Model model){
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
-        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
+//        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
+        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectById(id);
         model.addAttribute("Event",nebulaPublishEvent);
         return "event/publishProcess";
     }
@@ -279,7 +281,11 @@ public class PublishEventController extends BaseController{
             map.put("actionGroup", actionGroup);
             map.put("whichStep", whichStep);
             map.put("actionState", actionState);
+            map.put("errorMsg",nebulaPublishSchedule.getErrorMsg());
         }
+        //获取机器信息
+        List<NebulaPublishHost> nebulaPublishHosts= publishHostService.selectByEventIdAndModuleId(eventId,null);
+        map.put("HostInfos", nebulaPublishHosts);
         return returnCallback("Success", map);
 
     }
