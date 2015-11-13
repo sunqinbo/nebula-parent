@@ -20,13 +20,6 @@
         <module>nebula-core</module>
         <module>nebula-file</module>
     </modules>
-    <dependencies>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.7</version>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>
@@ -332,6 +325,21 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+                <!--<artifactId>jackson-core</artifactId>-->
+                <!--<version>${jackson.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+                <!--<artifactId>jackson-annotations</artifactId>-->
+                <!--<version>${jackson.version}</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${jackson.mapper.asl.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.tmatesoft.svnkit</groupId>
@@ -393,6 +401,8 @@
         <httpclient.version>3.1</httpclient.version>
         <log4j.version>1.2.16</log4j.version>
         <fastjson.version>1.1.41</fastjson.version>
+        <jackson.version>2.6.3</jackson.version>
+        <jackson.mapper.asl.version>1.9.13</jackson.mapper.asl.version>
         <commons.fileupload.version>1.3.1</commons.fileupload.version>
         <tiles.version>2.2.2</tiles.version>
         <velocity.tools.version>2.0</velocity.tools.version>

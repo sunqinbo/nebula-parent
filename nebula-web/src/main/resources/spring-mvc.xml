@@ -20,6 +20,16 @@
     <mvc:resources mapping="/public/**" location="/WEB-INF/public/" />
 
 
+    <!--<mvc:annotation-driven>-->
+        <!--<mvc:message-converters>-->
+            <!--<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">-->
+                <!--<property name="objectMapper" ref="customObjectMapper"></property>-->
+            <!--</bean>-->
+        <!--</mvc:message-converters>-->
+    <!--</mvc:annotation-driven>-->
+    <!--<bean id="customObjectMapper" class="com.olymtech.nebula.global.CustomObjectMapper"></bean>-->
+
+
     <bean id="jacksonMessageConverter"
           class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
         <property name="supportedMediaTypes">
