@@ -30,16 +30,16 @@ public class GetSrcSvnAction extends AbstractAction {
 
     @Value("${master_deploy_dir}")
     private String MasterWarDir;
-    @Value("${svn_username}")
-    private String SvnUsername;
-    @Value("${svn_password}")
-    private String SvnPassword;
+    @Value("${src_svn_username}")
+    private String SrcSvnUsername;
+    @Value("${src_svn_password}")
+    private String SrcSvnPassword;
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, null, "");
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
-        SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SvnUsername, SvnPassword);
+        SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SrcSvnUsername, SrcSvnPassword);
         try{
             Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterWarDir + event.getPublishProductKey() + "/src_svn/");
             if(svnResult){

@@ -27,11 +27,11 @@ public class GetPublishSvnAction extends AbstractAction {
     private IPublishScheduleService publishScheduleService;
 
     @Value("${master_deploy_dir}")
-    private String MasterWarDir;
-    @Value("${svn_username}")
-    private String SvnUsername;
-    @Value("${svn_password}")
-    private String SvnPassword;
+    private String MasterDeployDir;
+    @Value("${dev_svn_username}")
+    private String DevSvnUsername;
+    @Value("${dev_svn_password}")
+    private String DevSvnPassword;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -43,9 +43,9 @@ public class GetPublishSvnAction extends AbstractAction {
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_PUBLISH_SVN, PublishActionGroup.PRE_MASTER, null, "");
         String svnUrl = event.getPublishSvn();
-        SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SvnUsername, SvnPassword);
+        SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, DevSvnUsername, DevSvnPassword);
         try{
-            Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterWarDir + event.getPublishProductKey() + "/publish_war/");
+            Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterDeployDir + event.getPublishProductKey() + "/publish_war/");
             if(svnResult){
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_PUBLISH_SVN, PublishActionGroup.PRE_MASTER, true, "");
                 return true;
