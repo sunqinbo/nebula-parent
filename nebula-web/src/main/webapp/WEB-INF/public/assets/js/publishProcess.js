@@ -5,6 +5,7 @@ $(document).ready(function(){
     $("#step2").hide();
     $("#step3").hide();
     $("#step4").hide();
+    $("#step5").hide();
     btnUnclick();
     //根据jQuery选择器找到需要加载ystep的容器
     //loadStep 方法可以初始化ystep
@@ -60,15 +61,22 @@ $(document).ready(function(){
         steps: [{
             title: "停止tomcat",
         },{
-            title: "删除Tomcat原始链",
-        },{
-            title: "创建Tomcat新链接",
+            title: "更改文件指向",
         },{
             title: "启动tomcat",
         },{
-            title: "清除临时发布目录",
-        },{
             title: "回滚完成",
+        }]
+    });
+    $("#processbar5").loadStep({
+        size: "large",
+        color: "blue",
+        steps: [{
+            title: "清除发布目录",
+        },{
+            title: "更新源SVN",
+        },{
+            title: "确认完成",
         }]
     });
     //页面初次加载进度条控制
@@ -80,30 +88,37 @@ $(document).ready(function(){
     $("#btn1").click(function(){
         $("#btn1").attr('disabled',true);
         $("#step1").show();
-        $("#step2").hide();
-        $("#step3").hide();
-        $("#step4").hide();
+        //$("#step2").hide();
+        //$("#step3").hide();
+        //$("#step4").hide();
     });
     $("#btn2").click(function(){
         $("#btn2").attr('disabled',true);
-        $("#step1").hide();
+        //$("#step1").hide();
         $("#step2").show();
-        $("#step3").hide();
-        $("#step4").hide();
+        //$("#step3").hide();
+        //$("#step4").hide();
     });
     $("#btn3").click(function(){
         $("#btn3").attr('disabled',true);
-        $("#step1").hide();
-        $("#step2").hide();
+        //$("#step1").hide();
+        //$("#step2").hide();
         $("#step3").show();
-        $("#step4").hide();
+        //$("#step4").hide();
     });
     $("#btn4").click(function(){
         $("#btn4").attr('disabled',true);
-        $("#step1").hide();
-        $("#step2").hide();
-        $("#step3").hide();
+        $("#btn_ConfirmResult").attr('disabled',true);
+        //$("#step1").hide();
+        //$("#step2").hide();
+        //$("#step3").hide();
         $("#step4").show();
+        //$("#step5").hide();
+    })
+    $("#btn_ConfirmResult").click(function(){
+        $("#btn_ConfirmResult").attr('disabled',true);
+        $("#btn4").attr('disabled',true);
+        $("#step5").show();
     })
 
 })
@@ -156,8 +171,17 @@ function Initialization(){
                 case 1:lastStep=4;break;
                 case 2:lastStep=5;break;
                 case 3:lastStep=3;break;
-                case 4:lastStep=5;break;
+                case 4:lastStep=3;break;
+                case 5:lastStep=2;break;
             }
+
+            //动作成功执行 隐藏重试按钮
+            if(actionState=="false"){
+                var false_btn="<Button type='button' class='btn btn-info'>重试</Button>"
+                $("#false_btn").html(false_btn);
+            }
+            else
+                $("#false_btn").html("");
             //当动作为创建发布事件且成功时，发布准备可点
             if(whichStep==0)
             {
@@ -165,18 +189,29 @@ function Initialization(){
                     $("#btn1").attr('disabled', false);
                 return;
             }
-            //动作为编辑ETC完成 下一步按钮可点
+            //动作为此阶段最后一步完成 下一步按钮可点
             if(whichStep==lastStep&&actionState=="true"){
-                actionGroup=actionGroup-1+2;
-                for(var i=1;i<=4;i++) {
-                    if(i==actionGroup) {
-                        $("#btn" + i).attr('disabled', false);
-                        $("#step"+(i-1)).hide();
+                if(actionGroup>=4){
+                    whichStep=whichStep+1;
+                }
+                else {
+                    actionGroup = actionGroup - 1 + 2;
+                    if (actionGroup == 4) {
+                        $("#btn_ConfirmResult").attr('disabled', false);
+                        $("#btn4").attr('disabled', false);
+                        $("#step" + (3)).hide();
                     }
-                    else {
-                        $("#btn" + i).attr('disabled', true);
+                    for (var i = 1; i < 4; i++) {
+                        if (i == actionGroup) {
+                            $("#btn" + i).attr('disabled', false);
+                            $("#step" + (i - 1)).hide();
+                        }
+                        else {
+                            $("#btn" + i).attr('disabled', true);
+                        }
                     }
-                }return;
+                    return;
+                }
             }
             //动作为ect开始时
             if (actionGroup==1&&whichStep==4&&(actionState == ""||actionState=="null")) {
@@ -222,7 +257,7 @@ function Initialization(){
             }
             btnUnclick();
             //控制进度条显示
-            for(var i=1;i<=4;i++){
+            for(var i=1;i<=5;i++){
                 if(i==actionGroup)
                 {
                     $("#step"+i).show();
@@ -232,10 +267,6 @@ function Initialization(){
             }
             //设置进度条进度
             $("#processbar" + actionGroup).setStep(whichStep);
-            if(actionState=="false"){
-                var false_btn="<Button type='button' class='btn btn-info'>重试</Button>"
-                $("#false_btn").html(false_btn);
-            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             //alert("很抱歉，获取进度失败，原因：" + errorThrown);
@@ -261,4 +292,5 @@ function btnUnclick(){
     $("#btn2").attr('disabled',true);
     $("#btn3").attr('disabled',true);
     $("#btn4").attr('disabled',true);
+    $("#btn_ConfirmResult").attr('disabled',true);
 }

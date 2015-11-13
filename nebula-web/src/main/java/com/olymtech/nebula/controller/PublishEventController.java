@@ -241,7 +241,8 @@ public class PublishEventController extends BaseController{
         String[] group1={"GET_PUBLISH_SVN","ANALYZE_PROJECT","GET_SRC_SVN","UPDATE_ETC"};
         String[] group2={"CREATE_PUBLISH_DIR","COPY_PUBLISH_OLD_ETC","COPY_PUBLISH_OLD_WAR","PUBLISH_NEW_ETC","PUBLISH_NEW_WAR"};
         String[] group3={"STOP_TOMCAT","CHANGE_LN","START_TOMCAT"};
-        String[] group4={"FDELETE_LN","FSTOP_TOMCAT","FCREATE_LN","FSTART_TOMCAT","FCLEAR_PUBLISH_DIR"};
+        String[] group4={"STOP_TOMCAT","CHANGE_LN","START_TOMCAT"};
+        String[] group5={"CLEAR_HISTORY_DIR","UPDATE_SRC_SVN"};
         List<NebulaPublishSchedule> nebulaPublishSchedules=publishScheduleService.selectByEventId(eventId);
         int last=nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
@@ -256,8 +257,8 @@ public class PublishEventController extends BaseController{
                 case "PRE_MASTER":actionGroup=1;group=group1;break;
                 case "PRE_MINION":actionGroup=2;group=group2;break;
                 case "PUBLISH_REAL":actionGroup=3;group=group3;break;
-                case "FAIL_CLEAR":actionGroup=4;group=group4;break;
-                case "SUCCESS_CLEAR":actionGroup=0;break;
+                case "FAIL_END":actionGroup=4;group=group4;break;
+                case "SUCCESS_END":actionGroup=5;group=group5;break;
             }
             for (int i = 0; i < group.length; i++) {
                 if(actionNameString.equals(group[i])){
