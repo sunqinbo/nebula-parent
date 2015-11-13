@@ -119,9 +119,37 @@ function Initialization(){
         url: "/publishProcessStep.htm",
         datetype: "json",
         success: function (data) {
+            //机器信息列表相关
+            var HostList=data.responseContext.HostInfos;
+            var tbString="";
+            for(var i=0;i<HostList.length;i++)
+            {
+                var passPublishHostName="";
+                var actionName=""
+                var isSuccessAction=""
+                var actionResult=""
+                if(HostList[i]["passPublishHostName"]!=null)
+                    passPublishHostName= HostList[i]["passPublishHostName"];
+                if(HostList[i]["actionName"]!=null)
+                    actionName= HostList[i]["actionName"];
+                if(HostList[i]["isSuccessAction"]!=null)
+                    isSuccessAction= HostList[i]["isSuccessAction"];
+                if(HostList[i]["actionResult"]!=null)
+                    actionResult= HostList[i]["actionResult"];
+                tbString=tbString+"<tr><td>"+passPublishHostName+"</td><td>"+
+                    actionName+"</td><td>"+ isSuccessAction+"</td><td>"+actionResult+"</td></tr>";
+            }
+            $("#hostInfo").html(tbString);
+            //进度条相关
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState+"";
+            if(actionState=="false"){
+                $("#errorMsgDiv").html(data.responseContext.errorMsg);
+                $("#errorMsgDiv").show();
+            }
+            else
+                $("#errorMsgDiv").hide();
             //设置进度条长度
             var lastStep;
             switch (actionGroup){

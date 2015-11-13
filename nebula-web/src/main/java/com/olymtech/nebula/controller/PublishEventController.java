@@ -4,29 +4,17 @@ import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.core.utils.SpringUtils;
-import com.olymtech.nebula.entity.Callback;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.entity.NebulaPublishSchedule;
-import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
-import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
-import com.olymtech.nebula.entity.*;
-import com.olymtech.nebula.service.IPublishEventService;
-import com.olymtech.nebula.service.IPublishHostService;
-import com.olymtech.nebula.service.IPublishScheduleService;
-import com.olymtech.nebula.service.IPublishSequenceService;
+import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
 import org.apache.commons.lang.StringUtils;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -63,8 +51,7 @@ public class PublishEventController extends BaseController{
     }
 
     @RequestMapping(value="/publish_event/getProductTreeListByPid.htm",method= {RequestMethod.POST,RequestMethod.GET})
-    @ResponseBody
-    public Callback getProductTreeListByPid(Integer pid){
+    public @ResponseBody Callback getProductTreeListByPid(Integer pid){
         try{
             List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(pid);
             return returnCallback("Success",productTrees);
@@ -82,7 +69,8 @@ public class PublishEventController extends BaseController{
     @RequestMapping(value="/publishProcess.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String publishProcess(HttpServletRequest request,Model model){
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
-        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
+//        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
+        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectById(id);
         model.addAttribute("Event",nebulaPublishEvent);
         return "event/publishProcess";
     }
@@ -279,7 +267,11 @@ public class PublishEventController extends BaseController{
             map.put("actionGroup", actionGroup);
             map.put("whichStep", whichStep);
             map.put("actionState", actionState);
+            map.put("errorMsg",nebulaPublishSchedule.getErrorMsg());
         }
+        //获取机器信息
+        List<NebulaPublishHost> nebulaPublishHosts= publishHostService.selectByEventIdAndModuleId(eventId,null);
+        map.put("HostInfos", nebulaPublishHosts);
         return returnCallback("Success", map);
 
     }

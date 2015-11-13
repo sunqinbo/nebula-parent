@@ -99,19 +99,21 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>模块</th>
                                 <th>主机名</th>
-                                <th>环境</th>
+##                                <th>环境</th>
+                                <th>action</>
+                                <th>是否成功</th>
+                                <th>更新信息</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tbody>
+                            <tbody id="hostInfo">
                         #foreach($module in ${Event.publishModules})
                             #foreach($host in ${module.publishHosts})
                              <tr>
-                                 <td>$!{module.publishModuleName}</td>
+##                                 <td>$!{module.publishModuleName}</td>
                                  <td>$!{host.passPublishHostName}</td>
-                                 <td></td>
+                                 <td></td><td></td><td></td>
                              </tr>
                             #end
                         #end
@@ -136,6 +138,7 @@
                         <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
                         <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
                         <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
+##                        <button type="button" id="btn5" class="btn btn-default">确认发布结果</button>
                         <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
                     </div>
             </div>
@@ -152,12 +155,6 @@
                 <div id="step2" class="card card-plain">
                     <div class="header">启动预发布</div>
                     <hr/>
-##                    <div class="content">
-##                        <button type="button" class="btn btn-default">创建发布目录</button>
-##                        <button type="button" class="btn btn-default">复制原始文件</button>
-##                        <button type="button" class="btn btn-default">发布war/etc</button>
-##                        <button type="button" class="btn btn-default">预发布完成</button>
-##                    </div>
                     <div id="processbar2" class="ystep4"></div>
             </div>
                 </div>
@@ -165,31 +162,20 @@
                 <div id="step3" class="card card-plain">
                     <div class="header">启动正式发布</div>
                     <hr/>
-                ##                    <div class="content">
-                ##                        <button type="button" class="btn btn-default">停止tomcat</button>
-                ##                        <button type="button" class="btn btn-default">删除ln</button>
-                ##                        <button type="button" class="btn btn-default">创建ln</button>
-                ##                        <button type="button" class="btn btn-default">启动tomcat</button>
-                ##                        <button type="button" class="btn btn-default">正式发布完成</button>
-                ##                    </div>
                     <div id="processbar3" class="ystep4"></div>
                 </div>
             </div>
+
+
             <div class="col-md-12">
                 <div id="step4" class="card card-plain">
                     <div class="header">启动回滚</div>
                     <hr/>
-##                    <div class="content">
-##                        <button type="button" class="btn btn-default">停止tomcat</button>
-##                        <button type="button" class="btn btn-default">删除ln</button>
-##                        <button type="button" class="btn btn-default">创建ln</button>
-##                        <button type="button" class="btn btn-default">启动tomcat</button>
-##                        <button type="button" class="btn btn-default">回滚完成</button>
-##                    </div>
                     <div id="processbar4" class="ystep4"></div>
                 </div>
             </div>
             <div id="false_btn"></div>
+            <div id="errorMsgDiv" style="margin-top: 20px;word-wrap:break-word;width: 60%;display: none; color: red;"></div>
         </div>
     </div>
 </div>

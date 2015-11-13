@@ -7,8 +7,10 @@ package com.olymtech.nebula.core.salt.core;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.Token;
 import com.suse.saltstack.netapi.exception.SaltStackException;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -39,11 +41,13 @@ public class SaltClientFactory {
     public static synchronized SaltStackClient getSaltClient() {
 
         if (client == null) {
-
+            InputStream ip = null;
             try {
-                InputStreamReader ip = new InputStreamReader(SaltClientFactory.class.getResourceAsStream(RESOURCE_SALT_PROPERTIES), "utf-8");
+                String resource = "classpath:"+RESOURCE_SALT_PROPERTIES;
+                ip = new FileInputStream(new PathMatchingResourcePatternResolver().getResource(resource).getFile());
                 conf = new Properties();
                 conf.load(ip);
+                ip.close();
             } catch (Exception ex) {
                 MissingResourceException mrex = new MissingResourceException("Failed to load conf resource.", SaltClientFactory.class.getName(), RESOURCE_SALT_PROPERTIES);
                 mrex.initCause(ex);
