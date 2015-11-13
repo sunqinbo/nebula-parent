@@ -15,8 +15,14 @@ nebula.main = function(){
 nebula.common={};
 
 nebula.common.timestapToDate=function(timestap){
-    var now = new Date(parseInt(unix) * 1000);
-    return now.toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+    var date = new Date(timestap);
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    var D = date.getDate() + ' ';
+    var h = date.getHours() + ':';
+    var m = date.getMinutes() + ':';
+    var s = date.getSeconds();
+    return Y+M+D+h+m+s;
 };
 
 nebula.publish = {};
