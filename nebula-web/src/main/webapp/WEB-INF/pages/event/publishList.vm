@@ -25,13 +25,13 @@
                                     <div class="form-group">
 
                                           <label>开始时间</label>
-                                        <input type="text" id="begintime" class="form-control" >
+                                        <input type="text" id="begintime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>结束时间</label>
-                                        <input type="text" id="endtime" class="form-control" >
+                                        <input type="text" id="endtime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
                                     </div>
                                 </div>
                                 <div class="col-md-3">
