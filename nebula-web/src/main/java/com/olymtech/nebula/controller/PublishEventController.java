@@ -232,7 +232,7 @@ public class PublishEventController extends BaseController{
         return returnCallback("Error","继续发布出错");
     }
 
-    @RequestMapping(value="/publish_event/publishContinue.htm",method = {RequestMethod.POST})
+    @RequestMapping(value="/publish_event/retryPublishRollback.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback retryPublishRollback(HttpServletRequest request){
         String idString = request.getParameter("id");
