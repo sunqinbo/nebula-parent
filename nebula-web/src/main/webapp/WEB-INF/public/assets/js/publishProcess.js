@@ -184,7 +184,7 @@ function Initialization(){
 
             //动作成功执行 隐藏重试按钮
             if(actionState=="false"){
-                var false_btn="<Button type='button' class='btn btn-info'>重试</Button>"
+                var false_btn="<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
                 $("#false_btn").html(false_btn);
             }
             else

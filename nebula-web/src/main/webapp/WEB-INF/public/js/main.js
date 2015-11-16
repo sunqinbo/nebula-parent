@@ -164,3 +164,24 @@ nebula.publish.process.publishReal = function(){
         }
     });
 };
+
+
+nebula.publish.process.publishContinue = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish_event/publishContinue.htm",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                $.notify({
+                    icon: '',
+                    message: "正式发布成功"
+                },{
+                    type: 'info',
+                    timer: 2000
+                });
+            }
+        }
+    });
+};

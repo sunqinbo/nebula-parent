@@ -189,23 +189,31 @@ public class PublishEventController extends BaseController{
         if(!StringUtils.isNotEmpty(idString)){
             return returnCallback("Error","参数id为空");
         }
-        Integer eventId = Integer.parseInt(idString);
-        NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
-        List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
-        if(nebulaPublishSchedules != null){
-            return returnCallback("Error","无法获取发布事件进度");
-        }
-        Integer size = nebulaPublishSchedules.size();
-        NebulaPublishSchedule publishSchedule = nebulaPublishSchedules.get(size - 1);
-        List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(publishSchedule.getPublishActionGroup());
-
         try{
+
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+            List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
+            if(nebulaPublishSchedules == null || nebulaPublishSchedules.size() == 0 ){
+                return returnCallback("Error","无法获取发布事件进度");
+            }
+            Integer size = nebulaPublishSchedules.size();
+            NebulaPublishSchedule publishSchedule = nebulaPublishSchedules.get(size - 1);
+            List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(publishSchedule.getPublishActionGroup());
+
             //创建任务队列
             ActionChain chain = new ActionChain();
+            Boolean flag = false;
             for(NebulaPublishSequence publishSequence:publishSequences){
-                if( (publishSequence.getActionName() == publishSchedule.getPublishAction()) &&
-                        (publishSequence.getActionClass()!=null && !"".equals(publishSequence.getActionClass())) ){
+                if( publishSequence.getActionName() == publishSchedule.getPublishAction() ){
+                    flag = true;
+                }
+                if( publishSequence.getActionClass() == null || "".equals(publishSequence.getActionClass()) ){
+                    continue;
+                }
+                if(flag){
                     String actionClassName = publishSequence.getActionClass();
+                    actionClassName = "com.olymtech.nebula.service.action."+actionClassName;
                     Action action =  (Action) SpringUtils.getBean(Class.forName(actionClassName));
                     chain.addAction(action);
                 }
