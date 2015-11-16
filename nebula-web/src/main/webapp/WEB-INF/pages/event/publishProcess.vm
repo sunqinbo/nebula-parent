@@ -131,14 +131,14 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card card-plain">
+                <div id="publish_btn" class="card card-plain">
                     <div class="header">发布操作</div>
                     <hr/>
                     <div class="content">
                         <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
                         <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
                         <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
-##                        <button type="button" id="btn5" class="btn btn-default">确认发布结果</button>
+                        <button type="button" id="btn_ConfirmResult" class="btn btn-default">确认成功</button>
                         <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
                     </div>
             </div>
@@ -166,6 +166,13 @@
                 </div>
             </div>
 
+            <div class="col-md-12">
+                <div id="step5" class="card card-plain">
+                    <div class="header">启动成功发布确认</div>
+                    <hr/>
+                    <div id="processbar5" class="ystep4"></div>
+                </div>
+                </div>
 
             <div class="col-md-12">
                 <div id="step4" class="card card-plain">
