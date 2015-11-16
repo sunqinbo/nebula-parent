@@ -133,6 +133,15 @@ function Initialization(){
         },
         url: "/publishProcessStep.htm",
         datetype: "json",
+
+        beforeSend:function(XMLHttpRequest) {
+            $("#loading-status").show();
+        },
+        complete:function(XMLHttpRequest,textStatus){
+            $("#loading-status").hide();
+            $("#step1").hide();
+        },
+
         success: function (data) {
             //机器信息列表相关
             var HostList=data.responseContext.HostInfos;
