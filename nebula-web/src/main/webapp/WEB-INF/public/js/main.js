@@ -185,3 +185,24 @@ nebula.publish.process.publishContinue = function(){
         }
     });
 };
+
+nebula.publish.process.retryPublishRollback = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish_event/retryPublishRollback.htm",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                window.location.href="/publishProcess.htm?id="+id;
+                $.notify({
+                    icon: '',
+                    message: "正式发布成功"
+                },{
+                    type: 'info',
+                    timer: 2000
+                });
+            }
+        }
+    });
+};
