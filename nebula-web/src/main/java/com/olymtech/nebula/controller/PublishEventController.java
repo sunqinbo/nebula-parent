@@ -113,7 +113,7 @@ public class PublishEventController extends BaseController{
             return returnCallback("Error","id is null");
         }
         Integer eventId = Integer.parseInt(idString);
-        NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(GetPublishSvnAction.class));
