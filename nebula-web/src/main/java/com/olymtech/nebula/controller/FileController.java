@@ -78,7 +78,7 @@ public class FileController extends BaseController {
         /** 初始化页面 加载，有root信息，返回 jsTreeDataRoots */
         if (idString.equals("#")) {
             /** 根节点为0 */
-            idString= "/Users/saas/deploy_tmp/"+nebulaPublishEvent.getPublishProductKey()+"/src_svn/etc/";
+            idString= "/home/saas/deploy_tmp/"+nebulaPublishEvent.getPublishProductKey()+"/src_svn/etc/";
 //            idString="F:\\121";
             Map<String,Boolean> Srcmap=fileAnalyzeService.getDirMapByDirPath(idString);
             List<JsTreeDataRoot> jsTreeDataRoots = new ArrayList<JsTreeDataRoot>();

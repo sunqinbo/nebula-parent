@@ -1,6 +1,8 @@
 package com.olymtech.nebula.file.analyze.impl;
 
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,36 +16,51 @@ import java.util.Map;
  */
 @Service
 public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
+
+    private Logger logger       = LoggerFactory.getLogger(this.getClass());
+
     public List<String> getFileListByDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
-        File file = new File(dirPath);
-        File[] files = file.listFiles();
-        for (File f:files) {
-            if (!f.isDirectory()){
-                fileList.add(f.getName());
+        try{
+            File file = new File(dirPath);
+            File[] files = file.listFiles();
+            for (File f:files) {
+                if (!f.isDirectory()){
+                    fileList.add(f.getName());
+                }
             }
+        }catch (Exception e){
+            logger.error("getFileListByDirPath error,dirPath:"+dirPath,e);
         }
         return fileList;
     }
     @Override
     public List<String> getFileListByRecursionDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
-        File file = new File(dirPath);
-        reverseRecursionDirPath(file,fileList);
+        try{
+            File file = new File(dirPath);
+            reverseRecursionDirPath(file,fileList);
+        }catch (Exception e){
+            logger.error("getFileListByRecursionDirPath error,dirPath:"+dirPath,e);
+        }
         return fileList;
     }
 
     public Map<String,Boolean> getDirMapByDirPath(String dirPath) {
         Map<String,Boolean> fileList = new HashMap<>();
-        File file = new File(dirPath);
-        File[] files = file.listFiles();
-        for (File f:files) {
-            if (!f.isDirectory()){
-                fileList.put(f.getName(), false);
+        try{
+            File file = new File(dirPath);
+            File[] files = file.listFiles();
+            for (File f:files) {
+                if (!f.isDirectory()){
+                    fileList.put(f.getName(), false);
+                }
+                else {
+                    fileList.put(f.getName(), true);
+                }
             }
-            else {
-                fileList.put(f.getName(), true);
-            }
+        }catch(Exception e){
+            logger.error("getDirMapByDirPath error,dirPath:"+dirPath,e);
         }
         return fileList;
     }
