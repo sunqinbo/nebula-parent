@@ -421,7 +421,7 @@
         <aliyun.sdk.sts.version>2.1.6</aliyun.sdk.sts.version>
         <mybatis.version>3.2.2</mybatis.version>
         <mybatisspring.version>1.1.0</mybatisspring.version>
-        <pagehelper.version>4.0.1</pagehelper.version>
+        <pagehelper.version>4.0.3</pagehelper.version>
         <aspectjrt.version>1.7.4</aspectjrt.version>
         <aspectjweaver.version>1.7.4</aspectjweaver.version>
         <cglib.version>3.1</cglib.version>
