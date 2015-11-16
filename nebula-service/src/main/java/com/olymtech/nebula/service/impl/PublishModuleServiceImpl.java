@@ -30,5 +30,9 @@ public class PublishModuleServiceImpl implements INebulaPublishModuleService {
         return nebulaPublishModuleDao.selectModulesByEventId(eventId);
     }
 
+    @Override
+    public void deleteByEventId(Integer eventId){
+        nebulaPublishModuleDao.deleteByEventId(eventId);
+    }
 
 }

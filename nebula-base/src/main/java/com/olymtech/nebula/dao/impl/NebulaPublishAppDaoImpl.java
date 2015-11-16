@@ -16,5 +16,8 @@ import java.util.List;
 @Repository("nebulaPublishAppDao")
 public class NebulaPublishAppDaoImpl extends BaseDaoImpl<NebulaPublishApp,Integer> implements INebulaPublishAppDao {
 
-
+    @Override
+    public void deleteByEventId(Integer eventId){
+        getSqlSession().delete(CLASS_NAME + "-Delete-By-Event-Id", eventId);
+    }
 }

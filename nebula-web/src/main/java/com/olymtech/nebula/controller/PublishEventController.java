@@ -232,6 +232,22 @@ public class PublishEventController extends BaseController{
         return returnCallback("Error","继续发布出错");
     }
 
+    @RequestMapping(value="/publish_event/retryPublishRollback.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback retryPublishRollback(HttpServletRequest request){
+        String idString = request.getParameter("id");
+        if(!StringUtils.isNotEmpty(idString)){
+            return returnCallback("Error","参数id为空");
+        }
+        try{
+            publishEventService.retryPublishRollback(Integer.parseInt(idString));
+            return returnCallback("Success","重新发布回退成功");
+        }catch (Exception e){
+            logger.error("retryPublishRollback error:",e);
+        }
+        return returnCallback("Error","重新发布回退失败");
+    }
+
     @RequestMapping(value="/publish_event/updateEtcEnd.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback updateEtcEnd(HttpServletRequest request){

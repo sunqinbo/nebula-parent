@@ -11,6 +11,8 @@ import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,16 @@ import java.util.Date;
 import java.util.List;
 
 import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
+import static com.olymtech.nebula.common.utils.DateUtils.longDate;
 
 /**
  * Created by liwenji on 2015/11/4.
  */
 @Service
 public class PublishEventServiceImpl implements IPublishEventService {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Resource
     INebulaPublishEventDao nebulaPublishEventDao;
 
@@ -83,6 +89,21 @@ public class PublishEventServiceImpl implements IPublishEventService {
         }
         nebulaPublishEvent.setPublishModules(publishModules);
         return nebulaPublishEvent;
+    }
+
+    @Override
+    public Boolean retryPublishRollback(Integer eventId){
+        Boolean result = false;
+        try{
+            publishHostService.deleteByEventId(eventId);
+            publishAppService.deleteByEventId(eventId);
+            nebulaPublishModuleService.deleteByEventId(eventId);
+            publishScheduleService.deleteByEventIdWithOutCreateAction(eventId);
+            result = true;
+        }catch (Exception e){
+            logger.error("retryPublishRollback error:",e);
+        }
+        return result;
     }
 
 }

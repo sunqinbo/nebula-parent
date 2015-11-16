@@ -49,4 +49,14 @@ public class PublishScheduleServiceImpl implements IPublishScheduleService {
         return nebulaPublishScheduleDao.selectByEventId(eventId);
     }
 
+    @Override
+    public void deleteByEventIdWithOutCreateAction(Integer eventId){
+        List<NebulaPublishSchedule> nebulaPublishSchedules = nebulaPublishScheduleDao.selectByEventId(eventId);
+        for(NebulaPublishSchedule nebulaPublishSchedule:nebulaPublishSchedules){
+            if(nebulaPublishSchedule.getPublishAction() != PublishAction.CREATE_PUBLISH_EVENT){
+                nebulaPublishScheduleDao.deleteById(nebulaPublishSchedule.getId());
+            }
+        }
+    }
+
 }

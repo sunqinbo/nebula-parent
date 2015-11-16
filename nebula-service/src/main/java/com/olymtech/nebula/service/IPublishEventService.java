@@ -19,4 +19,7 @@ public interface IPublishEventService {
     public NebulaPublishEvent selectById(Integer eventId);
 
     public NebulaPublishEvent selectWithChildByEventId(Integer eventId);
+
+    public Boolean retryPublishRollback(Integer eventId);
+
 }
