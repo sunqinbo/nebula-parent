@@ -166,12 +166,12 @@ function Initialization(){
                 $("#loading-status").hide();
             }
 
-            if(actionState=="false"){
-                $("#errorMsgDiv").html(data.responseContext.errorMsg);
-                $("#errorMsgDiv").show();
-            }
-            else
-                $("#errorMsgDiv").hide();
+            //if(actionState=="false"){
+            //    $("#errorMsgDiv").html(data.responseContext.errorMsg);
+            //    $("#errorMsgDiv").show();
+            //}
+            //else
+            //    $("#errorMsgDiv").hide();
             //设置进度条长度
             var lastStep;
             switch (actionGroup){
@@ -186,9 +186,13 @@ function Initialization(){
             if(actionState=="false"){
                 var false_btn="<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
                 $("#false_btn").html(false_btn);
+                $("#errorMsgDiv").html(data.responseContext.errorMsg);
+                $("#errorMsgDiv").show();
             }
-            else
+            else {
                 $("#false_btn").html("");
+                $("#errorMsgDiv").hide();
+            }
             //当动作为创建发布事件且成功时，发布准备可点
             if(whichStep==0)
             {
@@ -202,6 +206,9 @@ function Initialization(){
                     whichStep=whichStep+1;
                 }
                 else {
+                    if(actionGroup==2){
+                        $("#restartPublish").hide();
+                    }
                     actionGroup = actionGroup - 1 + 2;
                     if (actionGroup == 4) {
                         $("#btn_ConfirmResult").attr('disabled', false);
@@ -223,6 +230,8 @@ function Initialization(){
             //动作为ect开始时
             if (actionGroup==1&&whichStep==4&&(actionState == ""||actionState=="null")) {
                 //添加编辑按钮
+                $("#restartPublish").show();
+
                 var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
                     "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
                 $("#etc_btns").html(etc_btn);
@@ -254,6 +263,7 @@ function Initialization(){
                     }
                 });
             }
+            else{$("#restartPublish").hide()}
             btnUnclick();
             //控制进度条显示
             for(var i=1;i<=5;i++){
