@@ -39,6 +39,11 @@ public class PublishAppServiceImpl implements IPublishAppService {
         return nebulaPublishApps;
     }
 
+    @Override
+    public void deleteByEventId(Integer eventId){
+        nebulaPublishAppDao.deleteByEventId(eventId);
+    }
+
 
 
 }

@@ -28,4 +28,9 @@ public class PublishHostServiceImpl implements IPublishHostService {
         nebulaPublishHost.setPublishModuleId(moduleId);
         return nebulaPublishHostDao.selectAllPaging(nebulaPublishHost);
     }
+
+    @Override
+    public void deleteByEventId(Integer eventId){
+        nebulaPublishHostDao.deleteByEventId(eventId);
+    }
 }

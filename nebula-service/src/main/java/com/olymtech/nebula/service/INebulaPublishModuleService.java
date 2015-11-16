@@ -14,4 +14,6 @@ import java.util.List;
 public interface INebulaPublishModuleService {
 
     public List<NebulaPublishModule> selectByEventId(Integer eventId);
+
+    public void deleteByEventId(Integer eventId);
 }

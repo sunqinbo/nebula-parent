@@ -15,4 +15,5 @@ public interface IPublishAppService {
 
     public List<NebulaPublishApp> selectByEventIdAndModuleId(Integer eventId, Integer moduleId);
 
+    public void deleteByEventId(Integer eventId);
 }

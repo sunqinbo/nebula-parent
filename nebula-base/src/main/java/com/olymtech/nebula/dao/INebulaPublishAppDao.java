@@ -10,4 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishApp;
  * Created by Gavin on 2015-11-03 15:42.
  */
 public interface INebulaPublishAppDao extends IBaseDao<NebulaPublishApp,Integer> {
+
+    public void deleteByEventId(Integer eventId);
+
 }

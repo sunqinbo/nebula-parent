@@ -57,6 +57,10 @@
         delete from nebula_publish_module
         where id = #{id,jdbcType=INTEGER}
     </delete>
+    <delete id="Nebula-NebulaPublishModuleDao-Delete-By-Event-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_module
+        where publish_event_id = #{publishEventId,jdbcType=INTEGER}
+    </delete>
     <insert id="Nebula-NebulaPublishModuleDao-Insert" parameterType="NebulaPublishModule">
         insert into nebula_publish_module (
         id,

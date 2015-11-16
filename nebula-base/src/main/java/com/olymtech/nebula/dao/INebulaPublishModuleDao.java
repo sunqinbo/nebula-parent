@@ -16,4 +16,5 @@ public interface INebulaPublishModuleDao extends IBaseDao<NebulaPublishModule,In
     public List<NebulaPublishModule> selectModulesByEventId(Integer publishEventId);
 
 
+    public void deleteByEventId(Integer eventId);
 }
