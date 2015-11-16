@@ -43,7 +43,7 @@ nebula.publish.event.main = function(){
                         var productTrees = jsonData.responseContext;
                         for(var i=0;i<productTrees.length;i++){
                             var productTree = productTrees[i];
-                            $("#select-product").append("<option vaule-svn='"+productTree.srcSvn+"' value-hidden='"+productTree.nodeName+"' value='"+productTree.id+"'>"+productTree.nodeCname+"</option>");
+                            $("#select-product").append("<option value-svn='"+productTree.srcSvn+"' value-hidden='"+productTree.nodeName+"' value='"+productTree.id+"'>"+productTree.nodeCname+"</option>");
                         }
                     }
                 }
