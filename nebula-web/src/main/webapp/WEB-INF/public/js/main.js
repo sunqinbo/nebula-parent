@@ -110,6 +110,12 @@ nebula.publish.process.preMasterPublish = function(){
         url:"/publish_event/preMasterPublish.htm",
         type:"post",
         data:{"id":id},
+        beforeSend:function(XMLHttpRequest) {
+            $("#loading-status").show();
+        },
+        complete:function(XMLHttpRequest,textStatus){
+            $("#loading-status").hide();
+        },
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $.notify({
