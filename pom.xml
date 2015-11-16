@@ -386,6 +386,11 @@
                 <version>${shiro.spring.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.olymtech.cc</groupId>
+                <artifactId>util</artifactId>
+                <version>${olym.cc.util.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -398,6 +403,7 @@
         <javax.servlet.jsp.jstlapi.version>1.2.1</javax.servlet.jsp.jstlapi.version>
         <mysql.version>5.1.32</mysql.version>
         <ibatis.version>2.3.4.726</ibatis.version>
+        <olym.cc.util.version>1.0.10-SNAPSHOT</olym.cc.util.version>
         <httpclient.version>3.1</httpclient.version>
         <log4j.version>1.2.16</log4j.version>
         <fastjson.version>1.1.41</fastjson.version>

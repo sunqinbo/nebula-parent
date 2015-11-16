@@ -11,8 +11,19 @@
 
     <context:component-scan base-package="com.olymtech.nebula.dao"/>
 
-    <!-- 引入jdbc配置文件 -->
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--&lt;!&ndash; 引入jdbc配置文件 &ndash;&gt;-->
+    <!--<context:property-placeholder location="classpath:jdbc.properties"/>-->
+
+    <bean id="propertyConfigurer" class="com.olymtech.util.diamond.DiamondPropertyPlaceholderConfigurer">
+        <property name="diamondConfigKeys">
+            <list>
+                <bean class="com.olymtech.util.diamond.DiamondConfigKey">
+                    <property name="group" value="com.olymtech.nebula.dao" />
+                    <property name="dataId" value="jdbc.properties" />
+                </bean>
+            </list>
+        </property>
+    </bean>
 
     <!-- 创建jdbc数据源 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
