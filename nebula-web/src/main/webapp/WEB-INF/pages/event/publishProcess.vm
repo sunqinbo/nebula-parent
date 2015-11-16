@@ -15,7 +15,7 @@
 <script>
     nebula.publish.process.main();
 </script>
-<div id="loading-status" style="display: none;z-index: 100;position: fixed;margin:auto;left:0;right:0;top:0;bottom:0;width:200px;height:150px;"><img src="public/assets/img/loading.gif"></div>
+<div id="loading-status" style="display: none;z-index: -1;position: fixed;margin:auto;left:0;right:0;top:0;bottom:0;width:200px;height:150px;"><img src="public/assets/img/loading.gif"></div>
 
 <div class="content">
     <div class="container-fluid">
