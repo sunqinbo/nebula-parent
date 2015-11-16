@@ -1,9 +1,9 @@
 package com.olymtech.nebula.service;
 
+import com.github.pagehelper.PageInfo;
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.BaseDO;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
-
-import java.util.List;
 
 /**
  * Created by liwenji on 2015/11/4.
@@ -14,7 +14,7 @@ public interface IPublishEventService {
 
     public BaseDO getPublishEventById(Integer id);
 
-    public List<NebulaPublishEvent> getPublishEvent();
+    public PageInfo getPublishEvent(DataTablePage dataTablePage);
 
     public NebulaPublishEvent selectById(Integer eventId);
 
