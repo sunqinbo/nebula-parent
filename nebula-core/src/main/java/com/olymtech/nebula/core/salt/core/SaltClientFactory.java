@@ -55,19 +55,19 @@ public class SaltClientFactory {
             }
 
             if(conf.get(SALT_URI)==null){
-                throw new NullPointerException("in th salt.properties file does't have the propertiy ->>>> uri");
+                throw new NullPointerException("in the salt.properties file does't have the propertiy ->>>> uri");
             }
             if(conf.get(TRUST_STOR_NAME)==null){
-                throw new NullPointerException("in th salt.properties file does't have the propertiy ->>>> trust_stor");
+                throw new NullPointerException("in the salt.properties file does't have the propertiy ->>>> trust_stor");
             }
             if(conf.get(PORT)==null){
-                throw new NullPointerException("in th salt.properties file does't have the propertiy ->>>> port");
+                throw new NullPointerException("in the salt.properties file does't have the propertiy ->>>> port");
             }
             if(conf.get(USERNAME)==null){
-                throw new NullPointerException("in th salt.properties file does't have the propertiy ->>>> username");
+                throw new NullPointerException("in the salt.properties file does't have the propertiy ->>>> username");
             }
             if(conf.get(PASSWORD)==null){
-                throw new NullPointerException("in th salt.properties file does't have the propertiy ->>>> password");
+                throw new NullPointerException("in the salt.properties file does't have the propertiy ->>>> password");
             }
 
             System.setProperty("javax.net.ssl.trustStore", SaltClientFactory.class.getClassLoader().getResource(conf.getProperty(TRUST_STOR_NAME)).getPath());

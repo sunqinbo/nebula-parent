@@ -63,7 +63,7 @@ public class PublishWarAction extends AbstractAction {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targes.add(nebulaPublishHost.getPassPublishHostName());
             }
 
             String warFromBase = event.getPublishProductKey() + "/publish_war/";
