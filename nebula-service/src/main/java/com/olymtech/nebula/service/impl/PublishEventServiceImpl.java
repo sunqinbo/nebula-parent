@@ -1,7 +1,9 @@
 package com.olymtech.nebula.service.impl;
 
-import com.olymtech.nebula.dao.INebulaPublishAppDao;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.INebulaPublishEventDao;
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -58,8 +59,11 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     @Override
-    public List<NebulaPublishEvent> getPublishEvent() {
-        return nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
+    public PageInfo getPublishEvent(DataTablePage dataTablePage) {
+        PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
+        List<NebulaPublishEvent> nebulaPublishEvents=nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
+        PageInfo pageInfo=new PageInfo(nebulaPublishEvents);
+        return pageInfo;
     }
 
     @Override
