@@ -62,7 +62,7 @@ public class PublishEtcAction extends AbstractAction {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targes.add(nebulaPublishHost.getPassPublishHostName());
             }
 
             String etcFrom = event.getPublishProductKey() + "/src_svn/etc";

@@ -45,6 +45,7 @@ public class ChangeLnAction extends AbstractAction {
     @Value("${war_link}")
     private String WarLink;
 
+
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, null, "");
@@ -56,7 +57,7 @@ public class ChangeLnAction extends AbstractAction {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targes.add(nebulaPublishHost.getPassPublishHostName());
             }
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
@@ -70,6 +71,8 @@ public class ChangeLnAction extends AbstractAction {
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
                     if (entry.getValue().equals("")) {
                         //todo 每台机子的执行信息处理
+
+
                     } else {
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
