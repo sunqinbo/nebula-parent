@@ -19,4 +19,5 @@ public interface IPublishScheduleService {
 
     public List<NebulaPublishSchedule> selectByEventId(Integer eventId);
 
+    public void deleteByEventIdWithOutCreateAction(Integer eventId);
 }

@@ -98,6 +98,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
             publishHostService.deleteByEventId(eventId);
             publishAppService.deleteByEventId(eventId);
             nebulaPublishModuleService.deleteByEventId(eventId);
+            publishScheduleService.deleteByEventIdWithOutCreateAction(eventId);
             result = true;
         }catch (Exception e){
             logger.error("retryPublishRollback error:",e);

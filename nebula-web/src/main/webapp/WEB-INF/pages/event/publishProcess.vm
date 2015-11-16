@@ -15,7 +15,7 @@
 <script>
     nebula.publish.process.main();
 </script>
-<div id="loading-status" style="display: none;z-index: 100;position: fixed;margin:auto;left:0;right:0;top:0;bottom:0;width:200px;height:150px;"><img src="public/assets/img/loading.gif"></div>
+<div id="loading-status" style="display: none;z-index: -1;position: fixed;margin:auto;left:0;right:0;top:0;bottom:0;width:200px;height:150px;"><img src="public/assets/img/loading.gif"></div>
 
 <div class="content">
     <div class="container-fluid">
@@ -140,7 +140,7 @@
                         <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
                         <button type="button" id="btn_ConfirmResult" class="btn btn-default">确认成功</button>
                         <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
-                        <button type="button" style="display: none" id="restartPublish" class="btn btn-danger">重新发布</button>
+                        <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
                     </div>
             </div>
             </div>
