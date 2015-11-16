@@ -194,6 +194,7 @@ nebula.publish.process.retryPublishRollback = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
+                $("#restartPublish").hide();
                 window.location.href="/publishProcess.htm?id="+id;
                 $.notify({
                     icon: '',
