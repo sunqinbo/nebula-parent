@@ -159,6 +159,13 @@ function Initialization(){
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState+"";
+
+            if(actionState=="null"||actionState==""){
+                $("#loading-status").show();
+            }else{
+                $("#loading-status").hide();
+            }
+
             if(actionState=="false"){
                 $("#errorMsgDiv").html(data.responseContext.errorMsg);
                 $("#errorMsgDiv").show();
