@@ -43,7 +43,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="">
-                            用户登入$shiro.hasRole("adminxx")
+                            用户登入$shiro.hasRole("admin")
                         </a>
                     </li>
                     <li>

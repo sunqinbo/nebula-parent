@@ -101,10 +101,8 @@ $(document).ready(function(){
     });
     $("#btn3").click(function(){
         $("#btn3").attr('disabled',true);
-        //$("#step1").hide();
-        //$("#step2").hide();
         $("#step3").show();
-        //$("#step4").hide();
+        $("#restartPublish").hide();
     });
     $("#btn4").click(function(){
         $("#btn4").attr('disabled',true);
@@ -160,7 +158,7 @@ function Initialization(){
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState+"";
 
-            if(actionState=="null"||actionState==""){
+            if((actionState=="null"||actionState=="")&&(actionGroup!=1&&whichStep!=4)){
                 $("#loading-status").show();
             }else{
                 $("#loading-status").hide();
