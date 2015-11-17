@@ -81,7 +81,7 @@ public class CpWarAction extends AbstractAction {
                 Map<String, Object> results = resultInfo.getResults();
                 int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
                     nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
                     nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_WAR);
                     if (entry.getValue().equals("")) {

@@ -73,7 +73,7 @@ public class ChangeLnAction extends AbstractAction {
                 Map<String, Object> results = resultInfo.getResults();
                 int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
                     nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
                     nebulaPublishHost.setActionName(PublishAction.CHANGE_LN);
                     if (entry.getValue().equals("")) {
