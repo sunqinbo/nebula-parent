@@ -12,6 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
@@ -33,6 +34,9 @@ public class StopTomcatAction extends AbstractAction {
     private ISaltStackService saltStackService;
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Autowired
+    private IPublishHostService publishHostService;
 
     @Value("${stop_command_path}")
     private String stopCommandPath;
@@ -59,12 +63,19 @@ public class StopTomcatAction extends AbstractAction {
             if (resultInfos.getInfoList().size() == 1) {
                 ResultInfo resultInfo = resultInfos.get(0);
                 Map<String, Object> results = resultInfo.getResults();
+                int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
+                    nebulaPublishHost.setActionName(PublishAction.STOP_TOMCAT);
                     if (entry.getValue().equals("")) {
-
-                        //todo 每台机子的执行信息处理
+                        nebulaPublishHost.setActionResult("success");
+                        nebulaPublishHost.setIsSuccessAction(true);
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                     } else {
+                        nebulaPublishHost.setActionResult(entry.getValue().toString());
+                        nebulaPublishHost.setIsSuccessAction(false);
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.STOP_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }

@@ -33,4 +33,14 @@ public class PublishHostServiceImpl implements IPublishHostService {
     public void deleteByEventId(Integer eventId){
         nebulaPublishHostDao.deleteByEventId(eventId);
     }
+
+    @Override
+    public int createPublishHost(NebulaPublishHost publicHost) {
+        return nebulaPublishHostDao.insert(publicHost);
+    }
+
+    @Override
+    public void updatePublishHost(NebulaPublishHost publicHost) {
+        nebulaPublishHostDao.update(publicHost);
+    }
 }
