@@ -158,7 +158,7 @@ function Initialization(){
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState+"";
 
-            if((actionState=="null"||actionState=="")&&(actionGroup!=1&&whichStep!=4)){
+            if((actionState=="null"||actionState=="")&&!(actionGroup==1&&whichStep==4)){
                 $("#loading-status").show();
             }else{
                 $("#loading-status").hide();
