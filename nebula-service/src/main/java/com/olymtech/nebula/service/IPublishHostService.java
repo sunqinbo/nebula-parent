@@ -16,4 +16,8 @@ public interface IPublishHostService {
     public List<NebulaPublishHost> selectByEventIdAndModuleId(Integer eventId, Integer moduleId);
 
     public void deleteByEventId(Integer eventId);
+
+    public int createPublishHost(NebulaPublishHost publicHost);
+
+    public void updatePublishHost(NebulaPublishHost publicHost);
 }

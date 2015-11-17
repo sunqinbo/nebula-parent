@@ -12,6 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -33,6 +34,9 @@ public class StartTomcatAction extends AbstractAction {
     private ISaltStackService saltStackService;
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Autowired
+    private IPublishHostService publishHostService;
 
     @Value("${start_command_path}")
     private String startCommandPath;
@@ -62,15 +66,16 @@ public class StartTomcatAction extends AbstractAction {
             if (resultInfos.getInfoList().size() == 1) {
                 ResultInfo resultInfo = resultInfos.get(0);
                 Map<String, Object> results = resultInfo.getResults();
+                int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-
-                    //if (entry.getValue().equals("")) {
-                    //
-                    //    //todo 每台机子的执行信息处理
-                    //} else {
-                    //    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
-                    //    throw new SaltStackException(entry.getValue().toString());
-                    //}
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
+                    nebulaPublishHost.setActionName(PublishAction.START_TOMCAT);
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
+                    //throw new SaltStackException(entry.getValue().toString());
                 }
             } else {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");

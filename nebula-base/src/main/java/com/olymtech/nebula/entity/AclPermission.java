@@ -10,7 +10,7 @@ public class AclPermission extends BaseDO{
 
     private String permission;
 
-    private String type;
+    private String permissionType;
 
     private String url;
 
@@ -18,7 +18,7 @@ public class AclPermission extends BaseDO{
 
     private String pids;
 
-    private String isEnable;
+    private Integer isEnable;
 
     public String getPermissionCname() {
         return permissionCname;
@@ -52,12 +52,12 @@ public class AclPermission extends BaseDO{
         this.permission = permission == null ? null : permission.trim();
     }
 
-    public String getType() {
-        return type;
+    public String getPermissionType() {
+        return permissionType;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setPermissionType(String permissionType) {
+        this.permissionType = permissionType;
     }
 
     public String getUrl() {
@@ -84,11 +84,12 @@ public class AclPermission extends BaseDO{
         this.pids = pids == null ? null : pids.trim();
     }
 
-    public String getIsEnable() {
+    public Integer getIsEnable() {
         return isEnable;
     }
 
-    public void setIsEnable(String isEnable) {
-        this.isEnable = isEnable == null ? null : isEnable.trim();
+    public void setIsEnable(Integer isEnable) {
+        this.isEnable = isEnable;
     }
+
 }

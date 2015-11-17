@@ -13,6 +13,7 @@ import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishAppService;
+import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -39,6 +40,9 @@ public class PublishEtcAction extends AbstractAction {
 
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Autowired
+    private IPublishHostService publishHostService;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
@@ -72,20 +76,25 @@ public class PublishEtcAction extends AbstractAction {
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
                 Map<String, Object> results = resultInfo.getResults();
+                int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    //if (entry.getValue().equals("")) {
-                    //    //todo 每台机子的执行信息处理
-                    //} else {
-                    //    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, PublishActionGroup.PRE_MINION, false, "error message");
-                    //    throw new SaltStackException(entry.getValue().toString());
-                    //}
+
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                    nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_ETC);
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, PublishActionGroup.PRE_MINION, false, "error message");
+                    //throw new SaltStackException(entry.getValue().toString());
                 }
             } else {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, PublishActionGroup.PRE_MINION, false, "error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC,PublishActionGroup.PRE_MINION, true, "");
+
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, PublishActionGroup.PRE_MINION, true, "");
         return true;
     }
 
