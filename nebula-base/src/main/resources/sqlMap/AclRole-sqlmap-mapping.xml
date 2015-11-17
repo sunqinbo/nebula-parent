@@ -4,12 +4,16 @@
     <resultMap id="RM-AclRole" type="com.olymtech.nebula.entity.AclRole">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="role_cname" property="roleCname" jdbcType="VARCHAR" />
         <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+        <result column="is_enable" property="isEnable" jdbcType="INTEGER" />
     </resultMap>
     <sql id="AclRole-Base-Column-List">
         id,
         role_name,
-        role_desc
+        role_cname,
+        role_desc,
+        is_enable
     </sql>
     <select id="Nebula-AclRoleDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-AclRole">
         select
@@ -26,6 +30,12 @@
             <if test="roleName != null">
                 role_name = #{roleName}
             </if>
+            <if test="roleCname != null">
+                role_cname = #{roleCname}
+            </if>
+            <if test="isEnable != null">
+                is_enable = #{isEnable}
+            </if>
         </trim>
     </select>
     <select id="Nebula-AclRoleDao-Select-All-Paging-Where" parameterType="AclRole" resultMap="RM-AclRole">
@@ -33,6 +43,12 @@
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="roleName != null">
                 role_name = #{roleName}
+            </if>
+            <if test="roleCname != null">
+                role_cname = #{roleCname}
+            </if>
+            <if test="isEnable != null">
+                is_enable = #{isEnable}
             </if>
         </trim>
         group by id order by id desc
@@ -45,10 +61,14 @@
         insert into acl_role (
         id,
         role_name,
-        role_desc)
+        role_cname,
+        role_desc,
+        is_enable)
         values (#{id,jdbcType=INTEGER},
         #{roleName,jdbcType=VARCHAR},
-        #{roleDesc,jdbcType=VARCHAR})
+        #{roleCname,jdbcType=VARCHAR},
+        #{roleDesc,jdbcType=VARCHAR},
+        #{isEnable,jdbcType=INTEGER})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -62,8 +82,14 @@
             <if test="roleName != null" >
                 role_name,
             </if>
+            <if test="roleCname != null" >
+                role_cname,
+            </if>
             <if test="roleDesc != null" >
                 role_desc,
+            </if>
+            <if test="isEnable != null" >
+                is_enable,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -73,8 +99,14 @@
             <if test="roleName != null" >
                 #{roleName,jdbcType=VARCHAR},
             </if>
+            <if test="roleCname != null" >
+                #{roleCname,jdbcType=VARCHAR},
+            </if>
             <if test="roleDesc != null" >
                 #{roleDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="isEnable != null" >
+                #{isEnable,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -84,8 +116,14 @@
             <if test="roleName != null" >
                 role_name = #{roleName,jdbcType=VARCHAR},
             </if>
+            <if test="roleCname != null" >
+                role_cname = #{roleCname,jdbcType=VARCHAR},
+            </if>
             <if test="roleDesc != null" >
                 role_desc = #{roleDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="isEnable != null" >
+                is_enable = #{isEnable,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -93,7 +131,9 @@
     <update id="Nebula-AclRoleDao-Update-By-Id" parameterType="AclRole">
         update acl_role set
         role_name = #{roleName,jdbcType=VARCHAR},
-        role_desc = #{roleDesc,jdbcType=VARCHAR}
+        role_cname = #{roleCname,jdbcType=VARCHAR},
+        role_desc = #{roleDesc,jdbcType=VARCHAR},
+        is_enable = #{isEnable,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

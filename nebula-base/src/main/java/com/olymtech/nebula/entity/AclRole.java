@@ -4,7 +4,27 @@ public class AclRole extends BaseDO{
 
     private String roleName;
 
+    private String roleCname;
+
     private String roleDesc;
+
+    private Boolean isEnable;
+
+    public String getRoleCname() {
+        return roleCname;
+    }
+
+    public void setRoleCname(String roleCname) {
+        this.roleCname = roleCname;
+    }
+
+    public Boolean getIsEnable() {
+        return isEnable;
+    }
+
+    public void setIsEnable(Boolean isEnable) {
+        this.isEnable = isEnable;
+    }
 
     public String getRoleName() {
         return roleName;

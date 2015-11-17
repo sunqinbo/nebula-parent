@@ -4,6 +4,8 @@ public class AclPermission extends BaseDO{
 
     private String permissionName;
 
+    private String permissionCname;
+
     private String permissionDesc;
 
     private String permission;
@@ -17,6 +19,14 @@ public class AclPermission extends BaseDO{
     private String pids;
 
     private String isEnable;
+
+    public String getPermissionCname() {
+        return permissionCname;
+    }
+
+    public void setPermissionCname(String permissionCname) {
+        this.permissionCname = permissionCname;
+    }
 
     public String getPermissionName() {
         return permissionName;
