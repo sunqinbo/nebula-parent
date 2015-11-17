@@ -50,7 +50,7 @@ public class StartTomcatAction extends AbstractAction {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostName());
+                targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             List<String> pathList = new ArrayList<String>();

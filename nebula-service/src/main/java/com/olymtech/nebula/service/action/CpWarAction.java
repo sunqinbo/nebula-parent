@@ -58,7 +58,7 @@ public class CpWarAction extends AbstractAction {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostName());
+                targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             String oldModule =  publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());

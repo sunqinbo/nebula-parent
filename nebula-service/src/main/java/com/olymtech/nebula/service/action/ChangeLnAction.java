@@ -57,7 +57,7 @@ public class ChangeLnAction extends AbstractAction {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targes = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostName());
+                targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
