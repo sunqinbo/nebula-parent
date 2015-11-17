@@ -35,7 +35,14 @@ $(document).ready(function(){
                         $("#fileView").val(context);
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("很抱歉，文件打开失败，原因：" + errorThrown);
+                        $.notify({
+                            icon: '',
+                            message: "很抱歉，文件打开失败，原因"+ errorThrown
+
+                        },{
+                            type: 'info',
+                            timer: 1000
+                        });
                     }
                 })
                 //文本设置可编辑
@@ -57,11 +64,25 @@ $(document).ready(function(){
                         },
                         datetype:"json",
                         success:function(data){
-                            alert("保存成功");
+                            $.notify({
+                                icon: '',
+                                message: "保存成功"
+
+                            },{
+                                type: 'info',
+                                timer: 1000
+                            });
                             $("#fileView").val(data.responseContext);
                         },
                         error : function(XMLHttpRequest, textStatus, errorThrown) {
-                            alert("很抱歉，文件保存失败，原因：" + errorThrown);
+                            $.notify({
+                                icon: '',
+                                message: "很抱歉，文件保存失败，原因"+ errorThrown
+
+                            },{
+                                type: 'info',
+                                timer: 1000
+                            });
                         }
                     })
                 });

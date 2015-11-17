@@ -33,7 +33,7 @@
                                 <td>
                                     <label>发布产品：</label>
 ##                                    <label>运价2014</label>
-                                    <label>$!{Event.publishProductName}</label>
+                                    <label>$!{Event.publishProductCname}</label>
                                     <input id="eventId" style="display:none" type="text" value=$!{Event.id}>
 ##                                    <input id="actionGroup" style="display:none" type="text" value=$!{actionGroup}>
 ##                                    <input id="whichStep" style="display:none" type="text" value=$!{whichStep}>
@@ -41,7 +41,7 @@
                                 </td>
                                 <td>
                                     <label>发布模块：</label>
-                                    <label>二次发布</label>
+                                    <label>$!{Event.mokuai}</label>
                                 </td>
                                 <td>
                                     <label>发布环境：</label>
@@ -49,47 +49,110 @@
                                 </td>
                                 <td>
                                     <label>发布类型：</label>
-                                    <label>发布/回滚</label>
+                                    <label>发布</label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <label>发布状态：</label>
-                                    <label>发布中</label>
+                                    <label>$!{Event.zhuantai}</label>
                                 </td>
-                                <td>
-                                    <label>发布结果：</label>
-                                    <label>$!{Event.isSuccessPublish}</label>
-                                </td>
-                                <td>
-                                    <label>发布分批：</label>
-                                    <label>是/否</label>
-                                </td>
+##                                <td>
+##                                    <label>发布结果：</label>
+##                                    <label>$!{Event.isSuccessPublish}</label>
+##                                </td>
+##                                <td>
+##                                    <label>发布分批：</label>
+##                                    <label>是/否</label>
+##                                </td>
                                 <td>
                                     <label>发布人：</label>
                                     <label>$!{Event.submitEmpId}</label>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>发布批次：</label>
-                                    <label>当前1/分一批</label>
-                                </td>
                                 <td>
                                     <label>发布进度：</label>
-                                    <label>完成0/总数1</label>
+                                    <label></label>
                                 </td>
                                 <td>
                                     <label>发布时间：</label>
                                     <label>$!{Event.publishDatetime}</label>
                                 </td>
                             </tr>
+##                            <tr>
+####                                <td>
+####                                    <label>发布批次：</label>
+####                                    <label>当前1/分一批</label>
+####                                </td>
+##                                <td>
+##                                    <label>发布进度：</label>
+####                                    <label>完成0/总数1</label>
+##                                    <label></label>
+##                                </td>
+##                                <td>
+##                                    <label>发布时间：</label>
+##                                    <label>$!{Event.publishDatetime}</label>
+##                                </td>
+##                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
+                <div class="col-md-12">
+                    <div id="publish_btn" class="card card-plain">
+                        <div class="header">发布操作</div>
+                        <hr/>
+                        <div class="content">
+                            <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
+                            <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
+                            <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
+                            <button type="button" id="btn_ConfirmResult" class="btn btn-default">确认成功</button>
+                            <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
+                            <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="etc_edit" class="col-md-12">
+                    <div id="step1" class="card card-plain">
+                        <div class="header">发布准备</div>
+                        <hr/>
+                        <div id="processbar1" class="ystep4"></div>
+                        <div id="etc_btns" style="margin-top: 30px"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="step2" class="card card-plain">
+                        <div class="header">启动预发布</div>
+                        <hr/>
+                        <div id="processbar2" class="ystep4"></div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="step3" class="card card-plain">
+                        <div class="header">启动正式发布</div>
+                        <hr/>
+                        <div id="processbar3" class="ystep4"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div id="step5" class="card card-plain">
+                        <div class="header">启动成功发布确认</div>
+                        <hr/>
+                        <div id="processbar5" class="ystep4"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div id="step4" class="card card-plain">
+                        <div class="header">启动回滚</div>
+                        <hr/>
+                        <div id="processbar4" class="ystep4"></div>
+                    </div>
+                </div>
+                <div id="false_btn"></div>
+                <div id="errorMsgDiv" style="margin-top: 20px;word-wrap:break-word;width: 60%;display: none; color: red;"></div>
                 <div class="card card-plain">
                     <div class="header">
                         发布的机器列表
@@ -100,6 +163,7 @@
                             <thead>
                             <tr>
                                 <th>主机名</th>
+                                <th>主机ip</th>
 ##                                <th>环境</th>
                                 <th>action</>
                                 <th>是否成功</th>
@@ -113,7 +177,10 @@
                              <tr>
 ##                                 <td>$!{module.publishModuleName}</td>
                                  <td>$!{host.passPublishHostName}</td>
-                                 <td></td><td></td><td></td>
+                                 <td>$!{host.passPublishHostIp}</td>
+                                 <td>$!{host.actionName}</td>
+                                 <td>$!{host.isSuccessAction}</td>
+                                 <td>$!{host.actionResult}</td>
                              </tr>
                             #end
                         #end
@@ -130,60 +197,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div id="publish_btn" class="card card-plain">
-                    <div class="header">发布操作</div>
-                    <hr/>
-                    <div class="content">
-                        <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
-                        <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
-                        <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
-                        <button type="button" id="btn_ConfirmResult" class="btn btn-default">确认成功</button>
-                        <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
-                        <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
-                    </div>
-            </div>
-            </div>
-            <div id="etc_edit" class="col-md-12">
-                <div id="step1" class="card card-plain">
-                    <div class="header">发布准备</div>
-                    <hr/>
-                    <div id="processbar1" class="ystep4"></div>
-                    <div id="etc_btns" style="margin-top: 30px"></div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div id="step2" class="card card-plain">
-                    <div class="header">启动预发布</div>
-                    <hr/>
-                    <div id="processbar2" class="ystep4"></div>
-            </div>
-                </div>
-            <div class="col-md-12">
-                <div id="step3" class="card card-plain">
-                    <div class="header">启动正式发布</div>
-                    <hr/>
-                    <div id="processbar3" class="ystep4"></div>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div id="step5" class="card card-plain">
-                    <div class="header">启动成功发布确认</div>
-                    <hr/>
-                    <div id="processbar5" class="ystep4"></div>
-                </div>
-                </div>
-
-            <div class="col-md-12">
-                <div id="step4" class="card card-plain">
-                    <div class="header">启动回滚</div>
-                    <hr/>
-                    <div id="processbar4" class="ystep4"></div>
-                </div>
-            </div>
-            <div id="false_btn"></div>
-            <div id="errorMsgDiv" style="margin-top: 20px;word-wrap:break-word;width: 60%;display: none; color: red;"></div>
         </div>
     </div>
 </div>
