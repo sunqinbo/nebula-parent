@@ -12,6 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
@@ -36,6 +37,9 @@ public class CreateDirAciton extends AbstractAction {
 
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Autowired
+    private IPublishHostService publishHostService;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
@@ -68,10 +72,22 @@ public class CreateDirAciton extends AbstractAction {
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
                 Map<String, Object> results = resultInfo.getResults();
+                int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
+                    NebulaPublishHost hostinfo = new NebulaPublishHost();
+                    hostinfo.setActionGroup(PublishActionGroup.PRE_MINION);
+                    hostinfo.setActionName(PublishAction.CREATE_PUBLISH_DIR);
+                    hostinfo.setPassPublishHostName(publishHosts.get(i++).getPassPublishHostName());
+                    hostinfo.setPublishModuleId(publishModule.getId());
+                    hostinfo.setPassPublishHostIp(entry.getKey());
+                    hostinfo.setPublishEventId(event.getId());
                     if (entry.getValue().equals("")) {
-                        //todo 每台机子的执行信息处理
+                        hostinfo.setActionResult("success");
+                        hostinfo.setIsSuccessAction(true);
+                        publishHostService.createPublishHost(hostinfo);
                     } else {
+                        hostinfo.setActionResult("failure");
+                        hostinfo.setIsSuccessAction(false);
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
