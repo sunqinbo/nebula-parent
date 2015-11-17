@@ -18,4 +18,6 @@ public interface IPublishHostService {
     public void deleteByEventId(Integer eventId);
 
     public int createPublishHost(NebulaPublishHost publicHost);
+
+    public void updatePublishHost(NebulaPublishHost publicHost);
 }

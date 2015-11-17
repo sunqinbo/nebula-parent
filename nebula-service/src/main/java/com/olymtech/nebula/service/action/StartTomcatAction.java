@@ -68,17 +68,12 @@ public class StartTomcatAction extends AbstractAction {
                 Map<String, Object> results = resultInfo.getResults();
                 int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-
-                    NebulaPublishHost hostinfo = new NebulaPublishHost();
-                    hostinfo.setActionGroup(PublishActionGroup.PUBLISH_REAL);
-                    hostinfo.setActionName(PublishAction.START_TOMCAT);
-                    hostinfo.setPassPublishHostName(publishHosts.get(i++).getPassPublishHostName());
-                    hostinfo.setPublishModuleId(publishModule.getId());
-                    hostinfo.setPassPublishHostIp(entry.getKey());
-                    hostinfo.setPublishEventId(event.getId());
-                    hostinfo.setActionResult(entry.getValue().toString());
-                    hostinfo.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
-                    publishHostService.createPublishHost(hostinfo);
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
+                    nebulaPublishHost.setActionName(PublishAction.START_TOMCAT);
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                    publishHostService.updatePublishHost(nebulaPublishHost);
                     publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
                     //throw new SaltStackException(entry.getValue().toString());
                 }

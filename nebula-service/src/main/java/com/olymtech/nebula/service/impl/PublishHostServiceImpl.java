@@ -38,4 +38,9 @@ public class PublishHostServiceImpl implements IPublishHostService {
     public int createPublishHost(NebulaPublishHost publicHost) {
         return nebulaPublishHostDao.insert(publicHost);
     }
+
+    @Override
+    public void updatePublishHost(NebulaPublishHost publicHost) {
+        nebulaPublishHostDao.update(publicHost);
+    }
 }

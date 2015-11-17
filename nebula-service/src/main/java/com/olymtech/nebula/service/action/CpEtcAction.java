@@ -82,21 +82,17 @@ public class CpEtcAction extends AbstractAction {
                 Map<String, Object> results = resultInfo.getResults();
                 int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost hostinfo = new NebulaPublishHost();
-                    hostinfo.setActionGroup(PublishActionGroup.PUBLISH_REAL);
-                    hostinfo.setActionName(PublishAction.CHANGE_LN);
-                    hostinfo.setPassPublishHostName(publishHosts.get(i++).getPassPublishHostName());
-                    hostinfo.setPublishModuleId(publishModule.getId());
-                    hostinfo.setPassPublishHostIp(entry.getKey());
-                    hostinfo.setPublishEventId(event.getId());
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                    nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_ETC);
                     if (entry.getValue().equals("")) {
-                        hostinfo.setActionResult("success");
-                        hostinfo.setIsSuccessAction(true);
-                        publishHostService.createPublishHost(hostinfo);
+                        nebulaPublishHost.setActionResult("success");
+                        nebulaPublishHost.setIsSuccessAction(true);
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                     } else {
-                        hostinfo.setActionResult("failure");
-                        hostinfo.setIsSuccessAction(false);
-                        publishHostService.createPublishHost(hostinfo);
+                        nebulaPublishHost.setActionResult(entry.getValue().toString());
+                        nebulaPublishHost.setIsSuccessAction(false);
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,PublishActionGroup.PRE_MINION, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }

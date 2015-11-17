@@ -83,16 +83,12 @@ public class PublishWarAction extends AbstractAction {
                     Map<String, Object> results = resultInfo.getResults();
                     int i = 0;
                     for (Map.Entry<String, Object> entry : results.entrySet()) {
-                        NebulaPublishHost hostinfo = new NebulaPublishHost();
-                        hostinfo.setActionGroup(PublishActionGroup.PRE_MINION);
-                        hostinfo.setActionName(PublishAction.PUBLISH_NEW_WAR);
-                        hostinfo.setPassPublishHostName(publishHosts.get(i++).getPassPublishHostName());
-                        hostinfo.setPublishModuleId(publishModule.getId());
-                        hostinfo.setPassPublishHostIp(entry.getKey());
-                        hostinfo.setPublishEventId(event.getId());
-                        hostinfo.setActionResult(entry.getValue().toString());
-                        hostinfo.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
-                        publishHostService.createPublishHost(hostinfo);
+                        NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                        nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                        nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_WAR);
+                        nebulaPublishHost.setActionResult(entry.getValue().toString());
+                        nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "error message");
                     }
                 } else {

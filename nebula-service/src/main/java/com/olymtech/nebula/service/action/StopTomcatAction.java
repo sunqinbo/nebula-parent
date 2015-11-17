@@ -65,20 +65,17 @@ public class StopTomcatAction extends AbstractAction {
                 Map<String, Object> results = resultInfo.getResults();
                 int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost hostinfo = new NebulaPublishHost();
-                    hostinfo.setActionGroup(PublishActionGroup.PUBLISH_REAL);
-                    hostinfo.setActionName(PublishAction.STOP_TOMCAT);
-                    hostinfo.setPassPublishHostName(publishHosts.get(i++).getPassPublishHostName());
-                    hostinfo.setPublishModuleId(publishModule.getId());
-                    hostinfo.setPassPublishHostIp(entry.getKey());
-                    hostinfo.setPublishEventId(event.getId());
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
+                    nebulaPublishHost.setActionName(PublishAction.STOP_TOMCAT);
                     if (entry.getValue().equals("")) {
-                        hostinfo.setActionResult("success");
-                        hostinfo.setIsSuccessAction(true);
-                        publishHostService.createPublishHost(hostinfo);
+                        nebulaPublishHost.setActionResult("success");
+                        nebulaPublishHost.setIsSuccessAction(true);
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                     } else {
-                        hostinfo.setActionResult("failure");
-                        hostinfo.setIsSuccessAction(false);
+                        nebulaPublishHost.setActionResult(entry.getValue().toString());
+                        nebulaPublishHost.setIsSuccessAction(false);
+                        publishHostService.updatePublishHost(nebulaPublishHost);
                         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.STOP_TOMCAT, PublishActionGroup.PUBLISH_REAL, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
