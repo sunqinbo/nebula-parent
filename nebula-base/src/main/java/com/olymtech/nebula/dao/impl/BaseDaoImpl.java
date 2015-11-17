@@ -39,7 +39,7 @@ public class BaseDaoImpl<T extends BaseDO, ID extends Serializable> extends SqlS
 
     @Override
     public void update(T baseDO){
-        getSqlSession().update(CLASS_NAME + "-Update", baseDO);
+        getSqlSession().update(CLASS_NAME + "-Update-By-Id", baseDO);
     }
 
     @Override
