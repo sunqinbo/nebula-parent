@@ -8,6 +8,7 @@ import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -22,7 +23,8 @@ public class AclRoleController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
-    @RequestMapping(value = "role/insertAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/role/insertAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
     public Callback insertAclRole(AclRole aclRole) {
         try {
             aclRoleService.insertAclRole(aclRole);
@@ -33,7 +35,8 @@ public class AclRoleController extends BaseController {
         return returnCallback("Error", "插入角色失败");
     }
 
-    @RequestMapping(value = "role/deleteAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/role/deleteAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
     public Callback deleteAclRole(Integer id) {
         try {
             aclRoleService.deleteAclRoleById(id);
@@ -44,7 +47,8 @@ public class AclRoleController extends BaseController {
         return returnCallback("Error", "删除角色失败");
     }
 
-    @RequestMapping(value = "role/updateAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/role/updateAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
     public Callback updateAclRole(AclRole aclRole) {
         try {
             aclRoleService.updateAclRole(aclRole);
@@ -55,7 +59,8 @@ public class AclRoleController extends BaseController {
         return returnCallback("Error", "更新角色失败");
     }
 
-    @RequestMapping(value = "role/selectAllPagingRole", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/role/selectAllPagingRole", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Object selectAllPagingRole(DataTablePage dataTablePage) {
         PageInfo pageInfo = aclRoleService.getPageInfoAclRole(dataTablePage);
         return pageInfo;
