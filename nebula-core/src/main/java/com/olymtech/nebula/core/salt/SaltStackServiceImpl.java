@@ -133,9 +133,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
     @Override
     public <T> ResultInfoSet cmdRun(Target<T> target, List<Object> args, Map<String, Object> kwargs) throws SaltStackException {
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, kwargs);
-
         ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
-
         return jobResult;
     }
 
@@ -193,8 +191,6 @@ public class SaltStackServiceImpl implements ISaltStackService {
         }
 
         args.add(buffer.toString());
-
-        System.out.println(buffer.toString());
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
 
