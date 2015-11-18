@@ -29,7 +29,7 @@ public class GetSrcSvnAction extends AbstractAction {
     private IPublishScheduleService publishScheduleService;
 
     @Value("${master_deploy_dir}")
-    private String MasterWarDir;
+    private String MasterDeployDir;
     @Value("${src_svn_username}")
     private String SrcSvnUsername;
     @Value("${src_svn_password}")
@@ -41,7 +41,7 @@ public class GetSrcSvnAction extends AbstractAction {
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
         SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SrcSvnUsername, SrcSvnPassword);
         try{
-            Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterWarDir + event.getPublishProductKey() + "/src_svn/");
+            Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterDeployDir + event.getPublishProductKey() + "/src_svn/");
             if(svnResult){
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, true, "");
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, null, "");

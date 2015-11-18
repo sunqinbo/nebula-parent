@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.BaseDO;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.NebulaPublishModule;
 
 /**
  * Created by liwenji on 2015/11/4.

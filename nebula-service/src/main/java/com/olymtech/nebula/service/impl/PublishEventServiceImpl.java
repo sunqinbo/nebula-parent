@@ -3,11 +3,7 @@ package com.olymtech.nebula.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.INebulaPublishEventDao;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.NebulaPublishApp;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.entity.NebulaPublishHost;
-import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.*;
@@ -45,6 +41,9 @@ public class PublishEventServiceImpl implements IPublishEventService {
 
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Autowired
+    private IPublishBaseService publishBaseService;
 
 
     @Override
@@ -91,6 +90,11 @@ public class PublishEventServiceImpl implements IPublishEventService {
         return nebulaPublishEvent;
     }
 
+    /**
+     * 重新发布
+     * @param eventId
+     * @return
+     */
     @Override
     public Boolean retryPublishRollback(Integer eventId) {
         Boolean result = false;

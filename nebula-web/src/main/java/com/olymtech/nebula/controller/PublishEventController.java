@@ -41,6 +41,8 @@ public class PublishEventController extends BaseController{
     @Resource
     IPublishSequenceService publishSequenceService;
     @Resource
+    IPublishBaseService publishBaseService;
+    @Resource
     HttpServletRequest request;
 
     @RequestMapping(value="/publishEvent.htm",method= {RequestMethod.POST,RequestMethod.GET})
@@ -230,6 +232,69 @@ public class PublishEventController extends BaseController{
             logger.error("publishContinue error:",e);
         }
         return returnCallback("Error","继续发布出错");
+    }
+
+    @RequestMapping(value="/publish_event/publishSuccessEnd.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback publishSuccessEnd(){
+        String idString = request.getParameter("id");
+        if(!StringUtils.isNotEmpty(idString)){
+            return returnCallback("Error","参数id为空");
+        }
+        try {
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            chain.addAction(SpringUtils.getBean(ClearHistoryDirAction.class));
+            chain.addAction(SpringUtils.getBean(UpdateSrcSvnAction.class));
+            chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
+
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
+            dispatcher.doDispatch(publishEvent);
+
+            /** 发布成功基线 */
+            for(NebulaPublishModule publishModule:publishEvent.getPublishModules()){
+                NebulaPublishBase publishBase = new NebulaPublishBase(eventId,
+                        publishEvent.getPublishProductName(),
+                        publishEvent.getPublishEnv(),
+                        publishModule.getPublishModuleName(),
+                        publishModule.getPublishModuleKey());
+                publishBaseService.insertAndUpdate(publishBase);
+            }
+            return returnCallback("Success","成功发布确认成功");
+        }catch (Exception e){
+            logger.error("publishSuccessEnd error:",e);
+        }
+        return  returnCallback("Error","成功发布确认失败");
+    }
+
+    @RequestMapping(value="/publish_event/publishFailEnd.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback publishFailEnd(){
+        String idString = request.getParameter("id");
+        if(!StringUtils.isNotEmpty(idString)){
+            return returnCallback("Error","参数id为空");
+        }
+        try {
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(ChangeFailLnAction.class));
+            chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
+            chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
+
+            Dispatcher dispatcher = new Dispatcher(chain,request,response);
+            dispatcher.doDispatch(publishEvent);
+
+            return returnCallback("Success","失败发布确认成功");
+        }catch (Exception e){
+            logger.error("publishFailEnd error:",e);
+        }
+        return  returnCallback("Error","服务器异常");
     }
 
     @RequestMapping(value="/publish_event/retryPublishRollback.htm",method = {RequestMethod.POST})

@@ -35,8 +35,14 @@
             <if test="productEnv != null">
                 AND product_env = #{productEnv}
             </if>
+            <if test="productSrcSvn != null">
+                AND product_src_svn = #{productSrcSvn}
+            </if>
             <if test="publishEventId != null">
                 AND publish_event_id = #{publishEventId}
+            </if>
+            <if test="srcSvnVersion != null">
+                AND src_svn_version = #{srcSvnVersion}
             </if>
         </trim>
     </select>
@@ -49,8 +55,14 @@
             <if test="productEnv != null">
                 AND product_env = #{productEnv}
             </if>
+            <if test="productSrcSvn != null">
+                AND product_src_svn = #{productSrcSvn}
+            </if>
             <if test="publishEventId != null">
                 AND publish_event_id = #{publishEventId}
+            </if>
+            <if test="srcSvnVersion != null">
+                AND src_svn_version = #{srcSvnVersion}
             </if>
         </trim>
         group by id order by id desc
