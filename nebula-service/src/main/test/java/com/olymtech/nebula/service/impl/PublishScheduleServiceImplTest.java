@@ -38,7 +38,7 @@ public class PublishScheduleServiceImplTest {
 
     @Test
     public void testLogScheduleByAction() throws Exception {
-        Integer id = publishScheduleService.logScheduleByAction(2, PublishAction.CLEAR_HISTORY_DIR, PublishActionGroup.SUCCESS_END, false, "error message");
+        Integer id = publishScheduleService.logScheduleByAction(2, PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.SUCCESS_END, false, "error message");
         System.out.println(id);
     }
 

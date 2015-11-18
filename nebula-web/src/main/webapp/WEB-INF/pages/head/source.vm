@@ -24,6 +24,9 @@
 <link href="../../public/assets/css/sui.css">
 <link href="../../public/assets/css/sui-append.css">
 
+<!--WdataPicker-->
+<link href="../../public/assets/datetime-plugin/timepicki.css">
+
 <!--   Core JS Files   -->
 <script src="public/assets/js/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="public/assets/js/bootstrap.min.js" type="text/javascript"></script>
@@ -40,6 +43,9 @@
 <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
 <script src="public/assets/js/light-bootstrap-dashboard.js"></script>
 
-
 <script src="public/js/main.js"></script>
 
+<!--WdataPicker-->
+<script src="../../public/assets/datetime-plugin/WdatePicker.js"></script>
+<script src="../../public/assets/datetime-plugin/calendar.js"></script>
+<script src="../../public/assets/datetime-plugin/timepicki.js"></script>

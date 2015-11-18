@@ -2,7 +2,7 @@ package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.Callback;
-import com.olymtech.nebula.service.IPermissionService;
+import com.olymtech.nebula.service.IAclPermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,10 +14,10 @@ import javax.annotation.Resource;
  */
 @Controller("permissionController")
 @RequestMapping("/")
-public class PermissionController extends BaseController {
+public class AclPermissionController extends BaseController {
 
     @Resource
-    private IPermissionService permissionService;
+    private IAclPermissionService permissionService;
 
     @RequestMapping(value = "permission/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public Callback insertAclPermission(AclPermission permission) {

@@ -232,6 +232,30 @@ public class PublishEventController extends BaseController{
         return returnCallback("Error","继续发布出错");
     }
 
+    @RequestMapping(value="/publish_event/publishSuccessEnd.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback publishSuccessEnd(){
+        try {
+            //TODO 需要先insert nebula_publish_base 发布成功的记录
+            return returnCallback("Success","成功发布确认成功");
+        }catch (Exception e){
+
+        }
+        return  returnCallback("Error","成功发布确认失败");
+    }
+
+    @RequestMapping(value="/publish_event/publishFailEnd.htm",method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback publishFailEnd(){
+        try {
+
+            return returnCallback("Success","失败发布确认成功");
+        }catch (Exception e){
+
+        }
+        return  returnCallback("Error","服务器异常");
+    }
+
     @RequestMapping(value="/publish_event/retryPublishRollback.htm",method = {RequestMethod.POST})
     @ResponseBody
     public Callback retryPublishRollback(HttpServletRequest request){
