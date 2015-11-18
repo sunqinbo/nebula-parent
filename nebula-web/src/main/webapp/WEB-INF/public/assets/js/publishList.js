@@ -12,12 +12,15 @@ $(document).ready(function(){
                         var tbString="";
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
-                            tbString=tbString+"<tr><td>"+data["list"][i]["id"]+"</td><td>"+
-                                    data["list"][i]["publishEnv"]+"</td><td>"+data["list"][i]["publishProductCname"]+
-                                "</td><td>"+""+
+                            tbString=tbString+"<tr><td>"+data["list"][i]["id"]+
+                                "</td><td>"+data["list"][i]["publishSubject"]+"</td><td>"+
+                                    data["list"][i]["publishEnv"]+"</td><td>"+data["list"][i]["模块"]+
                                 "</td><td>"+data["list"][i]["submitDatetime"]+
                                 "</td><td>"+""+
                                 "</td><td>"+data["list"][i]["isSuccessPublish"]+
+                                "</td><td>"+data["list"][i]["submitEmpId"]+
+                                "</td><td>"+data["list"][i]["submitEmpId"]+
+                                "</td><td>"+data["list"][i]["publishProductCname"]+
                                 "</td><td>"+""+"</td><td><a href='/publishProcess.htm?id="+
                                 data["list"][i]["id"]+"'>详情</a></td>"
                         }
@@ -58,7 +61,14 @@ $(document).ready(function(){
                         });
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("很抱歉，列表查询失败，原因：" + errorThrown);
+                        $.notify({
+                            icon: '',
+                            message: "很抱歉，列表查询失败，原因"+ errorThrown
+
+                        },{
+                            type: 'info',
+                            timer: 1000
+                        });
                     }
                 })
     };
