@@ -1,7 +1,7 @@
 package com.olymtech.nebula.service.impl;
 
 import com.olymtech.nebula.entity.AclPermission;
-import com.olymtech.nebula.service.IPermissionService;
+import com.olymtech.nebula.service.IAclPermissionService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,18 +12,16 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import javax.annotation.Resource;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by WYQ on 2015/11/17.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring.config.xml" })
 @TransactionConfiguration(defaultRollback = false)
-public class PermissionServiceImplTest {
+public class AclPermissionServiceImplTest {
 
     @Resource
-    private IPermissionService permissionService;
+    private IAclPermissionService permissionService;
 
     @Before
     public void setUp() throws Exception {

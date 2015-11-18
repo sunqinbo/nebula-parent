@@ -10,4 +10,5 @@ import com.olymtech.nebula.entity.AclUserRole;
  * Created by Gavin on 2015-11-10 00:53.
  */
 public interface IAclUserRoleDao extends IBaseDao<AclUserRole,Integer>{
+
 }

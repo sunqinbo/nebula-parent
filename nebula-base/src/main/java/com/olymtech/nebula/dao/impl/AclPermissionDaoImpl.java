@@ -6,9 +6,15 @@ package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.IAclPermissionDao;
 import com.olymtech.nebula.entity.AclPermission;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by Gavin on 2015-11-10 00:48.
  */
+
+@Repository("aclPermissionDaoImpl")
 public class AclPermissionDaoImpl extends BaseDaoImpl<AclPermission,Integer> implements IAclPermissionDao {
+
+
+
 }
