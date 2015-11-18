@@ -49,7 +49,7 @@ public class ClearHistoryDirAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.CLEAN_END, null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -73,8 +73,8 @@ public class ClearHistoryDirAction extends AbstractAction {
                 int i = 0;
                 for (Map.Entry<String, Object> entry : results.entrySet()) {
                     NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                    nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
-                    nebulaPublishHost.setActionName(PublishAction.CHANGE_LN);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.CLEAN_END);
+                    nebulaPublishHost.setActionName(PublishAction.CLEAN_HISTORY_DIR);
                     if (entry.getValue().equals("")) {
                         nebulaPublishHost.setActionResult("success");
                         nebulaPublishHost.setIsSuccessAction(true);
@@ -83,18 +83,18 @@ public class ClearHistoryDirAction extends AbstractAction {
                         nebulaPublishHost.setActionResult(entry.getValue().toString());
                         nebulaPublishHost.setIsSuccessAction(false);
                         publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, false, "error message");
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.CLEAN_END, false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, false, "error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.CLEAN_END, false, "error message");
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.PUBLISH_REAL, true, "");
         return true;
     }
 
