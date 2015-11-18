@@ -12,7 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
-import com.olymtech.nebula.service.IPublishEventService;
+import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -36,7 +36,7 @@ public class ClearHistoryDirAction extends AbstractAction {
     @Autowired
     private IPublishHostService publishHostService;
     @Autowired
-    private IPublishEventService publishEventService;
+    private IPublishBaseService publishBaseService;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
@@ -62,8 +62,8 @@ public class ClearHistoryDirAction extends AbstractAction {
             }
 
             List<String > pathList =  new ArrayList<String >();
-            pathList.add(BaseWarDir + publishEventService.checkoutHistoryDirKey(event,publishModule));
-            pathList.add(BaseEtcDir + publishEventService.checkoutHistoryDirKey(event,publishModule));
+            pathList.add(BaseWarDir + publishBaseService.checkoutHistoryDirKey(event,publishModule));
+            pathList.add(BaseEtcDir + publishBaseService.checkoutHistoryDirKey(event, publishModule));
 
             ResultInfoSet result = saltStackService.deleteFile(new SaltTarget(targes), pathList ,true);
 

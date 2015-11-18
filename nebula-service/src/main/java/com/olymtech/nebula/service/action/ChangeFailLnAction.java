@@ -12,7 +12,7 @@ import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
-import com.olymtech.nebula.service.IPublishEventService;
+import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -41,7 +41,7 @@ public class ChangeFailLnAction extends AbstractAction {
     private IPublishHostService publishHostService;
 
     @Autowired
-    private IPublishEventService publishEventService;
+    private IPublishBaseService publishBaseService;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
@@ -68,8 +68,8 @@ public class ChangeFailLnAction extends AbstractAction {
             }
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
-            lnMap.put(BaseWarDir + publishEventService.checkoutLastDirKey(event, publishModule), WarLink);
-            lnMap.put(BaseEtcDir + publishEventService.checkoutLastDirKey(event, publishModule) + "/etc", EtcLink);
+            lnMap.put(BaseWarDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()), WarLink);
+            lnMap.put(BaseEtcDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()) + "/etc", EtcLink);
             ResultInfoSet result = saltStackService.makeLn(new SaltTarget(targes), lnMap);
 
             if (result.getInfoList().size() == 1) {
