@@ -29,13 +29,27 @@ public class PublishBaseServiceImpl implements IPublishBaseService {
     private INebulaPublishBaseDao   nebulaPublishBaseDao;
 
     @Override
+    public Integer insertAndUpdate(NebulaPublishBase publishBase){
+        List<NebulaPublishBase> publishBases = nebulaPublishBaseDao.selectAllPaging(publishBase);
+        if(publishBases == null || publishBases.size() == 0){
+            return nebulaPublishBaseDao.insert(publishBase);
+        }else{
+            NebulaPublishBase nebulaPublishBaseInDB = publishBases.get(0);
+            nebulaPublishBaseInDB.setPublishProductEnv(publishBase.getPublishProductEnv());
+            nebulaPublishBaseInDB.setPublishProductName(publishBase.getPublishProductName());
+            nebulaPublishBaseInDB.setPublishModuleName(publishBase.getPublishModuleName());
+            nebulaPublishBaseInDB.setPublishEventId(publishBase.getPublishEventId());
+            nebulaPublishBaseInDB.setPublishModuleKey(publishBase.getPublishModuleKey());
+            nebulaPublishBaseDao.update(nebulaPublishBaseInDB);
+            return nebulaPublishBaseInDB.getId();
+        }
+    }
+
+    @Override
     public String selectLastModuleKeyByPublishEvent(NebulaPublishEvent event,String moduleName){
         String publishKey = null;
         try{
-            NebulaPublishBase baseSearch = new NebulaPublishBase();
-            baseSearch.setPublishModuleName(moduleName);
-            baseSearch.setPublishProductName(event.getPublishProductName());
-            baseSearch.setPublishProductEnv(event.getPublishEnv());
+            NebulaPublishBase baseSearch = new NebulaPublishBase(event.getPublishProductName(),moduleName,event.getPublishEnv());
             PageHelper.startPage(1, 10);
             List<NebulaPublishBase> nebulaPublishBases = nebulaPublishBaseDao.selectAllPaging(baseSearch);
             if(nebulaPublishBases != null && nebulaPublishBases.size()>0){
@@ -59,8 +73,9 @@ public class PublishBaseServiceImpl implements IPublishBaseService {
         if(nebulaPublishBases == null){
             return historyDirKey;
         }
-        if(nebulaPublishBases.size() >=6){
-            historyDirKey = nebulaPublishBases.get(5).getPublishModuleKey();
+        /** 执行成功归档后，才记录base，因此这里取之前的5条记录，获取最早的一条 */
+        if(nebulaPublishBases.size() >=5){
+            historyDirKey = nebulaPublishBases.get(4).getPublishModuleKey();
         }
         return historyDirKey;
     }

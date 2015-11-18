@@ -105,8 +105,15 @@ public class SvnUtils {
     }
 
     public static SVNCommitInfo commit(final SVNClientManager svnClientManager,
-                                       File localPath, boolean keepLocks, String commitMessage) {
+                                       String svnLocalPath, boolean keepLocks, String commitMessage) {
         try {
+            File localPath = new File(svnLocalPath);
+            if (!localPath.exists()) {
+                logger.error("the destination directory '"
+                        + localPath.getAbsolutePath() + "' is not exists!");
+                return null;
+            }
+
             svnClientManager.getStatusClient().doStatus(localPath, SVNRevision.HEAD, SVNDepth.INFINITY, false, false, false, false, new ISVNStatusHandler() {
                 @Override
                 public void handleStatus(SVNStatus status) throws SVNException {

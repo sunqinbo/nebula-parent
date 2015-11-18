@@ -12,6 +12,23 @@ public class NebulaPublishSvnBaseline extends BaseDO{
 
     private String srcSvnVersion;
 
+    public NebulaPublishSvnBaseline(){
+        super();
+    }
+
+    public NebulaPublishSvnBaseline(String productName,
+                                    String productEnv,
+                                    String productSrcSvn,
+                                    Integer publishEventId,
+                                    String srcSvnVersion){
+        super();
+        this.productName = productName;
+        this.productEnv = productEnv;
+        this.productSrcSvn = productSrcSvn;
+        this.publishEventId = publishEventId;
+        this.srcSvnVersion = srcSvnVersion;
+    }
+
     public String getProductEnv() {
         return productEnv;
     }

@@ -1,6 +1,7 @@
 package com.olymtech.nebula.service.impl;
 
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.service.IPublishBaseService;
 import org.junit.After;
 import org.junit.Before;
@@ -44,4 +45,14 @@ public class PublishBaseServiceImplTest {
         System.out.println(moduleKey);
     }
 
+    @Test
+    public void testCheckoutHistoryDirKey() throws Exception {
+        NebulaPublishEvent event = new NebulaPublishEvent();
+        event.setPublishEnv("test");
+        event.setPublishProductName("yjt2014");
+        NebulaPublishModule module = new NebulaPublishModule();
+        module.setPublishModuleName("ebooking");
+        String key = publishBaseService.checkoutHistoryDirKey(event,module);
+        System.out.println(key);
+    }
 }

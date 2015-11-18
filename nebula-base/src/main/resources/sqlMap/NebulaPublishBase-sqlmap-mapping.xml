@@ -32,14 +32,17 @@
             <if test="publishEventId != null">
                 publish_event_id = #{publishEventId}
             </if>
+            <if test="publishProductEnv != null">
+                AND publish_product_env = #{publishProductEnv}
+            </if>
             <if test="publishProductName != null">
                 AND publish_product_name = #{publishProductName}
             </if>
             <if test="publishModuleName != null">
                 AND publish_module_name = #{publishModuleName}
             </if>
-            <if test="publishProductEnv != null">
-                AND publish_product_env = #{publishProductEnv}
+            <if test="publishModuleKey != null">
+                AND publish_module_key = #{publishModuleKey}
             </if>
         </trim>
     </select>
@@ -49,14 +52,17 @@
             <if test="publishEventId != null">
                 publish_event_id = #{publishEventId}
             </if>
+            <if test="publishProductEnv != null">
+                AND publish_product_env = #{publishProductEnv}
+            </if>
             <if test="publishProductName != null">
                 AND publish_product_name = #{publishProductName}
             </if>
             <if test="publishModuleName != null">
                 AND publish_module_name = #{publishModuleName}
             </if>
-            <if test="publishProductEnv != null">
-                AND publish_product_env = #{publishProductEnv}
+            <if test="publishModuleKey != null">
+                AND publish_module_key = #{publishModuleKey}
             </if>
         </trim>
         group by id order by id desc
