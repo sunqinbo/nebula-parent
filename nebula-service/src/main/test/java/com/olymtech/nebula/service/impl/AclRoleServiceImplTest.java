@@ -14,8 +14,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import javax.annotation.Resource;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by WYQ on 2015/11/18.
  */

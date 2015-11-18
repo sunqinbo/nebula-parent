@@ -8,6 +8,7 @@ import com.olymtech.nebula.service.IAclPermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ public class AclPermissionController extends BaseController {
     @Resource
     private IAclPermissionService permissionService;
 
-    @RequestMapping(value = "permission/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/permission/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Callback insertAclPermission(AclPermission permission) {
         try {
             permissionService.insertAclPermission(permission);
@@ -34,7 +36,8 @@ public class AclPermissionController extends BaseController {
         return returnCallback("Error", "插入权限失败");
     }
 
-    @RequestMapping(value = "permission/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/permission/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Callback deleteAclPermission(Integer id) {
         try {
             permissionService.deleteAclPermissionById(id);
@@ -45,7 +48,8 @@ public class AclPermissionController extends BaseController {
         return returnCallback("Error", "删除权限失败");
     }
 
-    @RequestMapping(value = "permission/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/permission/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Callback updateAclPermission(AclPermission permission) {
         try {
             permissionService.updateAclPermission(permission);
@@ -56,7 +60,8 @@ public class AclPermissionController extends BaseController {
         return returnCallback("Error","更新权限失败");
     }
 
-    @RequestMapping(value = "permission/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/permission/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Object selectAllPagingPermission(DataTablePage dataTablePage) {
         PageInfo pageInfo = permissionService.getPageInfoAclPermission(dataTablePage);
         return pageInfo;

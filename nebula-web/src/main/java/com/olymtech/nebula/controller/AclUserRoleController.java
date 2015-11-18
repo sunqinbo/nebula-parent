@@ -6,6 +6,7 @@ import com.olymtech.nebula.service.IAclUserRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
@@ -19,7 +20,8 @@ public class AclUserRoleController extends BaseController{
     @Resource
     private IAclUserRoleService aclUserRoleService;
 
-    @RequestMapping(value = "userRole/insertAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/userRole/insertAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Callback insertAclUserRole(AclUserRole aclUserRole) {
         try {
             aclUserRoleService.insertAclUserRole(aclUserRole);
@@ -31,7 +33,8 @@ public class AclUserRoleController extends BaseController{
     }
 
 
-    @RequestMapping(value = "userRole/deleteAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/userRole/deleteAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Callback deleteAclUserRole(Integer id) {
         try {
             aclUserRoleService.deleteAclUserRoleById(id);
@@ -42,7 +45,8 @@ public class AclUserRoleController extends BaseController{
         return returnCallback("Error", "删除用户角色失败");
     }
 
-    @RequestMapping(value = "userRole/updateAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/userRole/updateAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
     public Callback updateAclUserRole(AclUserRole aclUserRole) {
         try {
             aclUserRoleService.updateAclUserRole(aclUserRole);
