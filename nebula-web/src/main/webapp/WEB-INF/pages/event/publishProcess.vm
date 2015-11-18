@@ -107,8 +107,8 @@
                             <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
                             <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
                             <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
-                            <button type="button" id="btn_ConfirmResult" class="btn btn-default">确认成功</button>
-                            <button type="button" id="btn4" class="btn btn-default">我要回滚</button>
+                            <button type="button" id="btn_ConfirmResult" class="btn btn-default" onclick="nebula.publish.process.publishSuccessEnd()">确认成功</button>
+                            <button type="button" id="btn4" class="btn btn-default" onclick="nebula.publish.process.publishFailEnd()">我要回滚</button>
                             <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
                         </div>
                     </div>
