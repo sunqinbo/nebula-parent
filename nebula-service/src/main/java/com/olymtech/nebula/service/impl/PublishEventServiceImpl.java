@@ -91,6 +91,11 @@ public class PublishEventServiceImpl implements IPublishEventService {
         return nebulaPublishEvent;
     }
 
+    /**
+     * 重新发布
+     * @param eventId
+     * @return
+     */
     @Override
     public Boolean retryPublishRollback(Integer eventId){
         Boolean result = false;
@@ -105,5 +110,18 @@ public class PublishEventServiceImpl implements IPublishEventService {
         }
         return result;
     }
+
+    @Override
+    public String checkoutHistoryDirKey(NebulaPublishEvent event, NebulaPublishModule module){
+        String historyDirKey = "";
+        return historyDirKey;
+    }
+
+    @Override
+    public String checkoutLastDirKey(NebulaPublishEvent event, NebulaPublishModule module){
+        String lastDirKey = "";
+        return lastDirKey;
+    }
+
 
 }
