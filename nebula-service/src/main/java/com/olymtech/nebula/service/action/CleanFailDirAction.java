@@ -21,14 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author taoshanchang 15/11/17
+ * @author taoshanchang 15/11/18
  */
-public class CleanAction extends AbstractAction {
+public class CleanFailDirAction extends AbstractAction {
     @Autowired
     private ISaltStackService saltStackService;
     @Autowired
@@ -59,10 +58,11 @@ public class CleanAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            HashMap<String, String> lnMap = new HashMap<String, String>();
-            lnMap.put(BaseWarDir + publishModule.getPublishModuleKey(), WarLink);
-            lnMap.put(BaseEtcDir + publishModule.getPublishModuleKey() + "/etc", EtcLink);
-            ResultInfoSet result = saltStackService.makeLn(new SaltTarget(targes), lnMap);
+            List<String> pathList = new ArrayList<String>();
+            pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
+            pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
+
+            ResultInfoSet result = saltStackService.deleteFile(new SaltTarget(targes), pathList, true);
 
             if (result.getInfoList().size() == 1) {
                 ResultInfo resultInfo = result.get(0);
@@ -94,6 +94,7 @@ public class CleanAction extends AbstractAction {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.PUBLISH_REAL, true, "");
         return true;
     }
+
 
     @Override
     public void doFailure(NebulaPublishEvent event) {
