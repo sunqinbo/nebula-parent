@@ -246,9 +246,9 @@ public class PublishEventController extends BaseController{
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
             //创建任务队列
             ActionChain chain = new ActionChain();
-//            chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
-//            chain.addAction(SpringUtils.getBean(ChangeLnAction.class));
-//            chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(ClearHistoryDirAction.class));
+            chain.addAction(SpringUtils.getBean(UpdateSrcSvnAction.class));
+            chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
 
             Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(publishEvent);
@@ -281,9 +281,11 @@ public class PublishEventController extends BaseController{
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
             //创建任务队列
             ActionChain chain = new ActionChain();
-//            chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
-//            chain.addAction(SpringUtils.getBean(ChangeLnAction.class));
-//            chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(ChangeFailLnAction.class));
+            chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
+            chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
 
             Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(publishEvent);
