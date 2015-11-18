@@ -162,9 +162,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
             paths.append(" " + path);
         }
         if (recursion) {
-            args.add("rf -rf " + paths);
+            args.add("rm -rf " + paths);
         } else {
-            args.add("rf " + paths);
+            args.add("rm " + paths);
         }
 
         ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);

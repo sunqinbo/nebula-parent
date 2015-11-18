@@ -1,6 +1,7 @@
 package com.olymtech.nebula.entity;
 
 import com.olymtech.nebula.common.utils.CustomDateSerializer;
+import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -34,6 +35,16 @@ public class NebulaPublishEvent extends BaseDO {
     private Integer submitEmpId;
 
     private Boolean isSuccessPublish;
+
+    private PublishActionGroup publishActionGroup;
+
+    public PublishActionGroup getPublishActionGroup() {
+        return publishActionGroup;
+    }
+
+    public void setPublishActionGroup(PublishActionGroup publishActionGroup) {
+        this.publishActionGroup = publishActionGroup;
+    }
 
     private List<NebulaPublishModule> publishModules;
 

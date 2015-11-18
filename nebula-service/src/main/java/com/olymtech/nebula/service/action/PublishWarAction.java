@@ -58,7 +58,7 @@ public class PublishWarAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, PublishActionGroup.PRE_MINION, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, event.getPublishActionGroup(), null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -89,15 +89,15 @@ public class PublishWarAction extends AbstractAction {
                         nebulaPublishHost.setActionResult(entry.getValue().toString());
                         nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
                         publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "error message");
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,event.getPublishActionGroup(), false, "error message");
                     }
                 } else {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, false, "error message");
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,event.getPublishActionGroup(), false, "error message");
                     return false;
                 }
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,PublishActionGroup.PRE_MINION, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,event.getPublishActionGroup(), true, "");
         return true;
     }
 

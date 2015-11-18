@@ -20,6 +20,7 @@ import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,8 @@ import java.util.Map;
 /**
  * @author taoshanchang 15/11/17
  */
-public class ClearHistoryDirAction extends AbstractAction {
+@Service
+public class CleanHistoryDirAction extends AbstractAction {
     @Autowired
     private ISaltStackService saltStackService;
     @Autowired
@@ -49,7 +51,7 @@ public class ClearHistoryDirAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.CLEAN_END, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, event.getPublishActionGroup(), null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -83,18 +85,18 @@ public class ClearHistoryDirAction extends AbstractAction {
                         nebulaPublishHost.setActionResult(entry.getValue().toString());
                         nebulaPublishHost.setIsSuccessAction(false);
                         publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.CLEAN_END, false, "error message");
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, event.getPublishActionGroup(), false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.CLEAN_END, false, "error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, event.getPublishActionGroup(), false, "error message");
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, PublishActionGroup.PUBLISH_REAL, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_HISTORY_DIR, event.getPublishActionGroup(), true, "");
         return true;
     }
 
