@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Created by Gavin on 2015-11-10 00:54.
  */
-@Repository("aclUserRoleDaoImpl")
+@Repository("aclUserRoleDao")
 public class AclUserRoleDaoImpl extends BaseDaoImpl<AclUserRole,Integer> implements IAclUserRoleDao {
 }

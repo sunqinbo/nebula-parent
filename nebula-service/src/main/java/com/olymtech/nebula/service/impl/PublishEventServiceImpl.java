@@ -50,8 +50,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Override
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         Date now = new Date();
-        String dateKey=getKeyDate(now);
-        String key=nebulaPublishEvent.getPublishEnv()+"."+nebulaPublishEvent.getPublishProductName()+"."+dateKey;
+        String dateKey = getKeyDate(now);
+        String key = nebulaPublishEvent.getPublishEnv() + "." + nebulaPublishEvent.getPublishProductName() + "." + dateKey;
         nebulaPublishEvent.setPublishProductKey(key);
         nebulaPublishEvent.setSubmitDatetime(now);
         Integer id = nebulaPublishEventDao.insert(nebulaPublishEvent);
@@ -67,23 +67,23 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Override
     public PageInfo getPublishEvent(DataTablePage dataTablePage) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
-        List<NebulaPublishEvent> nebulaPublishEvents=nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
-        PageInfo pageInfo=new PageInfo(nebulaPublishEvents);
+        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
+        PageInfo pageInfo = new PageInfo(nebulaPublishEvents);
         return pageInfo;
     }
 
     @Override
-    public NebulaPublishEvent selectById(Integer id){
-        return  nebulaPublishEventDao.selectById(id);
+    public NebulaPublishEvent selectById(Integer id) {
+        return nebulaPublishEventDao.selectById(id);
     }
 
     @Override
-    public NebulaPublishEvent selectWithChildByEventId(Integer eventId){
+    public NebulaPublishEvent selectWithChildByEventId(Integer eventId) {
         NebulaPublishEvent nebulaPublishEvent = nebulaPublishEventDao.selectById(eventId);
         List<NebulaPublishModule> publishModules = nebulaPublishModuleService.selectByEventId(eventId);
-        for(NebulaPublishModule publishModule:publishModules){
+        for (NebulaPublishModule publishModule : publishModules) {
             List<NebulaPublishApp> publishApps = publishAppService.selectByEventIdAndModuleId(eventId, publishModule.getId());
-            List<NebulaPublishHost> publishHosts = publishHostService.selectByEventIdAndModuleId(eventId,publishModule.getId());
+            List<NebulaPublishHost> publishHosts = publishHostService.selectByEventIdAndModuleId(eventId, publishModule.getId());
             publishModule.setPublishApps(publishApps);
             publishModule.setPublishHosts(publishHosts);
         }
@@ -92,16 +92,16 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     @Override
-    public Boolean retryPublishRollback(Integer eventId){
+    public Boolean retryPublishRollback(Integer eventId) {
         Boolean result = false;
-        try{
+        try {
             publishHostService.deleteByEventId(eventId);
             publishAppService.deleteByEventId(eventId);
             nebulaPublishModuleService.deleteByEventId(eventId);
             publishScheduleService.deleteByEventIdWithOutCreateAction(eventId);
             result = true;
-        }catch (Exception e){
-            logger.error("retryPublishRollback error:",e);
+        } catch (Exception e) {
+            logger.error("retryPublishRollback error:", e);
         }
         return result;
     }

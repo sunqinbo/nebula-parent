@@ -1,6 +1,8 @@
 package com.olymtech.nebula.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclPermission;
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.service.IAclPermissionService;
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +38,6 @@ public class AclPermissionServiceImplTest {
     @Test
     public void testInsertAclPermission() throws Exception {
         AclPermission permission = new AclPermission();
-        permission.setId(33);
         permission.setIsEnable(1);
         permission.setPermission("permission");
         permission.setPermissionCname("aaa");
@@ -60,6 +61,14 @@ public class AclPermissionServiceImplTest {
         permission.setId(1);
         permission.setPid(888);
         permissionService.updateAclPermission(permission);
+    }
 
+    @Test
+    public void testGetPageInfoAclPermission() throws Exception {
+        DataTablePage dataTablePage = new DataTablePage();
+        dataTablePage.setPageNum(2);
+        dataTablePage.setPageSize(3);
+        PageInfo pageInfo =  permissionService.getPageInfoAclPermission(dataTablePage);
+        System.out.println(pageInfo);
     }
 }
