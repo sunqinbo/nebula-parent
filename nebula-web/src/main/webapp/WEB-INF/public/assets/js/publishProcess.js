@@ -87,6 +87,7 @@ $(document).ready(function(){
     //按钮点击事件
     $("#btn1").click(function(){
         $("#btn1").attr('disabled',true);
+        $("#btn1").removeClass("btn-info");
         $("#step1").show();
         //$("#step2").hide();
         //$("#step3").hide();
@@ -94,6 +95,7 @@ $(document).ready(function(){
     });
     $("#btn2").click(function(){
         $("#btn2").attr('disabled',true);
+        $("#btn2").removeClass("btn-info");
         //$("#step1").hide();
         $("#step2").show();
         //$("#step3").hide();
@@ -101,12 +103,15 @@ $(document).ready(function(){
     });
     $("#btn3").click(function(){
         $("#btn3").attr('disabled',true);
+        $("#btn3").removeClass("btn-info");
         $("#step3").show();
         $("#restartPublish").hide();
     });
     $("#btn4").click(function(){
         $("#btn4").attr('disabled',true);
+        $("#btn4").removeClass("btn-info");
         $("#btn_ConfirmResult").attr('disabled',true);
+        $("#btn_ConfirmResult").removeClass("btn-info");
         //$("#step1").hide();
         //$("#step2").hide();
         //$("#step3").hide();
@@ -115,7 +120,9 @@ $(document).ready(function(){
     })
     $("#btn_ConfirmResult").click(function(){
         $("#btn_ConfirmResult").attr('disabled',true);
+        $("#btn_ConfirmResult").removeClass("btn-info");
         $("#btn4").attr('disabled',true);
+        $("#btn4").removeClass("btn-info");
         $("#step5").show();
     })
 
@@ -141,15 +148,18 @@ function Initialization(){
                 var actionName=""
                 var isSuccessAction=""
                 var actionResult=""
+                var passPublishHostIp="";
                 if(HostList[i]["passPublishHostName"]!=null)
                     passPublishHostName= HostList[i]["passPublishHostName"];
+                if(HostList[i]["passPublishHostName"]!=null)
+                    passPublishHostIp= HostList[i]["passPublishHostIp"];
                 if(HostList[i]["actionName"]!=null)
                     actionName= HostList[i]["actionName"];
                 if(HostList[i]["isSuccessAction"]!=null)
                     isSuccessAction= HostList[i]["isSuccessAction"];
                 if(HostList[i]["actionResult"]!=null)
                     actionResult= HostList[i]["actionResult"];
-                tbString=tbString+"<tr><td>"+passPublishHostName+"</td><td>"+
+                tbString=tbString+"<tr><td>"+passPublishHostName+"</td><td>"+passPublishHostIp+"</td><td>"+
                     actionName+"</td><td>"+ isSuccessAction+"</td><td>"+actionResult+"</td></tr>";
             }
             $("#hostInfo").html(tbString);
@@ -158,7 +168,7 @@ function Initialization(){
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState+"";
 
-            if((actionState=="null"||actionState=="")&&(actionGroup!=1&&whichStep!=4)){
+            if((actionState=="null"||actionState=="")&&!(actionGroup==1&&whichStep==4)){
                 $("#loading-status").show();
             }else{
                 $("#loading-status").hide();
@@ -194,8 +204,10 @@ function Initialization(){
             //当动作为创建发布事件且成功时，发布准备可点
             if(whichStep==0)
             {
-                if(actionState=="true")
+                if(actionState=="true") {
                     $("#btn1").attr('disabled', false);
+                    $("#btn1").addClass("btn-info");
+                }
                 return;
             }
             //动作为此阶段最后一步完成 下一步按钮可点
@@ -210,16 +222,20 @@ function Initialization(){
                     actionGroup = actionGroup - 1 + 2;
                     if (actionGroup == 4) {
                         $("#btn_ConfirmResult").attr('disabled', false);
+                        $("#btn_ConfirmResult").addClass("btn-info")
                         $("#btn4").attr('disabled', false);
+                        $("#btn4").addClass("btn-info");
                         $("#step" + (3)).hide();
                     }
                     for (var i = 1; i < 4; i++) {
                         if (i == actionGroup) {
                             $("#btn" + i).attr('disabled', false);
+                            $("#btn"+i).addClass("btn-info");
                             $("#step" + (i - 1)).hide();
                         }
                         else {
                             $("#btn" + i).attr('disabled', true);
+                            $("#btn4").removeClass("btn-info");
                         }
                     }
                     return;
@@ -276,7 +292,6 @@ function Initialization(){
             $("#processbar" + actionGroup).setStep(whichStep);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            //alert("很抱歉，获取进度失败，原因：" + errorThrown);
             $.notify({
                 icon: '',
                 message: "很抱歉，获取进度失败，原因"+ errorThrown
