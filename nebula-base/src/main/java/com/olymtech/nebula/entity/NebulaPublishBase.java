@@ -12,6 +12,16 @@ public class NebulaPublishBase extends BaseDO{
 
     private String publishModuleKey;
 
+    public NebulaPublishBase(){
+        super();
+    }
+
+    public NebulaPublishBase(String publishProductName,String publishModuleName,String publishProductEnv){
+        this.publishProductName = publishProductName;
+        this.publishModuleName = publishModuleName;
+        this.publishProductEnv = publishProductEnv;
+    }
+
     public String getPublishProductEnv() {
         return publishProductEnv;
     }
