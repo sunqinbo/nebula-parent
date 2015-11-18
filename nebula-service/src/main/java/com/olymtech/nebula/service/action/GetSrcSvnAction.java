@@ -37,20 +37,20 @@ public class GetSrcSvnAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, event.getPublishActionGroup(), null, "");
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
         SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SrcSvnUsername, SrcSvnPassword);
         try{
             Boolean svnResult = SvnUtils.checkout(svnClientManager, svnUrl, MasterDeployDir + event.getPublishProductKey() + "/src_svn/");
             if(svnResult){
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, true, "");
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, null, "");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, event.getPublishActionGroup(), true, "");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_ETC, event.getPublishActionGroup(), null, "");
                 return true;
             }
         }catch (Exception e){
             logger.error("GetPublishSvnAction error:",e);
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, PublishActionGroup.PRE_MASTER, false, "error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, event.getPublishActionGroup(), false, "error message");
         return false;
     }
 

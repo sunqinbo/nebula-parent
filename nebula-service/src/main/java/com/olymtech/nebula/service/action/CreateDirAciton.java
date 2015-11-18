@@ -52,7 +52,7 @@ public class CreateDirAciton extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, null ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), null ,"");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -85,17 +85,17 @@ public class CreateDirAciton extends AbstractAction {
                         nebulaPublishHost.setActionResult(entry.getValue().toString());
                         nebulaPublishHost.setIsSuccessAction(false);
                         publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), false ,"error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, false ,"error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), false ,"error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, PublishActionGroup.PRE_MINION, true ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), true ,"");
         return true;
     }
 

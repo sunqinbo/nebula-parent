@@ -58,7 +58,7 @@ public class PublishRelationAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), null, "");
         String publicWarDirPath = MasterDeployDir+"/"+event.getPublishProductKey()+"/publish_war/";
         List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
         String appNames = "";
@@ -108,13 +108,13 @@ public class PublishRelationAction extends AbstractAction {
                 modules.add(nebulaPublishModule);
             }
             event.setPublishModules(modules);
-            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), true, "");
             return true;
         } catch (Exception e) {
-            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, false, "error message");
+            publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "error message");
             logger.error("PublishRelationAction error:",e);
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, PublishActionGroup.PRE_MASTER, false, "error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "error message");
         return false;
     }
 

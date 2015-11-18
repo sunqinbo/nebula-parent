@@ -42,7 +42,7 @@ public class UpdateSrcSvnAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, PublishActionGroup.SUCCESS_END, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, event.getPublishActionGroup(), null, "");
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
         SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SrcSvnUsername, SrcSvnPassword);
         try{
@@ -54,7 +54,7 @@ public class UpdateSrcSvnAction extends AbstractAction {
                 if(commitCallback.equals("EMPTY COMMIT")){
                     logger.error(MasterDeployDir + event.getPublishProductKey() + "/src_svn/"+"  is empty commit");
                 }else{
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, PublishActionGroup.SUCCESS_END, true, commitInfo.toString());
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, event.getPublishActionGroup(), true, commitInfo.toString());
 
                     /** 记录 svn base */
                     NebulaPublishSvnBaseline publishSvnBaseline = new NebulaPublishSvnBaseline(event.getPublishProductName(),event.getPublishEnv(),event.getProductSrcSvn(),event.getId(),commitCallback);
@@ -65,7 +65,7 @@ public class UpdateSrcSvnAction extends AbstractAction {
         }catch (Exception e){
             logger.error("UpdateSrcSvnAction error:",e);
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, PublishActionGroup.SUCCESS_END, false, "commit error");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, event.getPublishActionGroup(), false, "commit error");
         return false;
     }
 

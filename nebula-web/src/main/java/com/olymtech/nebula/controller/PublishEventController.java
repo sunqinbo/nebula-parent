@@ -116,6 +116,7 @@ public class PublishEventController extends BaseController{
         }
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+        nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PRE_MASTER);
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(GetPublishSvnAction.class));
@@ -141,6 +142,7 @@ public class PublishEventController extends BaseController{
         }
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+        nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PRE_MINION);
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(CreateDirAciton.class));
@@ -168,6 +170,7 @@ public class PublishEventController extends BaseController{
         }
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+        nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PUBLISH_REAL);
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
@@ -244,9 +247,10 @@ public class PublishEventController extends BaseController{
         try {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            publishEvent.setPublishActionGroup(PublishActionGroup.SUCCESS_END);
             //创建任务队列
             ActionChain chain = new ActionChain();
-            chain.addAction(SpringUtils.getBean(ClearHistoryDirAction.class));
+            chain.addAction(SpringUtils.getBean(CleanHistoryDirAction.class));
             chain.addAction(SpringUtils.getBean(UpdateSrcSvnAction.class));
             chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
 
@@ -284,6 +288,7 @@ public class PublishEventController extends BaseController{
         try {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            publishEvent.setPublishActionGroup(PublishActionGroup.FAIL_END);
             //创建任务队列
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(StopTomcatAction.class));

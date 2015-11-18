@@ -19,6 +19,7 @@ import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.Map;
 /**
  * @author taoshanchang 15/11/18
  */
+@Service
 public class CleanFailDirAction extends AbstractAction {
     @Autowired
     private ISaltStackService saltStackService;
@@ -46,7 +48,7 @@ public class CleanFailDirAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.FAIL_END, null, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_FAIL_DIR, event.getPublishActionGroup(), null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -80,18 +82,18 @@ public class CleanFailDirAction extends AbstractAction {
                         nebulaPublishHost.setActionResult(entry.getValue().toString());
                         nebulaPublishHost.setIsSuccessAction(false);
                         publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.FAIL_END, false, "error message");
+                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_FAIL_DIR, event.getPublishActionGroup(), false, "error message");
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
 
             } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.FAIL_END, false, "error message");
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_FAIL_DIR, event.getPublishActionGroup(), false, "error message");
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, PublishActionGroup.FAIL_END, true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_FAIL_DIR, event.getPublishActionGroup(), true, "");
         return true;
     }
 

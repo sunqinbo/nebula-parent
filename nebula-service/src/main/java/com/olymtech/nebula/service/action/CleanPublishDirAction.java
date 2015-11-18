@@ -40,6 +40,7 @@ public class CleanPublishDirAction extends AbstractAction {
             Boolean result = deleteDir(tmpDir);
             if(result){
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_PUBLISH_DIR, PublishActionGroup.CLEAN_END, true, "清除发布目录成功");
+                return true;
             }
         }catch (Exception e){
             logger.error("CleanPublishDirAction error:",e);
