@@ -27,9 +27,9 @@ public class PublishListController extends BaseController {
     @RequestMapping(value = {"/PublishList"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object PublishList(DataTablePage dataTablePage) {
-        NebulaPublishEvent nebulaPublishEvent=new NebulaPublishEvent();
+        NebulaPublishEvent nebulaPublishEvent = new NebulaPublishEvent();
 //        List<NebulaPublishEvent> nebulaPublishEvents= publishEventService.getPublishEvent(dataTablePage);
-        PageInfo pageInfo=publishEventService.getPublishEvent(dataTablePage);
+        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage);
         return pageInfo;
     }
 }

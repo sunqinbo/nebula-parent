@@ -1,7 +1,5 @@
 package com.olymtech.nebula.controller;
 
-import com.olymtech.nebula.dao.IAclUserRoleDao;
-import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.AclUserRole;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.service.IAclUserRoleService;
@@ -27,32 +25,32 @@ public class AclUserRoleController extends BaseController{
             aclUserRoleService.insertAclUserRole(aclUserRole);
             return returnCallback("Success","插入用户角色成功");
         } catch (Exception e) {
-            logger.error("insertAclPermission error:", e);
+            logger.error("insertAclUserRole error:", e);
         }
-        return returnCallback("Error", "插入权限失败");
+        return returnCallback("Error", "插入用户角色失败");
     }
 
 
-//    @RequestMapping(value = "permission/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
-//    public Callback deleteAclPermission(Integer id) {
-//        try {
-//            aclUserRoleDao.deleteAclPermissionById(id);
-//            return returnCallback("Success", "删除权限成功");
-//        } catch (Exception e) {
-//            logger.error("deleteAclPermission error:", e);
-//        }
-//        return returnCallback("Error", "删除权限失败");
-//    }
-//
-//    @RequestMapping(value = "permission/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
-//    public Callback updateAclPermission(AclPermission permission) {
-//        try {
-//            permissionService.updateAclPermission(permission);
-//            return returnCallback("Success", "更新权限成功");
-//        }catch (Exception e) {
-//            logger.error("updateAclPermission error:", e);
-//        }
-//        return returnCallback("Error","更新权限失败");
-//    }
+    @RequestMapping(value = "userRole/deleteAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public Callback deleteAclUserRole(Integer id) {
+        try {
+            aclUserRoleService.deleteAclUserRoleById(id);
+            return returnCallback("Success", "删除用户角色成功");
+        } catch (Exception e) {
+            logger.error("deleteAclUserRoleById error:", e);
+        }
+        return returnCallback("Error", "删除用户角色失败");
+    }
+
+    @RequestMapping(value = "userRole/updateAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public Callback updateAclUserRole(AclUserRole aclUserRole) {
+        try {
+            aclUserRoleService.updateAclUserRole(aclUserRole);
+            return returnCallback("Success", "更新用户角色成功");
+        }catch (Exception e) {
+            logger.error("updateAclUserRole error:", e);
+        }
+        return returnCallback("Error","更新用户角色失败");
+    }
 
 }

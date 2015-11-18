@@ -4,7 +4,10 @@
  */
 package com.olymtech.nebula.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.INebulaUserInfoDao;
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,5 +51,28 @@ public class UserServiceImpl implements IUserService {
         permissions.add("add");
         permissions.add("delete");
         return permissions;
+    }
+
+    @Override
+    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo) {
+        return nebulaUserInfoDao.insert(nebulaUserInfo);
+    }
+
+    @Override
+    public void deleteNebulaUserInfo(Integer id) {
+        nebulaUserInfoDao.deleteById(id);
+    }
+
+    @Override
+    public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo) {
+        nebulaUserInfoDao.update(nebulaUserInfo);
+    }
+
+    @Override
+    public PageInfo getPageInfoAclUser(DataTablePage dataTablePage) {
+        PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
+        List<NebulaUserInfo> users = nebulaUserInfoDao.selectAllPaging(new NebulaUserInfo());
+        PageInfo pageInfo = new PageInfo(users);
+        return pageInfo;
     }
 }

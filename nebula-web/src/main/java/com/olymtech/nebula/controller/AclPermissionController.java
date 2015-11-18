@@ -1,13 +1,17 @@
 package com.olymtech.nebula.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.Callback;
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.service.IAclPermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by WYQ on 2015/11/17.
@@ -51,6 +55,13 @@ public class AclPermissionController extends BaseController {
         }
         return returnCallback("Error","更新权限失败");
     }
+
+    @RequestMapping(value = "permission/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    public Object selectAllPagingPermission(DataTablePage dataTablePage) {
+        PageInfo pageInfo = permissionService.getPageInfoAclPermission(dataTablePage);
+        return pageInfo;
+    }
+
 
 
 }

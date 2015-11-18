@@ -4,6 +4,8 @@
  */
 package com.olymtech.nebula.service;
 
+import com.github.pagehelper.PageInfo;
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 
 import java.util.Set;
@@ -19,4 +21,12 @@ public interface IUserService {
     Set<String> findRoles(String username);
 
     Set<String> findPermissions(String username);
+
+    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo);
+
+    public void deleteNebulaUserInfo(Integer id);
+
+    public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo);
+
+    public PageInfo getPageInfoAclUser(DataTablePage dataTablePage);
 }
