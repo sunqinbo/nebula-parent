@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.olymtech.nebula.dao.INebulaPublishBaseDao;
 import com.olymtech.nebula.entity.NebulaPublishBase;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.trilead.ssh2.packets.PacketUserauthBanner;
 import org.slf4j.Logger;
@@ -47,6 +48,21 @@ public class PublishBaseServiceImpl implements IPublishBaseService {
             logger.error("selectLastModuleKeyByPublishEvent error:",e);
         }
         return publishKey;
+    }
+
+    @Override
+    public String checkoutHistoryDirKey(NebulaPublishEvent event, NebulaPublishModule module){
+        String historyDirKey = null;
+        NebulaPublishBase publishBase = new NebulaPublishBase(event.getPublishProductName(),module.getPublishModuleName(),event.getPublishEnv());
+        List<NebulaPublishBase> nebulaPublishBases = nebulaPublishBaseDao.selectAllPaging(publishBase);
+        /** 如果空，则返回空*/
+        if(nebulaPublishBases == null){
+            return historyDirKey;
+        }
+        if(nebulaPublishBases.size() >=6){
+            historyDirKey = nebulaPublishBases.get(5).getPublishModuleKey();
+        }
+        return historyDirKey;
     }
 
 }

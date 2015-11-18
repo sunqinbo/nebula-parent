@@ -3,11 +3,7 @@ package com.olymtech.nebula.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.INebulaPublishEventDao;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.NebulaPublishApp;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.entity.NebulaPublishHost;
-import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.*;
@@ -45,6 +41,9 @@ public class PublishEventServiceImpl implements IPublishEventService {
 
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Autowired
+    private IPublishBaseService publishBaseService;
 
 
     @Override
@@ -110,18 +109,5 @@ public class PublishEventServiceImpl implements IPublishEventService {
         }
         return result;
     }
-
-    @Override
-    public String checkoutHistoryDirKey(NebulaPublishEvent event, NebulaPublishModule module){
-        String historyDirKey = "";
-        return historyDirKey;
-    }
-
-    @Override
-    public String checkoutLastDirKey(NebulaPublishEvent event, NebulaPublishModule module){
-        String lastDirKey = "";
-        return lastDirKey;
-    }
-
 
 }
