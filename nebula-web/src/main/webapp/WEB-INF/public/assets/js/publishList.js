@@ -34,7 +34,7 @@ $(document).ready(function(){
                         }
                         $("tbody").html(tbString);
                         $("#pageSort").html(pageSortString);
-                        sortNum=pageNum;
+                        var sortNum=pageNum;
                         $(".pagination>li").each(function(){
                             if(pageNum+""==$(this).text())
                                 $(this).addClass("active");
