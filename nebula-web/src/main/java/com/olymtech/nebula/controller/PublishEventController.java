@@ -262,6 +262,11 @@ public class PublishEventController extends BaseController{
                         publishModule.getPublishModuleKey());
                 publishBaseService.insertAndUpdate(publishBase);
             }
+
+            /** 更新事件单为 成功发布 */
+            publishEvent.setIsSuccessPublish(true);
+            publishEventService.update(publishEvent);
+
             return returnCallback("Success","成功发布确认成功");
         }catch (Exception e){
             logger.error("publishSuccessEnd error:",e);
@@ -289,6 +294,10 @@ public class PublishEventController extends BaseController{
 
             Dispatcher dispatcher = new Dispatcher(chain,request,response);
             dispatcher.doDispatch(publishEvent);
+
+            /** 更新事件单为 失败发布 */
+            publishEvent.setIsSuccessPublish(false);
+            publishEventService.update(publishEvent);
 
             return returnCallback("Success","失败发布确认成功");
         }catch (Exception e){

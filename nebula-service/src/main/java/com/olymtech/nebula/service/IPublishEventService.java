@@ -11,6 +11,8 @@ import com.olymtech.nebula.entity.NebulaPublishModule;
  */
 public interface IPublishEventService {
 
+    public void update(NebulaPublishEvent nebulaPublishEvent);
+
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent);
 
     public BaseDO getPublishEventById(Integer id);

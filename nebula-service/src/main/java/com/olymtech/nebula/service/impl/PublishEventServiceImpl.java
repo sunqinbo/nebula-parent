@@ -47,6 +47,11 @@ public class PublishEventServiceImpl implements IPublishEventService {
 
 
     @Override
+    public void update(NebulaPublishEvent nebulaPublishEvent){
+        nebulaPublishEventDao.update(nebulaPublishEvent);
+    }
+
+    @Override
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         Date now = new Date();
         String dateKey = getKeyDate(now);

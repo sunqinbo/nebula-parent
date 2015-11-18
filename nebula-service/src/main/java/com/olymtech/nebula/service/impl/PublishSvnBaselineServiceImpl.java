@@ -10,12 +10,14 @@ import com.olymtech.nebula.service.IPublishSvnBaselineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Gavin on 2015-11-18 10:49.
  */
+@Service
 public class PublishSvnBaselineServiceImpl implements IPublishSvnBaselineService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
