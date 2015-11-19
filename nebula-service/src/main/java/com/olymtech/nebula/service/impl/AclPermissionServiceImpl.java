@@ -46,4 +46,9 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
         PageInfo pageInfo = new PageInfo(permissions);
         return pageInfo;
     }
+
+    @Override
+    public List<AclPermission> getPermissions() {
+        return aclPermissionDao.selectAllPaging(new AclPermission());
+    }
 }

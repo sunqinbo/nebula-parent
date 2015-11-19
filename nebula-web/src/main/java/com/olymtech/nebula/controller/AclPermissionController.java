@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.zNode;
 import com.olymtech.nebula.service.IAclPermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +68,21 @@ public class AclPermissionController extends BaseController {
         return pageInfo;
     }
 
-
+    @RequestMapping(value = "/permission/selectPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object selectPermission() {
+        List<AclPermission> aclPermissions=permissionService.getPermissions();
+        List<zNode> zNodes=new ArrayList<>();
+        for (AclPermission aclPermission:aclPermissions) {
+            zNode znode =new zNode();
+            znode.setName(aclPermission.getPermissionCname());
+            znode.setId(aclPermission.getId());
+            znode.setPid(aclPermission.getPid());
+            znode.setOpen(true);
+            zNodes.add(znode);
+        }
+        return zNodes;
+    }
 
 }
 
