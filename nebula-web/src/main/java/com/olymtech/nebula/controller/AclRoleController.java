@@ -1,17 +1,24 @@
 package com.olymtech.nebula.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.olymtech.nebula.dao.IAclPermissionDao;
+import com.olymtech.nebula.dao.IAclRolePermissionDao;
+import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.service.IAclPermissionService;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Created by WYQ on 2015/11/18.
@@ -25,9 +32,9 @@ public class AclRoleController extends BaseController {
 
     @RequestMapping(value = "/role/insertAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Callback insertAclRole(AclRole aclRole) {
+    public Callback insertAclRole(AclRole aclRole,@RequestParam("permissionIds[]") List<Integer> permissionIds) {
         try {
-            aclRoleService.insertAclRole(aclRole);
+            aclRoleService.insertAclRole(aclRole, permissionIds);
             return returnCallback("Success", "插入角色成功");
         } catch (Exception e) {
             logger.error("insertAclRole error", e);
@@ -51,7 +58,7 @@ public class AclRoleController extends BaseController {
     @ResponseBody
     public Callback updateAclRole(AclRole aclRole) {
         try {
-            aclRoleService.updateAclRole(aclRole);
+//            aclRoleService.updateAclRole(aclRole);
             return returnCallback("Success", "更新角色成功");
         } catch (Exception e) {
             logger.error("updateAclRole error", e);

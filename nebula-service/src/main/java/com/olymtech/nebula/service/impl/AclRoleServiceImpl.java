@@ -3,7 +3,9 @@ package com.olymtech.nebula.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.IAclRoleDao;
+import com.olymtech.nebula.dao.IAclRolePermissionDao;
 import com.olymtech.nebula.entity.AclRole;
+import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.slf4j.Logger;
@@ -11,20 +13,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.ws.ResponseWrapper;
 import java.util.List;
 
 /**
  * Created by WYQ on 2015/11/18.
  */
-@Service("aclRoleServiceImpl")
+@Service
 public class AclRoleServiceImpl implements IAclRoleService{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private IAclRoleDao aclRoleDao;
 
+    @Resource
+    private IAclRolePermissionDao aclRolePermissionDao;
+
     @Override
-    public int insertAclRole(AclRole aclRole) {
+    public int insertAclRole(AclRole aclRole, List<Integer> permissionIds) {
+        for (Integer permissionId : permissionIds) {
+            AclRolePermission aclRolePermission = new AclRolePermission();
+            aclRolePermission.setRoleId(aclRole.getId());
+            aclRolePermission.setPermissionId(permissionId);
+            aclRolePermissionDao.insert(aclRolePermission);
+        }
         return aclRoleDao.insert(aclRole);
     }
 
@@ -34,7 +46,11 @@ public class AclRoleServiceImpl implements IAclRoleService{
     }
 
     @Override
-    public void updateAclRole(AclRole aclRole) {
+    public void updateAclRole(AclRole aclRole,List<Integer> permissionIds) {
+        AclRolePermission aclRolePermission = aclRolePermissionDao.selectById(aclRole.getId());
+        for(Integer permissionId : permissionIds) {
+            aclRoleDao.selectById(aclRole.getId());
+        }
         aclRoleDao.update(aclRole);
     }
 

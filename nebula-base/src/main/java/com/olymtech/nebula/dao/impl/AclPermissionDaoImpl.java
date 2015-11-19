@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Created by Gavin on 2015-11-10 00:48.
  */
 
-@Repository("aclPermissionDao")
+@Repository
 public class AclPermissionDaoImpl extends BaseDaoImpl<AclPermission,Integer> implements IAclPermissionDao {
 
 

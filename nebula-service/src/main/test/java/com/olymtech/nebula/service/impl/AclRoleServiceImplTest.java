@@ -2,8 +2,10 @@ package com.olymtech.nebula.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclRole;
+import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.service.IAclRoleService;
+import org.apache.log4j.pattern.LineSeparatorPatternConverter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,12 +15,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by WYQ on 2015/11/18.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
 public class AclRoleServiceImplTest {
 
@@ -37,9 +41,16 @@ public class AclRoleServiceImplTest {
 
     @Test
     public void testInsertAclRole() throws Exception {
+        AclRolePermission aclRolePermission = new AclRolePermission();
         AclRole aclRole = new AclRole();
-        aclRole.setRoleName("bbb");
-        aclRoleService.insertAclRole(aclRole);
+        List<Integer> permissionIds = new ArrayList<>();
+        permissionIds.add(111);
+        permissionIds.add(121);
+        permissionIds.add(131);
+        aclRole.setId(10);
+
+        aclRoleService.insertAclRole(aclRole, permissionIds);
+
     }
 
     @Test
@@ -49,10 +60,10 @@ public class AclRoleServiceImplTest {
 
     @Test
     public void testUpdateAclRole() throws Exception {
-        AclRole aclRole = new AclRole();
-        aclRole.setId(2);
-        aclRole.setRoleName("ddd");
-        aclRoleService.updateAclRole(aclRole);
+//        AclRole aclRole = new AclRole();
+//        aclRole.setId(2);
+//        aclRole.setRoleName("ddd");
+//        aclRoleService.updateAclRole(aclRole);
     }
 
     @Test
