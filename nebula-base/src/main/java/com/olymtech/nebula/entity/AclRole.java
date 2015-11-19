@@ -1,5 +1,7 @@
 package com.olymtech.nebula.entity;
 
+import java.util.List;
+
 public class AclRole extends BaseDO{
 
     private String roleName;
@@ -9,6 +11,8 @@ public class AclRole extends BaseDO{
     private String roleDesc;
 
     private Boolean isEnable;
+
+    private List<AclPermission> aclPermissions;
 
     public String getRoleCname() {
         return roleCname;
@@ -40,5 +44,13 @@ public class AclRole extends BaseDO{
 
     public void setRoleDesc(String roleDesc) {
         this.roleDesc = roleDesc == null ? null : roleDesc.trim();
+    }
+
+    public List<AclPermission> getAclPermissions() {
+        return aclPermissions;
+    }
+
+    public void setAclPermissions(List<AclPermission> aclPermissions) {
+        this.aclPermissions = aclPermissions;
     }
 }
