@@ -77,8 +77,8 @@ public class AclPermissionController extends BaseController {
             zNode znode =new zNode();
             znode.setName(aclPermission.getPermissionCname());
             znode.setId(aclPermission.getId());
-            znode.setPid(aclPermission.getPid());
-            znode.setOpen(true);
+            znode.setpId(aclPermission.getPid());
+//            znode.setOpen(true);
             zNodes.add(znode);
         }
         return zNodes;

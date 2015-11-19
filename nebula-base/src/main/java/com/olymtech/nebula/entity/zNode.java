@@ -4,16 +4,16 @@ package com.olymtech.nebula.entity;
  * Created by liwenji on 2015/11/19.
  */
 public class zNode extends BaseDO{
-    private Integer pid;
+    private Integer pId;
     private String name;
     private boolean open;
 
-    public Integer getPid() {
-        return pid;
+    public Integer getpId() {
+        return pId;
     }
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
+    public void setpId(Integer pId) {
+        this.pId = pId;
     }
 
     public String getName() {
