@@ -31,13 +31,14 @@ public class AclRoleServiceImpl implements IAclRoleService{
 
     @Override
     public int insertAclRole(AclRole aclRole, List<Integer> permissionIds) {
+        Integer id = aclRoleDao.insert(aclRole);
         for (Integer permissionId : permissionIds) {
             AclRolePermission aclRolePermission = new AclRolePermission();
-            aclRolePermission.setRoleId(aclRole.getId());
+            aclRolePermission.setRoleId(id);
             aclRolePermission.setPermissionId(permissionId);
             aclRolePermissionDao.insert(aclRolePermission);
         }
-        return aclRoleDao.insert(aclRole);
+        return id;
     }
 
     @Override
@@ -47,9 +48,10 @@ public class AclRoleServiceImpl implements IAclRoleService{
 
     @Override
     public void updateAclRole(AclRole aclRole,List<Integer> permissionIds) {
-        AclRolePermission aclRolePermission = aclRolePermissionDao.selectById(aclRole.getId());
         for(Integer permissionId : permissionIds) {
-            aclRoleDao.selectById(aclRole.getId());
+            for (int i = 0; i < permissionIds.size(); i++) {
+//                if (permissionId==)
+            }
         }
         aclRoleDao.update(aclRole);
     }
