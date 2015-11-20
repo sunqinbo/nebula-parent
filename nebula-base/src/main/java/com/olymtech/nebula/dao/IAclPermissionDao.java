@@ -10,5 +10,5 @@ import com.olymtech.nebula.entity.AclPermission;
  * Created by Gavin on 2015-11-10 00:47.
  */
 public interface IAclPermissionDao extends IBaseDao<AclPermission,Integer> {
-
+    public AclPermission selectById(Integer id);
 }

@@ -13,8 +13,11 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public class AclPermissionDaoImpl extends BaseDaoImpl<AclPermission,Integer> implements IAclPermissionDao {
+public class AclPermissionDaoImpl extends BaseDaoImpl<AclPermission, Integer> implements IAclPermissionDao {
 
-
+    @Override
+    public AclPermission selectById(Integer id) {
+        return getSqlSession().selectOne(CLASS_NAME + "-Select-By-Id", id);
+    }
 
 }

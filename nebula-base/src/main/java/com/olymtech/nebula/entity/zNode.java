@@ -7,6 +7,7 @@ public class zNode extends BaseDO{
     private Integer pId;
     private String name;
     private boolean open;
+    private boolean checked;
 
     public Integer getpId() {
         return pId;
@@ -30,5 +31,13 @@ public class zNode extends BaseDO{
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

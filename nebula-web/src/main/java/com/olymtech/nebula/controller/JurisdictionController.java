@@ -43,7 +43,8 @@ public class JurisdictionController extends BaseController {
     public String editRole(Model model,Integer id){
 //        AclRole aclRole=aclRoleService.
 //                model.addAttribute("productTrees");
-        return "event/publishEvent";
+        model.addAttribute("edit",true);
+        return "event/createRole";
     }
 
 }
