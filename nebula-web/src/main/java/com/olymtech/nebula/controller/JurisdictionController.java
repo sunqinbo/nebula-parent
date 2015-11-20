@@ -41,9 +41,8 @@ public class JurisdictionController extends BaseController {
 
     @RequestMapping(value="/editRole.html",method= {RequestMethod.POST,RequestMethod.GET})
     public String editRole(Model model,Integer id){
-//        AclRole aclRole=aclRoleService.
-//                model.addAttribute("productTrees");
         model.addAttribute("edit",true);
+        model.addAttribute("id",id);
         return "event/createRole";
     }
 

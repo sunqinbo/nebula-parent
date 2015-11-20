@@ -6,9 +6,11 @@ import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.zNode;
 import com.olymtech.nebula.service.IAclPermissionService;
+import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -24,6 +26,9 @@ public class AclPermissionController extends BaseController {
 
     @Resource
     private IAclPermissionService permissionService;
+
+    @Resource
+    private IAclRoleService aclRoleService;
 
     @RequestMapping(value = "/permission/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -70,18 +75,12 @@ public class AclPermissionController extends BaseController {
 
     @RequestMapping(value = "/permission/selectPermission", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object selectPermission() {
-        List<AclPermission> aclPermissions=permissionService.getPermissions();
-        List<zNode> zNodes=new ArrayList<>();
-        for (AclPermission aclPermission:aclPermissions) {
-            zNode znode =new zNode();
-            znode.setName(aclPermission.getPermissionCname());
-            znode.setId(aclPermission.getId());
-            znode.setpId(aclPermission.getPid());
-//            znode.setOpen(false);
-//            znode.setChecked(false);
-            zNodes.add(znode);
+    public Object selectPermission(Integer id) {
+        List<AclPermission> permissionList=new ArrayList<>();
+        if(id!=null) {
+            permissionList = aclRoleService.getAclRoleWithPermissionsByRoleId(id).getAclPermissions();
         }
+        List<zNode> zNodes=permissionService.getzNodes(permissionList);
         return zNodes;
     }
 
