@@ -23,7 +23,7 @@ public class SaltTest {
 
     @Before
     public void init() throws Exception {
-        service = new SaltStackServiceImpl();
+        //service = new SaltStackServiceImpl();
     }
 
     @Test

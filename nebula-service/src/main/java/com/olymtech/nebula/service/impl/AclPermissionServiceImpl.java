@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.IAclPermissionDao;
 import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.zNode;
 import com.olymtech.nebula.service.IAclPermissionService;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.security.Permission;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,5 +53,31 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
     @Override
     public List<AclPermission> getPermissions() {
         return aclPermissionDao.selectAllPaging(new AclPermission());
+    }
+
+    @Override
+    public List<zNode> getzNodes(List<AclPermission> permissionList) {
+        List<AclPermission> aclPermissions=aclPermissionDao.selectAllPaging(new AclPermission());
+        List<zNode> zNodes=new ArrayList<>();
+        for (AclPermission aclPermission:aclPermissions) {
+            zNode znode =new zNode();
+            znode.setName(aclPermission.getPermissionCname());
+            znode.setId(aclPermission.getId());
+            znode.setpId(aclPermission.getPid());
+            //若为编辑角色，角色已有权限，则打开已有权限的父节点，勾选子节点
+            if(permissionList.size()>0) {
+                for (AclPermission aclPermissionhas : permissionList) {
+                    if (aclPermission.getId() == aclPermissionhas.getId()) {
+                        znode.setChecked(true);
+                    }
+                    if (aclPermission.getId() == aclPermissionhas.getPid()) {
+                        znode.setOpen(true);
+                        znode.setChecked(true);
+                    }
+                }
+            }
+            zNodes.add(znode);
+        }
+        return zNodes;
     }
 }

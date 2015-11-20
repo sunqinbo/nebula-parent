@@ -1,33 +1,4 @@
 $(function(){
-    //$("#submit").click(function(){
-    //    $.ajax({
-    //        type: "POST",
-    //        url:"/userRole/insertAclUserRole.htm",
-    //        data:$('#insertform').serialize(),
-    //        async: false,
-    //        success: function(data) {
-    //            $.notify({
-    //                icon: '',
-    //                message: "��ӽ�ɫ�ɹ�"
-    //
-    //            },{
-    //                type: 'info',
-    //                timer: 1000
-    //            });
-    //        },
-    //        error: function(request) {
-    //            $.notify({
-    //                icon: '',
-    //                message: "��ӽ�ɫʧ��"+ errorThrown
-    //
-    //            },{
-    //                type: 'info',
-    //                timer: 1000
-    //            });
-    //        }
-    //    });
-    //})
-
     //var setting = {
     //    isSimpleData : true,              //数据是否采用简单 Array 格式，默认false
     //    treeNodeKey : "id",               //在isSimpleData格式下，当前节点id属性
@@ -35,6 +6,43 @@ $(function(){
     //    showLine : true,                  //是否显示节点间的连线
     //    checkable : true                  //每个节点上是否显示 CheckBox
     //};
+    var permissionList;
+    //为编辑页面时
+    $("#save").hide();
+    if($("#isEdit").val()!=""){
+        $.ajax({
+            async: false,
+            type:"post",
+            data:{"roleId":$("#roleId").val()},
+            url:"/role/getAclRoleWithPermissionsByRoleId",
+            datatype:"json",
+            success: function (data) {
+                $("#roleName").val(data["roleName"]);
+                $("#roleCname").val(data["roleCname"]);
+                $("#roleDesc").val(data["roleDesc"]);
+                permissionList=data["aclPermissions"];
+                if(data["isEnable"]==1) {
+                    $("#enableRadio").attr("checked", true);
+                }
+                else
+                    $("#unenableRadio").attr("checked", true);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.notify({
+                    icon: '',
+                    message: "很抱歉载入角色信息失败，原因"+ errorThrown
+
+                },{
+                    type: 'info',
+                    timer: 1000
+                });
+            }
+        });
+        $("#submit").hide();
+        $("#save").show();
+    }
+
+    //zTree的配置
     var checkSetting =
     {
         check: {
@@ -55,8 +63,13 @@ $(function(){
     };
 
     var zNodes;
+    //查询权限列表，放入zTree
     $.ajax({
+        async: false,
         type:"post",
+        data:{
+            "id":$("#roleId").val()
+        },
         url:"/permission/selectPermission",
         datatype:"json",
         success: function (data) {
@@ -74,58 +87,78 @@ $(function(){
             });
         }
     });
+
+    //提交按钮
     $("#submit").click(function(){
-        var treeObj = $.fn.zTree.getZTreeObj("permissionList");
-        var nodes=treeObj.getCheckedNodes();
-        //var childNodes = treeObj.transformTozTreeNodes(nodes);
-        //var nodes1 = new Array();
-        //for(i = 0; i < childNodes.length; i++) {
-        //    nodes1[i] = childNodes[i].id;
-        //}
-        var permissionIds=[];
-        for(var i=0;i<nodes.length;i++){
-            if(nodes[i]["pId"]!=null)
-                permissionIds.push(nodes[i]["id"]);
-        }
-        var isEnable=$('#isEnable input[name="isEnable"]:checked ').val();
-        var roleName=$("#roleName").val();
-        var roleCname=$("#roleCname").val();
-        var roleDesc=$("#roleDesc").val();
-        $.ajax({
-            type:"post",
-            url:"/role/insertAclRole.htm",
-            data:{
-                "isEnable":isEnable,
-                "roleName":roleName,
-                "roleCname":roleCname,
-                "roleDesc":roleDesc,
-                "permissionIds":permissionIds,
-            },
-            datatype:"json",
-            success: function (data) {
-                $.notify({
-                    icon: '',
-                    message: "新增角色成功"
-
-                },{
-                    type: 'info',
-                    timer: 1000
-                });
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "很抱歉新增角色失败，原因"+ errorThrown
-
-                },{
-                    type: 'info',
-                    timer: 1000
-                });
-            }
-        })
+        btnClick(true);
     });
+
+    //保存按钮
+    $("#save").click(function(){
+        btnClick(false);
+    });
+    //zTree结点点击控制选中
     function onClick(e,treeId, treeNode) {
         var zTree = $.fn.zTree.getZTreeObj("permissionList");
         zTree.checkNode(treeNode,"",true,false);
     }
+
+
 })
+
+function btnClick(isCreate){
+    var treeObj = $.fn.zTree.getZTreeObj("permissionList");
+    var nodes=treeObj.getCheckedNodes();
+    var permissionIds=[];
+    for(var i=0;i<nodes.length;i++){
+        if(nodes[i]["pId"]!=null)
+            permissionIds.push(nodes[i]["id"]);
+    }
+    var isEnable=$('#isEnable input[name="isEnable"]:checked ').val();
+    var roleName=$("#roleName").val();
+    var roleCname=$("#roleCname").val();
+    var roleDesc=$("#roleDesc").val();
+    var url,tips;
+    if(isCreate){
+        url="/role/insertAclRole.htm";
+        tips="新增";
+    }
+    else{
+        url="/role/updateAclRole.htm";
+        tips="修改";
+    }
+
+    $.ajax({
+        type:"post",
+        url:url,
+        data:{
+            "id":$("#roleId").val(),
+            "isEnable":isEnable,
+            "roleName":roleName,
+            "roleCname":roleCname,
+            "roleDesc":roleDesc,
+            "permissionIds":permissionIds,
+        },
+        datatype:"json",
+        success: function (data) {
+            $.notify({
+                icon: '',
+                message: tips+"角色成功"
+
+            },{
+                type: 'info',
+                timer: 1000
+            });
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $.notify({
+                icon: '',
+                message: "很抱歉"+tips+"角色失败，原因"+ errorThrown
+
+            },{
+                type: 'info',
+                timer: 1000
+            });
+        }
+    })
+}

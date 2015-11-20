@@ -24,6 +24,17 @@ public class UserController extends BaseController {
     @Resource
     private IUserService userService;
 
+    @RequestMapping(value="/createUser.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String createUser (){
+        return "event/createUser";
+    }
+
+    @RequestMapping(value="/userList.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String userList (){
+        return "event/userList";
+    }
+
+
     @RequestMapping(value = "/user/insertUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") List<Integer> roleIds) {
