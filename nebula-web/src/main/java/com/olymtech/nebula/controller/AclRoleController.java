@@ -56,9 +56,9 @@ public class AclRoleController extends BaseController {
 
     @RequestMapping(value = "/role/updateAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Callback updateAclRole(AclRole aclRole) {
+    public Callback updateAclRole(AclRole aclRole,List<Integer> permissionIds) {
         try {
-//            aclRoleService.updateAclRole(aclRole);
+            aclRoleService.updateAclRole(aclRole,permissionIds);
             return returnCallback("Success", "更新角色成功");
         } catch (Exception e) {
             logger.error("updateAclRole error", e);
@@ -71,6 +71,12 @@ public class AclRoleController extends BaseController {
     public Object selectAllPagingRole(DataTablePage dataTablePage) {
         PageInfo pageInfo = aclRoleService.getPageInfoAclRole(dataTablePage);
         return pageInfo;
+    }
+
+    @RequestMapping(value = "/role/getAclRoleWithPermissionsByRoleId", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object getAclRoleWithPermissionsByRoleId(Integer roleId) {
+        return aclRoleService.getAclRoleWithPermissionsByRoleId(roleId);
     }
 }
 

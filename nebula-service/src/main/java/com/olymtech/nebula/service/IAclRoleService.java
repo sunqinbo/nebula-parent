@@ -18,4 +18,6 @@ public interface IAclRoleService {
     public void updateAclRole(AclRole aclRole, List<Integer> permissionIds);
 
     public PageInfo getPageInfoAclRole(DataTablePage dataTablePage);
+
+    public AclRole getAclRoleWithPermissionsByRoleId(Integer roleId);
 }

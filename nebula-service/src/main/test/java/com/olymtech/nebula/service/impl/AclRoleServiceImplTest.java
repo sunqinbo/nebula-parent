@@ -60,10 +60,15 @@ public class AclRoleServiceImplTest {
 
     @Test
     public void testUpdateAclRole() throws Exception {
-//        AclRole aclRole = new AclRole();
-//        aclRole.setId(2);
-//        aclRole.setRoleName("ddd");
-//        aclRoleService.updateAclRole(aclRole);
+        AclRole aclRole = new AclRole();
+        List<Integer> permissionIds = new ArrayList<>();
+        aclRole.setRoleName("10:09");
+        aclRole.setId(9);
+        permissionIds.add(1);
+        permissionIds.add(2);
+        permissionIds.add(3);
+
+        aclRoleService.updateAclRole(aclRole, permissionIds);
     }
 
     @Test
@@ -74,4 +79,11 @@ public class AclRoleServiceImplTest {
         PageInfo pageInfo = aclRoleService.getPageInfoAclRole(dataTablePage);
         System.out.println(pageInfo);
     }
+
+    @Test
+    public void testGetAclRoleWithPermissionsByRoleId() throws Exception {
+        aclRoleService.getAclRoleWithPermissionsByRoleId(1);
+        System.out.println(aclRoleService.getAclRoleWithPermissionsByRoleId(10));
+    }
+
 }
