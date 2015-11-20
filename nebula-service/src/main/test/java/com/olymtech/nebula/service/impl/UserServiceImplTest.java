@@ -1,7 +1,5 @@
 package com.olymtech.nebula.service.impl;
 
-import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import org.junit.After;
 import org.junit.Before;
@@ -12,17 +10,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by WYQ on 2015/11/18.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
 public class UserServiceImplTest {
 
@@ -63,7 +58,7 @@ public class UserServiceImplTest {
         roleIds.add(133);
         userInfo.setEmail("11-20-15:29");
         userInfo.setEmpId(2);
-        userService.insertNebulaUserInfo(userInfo,roleIds);
+        userService.insertNebulaUserInfo(userInfo, roleIds);
     }
 
     @Test
@@ -88,10 +83,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetPageInfoAclUser() throws Exception {
-        DataTablePage dataTablePage = new DataTablePage();
-        dataTablePage.setPageNum(2);
-        dataTablePage.setPageSize(3);
-        PageInfo pageInfo =  userService.getPageInfoAclUser(dataTablePage);
-        System.out.println(pageInfo);
+        userService.getAclUserWithRolesByEmpId(2);
+        System.out.println(userService.getAclUserWithRolesByEmpId(2));
     }
 }
