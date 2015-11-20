@@ -1,5 +1,7 @@
 package com.olymtech.nebula.entity;
 
+import java.util.List;
+
 public class NebulaUserInfo extends BaseDO{
 
     private String username;
@@ -27,6 +29,16 @@ public class NebulaUserInfo extends BaseDO{
     private String password;
 
     private String securityKey;
+
+    private List<AclRole> aclRoles;
+
+    public List<AclRole> getAclRoles() {
+        return aclRoles;
+    }
+
+    public void setAclRoles(List<AclRole> aclRoles) {
+        this.aclRoles = aclRoles;
+    }
 
     public String getUsername() {
         return username;

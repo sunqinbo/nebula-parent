@@ -13,6 +13,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import javax.annotation.Resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -54,23 +57,33 @@ public class UserServiceImplTest {
     @Test
     public void testInsertNebulaUserInfo() throws Exception {
         NebulaUserInfo userInfo = new NebulaUserInfo();
-        userInfo.setEmail("364514921@qq.com");
-        userInfo.setEmpId(88);
-        userService.insertNebulaUserInfo(userInfo);
+        List<Integer> roleIds = new ArrayList<>();
+        roleIds.add(111);
+        roleIds.add(122);
+        roleIds.add(133);
+        userInfo.setEmail("11-20-15:29");
+        userInfo.setEmpId(2);
+        userService.insertNebulaUserInfo(userInfo,roleIds);
     }
 
     @Test
     public void testDeleteNebulaUserInfo() throws Exception {
-        userService.deleteNebulaUserInfo(2);
+        userService.deleteNebulaUserInfo(3);
     }
 
     @Test
     public void testUpdateNebulaUserInfo() throws Exception {
         NebulaUserInfo userInfo = new NebulaUserInfo();
-        userInfo.setId(3);
-        userInfo.setEmpId(88);
-        userInfo.setEmail("1286849100@163.com");
-        userService.updateNebulaUserInfo(userInfo);
+        List<Integer> roleIds = new ArrayList<>();
+        userInfo.setEmpId(6);
+        userInfo.setId(6);
+        userInfo.setEmail("bbbbbbbbb");
+
+        roleIds.add(13);
+        roleIds.add(14);
+        roleIds.add(22);
+
+        userService.updateNebulaUserInfo(userInfo, roleIds);
     }
 
     @Test

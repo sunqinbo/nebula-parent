@@ -41,7 +41,6 @@ public class AclRoleServiceImplTest {
 
     @Test
     public void testInsertAclRole() throws Exception {
-        AclRolePermission aclRolePermission = new AclRolePermission();
         AclRole aclRole = new AclRole();
         List<Integer> permissionIds = new ArrayList<>();
         permissionIds.add(111);
@@ -66,7 +65,7 @@ public class AclRoleServiceImplTest {
         aclRole.setId(9);
         permissionIds.add(1);
         permissionIds.add(2);
-        permissionIds.add(3);
+        permissionIds.add(7);
 
         aclRoleService.updateAclRole(aclRole, permissionIds);
     }

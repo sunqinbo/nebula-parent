@@ -11,5 +11,5 @@ import com.olymtech.nebula.entity.NebulaUserInfo;
  */
 public interface INebulaUserInfoDao extends IBaseDao<NebulaUserInfo,Integer> {
 
-    NebulaUserInfo selectByUsername(String username);
+    public NebulaUserInfo selectByUsername(String username);
 }
