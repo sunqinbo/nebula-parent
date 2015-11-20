@@ -10,7 +10,6 @@ import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -20,8 +19,8 @@ import java.util.List;
 /**
  * Created by WYQ on 2015/11/17.
  */
-@Controller("permissionController")
-@RequestMapping("/")
+@Controller
+@RequestMapping("/permission")
 public class AclPermissionController extends BaseController {
 
     @Resource
@@ -30,57 +29,47 @@ public class AclPermissionController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
-    @RequestMapping(value = "/permission/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public
     @ResponseBody
-    public Callback insertAclPermission(AclPermission permission) {
-        try {
-            permissionService.insertAclPermission(permission);
-            return returnCallback("Success", "插入权限成功");
-        } catch (Exception e) {
-            logger.error("insertAclPermission error:", e);
-        }
-        return returnCallback("Error", "插入权限失败");
+    Callback insertAclPermission(AclPermission permission) {
+        permissionService.insertAclPermission(permission);
+        return returnCallback("Success", "插入权限成功");
     }
 
-    @RequestMapping(value = "/permission/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public
     @ResponseBody
-    public Callback deleteAclPermission(Integer id) {
-        try {
-            permissionService.deleteAclPermissionById(id);
-            return returnCallback("Success", "删除权限成功");
-        } catch (Exception e) {
-            logger.error("deleteAclPermission error:", e);
-        }
-        return returnCallback("Error", "删除权限失败");
+    Callback deleteAclPermission(Integer id) {
+        permissionService.deleteAclPermissionById(id);
+        return returnCallback("Success", "删除权限成功");
     }
 
-    @RequestMapping(value = "/permission/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public
     @ResponseBody
-    public Callback updateAclPermission(AclPermission permission) {
-        try {
-            permissionService.updateAclPermission(permission);
-            return returnCallback("Success", "更新权限成功");
-        }catch (Exception e) {
-            logger.error("updateAclPermission error:", e);
-        }
-        return returnCallback("Error","更新权限失败");
+    Callback updateAclPermission(AclPermission permission) {
+        permissionService.updateAclPermission(permission);
+        return returnCallback("Success", "更新权限成功");
     }
 
-    @RequestMapping(value = "/permission/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    public
     @ResponseBody
-    public Object selectAllPagingPermission(DataTablePage dataTablePage) {
+    Object selectAllPagingPermission(DataTablePage dataTablePage) {
         PageInfo pageInfo = permissionService.getPageInfoAclPermission(dataTablePage);
         return pageInfo;
     }
 
-    @RequestMapping(value = "/permission/selectPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/selectPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    public
     @ResponseBody
-    public Object selectPermission(Integer id) {
-        List<AclPermission> permissionList=new ArrayList<>();
-        if(id!=null) {
+    Object selectPermission(Integer id) {
+        List<AclPermission> permissionList = new ArrayList<>();
+        if (id != null) {
             permissionList = aclRoleService.getAclRoleWithPermissionsByRoleId(id).getAclPermissions();
         }
-        List<zNode> zNodes=permissionService.getzNodes(permissionList);
+        List<zNode> zNodes = permissionService.getzNodes(permissionList);
         return zNodes;
     }
 

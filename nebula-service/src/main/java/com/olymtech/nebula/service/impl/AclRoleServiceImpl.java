@@ -9,14 +9,12 @@ import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.service.IAclPermissionService;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.ws.ResponseWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +56,7 @@ public class AclRoleServiceImpl implements IAclRoleService {
     @Override
     public void updateAclRole(AclRole aclRole, List<Integer> permissionIds) {
         aclRoleDao.update(aclRole);
-        for (Integer permissionId : permissionIds) {
-            aclRolePermissionDao.deleteByRoleId(aclRole.getId());
-        }
+        aclRolePermissionDao.deleteByRoleId(aclRole.getId());
         for (Integer permissionId : permissionIds) {
             AclRolePermission aclRolePermission = new AclRolePermission();
             aclRolePermission.setRoleId(aclRole.getId());

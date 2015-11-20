@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Created by liwenji on 2015/11/11.
  */
-@Controller("fileController")
+@Controller
 @RequestMapping("/")
 public class FileController extends BaseController {
     @Resource
