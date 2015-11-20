@@ -56,7 +56,7 @@ public class AclRoleController extends BaseController {
 
     @RequestMapping(value = "/role/updateAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Callback updateAclRole(AclRole aclRole,List<Integer> permissionIds) {
+    public Callback updateAclRole(AclRole aclRole,@RequestParam("permissionIds[]") List<Integer> permissionIds) {
         try {
             aclRoleService.updateAclRole(aclRole,permissionIds);
             return returnCallback("Success", "更新角色成功");

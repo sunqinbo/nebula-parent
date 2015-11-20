@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,11 +23,13 @@ public interface IUserService {
 
     Set<String> findPermissions(String username);
 
-    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo);
+    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, List<Integer> roleIds);
 
     public void deleteNebulaUserInfo(Integer id);
 
-    public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo);
+    public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo, List<Integer> roleIds);
 
     public PageInfo getPageInfoAclUser(DataTablePage dataTablePage);
+
+    public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId);
 }

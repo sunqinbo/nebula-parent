@@ -8,9 +8,11 @@ import com.olymtech.nebula.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by WYQ on 2015/11/18.
@@ -35,9 +37,9 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/user/insertUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback insertUser(NebulaUserInfo userInfo) {
+    public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") List<Integer> roleIds) {
         try {
-            userService.insertNebulaUserInfo(userInfo);
+            userService.insertNebulaUserInfo(userInfo,roleIds);
             return returnCallback("Success", "插入用户成功");
         } catch (Exception e) {
             logger.error("insertUser error:", e);
@@ -59,9 +61,9 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/user/updateUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback updateUser(NebulaUserInfo userInfo) {
+    public Callback updateUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]")List<Integer> roleIds ) {
         try {
-            userService.updateNebulaUserInfo(userInfo);
+            userService.updateNebulaUserInfo(userInfo,roleIds);
             return returnCallback("Success", "更新用户成功");
         } catch (Exception e) {
             logger.error("updateUser error:", e);
@@ -76,4 +78,9 @@ public class UserController extends BaseController {
         return pageInfo;
     }
 
+    @RequestMapping(value = "/role/getAclUserWithRolesByEmpId", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object getAclUserWithRolesByEmpId(Integer empId) {
+        return userService.getAclUserWithRolesByEmpId(empId);
+    }
 }
