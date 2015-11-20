@@ -35,6 +35,15 @@ $(function(){
     //    showLine : true,                  //是否显示节点间的连线
     //    checkable : true                  //每个节点上是否显示 CheckBox
     //};
+    if($("#isEdit").val()!=""){
+        $("#roleName").val(1);
+        $("#roleCname").val(1);
+        $("#roleDesc").val(1);
+        $("#enableRadio").attr("checked",true);
+        $("#submit").hide();
+        return ;
+    }
+    $("#save").hide();
     var checkSetting =
     {
         check: {
