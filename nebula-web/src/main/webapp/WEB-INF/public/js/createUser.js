@@ -1,5 +1,49 @@
 $(function(){
     showSelect2();
+
+    $("#save").hide();
+    //为编辑页面时
+    if($("#isEdit").val()!=""){
+        $.ajax({
+            async: false,
+            type:"post",
+            data:{"empId":$("#empId").val()},
+            url:"/role/getAclUserWithRolesByEmpId",
+            datatype:"json",
+            success: function (data) {
+                $("#username").val(data["username"]);
+                $("#mobilePhone").val(data["mobilePhone"]);
+                $("#weixinAcc").val(data["weixinAcc"]);
+                $("#qqAcc").val(data["qqAcc"]);
+                $("#email").val(data["email"]);
+                $("#nickname").val(data["nickname"]);
+                $("#deptName").val(data["deptName"]);
+                $("#jobTitle").val(data["jobTitle"]);
+                $("#empId").val(data["empId"]);
+                $("#supervisorEmpId").val(data["supervisorEmpId"]);
+                $("#isEnable").val(data["isEnable"]);
+                $("#password").val(data["password"]);
+                if(data["isEnable"]==1) {
+                    $("#enableRadio").attr("checked", true);
+                }
+                else
+                    $("#unenableRadio").attr("checked", true);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.notify({
+                    icon: '',
+                    message: "很抱歉载入角色信息失败，原因"+ errorThrown
+
+                },{
+                    type: 'info',
+                    timer: 1000
+                });
+            }
+        });
+        $("#submit").hide();
+        $("#save").show();
+    }
+
     //提交按钮
     $("#submit").click(function(){
         btnClick(true);
@@ -12,6 +56,9 @@ function showSelect2(){
     $.ajax({
         async: false,
         type:"post",
+        data:{
+            "id":$("#empId").val()
+        },
         url:"/role/selectRole",
         datatype:"json",
         success: function (data) {
@@ -55,7 +102,7 @@ function btnClick(isCreate) {
         tips = "新增";
     }
     else {
-        url = "/role/updateUser.htm";
+        url = "/user/updateUser.htm";
         tips = "修改";
     }
     var roleList=$("#roleList").find("option:selected");
