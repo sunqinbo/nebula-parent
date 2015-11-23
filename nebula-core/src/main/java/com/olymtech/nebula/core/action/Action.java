@@ -18,7 +18,7 @@ public interface Action {
      * @return
      * @throws Exception
      */
-    public boolean doAction(NebulaPublishEvent event) throws Exception;
+    public boolean doAction(NebulaPublishEvent event) throws Exception ;
 
     /**
      * 发布动作失败后执行动作
@@ -28,6 +28,12 @@ public interface Action {
     public void doFailure(NebulaPublishEvent event) throws Exception;
 
     public void setObserver(Observer observer);
+
+    /**
+     * your action's name
+     * @return
+     */
+    public String getActionName();
 
 
 

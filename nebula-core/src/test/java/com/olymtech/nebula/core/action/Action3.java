@@ -4,6 +4,7 @@
  */
 package com.olymtech.nebula.core.action;
 
+import com.olymtech.nebula.core.action.exception.ActionException;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 
 /**
@@ -16,7 +17,7 @@ public class Action3 extends AbstractAction {
     }
 
     @Override
-    public boolean doAction(NebulaPublishEvent event) throws Exception {
+    public boolean doAction(NebulaPublishEvent event) throws ActionException {
         System.out.println("salt动作");
         this.nodifyObservers("salt动作执行完成");
         return true;

@@ -52,10 +52,10 @@ public class UserServiceImplTest {
     @Test
     public void testInsertNebulaUserInfo() throws Exception {
         NebulaUserInfo userInfo = new NebulaUserInfo();
-        List<Integer> roleIds = new ArrayList<>();
-        roleIds.add(111);
-        roleIds.add(122);
-        roleIds.add(133);
+        Integer[] roleIds = new Integer[3];
+        roleIds[0]=111;
+        roleIds[1]=222;
+        roleIds[2]=4333;
         userInfo.setEmail("11-20-15:29");
         userInfo.setEmpId(2);
         userService.insertNebulaUserInfo(userInfo, roleIds);

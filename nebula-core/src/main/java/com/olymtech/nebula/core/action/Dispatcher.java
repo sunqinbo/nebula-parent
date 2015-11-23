@@ -4,6 +4,8 @@
  */
 package com.olymtech.nebula.core.action;
 
+import com.olymtech.nebula.core.action.exception.ActionException;
+import com.olymtech.nebula.core.action.exception.ActionNullException;
 import com.olymtech.nebula.core.salt.core.SaltNullTargesException;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
@@ -33,7 +35,7 @@ public class Dispatcher implements Observer {
     }
 
 
-    public void doDispatch(NebulaPublishEvent event) throws Exception {
+    public void doDispatch(NebulaPublishEvent event) throws ActionException, SaltNullTargesException, ActionNullException {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
         for (NebulaPublishModule publishModule : publishModules) {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
@@ -47,15 +49,26 @@ public class Dispatcher implements Observer {
             for (int i = 0; i < actions.size(); i++) {
                 Action action = actions.get(i);
                 action.setObserver(this);
-                if (!action.doAction(event)) {
-                    triggerFailure(event);
-                    return;
+
+                boolean result = false;
+                try {
+                    result = action.doAction(event);
+                    if (!result) {
+                        triggerFailure(event);
+                        return;
+                    }
+                } catch (Exception e) {
+                    if (e instanceof ActionException){
+                        throw new ActionException(action.getActionName(),e.getMessage());
+                    }else if(e instanceof ActionException) {
+                        throw new SaltNullTargesException(e.getMessage());
+                    }
                 }
                 actionIndex = i;
             }
         } else {
 
-            throw new Exception("动作为空");
+            throw new ActionNullException("动作为空");
         }
 
     }

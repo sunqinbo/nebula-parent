@@ -2,7 +2,6 @@ package com.olymtech.nebula.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.service.IPublishEventService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by liwenji on 2015/11/6.
  */
-@Controller("PublishListController")
-@RequestMapping("/")
+@Controller
+@RequestMapping("/publish_event")
 public class PublishListController extends BaseController {
     @Resource
     HttpServletRequest request;
@@ -24,7 +23,7 @@ public class PublishListController extends BaseController {
     @Resource
     IPublishEventService publishEventService;
 
-    @RequestMapping(value = {"/PublishList"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"/publishList"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object PublishList(DataTablePage dataTablePage) {
         PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage);
