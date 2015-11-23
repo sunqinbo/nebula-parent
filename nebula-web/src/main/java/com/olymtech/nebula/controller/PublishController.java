@@ -1,5 +1,6 @@
 package com.olymtech.nebula.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
@@ -27,8 +28,8 @@ import java.util.Map;
  * Created by WYQ on 2015/11/3.
  */
 @Controller
-@RequestMapping("/publish_event")
-public class PublishEventController extends BaseController {
+@RequestMapping("/publish")
+public class PublishController extends BaseController {
 
     @Resource
     IPublishEventService publishEventService;
@@ -45,28 +46,34 @@ public class PublishEventController extends BaseController {
     @Resource
     HttpServletRequest request;
 
-    @RequestMapping(value = "/publishEvent.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object PublishList(DataTablePage dataTablePage) {
+        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage);
+        return pageInfo;
+    }
+
+    @RequestMapping(value = "/event", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishEvent(Model model) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
         model.addAttribute("productTrees", productTrees);
         return "event/publishEvent";
     }
 
-    @RequestMapping(value = "/getProductTreeListByPid.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public
+    @RequestMapping(value = "/getProductTreeList/pid", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    Callback getProductTreeListByPid(Integer pid) throws Exception {
+    public Callback getProductTreeListByPid(Integer pid) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(pid);
         return returnCallback("Success", productTrees);
     }
 
-    @RequestMapping(value = "/publishList.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishList() throws Exception {
         return "event/publishList";
     }
 
     @RequestMapping(value = "/publishProcess.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public String publishProcess(HttpServletRequest request, Model model)throws Exception {
+    public String publishProcess(HttpServletRequest request, Model model) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
 //        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(id);
@@ -77,7 +84,7 @@ public class PublishEventController extends BaseController {
     /**
      * public event
      */
-    @RequestMapping(value = "/createPublishEvent.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/createPublishEvent", method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
@@ -87,7 +94,7 @@ public class PublishEventController extends BaseController {
     /**
      * public schedule
      */
-    @RequestMapping(value = "/checkPublishSchedule.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/checkPublishSchedule", method = {RequestMethod.POST})
     @ResponseBody
     public Callback checkPublishScheduleByEventId(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String idString = request.getParameter("id");
@@ -99,7 +106,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Success", nebulaPublishSchedules);
     }
 
-    @RequestMapping(value = "/preMasterPublish.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/preMasterPublish", method = {RequestMethod.POST})
     @ResponseBody
     public Callback prePublishMaster(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String idString = request.getParameter("id");
@@ -120,7 +127,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Success", "发布准备执行完成");
     }
 
-    @RequestMapping(value = "/preMinionPublish.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/preMinionPublish", method = {RequestMethod.POST})
     @ResponseBody
     public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response) {
         String idString = request.getParameter("id");
@@ -148,7 +155,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Success", "预发布完成");
     }
 
-    @RequestMapping(value = "/publishReal.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/publishReal", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishReal(HttpServletRequest request, HttpServletResponse response) {
         String idString = request.getParameter("id");
@@ -174,7 +181,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Success", "预发布完成");
     }
 
-    @RequestMapping(value = "/publishContinue.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/publishContinue", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishContinue() {
         String idString = request.getParameter("id");
@@ -224,7 +231,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Error", "继续发布出错");
     }
 
-    @RequestMapping(value = "/publishSuccessEnd.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/publishSuccessEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishSuccessEnd() {
         String idString = request.getParameter("id");
@@ -265,7 +272,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Error", "成功发布确认失败");
     }
 
-    @RequestMapping(value = "/publishFailEnd.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/publishFailEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishFailEnd() {
         String idString = request.getParameter("id");
@@ -298,7 +305,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Error", "服务器异常");
     }
 
-    @RequestMapping(value = "/retryPublishRollback.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/retryPublishRollback", method = {RequestMethod.POST})
     @ResponseBody
     public Callback retryPublishRollback(HttpServletRequest request) {
         String idString = request.getParameter("id");
@@ -314,7 +321,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Error", "重新发布回退失败");
     }
 
-    @RequestMapping(value = "/updateEtcEnd.htm", method = {RequestMethod.POST})
+    @RequestMapping(value = "/updateEtcEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback updateEtcEnd(HttpServletRequest request) {
         String eventId = request.getParameter("id");
@@ -325,7 +332,7 @@ public class PublishEventController extends BaseController {
         return returnCallback("Success", "完成ETC编辑");
     }
 
-    @RequestMapping(value = "/publishProcessStep.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object publishProcessGetStep(Integer eventId) {
         String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC"};

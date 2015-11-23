@@ -24,18 +24,18 @@ public class UserController extends BaseController {
     @Resource
     private IUserService userService;
 
-    @RequestMapping(value="/createUser.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value="/add.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String createUser (){
         return "user/createUser";
     }
 
-    @RequestMapping(value="/userList.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String userList (){
         return "user/userList";
     }
 
 
-    @RequestMapping(value = "/insertUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") Integer[] roleIds) {
         try {
@@ -47,7 +47,7 @@ public class UserController extends BaseController {
         return returnCallback("Error", "插入用户失败");
     }
 
-    @RequestMapping(value = "/deleteUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback deleteUser(Integer id) {
         try {
@@ -59,7 +59,7 @@ public class UserController extends BaseController {
         return returnCallback("Error","删除用户失败");
     }
 
-    @RequestMapping(value = "/updateUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/update.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]")List<Integer> roleIds ) {
         try {
@@ -71,14 +71,14 @@ public class UserController extends BaseController {
         return returnCallback("Error","更新用户失败");
     }
 
-    @RequestMapping(value = "/selectAllPagingUser", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingUser(DataTablePage dataTablePage) {
         PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage);
         return pageInfo;
     }
 
-    @RequestMapping(value = "/getAclUserWithRolesByEmpId", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/get/empId", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object getAclUserWithRolesByEmpId(Integer empId) {
         return userService.getAclUserWithRolesByEmpId(empId);
