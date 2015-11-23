@@ -15,7 +15,7 @@
 </style>
 
 <input id="isEdit" style="display: none;" value="$!{edit}"/>
-<input id="empId" style="display: none;" value="$!{id}"/>
+<input id="id" style="display: none;" value="$!{id}"/>
 
 <div class="content">
     <div class="container-fluid">
@@ -82,7 +82,7 @@
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="empId" class="col-sm-2 control-label">工号</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="empId" type="text" class="form-control" placeholder="请输入用户工号"/>
+                                    <input id="empId" type="text" class="form-control" value="$!{empId}" placeholder="请输入用户工号"/>
                                 </div>
                             </div>
 

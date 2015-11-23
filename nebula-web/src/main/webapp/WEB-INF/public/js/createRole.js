@@ -14,7 +14,7 @@ $(function(){
             async: false,
             type:"post",
             data:{"roleId":$("#roleId").val()},
-            url:"/get/roleId",
+            url:"/role/get/roleId",
             datatype:"json",
             success: function (data) {
                 $("#roleName").val(data["roleName"]);

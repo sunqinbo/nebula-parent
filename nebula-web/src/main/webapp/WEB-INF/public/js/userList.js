@@ -124,7 +124,8 @@ function listBtn(pageNum){
         if($(this).text()=="编辑") {
             $(this).click(function() {
                 var empId = $(this).parent().parent().parent().children().eq(9);
-                window.open('/user/update.html?id=' + empId.text());
+                var id = $(this).parent().parent().parent().children().eq(0);
+                window.open('/user/update.htm?empId=' + empId.text()+'&id='+id.text());
             })
         }
     });

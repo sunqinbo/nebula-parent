@@ -6,6 +6,7 @@ import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.Select2Data;
 import com.olymtech.nebula.service.IAclRoleService;
+import com.olymtech.nebula.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +28,8 @@ public class RoleController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
+    @Resource
+    private IUserService userService;
 
     @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String roleList (){
@@ -80,8 +84,12 @@ public class RoleController extends BaseController {
 
     @RequestMapping(value = "/selectRole", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object selectRole() {
-        List<Select2Data> select2Datas =aclRoleService.getAllRoles();
+    public Object selectRole(Integer empId) {
+        List<AclRole> aclRoles=new ArrayList<>();
+        if (empId != null) {
+            aclRoles = userService.getAclUserWithRolesByEmpId(empId).getAclRoles();
+        }
+        List<Select2Data> select2Datas = aclRoleService.getSelect2Datas(aclRoles);
         return select2Datas;
     }
 

@@ -102,4 +102,22 @@ public class AclRoleServiceImpl implements IAclRoleService {
         }
         return select2Datas;
     }
+
+    @Override
+    public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles) {
+        List<AclRole> aclRoleList=aclRoleDao.selectAllPaging(new AclRole());
+        List<Select2Data> select2Datas=new ArrayList<>();
+        for(AclRole aclRole:aclRoleList){
+            Select2Data select2Data=new Select2Data();
+            select2Data.setId(aclRole.getId());
+            select2Data.setText(aclRole.getRoleCname());
+            for(AclRole aclRoleHas:aclRoles){
+                if(aclRole.getId()==aclRoleHas.getId()){
+                    select2Data.setSelected(true);
+                }
+            }
+            select2Datas.add(select2Data);
+        }
+        return select2Datas;
+    }
 }

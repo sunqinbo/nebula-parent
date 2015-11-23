@@ -6,6 +6,7 @@ import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,7 @@ public class UserController extends BaseController {
         return returnCallback("Error","删除用户失败");
     }
 
-    @RequestMapping(value = "/update.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]")List<Integer> roleIds ) {
         try {
@@ -82,5 +83,13 @@ public class UserController extends BaseController {
     @ResponseBody
     public Object getAclUserWithRolesByEmpId(Integer empId) {
         return userService.getAclUserWithRolesByEmpId(empId);
+    }
+
+    @RequestMapping(value="/update.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String editUser(Model model,Integer empId,Integer id){
+        model.addAttribute("edit",true);
+        model.addAttribute("empId",empId);
+        model.addAttribute("id",id);
+        return "user/createUser";
     }
 }

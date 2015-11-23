@@ -31,7 +31,7 @@ public class PermissionController extends BaseController {
 
     @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String jurisdiction (){
-        return "role/permissionList";
+        return "permission/permissionList";
     }
 
     @RequestMapping(value="/add.htm",method= {RequestMethod.POST,RequestMethod.GET})
