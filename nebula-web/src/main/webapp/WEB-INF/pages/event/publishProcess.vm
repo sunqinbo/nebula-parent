@@ -1,21 +1,19 @@
-<!doctype html>
-
-    #parse("./head/header.vm")
-    #parse("./head/sidebar.vm")
-    #parse("./head/navbar.vm")
-<link rel="stylesheet" href="public/assets/processbar/css/ystep.css" type="text/css" />
+#parse("./head/header.vm")
+#parse("./head/sidebar.vm")
+#parse("./head/navbar.vm")
+<link rel="stylesheet" href="/public/assets/processbar/css/ystep.css" type="text/css" />
 <!-- 引入jquery -->
-<script type="text/javascript" src="public/assets/processbar/js/jquery.min.js"></script>
+<script type="text/javascript" src="/public/assets/processbar/js/jquery.min.js"></script>
 <!-- 引入ystep插件 -->
-<script type="text/javascript" src="public/assets/processbar/js/ystep.js"></script>
-<script src="public/assets/js/demo.js"></script>
-<script src="public/assets/js/bootstrap-notify.js"></script>
-<script type="text/javascript" src="public/assets/js/publishProcess.js"></script>
+<script type="text/javascript" src="/public/assets/processbar/js/ystep.js"></script>
+<script src="/public/assets/js/demo.js"></script>
+<script src="/public/assets/js/bootstrap-notify.js"></script>
+<script type="text/javascript" src="/public/assets/js/publishProcess.js"></script>
 
 <script>
     nebula.publish.process.main();
 </script>
-<div id="loading-status" style="display: none;z-index: -1;position: fixed;margin:auto;left:0;right:0;top:0;bottom:0;width:200px;height:150px;"><img src="public/assets/img/loading.gif"></div>
+<div id="loading-status" style="display: none;z-index: -1;position: fixed;margin:auto;left:0;right:0;top:0;bottom:0;width:200px;height:150px;"><img src="/public/assets/img/loading.gif"></div>
 
 <div class="content">
     <div class="container-fluid">

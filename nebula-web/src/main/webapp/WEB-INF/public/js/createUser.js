@@ -98,11 +98,11 @@ function btnClick(isCreate) {
     var password = $("#password").val();
     var url, tips;
     if (isCreate) {
-        url = "/user/insertUser.htm";
+        url = "/user/add";
         tips = "新增";
     }
     else {
-        url = "/user/updateUser.htm";
+        url = "/user/update";
         tips = "修改";
     }
     var roleList=$("#roleList").find("option:selected");

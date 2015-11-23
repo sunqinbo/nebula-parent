@@ -1,8 +1,7 @@
-<!doctype html>
 
-    #parse("./head/header.vm")
-    #parse("./head/sidebar.vm")
-    #parse("./head/navbar.vm")
+#parse("./head/header.vm")
+#parse("./head/sidebar.vm")
+#parse("./head/navbar.vm")
 <script>
     nebula.publish.event.main();
 </script>

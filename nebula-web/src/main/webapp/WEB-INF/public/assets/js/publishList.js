@@ -2,7 +2,7 @@ $(document).ready(function(){
     function gettb(pageNum){
         $.ajax({
                     type: "post",
-                    url: "/publish_event/publishList",
+                    url: "/publish_event/list",
                     data: {
                         "pageSize":10,
                         "pageNum":pageNum

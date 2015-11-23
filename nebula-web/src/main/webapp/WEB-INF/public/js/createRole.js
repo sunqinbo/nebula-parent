@@ -120,11 +120,11 @@ function btnClick(isCreate){
     var roleDesc=$("#roleDesc").val();
     var url,tips;
     if(isCreate){
-        url="/role/insertAclRole.htm";
+        url="/role/add";
         tips="新增";
     }
     else{
-        url="/role/updateAclRole.htm";
+        url="/role/update";
         tips="修改";
     }
 
