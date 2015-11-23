@@ -73,7 +73,6 @@ public class FileController extends BaseController {
         Integer eventId = Integer.parseInt(eventIdString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
 
-
         idString = new String(idString.getBytes("ISO-8859-1"),"utf-8");
         /** 初始化页面 加载，有root信息，返回 jsTreeDataRoots */
         if (idString.equals("#")) {
