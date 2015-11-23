@@ -6,7 +6,7 @@ $(function(){
     //    showLine : true,                  //是否显示节点间的连线
     //    checkable : true                  //每个节点上是否显示 CheckBox
     //};
-    var permissionList;
+    //var permissionList;
     //为编辑页面时
     $("#save").hide();
     if($("#isEdit").val()!=""){
@@ -20,7 +20,7 @@ $(function(){
                 $("#roleName").val(data["roleName"]);
                 $("#roleCname").val(data["roleCname"]);
                 $("#roleDesc").val(data["roleDesc"]);
-                permissionList=data["aclPermissions"];
+                //permissionList=data["aclPermissions"];
                 if(data["isEnable"]==1) {
                     $("#enableRadio").attr("checked", true);
                 }
