@@ -22,6 +22,6 @@ public class AclRolePermissionDaoImpl extends BaseDaoImpl<AclRolePermission,Inte
 
     @Override
     public void deleteByRoleId(Integer roleId) {
-        getSqlSession().selectList(CLASS_NAME + "-Delete-By-Role-Id", roleId);
+        getSqlSession().delete(CLASS_NAME + "-Delete-By-Role-Id", roleId);
     }
 }

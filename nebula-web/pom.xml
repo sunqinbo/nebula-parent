@@ -196,14 +196,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.olymtech.nebula</groupId>
-            <artifactId>pushlet</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pushlet.jar</systemPath>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5</version>

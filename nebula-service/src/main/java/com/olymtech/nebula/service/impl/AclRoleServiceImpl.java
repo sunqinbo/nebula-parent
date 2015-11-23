@@ -57,9 +57,7 @@ public class AclRoleServiceImpl implements IAclRoleService {
     @Override
     public void updateAclRole(AclRole aclRole, List<Integer> permissionIds) {
         aclRoleDao.update(aclRole);
-        for (Integer permissionId : permissionIds) {
-            aclRolePermissionDao.deleteByRoleId(aclRole.getId());
-        }
+        aclRolePermissionDao.deleteByRoleId(aclRole.getId());
         for (Integer permissionId : permissionIds) {
             AclRolePermission aclRolePermission = new AclRolePermission();
             aclRolePermission.setRoleId(aclRole.getId());

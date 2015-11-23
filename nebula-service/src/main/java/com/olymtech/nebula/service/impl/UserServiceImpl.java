@@ -6,15 +6,20 @@ package com.olymtech.nebula.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.olymtech.nebula.dao.IAclRoleDao;
+import com.olymtech.nebula.dao.IAclUserRoleDao;
 import com.olymtech.nebula.dao.INebulaUserInfoDao;
+import com.olymtech.nebula.entity.AclRole;
+import com.olymtech.nebula.entity.AclUserRole;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +33,14 @@ public class UserServiceImpl implements IUserService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    @Resource
     private INebulaUserInfoDao nebulaUserInfoDao;
+
+    @Resource
+    private IAclUserRoleDao aclUserRoleDao;
+
+    @Resource
+    private IAclRoleDao aclRoleDao;
 
     @Override
     public NebulaUserInfo findByUsername(String username) {
@@ -54,18 +65,33 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo) {
-        return nebulaUserInfoDao.insert(nebulaUserInfo);
+    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, List<Integer> roleIds) {
+        Integer id = nebulaUserInfoDao.insert(nebulaUserInfo);
+        for (Integer roleId : roleIds) {
+            AclUserRole aclUserRole = new AclUserRole();
+            aclUserRole.setEmpId(nebulaUserInfo.getEmpId());
+            aclUserRole.setRoleId(roleId);
+            aclUserRoleDao.insert(aclUserRole);
+        }
+        return id;
     }
 
     @Override
     public void deleteNebulaUserInfo(Integer id) {
         nebulaUserInfoDao.deleteById(id);
+        aclUserRoleDao.deleteById(id);
     }
 
     @Override
-    public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo) {
+    public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo, List<Integer> roleIds) {
         nebulaUserInfoDao.update(nebulaUserInfo);
+        aclUserRoleDao.deleteByEmpId(nebulaUserInfo.getEmpId());
+        for (Integer roleId : roleIds) {
+            AclUserRole aclUserRole = new AclUserRole();
+            aclUserRole.setEmpId(nebulaUserInfo.getEmpId());
+            aclUserRole.setRoleId(roleId);
+            aclUserRoleDao.insert(aclUserRole);
+        }
     }
 
     @Override
@@ -74,5 +100,21 @@ public class UserServiceImpl implements IUserService {
         List<NebulaUserInfo> users = nebulaUserInfoDao.selectAllPaging(new NebulaUserInfo());
         PageInfo pageInfo = new PageInfo(users);
         return pageInfo;
+    }
+
+    @Override
+    public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId) {
+        NebulaUserInfo userInfo = nebulaUserInfoDao.selectById(empId);
+        List<Integer> roleIds = new ArrayList<>();
+        List<AclRole> roles = new ArrayList<>();
+        List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);
+        for (AclUserRole aclUserRole : aclUserRoles) {
+            roleIds.add(aclUserRole.getRoleId());
+        }
+        for (Integer roleId : roleIds) {
+            roles.add(aclRoleDao.selectById(roleId));
+        }
+        userInfo.setAclRoles(roles);
+        return userInfo;
     }
 }

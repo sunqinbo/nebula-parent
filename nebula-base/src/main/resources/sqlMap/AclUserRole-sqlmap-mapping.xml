@@ -17,6 +17,12 @@
         from acl_user_role
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="Nebula-AclUserRoleDao-Select-By-Emp-Id" parameterType="java.lang.Integer" resultMap="RM-AclUserRole">
+        select
+        <include refid="AclUserRole-Base-Column-List"/>
+        from acl_user_role
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </select>
     <select id="Nebula-AclUserRoleDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from acl_user_role
     </select>
@@ -46,6 +52,10 @@
     <delete id="Nebula-AclUserRoleDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from acl_user_role
         where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="Nebula-AclUserRoleDao-Delete-By-Emp-Id" parameterType="java.lang.Integer">
+        delete from acl_user_role
+        where emp_id = #{empId,jdbcType=INTEGER}
     </delete>
     <insert id="Nebula-AclUserRoleDao-Insert" parameterType="AclUserRole">
         insert into acl_user_role (
