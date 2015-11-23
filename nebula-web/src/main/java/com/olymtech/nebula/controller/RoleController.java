@@ -20,7 +20,7 @@ import java.util.List;
  * Created by liwenji on 2015/11/17.
  */
 @Controller
-@RequestMapping("/orle")
+@RequestMapping("/role")
 public class RoleController extends BaseController {
 
     @Resource

@@ -1,6 +1,6 @@
 <!doctype html>
 
-<div class="sidebar" data-color="purple" data-image="public/assets/img/sidebar-5.jpg">
+<div class="sidebar" data-color="purple" data-image="/public/assets/img/sidebar-5.jpg">
 
     <!--
 
@@ -18,21 +18,21 @@
         </div>
         <ul class="nav">
             <li>
-                <a href="/publishEvent.htm">
+                <a href="/publish_event/publishEvent.htm">
                     <i class="pe-7s-upload"></i>
 
                     <p>发布申请</p>
                 </a>
             </li>
             <li>
-                <a href="/publishList.htm">
+                <a href="/publish_event/publishList.htm">
                     <i class="pe-7s-user"></i>
 
                     <p>我的发布</p>
                 </a>
             </li>
             <li>
-                <a href="/publishList.htm">
+                <a href="/publish_event/publishList.htm">
                     <i class="pe-7s-note2"></i>
 
                     <p>发布数据</p>

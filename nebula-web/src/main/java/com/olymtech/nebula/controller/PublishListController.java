@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by liwenji on 2015/11/6.
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/publish_event")
 public class PublishListController extends BaseController {
     @Resource
     HttpServletRequest request;

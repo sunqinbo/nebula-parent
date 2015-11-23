@@ -2,10 +2,10 @@
     #parse("./head/header.vm")
     #parse("./head/sidebar.vm")
     #parse("./head/navbar.vm")
-<script src="public/plugins/JQuery zTree v3.5.15/js/jquery.ztree.all-3.5.min.js"></script>
+<script src="../../public/plugins/JQueryzTreev3.5.15/js/jquery.ztree.all-3.5.min.js"></script>
 ##<link rel="public/plugins/JQuery zTree v3.5.15/css/css/zTreeStyle/zTreeStyle.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="http://cdn.gbtags.com/ztree/3.5/zTreeStyle.css">
-<script src="public/js/createRole.js" type="text/javascript"></script>
+<script src="../../public/js/createRole.js" type="text/javascript"></script>
 
 <input id="isEdit" style="display: none;" value="$!{edit}"/>
 <input id="roleId" style="display: none;" value="$!{id}"/>

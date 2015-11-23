@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Created by WYQ on 2015/11/3.
  */
-@Controller("publishEventController")
+@Controller
 @RequestMapping("/publish_event")
 public class PublishEventController extends BaseController {
 
