@@ -1,5 +1,6 @@
 package com.olymtech.nebula.controller;
 
+import com.olymtech.nebula.web.exception.ParameterException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -39,7 +40,7 @@ public class LoginController {
     public void controller(HttpServletResponse response, Integer id) throws Exception {
         switch(id) {
             case 1:
-                throw new Exception("controller1");
+                throw new ParameterException("controller1");
             case 2:
                 throw new Exception("controller2");
             case 3:

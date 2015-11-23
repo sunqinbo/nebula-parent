@@ -15,6 +15,5 @@ public class IndexController extends BaseController{
 		return "event/publishList";
 	}
 
-
 }
 

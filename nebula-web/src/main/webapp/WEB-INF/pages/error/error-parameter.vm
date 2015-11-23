@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><title>Exception!</title></head>
+<body>
+<H2>参数错误: $ex</H2>
+<hr /><P>错误描述：</P>
+    $ex.message
+<P>错误堆栈信息：</P>
+    #foreach($stack in $ex.getStackTrace())
+        $stack.toString()
+    #end
+</body>
+</html>

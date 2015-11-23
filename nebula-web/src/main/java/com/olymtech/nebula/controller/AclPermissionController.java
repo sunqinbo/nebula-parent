@@ -30,41 +30,36 @@ public class AclPermissionController extends BaseController {
     private IAclRoleService aclRoleService;
 
     @RequestMapping(value = "/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public
     @ResponseBody
-    Callback insertAclPermission(AclPermission permission) {
+    public Callback insertAclPermission(AclPermission permission) {
         permissionService.insertAclPermission(permission);
         return returnCallback("Success", "插入权限成功");
     }
 
     @RequestMapping(value = "/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public
     @ResponseBody
-    Callback deleteAclPermission(Integer id) {
+    public Callback deleteAclPermission(Integer id) {
         permissionService.deleteAclPermissionById(id);
         return returnCallback("Success", "删除权限成功");
     }
 
     @RequestMapping(value = "/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public
     @ResponseBody
-    Callback updateAclPermission(AclPermission permission) {
+    public Callback updateAclPermission(AclPermission permission) {
         permissionService.updateAclPermission(permission);
         return returnCallback("Success", "更新权限成功");
     }
 
     @RequestMapping(value = "/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
-    public
     @ResponseBody
-    Object selectAllPagingPermission(DataTablePage dataTablePage) {
+    public Object selectAllPagingPermission(DataTablePage dataTablePage) {
         PageInfo pageInfo = permissionService.getPageInfoAclPermission(dataTablePage);
         return pageInfo;
     }
 
     @RequestMapping(value = "/selectPermission", method = {RequestMethod.POST, RequestMethod.GET})
-    public
     @ResponseBody
-    Object selectPermission(Integer id) {
+    public Object selectPermission(Integer id) {
         List<AclPermission> permissionList = new ArrayList<>();
         if (id != null) {
             permissionList = aclRoleService.getAclRoleWithPermissionsByRoleId(id).getAclPermissions();
