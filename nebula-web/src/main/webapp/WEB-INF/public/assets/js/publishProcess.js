@@ -124,7 +124,7 @@ function Initialization(){
         data: {
             eventId: $("#eventId").val()
         },
-        url: "/publish_event/publishProcessStep",
+        url: "/publish/publishProcessStep",
         datetype: "json",
         success: function (data) {
             //机器信息列表相关
@@ -238,7 +238,7 @@ function Initialization(){
                     var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
                     if (ms == true) {
                         $.ajax({
-                            url:"/publish_event/updateEtcEnd.htm",
+                            url:"/publish/updateEtcEnd.htm",
                             type:"post",
                             data:{"id":$("#eventId").val()},
                             success:function(jsonData){

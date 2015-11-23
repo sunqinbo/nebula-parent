@@ -6,7 +6,7 @@ $(function(){
 function getLtb(pageNum){
     $.ajax({
         type: "post",
-        url: "/user/selectAllPagingUser",
+        url: "/user/list",
         data: {
             "pageSize":10,
             "pageNum":pageNum

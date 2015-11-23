@@ -14,7 +14,7 @@ $(function(){
             async: false,
             type:"post",
             data:{"roleId":$("#roleId").val()},
-            url:"/role/getAclRoleWithPermissionsByRoleId",
+            url:"/get/roleId",
             datatype:"json",
             success: function (data) {
                 $("#roleName").val(data["roleName"]);
