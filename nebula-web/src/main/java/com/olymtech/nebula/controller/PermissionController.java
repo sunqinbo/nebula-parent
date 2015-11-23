@@ -29,12 +29,17 @@ public class PermissionController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
-    @RequestMapping(value="/createPermission.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String jurisdiction (){
+        return "role/permissionList";
+    }
+
+    @RequestMapping(value="/add.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String createPermission (){
         return "permission/createPermission";
     }
 
-    @RequestMapping(value = "/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertAclPermission(AclPermission permission) throws Exception{
         permissionService.insertAclPermission(permission);
@@ -42,21 +47,21 @@ public class PermissionController extends BaseController {
         return returnCallback("Success", "插入权限成功");
     }
 
-    @RequestMapping(value = "/deleteAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback deleteAclPermission(Integer id) {
         permissionService.deleteAclPermissionById(id);
         return returnCallback("Success", "删除权限成功");
     }
 
-    @RequestMapping(value = "/updateAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateAclPermission(AclPermission permission) {
         permissionService.updateAclPermission(permission);
         return returnCallback("Success", "更新权限成功");
     }
 
-    @RequestMapping(value = "/selectAllPagingPermission", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingPermission(DataTablePage dataTablePage) {
         PageInfo pageInfo = permissionService.getPageInfoAclPermission(dataTablePage);
