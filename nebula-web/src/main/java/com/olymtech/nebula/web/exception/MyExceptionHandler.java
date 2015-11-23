@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public class MyExceptionHandler implements HandlerExceptionResolver {
 
+    @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("ex", ex);

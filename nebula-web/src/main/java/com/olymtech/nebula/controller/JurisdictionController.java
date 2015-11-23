@@ -1,6 +1,5 @@
 package com.olymtech.nebula.controller;
 
-import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +11,8 @@ import javax.annotation.Resource;
 /**
  * Created by liwenji on 2015/11/17.
  */
-@Controller("JurisdictionController")
-@RequestMapping("/")
+@Controller
+@RequestMapping("/role")
 public class JurisdictionController extends BaseController {
 
     @Resource

@@ -1,13 +1,9 @@
 package com.olymtech.nebula.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.dao.IAclPermissionDao;
-import com.olymtech.nebula.dao.IAclRolePermissionDao;
-import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.service.IAclPermissionService;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,64 +12,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
  * Created by WYQ on 2015/11/18.
  */
-@Controller("aclRoleController")
-@RequestMapping("/")
+@Controller
+@RequestMapping("/role")
 public class AclRoleController extends BaseController {
 
     @Resource
     private IAclRoleService aclRoleService;
 
-    @RequestMapping(value = "/role/insertAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/insertAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Callback insertAclRole(AclRole aclRole,@RequestParam("permissionIds[]") List<Integer> permissionIds) {
-        try {
-            aclRoleService.insertAclRole(aclRole, permissionIds);
-            return returnCallback("Success", "插入角色成功");
-        } catch (Exception e) {
-            logger.error("insertAclRole error", e);
-        }
-        return returnCallback("Error", "插入角色失败");
+    public Callback insertAclRole(AclRole aclRole, @RequestParam("permissionIds[]") List<Integer> permissionIds) {
+        aclRoleService.insertAclRole(aclRole, permissionIds);
+        return returnCallback("Success", "插入角色成功");
     }
 
-    @RequestMapping(value = "/role/deleteAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/deleteAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Callback deleteAclRole(Integer id) {
-        try {
-            aclRoleService.deleteAclRoleById(id);
-            return returnCallback("Success", "删除角色成功");
-        } catch (Exception e) {
-            logger.error("deleteAclRole error", e);
-        }
-        return returnCallback("Error", "删除角色失败");
+        aclRoleService.deleteAclRoleById(id);
+        return returnCallback("Success", "删除角色成功");
     }
 
-    @RequestMapping(value = "/role/updateAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/updateAclRole.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Callback updateAclRole(AclRole aclRole,@RequestParam("permissionIds[]") List<Integer> permissionIds) {
-        try {
-            aclRoleService.updateAclRole(aclRole,permissionIds);
-            return returnCallback("Success", "更新角色成功");
-        } catch (Exception e) {
-            logger.error("updateAclRole error", e);
-        }
-        return returnCallback("Error", "更新角色失败");
+    public Callback updateAclRole(AclRole aclRole, @RequestParam("permissionIds[]") List<Integer> permissionIds) {
+        aclRoleService.updateAclRole(aclRole, permissionIds);
+        return returnCallback("Success", "更新角色成功");
     }
 
-    @RequestMapping(value = "/role/selectAllPagingRole", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/selectAllPagingRole", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingRole(DataTablePage dataTablePage) {
         PageInfo pageInfo = aclRoleService.getPageInfoAclRole(dataTablePage);
         return pageInfo;
     }
 
-    @RequestMapping(value = "/role/getAclRoleWithPermissionsByRoleId", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/getAclRoleWithPermissionsByRoleId", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object getAclRoleWithPermissionsByRoleId(Integer roleId) {
         return aclRoleService.getAclRoleWithPermissionsByRoleId(roleId);

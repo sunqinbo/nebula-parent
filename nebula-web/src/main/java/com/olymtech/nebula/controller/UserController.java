@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * Created by WYQ on 2015/11/18.
  */
-@Controller("userController")
-@RequestMapping("/")
+@Controller
+@RequestMapping("/user")
 public class UserController extends BaseController {
 
     @Resource
@@ -35,7 +35,7 @@ public class UserController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/user/insertUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/insertUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") List<Integer> roleIds) {
         try {
@@ -47,7 +47,7 @@ public class UserController extends BaseController {
         return returnCallback("Error", "插入用户失败");
     }
 
-    @RequestMapping(value = "/user/deleteUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/deleteUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback deleteUser(Integer id) {
         try {
@@ -59,7 +59,7 @@ public class UserController extends BaseController {
         return returnCallback("Error","删除用户失败");
     }
 
-    @RequestMapping(value = "/user/updateUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/updateUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]")List<Integer> roleIds ) {
         try {
@@ -71,14 +71,14 @@ public class UserController extends BaseController {
         return returnCallback("Error","更新用户失败");
     }
 
-    @RequestMapping(value = "/user/selectAllPagingUser", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/selectAllPagingUser", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingUser(DataTablePage dataTablePage) {
         PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage);
         return pageInfo;
     }
 
-    @RequestMapping(value = "/role/getAclUserWithRolesByEmpId", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/getAclUserWithRolesByEmpId", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object getAclUserWithRolesByEmpId(Integer empId) {
         return userService.getAclUserWithRolesByEmpId(empId);

@@ -31,8 +31,9 @@ public class AclPermissionController extends BaseController {
 
     @RequestMapping(value = "/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback insertAclPermission(AclPermission permission) {
+    public Callback insertAclPermission(AclPermission permission) throws Exception{
         permissionService.insertAclPermission(permission);
+
         return returnCallback("Success", "插入权限成功");
     }
 

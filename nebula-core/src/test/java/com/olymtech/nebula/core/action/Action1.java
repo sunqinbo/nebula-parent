@@ -4,6 +4,7 @@
  */
 package com.olymtech.nebula.core.action;
 
+import com.olymtech.nebula.core.action.exception.ActionException;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 
 /**
@@ -16,7 +17,7 @@ public class Action1 extends AbstractAction {
     }
 
     @Override
-    public boolean doAction(NebulaPublishEvent event) throws Exception {
+    public boolean doAction(NebulaPublishEvent event) throws ActionException {
 
         try {
             System.out.println("创建文件夹");
@@ -25,7 +26,7 @@ public class Action1 extends AbstractAction {
         }catch (Exception e){
 
             System.out.println("Action1 Exception");
-            throw new Exception("xxx");
+            throw new ActionException(this.getActionName(),"xxx");
 
         }
         return true;
