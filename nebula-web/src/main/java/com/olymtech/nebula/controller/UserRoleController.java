@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  */
 @Controller
 @RequestMapping("/userRole")
-public class AclUserRoleController extends BaseController {
+public class UserRoleController extends BaseController {
 
     @Resource
     private IAclUserRoleService aclUserRoleService;

@@ -21,13 +21,18 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/permission")
-public class AclPermissionController extends BaseController {
+public class PermissionController extends BaseController {
 
     @Resource
     private IAclPermissionService permissionService;
 
     @Resource
     private IAclRoleService aclRoleService;
+
+    @RequestMapping(value="/createPermission.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String createPermission (){
+        return "permission/createPermission";
+    }
 
     @RequestMapping(value = "/insertAclPermission.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
