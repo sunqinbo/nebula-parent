@@ -26,12 +26,12 @@ public class UserController extends BaseController {
 
     @RequestMapping(value="/createUser.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String createUser (){
-        return "event/createUser";
+        return "user/createUser";
     }
 
     @RequestMapping(value="/userList.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String userList (){
-        return "event/userList";
+        return "user/userList";
     }
 
 
