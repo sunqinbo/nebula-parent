@@ -9,14 +9,13 @@ import com.olymtech.nebula.entity.AclPermission;
 import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.service.IAclPermissionService;
+import com.olymtech.nebula.entity.Select2Data;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.ws.ResponseWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,5 +90,18 @@ public class AclRoleServiceImpl implements IAclRoleService {
         }
         aclRole.setAclPermissions(permissions);
         return aclRole;
+    }
+
+    @Override
+    public List<Select2Data> getAllRoles() {
+        List<Select2Data> select2Datas =new ArrayList<>();
+        List<AclRole> aclRoles=aclRoleDao.selectAllPaging(new AclRole());
+        for(AclRole aclRole:aclRoles){
+            Select2Data select2Data=new Select2Data();
+            select2Data.setId(aclRole.getId());
+            select2Data.setText(aclRole.getRoleCname());
+            select2Datas.add(select2Data);
+        }
+        return select2Datas;
     }
 }

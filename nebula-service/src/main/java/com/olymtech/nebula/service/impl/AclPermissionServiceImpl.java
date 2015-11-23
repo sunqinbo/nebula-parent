@@ -64,7 +64,7 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
             znode.setName(aclPermission.getPermissionCname());
             znode.setId(aclPermission.getId());
             znode.setpId(aclPermission.getPid());
-            //若为编辑角色，角色已有权限，则打开已有权限的父节点，勾选子节点
+            //鑻ヤ负缂栬緫瑙掕壊锛岃鑹插凡鏈夋潈闄愶紝鍒欐墦寮�宸叉湁鏉冮檺鐨勭埗鑺傜偣锛屽嬀閫夊瓙鑺傜偣
             if(permissionList.size()>0) {
                 for (AclPermission aclPermissionhas : permissionList) {
                     if (aclPermission.getId() == aclPermissionhas.getId()) {
