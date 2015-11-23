@@ -1,6 +1,8 @@
 $(function(){
     showSelect2();
+    //提交按钮
     $("#submit").click(function(){
+        btnClick(true);
     });
 })
 
@@ -49,35 +51,35 @@ function btnClick(isCreate) {
     var password = $("#password").val();
     var url, tips;
     if (isCreate) {
-        url = "/role/insertAclRole.htm";
+        url = "/user/insertUser.htm";
         tips = "新增";
     }
     else {
-        url = "/role/updateAclRole.htm";
+        url = "/role/updateUser.htm";
         tips = "修改";
     }
-    var selected=$("#roleList").find("option:selected");
-    var roleList=[];
-    for(var i=0;i<selected.length;i++){
-        roleList.push(abc[i].value);
+    var roleList=$("#roleList").find("option:selected");
+    var roleIds=[];
+    for(var i=0;i<roleList.length;i++){
+        roleIds.push(roleList[i].value);
     }
     $.ajax({
         type: "post",
         url: url,
         data: {
-            //"id": $("#roleId").val(),
+            "roleIds": roleIds,
             "isEnable": isEnable,
             "username": username,
             "weixinAcc": weixinAcc,
             "qqAcc": qqAcc,
+            "mobilePhone":mobilePhone,
             "email": email,
             "nickname": nickname,
             "deptName": deptName,
             "jobTitle": jobTitle,
             "empId": empId,
             "supervisorEmpId": supervisorEmpId,
-            "password": password,
-            "permissionIds": permissionIds,
+            "password": password
         },
         datatype: "json",
         success: function (data) {
