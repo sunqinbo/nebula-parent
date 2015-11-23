@@ -23,7 +23,7 @@ public interface IUserService {
 
     Set<String> findPermissions(String username);
 
-    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, List<Integer> roleIds);
+    public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, Integer[] roleIds);
 
     public void deleteNebulaUserInfo(Integer id);
 

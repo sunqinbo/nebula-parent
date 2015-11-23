@@ -37,7 +37,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/insertUser.htm", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") List<Integer> roleIds) {
+    public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") Integer[] roleIds) {
         try {
             userService.insertNebulaUserInfo(userInfo,roleIds);
             return returnCallback("Success", "插入用户成功");

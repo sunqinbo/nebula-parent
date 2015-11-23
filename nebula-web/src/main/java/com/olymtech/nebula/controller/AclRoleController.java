@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.Select2Data;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,13 @@ public class AclRoleController extends BaseController {
     @ResponseBody
     public Object getAclRoleWithPermissionsByRoleId(Integer roleId) {
         return aclRoleService.getAclRoleWithPermissionsByRoleId(roleId);
+    }
+
+    @RequestMapping(value = "/role/selectRole", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object selectPermission() {
+        List<Select2Data> select2Datas =aclRoleService.getAllRoles();
+        return select2Datas;
     }
 }
 
