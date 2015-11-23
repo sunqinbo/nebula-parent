@@ -2,7 +2,7 @@ $(function(){
     $("#submit").click(function(){
         $.ajax({
             type: "POST",
-            url:"/permission/insertAclPermission.htm",
+            url:"/permission/add",
             data:$('#insertform').serialize(),
             async: false,
             success: function(data) {

@@ -2,7 +2,7 @@
 #parse("./head/sidebar.vm")
 #parse("./head/navbar.vm")
 
-<script src="../../public/assets/js/publishList.js" type="text/javascript"></script>
+<script src="/public/assets/js/publishList.js" type="text/javascript"></script>
 
 <div class="content">
     <div class="container-fluid">

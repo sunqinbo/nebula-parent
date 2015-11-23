@@ -6,7 +6,7 @@ $(function(){
 function getLtb(pageNum){
     $.ajax({
         type: "post",
-        url: "/role/selectAllPagingRole",
+        url: "/role/list",
         data: {
             "pageSize":10,
             "pageNum":pageNum
@@ -86,7 +86,7 @@ function listBtn(pageNum){
                 var id=$(this).parent().parent().parent().children().eq(0);
                 $.ajax({
                     type:"post",
-                    url:"/role/deleteAclRole.htm",
+                    url:"/role/delete",
                     data:{"id":id.text()},
                     datatype:"json",
                     success: function (data) {
@@ -116,7 +116,7 @@ function listBtn(pageNum){
         if($(this).text()=="编辑") {
             $(this).click(function() {
                 var id = $(this).parent().parent().parent().children().eq(0);
-                window.open('/editRole.html?id=' + id.text());
+                window.open('/role/update.html?id=' + id.text());
             })
         }
     });

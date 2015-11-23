@@ -1,17 +1,15 @@
-<!doctype html>
+ #parse("./head/header.vm")
+ #parse("./head/sidebar.vm")
+ #parse("./head/navbar.vm")
 
-    #parse("./head/header.vm")
-    #parse("./head/sidebar.vm")
-    #parse("./head/navbar.vm")
-
-<script src="public/assets/js/fileEdit.js" type="text/javascript"></script>
-<script src="public/assets/js/jstree/jstree.min.js"></script>
-<link rel="stylesheet" href="public/assets/js/jstree/dist/themes/default/style.min.css" />
-##<script src="public/frame/dialog/bootstrap-dialog.min.js"></script>
+<script src="/public/assets/js/fileEdit.js" type="text/javascript"></script>
+<script src="/public/assets/js/jstree/jstree.min.js"></script>
+<link rel="stylesheet" href="/public/assets/js/jstree/dist/themes/default/style.min.css" />
+##<script src="/public/frame/dialog/bootstrap-dialog.min.js"></script>
 
 <style>
     .jstree-file-icon{
-        background-image: url(public/assets/img/file-icon.png)!important;
+        background-image: url(/public/assets/img/file-icon.png)!important;
     }
 </style>
 
