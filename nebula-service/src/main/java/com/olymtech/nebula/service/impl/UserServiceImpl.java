@@ -7,12 +7,10 @@ package com.olymtech.nebula.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.IAclRoleDao;
+import com.olymtech.nebula.dao.IAclRolePermissionDao;
 import com.olymtech.nebula.dao.IAclUserRoleDao;
 import com.olymtech.nebula.dao.INebulaUserInfoDao;
-import com.olymtech.nebula.entity.AclRole;
-import com.olymtech.nebula.entity.AclUserRole;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +40,9 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private IAclRoleDao aclRoleDao;
 
+    @Resource
+    private IAclRolePermissionDao aclRolePermissionDao;
+
     @Override
     public NebulaUserInfo findByUsername(String username) {
         NebulaUserInfo nebulaUserInfo = nebulaUserInfoDao.selectByUsername(username);
@@ -49,19 +50,30 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Set<String> findRoles(String username) {
+    public Set<String> findRolesByEmpId(Integer empId) {
         Set<String> roles = new HashSet<String>();
         roles.add("admin");
         roles.add("user");
-        //List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
+        List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);
+        for (AclUserRole aclUserRole : aclUserRoles) {
+            roles.add(aclUserRole.getAclRole().getRoleName());
+        }
         return roles;
     }
 
     @Override
-    public Set<String> findPermissions(String username) {
+    @Deprecated
+    public Set<String> findPermissionsByEmpId(Integer empId) {
         Set<String> permissions = new HashSet<String>();
         permissions.add("add");
         permissions.add("delete");
+        List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);
+        for (AclUserRole aclUserRole : aclUserRoles) {
+            List<AclRolePermission> aclRolePermissions = aclRolePermissionDao.selectByRoleId(aclUserRole.getRoleId());
+            for (AclRolePermission aclRolePermission : aclRolePermissions) {
+                permissions.add(aclRolePermission.getAclPermission().getPermission());
+            }
+        }
         return permissions;
     }
 

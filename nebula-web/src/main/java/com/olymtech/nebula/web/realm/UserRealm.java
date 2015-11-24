@@ -31,8 +31,9 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String)principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(userService.findRoles(username));
-        authorizationInfo.setStringPermissions(userService.findPermissions(username));
+        NebulaUserInfo user = userService.findByUsername(username);
+        authorizationInfo.setRoles(userService.findRolesByEmpId(user.getEmpId()));
+        authorizationInfo.setStringPermissions(userService.findPermissionsByEmpId(user.getEmpId()));
         return authorizationInfo;
     }
 

@@ -6,6 +6,8 @@ public class AclRolePermission extends BaseDO{
 
     private Integer permissionId;
 
+    private AclPermission aclPermission;
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -20,5 +22,13 @@ public class AclRolePermission extends BaseDO{
 
     public void setPermissionId(Integer permissionId) {
         this.permissionId = permissionId;
+    }
+
+    public AclPermission getAclPermission() {
+        return aclPermission;
+    }
+
+    public void setAclPermission(AclPermission aclPermission) {
+        this.aclPermission = aclPermission;
     }
 }
