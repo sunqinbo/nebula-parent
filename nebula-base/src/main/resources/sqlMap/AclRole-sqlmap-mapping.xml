@@ -21,6 +21,17 @@
         from acl_role
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="Nebula-AclRoleDao-Select-By-Ids" resultMap="RM-AclRole">
+        select
+        <include refid="AclRole-Base-Column-List"/>
+        from acl_role
+        where id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="Nebula-AclRoleDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from acl_role
     </select>

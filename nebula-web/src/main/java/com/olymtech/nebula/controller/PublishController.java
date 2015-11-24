@@ -339,7 +339,7 @@ public class PublishController extends BaseController {
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
         String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
-        String[] group5 = {"CLEAR_HISTORY_DIR", "UPDATE_SRC_SVN"};
+        String[] group5 = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
         List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
@@ -383,8 +383,10 @@ public class PublishController extends BaseController {
             map.put("errorMsg", nebulaPublishSchedule.getErrorMsg());
         }
         //获取机器信息
-        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-        map.put("HostInfos", nebulaPublishHosts);
+        if(eventId!=null) {
+            List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
+            map.put("HostInfos", nebulaPublishHosts);
+        }
         return returnCallback("Success", map);
 
     }

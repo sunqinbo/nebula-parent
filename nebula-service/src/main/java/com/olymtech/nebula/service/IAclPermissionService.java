@@ -2,6 +2,7 @@ package com.olymtech.nebula.service;
 
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclPermission;
+import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.zNode;
 
@@ -23,4 +24,6 @@ public interface IAclPermissionService {
     public List<AclPermission> getPermissions();
 
     List<zNode> getzNodes(List<AclPermission> permissionList);
+
+    public List<AclRolePermission> selectByRoleId(Integer roleId);
 }

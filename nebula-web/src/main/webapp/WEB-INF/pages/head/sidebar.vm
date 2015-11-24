@@ -18,21 +18,21 @@
         </div>
         <ul class="nav">
             <li>
-                <a href="/publish_event/publishEvent.htm">
+                <a href="/publish/event.htm">
                     <i class="pe-7s-upload"></i>
 
                     <p>发布申请</p>
                 </a>
             </li>
             <li>
-                <a href="/publish_event/publishList.htm">
+                <a href="/publish/list.htm">
                     <i class="pe-7s-user"></i>
 
                     <p>我的发布</p>
                 </a>
             </li>
             <li>
-                <a href="/publish_event/publishList.htm">
+                <a href="/publish/list.htm">
                     <i class="pe-7s-note2"></i>
 
                     <p>发布数据</p>

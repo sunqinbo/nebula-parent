@@ -4,7 +4,7 @@
  */
 package com.olymtech.nebula.dao;
 
-import com.olymtech.nebula.entity.AclUserRole;
+import com.olymtech.nebula.entity.AclRole;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,19 +21,20 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
-public class AclUserRoleDaoTest {
+public class AclRoleDaoTest {
 
     @Autowired
-    private IAclUserRoleDao aclUserRoleDao;
-
+    private IAclRoleDao aclRoleDao;
 
     @Test
     public void getUserRoleTest(){
-
-        List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(2);
-        System.out.println(aclUserRoles.size());
-        for (AclUserRole aclUserRole : aclUserRoles) {
-            System.out.println(aclUserRole.getAclRole().getRoleName());
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(1);
+        arrayList.add(2);
+        arrayList.add(4);
+        List<AclRole> aclRoles = aclRoleDao.selectByIds(arrayList);
+        for (AclRole aclRole : aclRoles) {
+            System.out.println(aclRole.getRoleCname());
         }
 
     }

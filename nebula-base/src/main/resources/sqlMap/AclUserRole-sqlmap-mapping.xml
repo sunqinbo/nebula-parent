@@ -5,6 +5,13 @@
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="emp_id" property="empId" jdbcType="INTEGER" />
         <result column="role_id" property="roleId" jdbcType="INTEGER" />
+        <association property="aclRole" column="role_id" javaType="com.olymtech.nebula.entity.AclRole">
+            <id column="id" property="id" jdbcType="INTEGER" />
+            <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+            <result column="role_cname" property="roleCname" jdbcType="VARCHAR" />
+            <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+            <result column="is_enable" property="isEnable" jdbcType="INTEGER" />
+        </association>
     </resultMap>
     <sql id="AclUserRole-Base-Column-List">
         id,
@@ -18,10 +25,9 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="Nebula-AclUserRoleDao-Select-By-Emp-Id" parameterType="java.lang.Integer" resultMap="RM-AclUserRole">
-        select
-        <include refid="AclUserRole-Base-Column-List"/>
-        from acl_user_role
-        where emp_id = #{empId,jdbcType=INTEGER}
+        select *
+        from acl_user_role ur left join acl_role r on ur.role_id=r.id
+        where ur.emp_id = #{empId,jdbcType=INTEGER}
     </select>
     <select id="Nebula-AclUserRoleDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from acl_user_role

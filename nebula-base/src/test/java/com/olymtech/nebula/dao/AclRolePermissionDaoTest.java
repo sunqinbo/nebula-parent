@@ -4,7 +4,7 @@
  */
 package com.olymtech.nebula.dao;
 
-import com.olymtech.nebula.entity.AclUserRole;
+import com.olymtech.nebula.entity.AclRolePermission;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +20,18 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
-public class AclUserRoleDaoTest {
+public class AclRolePermissionDaoTest {
 
     @Autowired
-    private IAclUserRoleDao aclUserRoleDao;
+    private IAclRolePermissionDao aclRolePermissionDao;
 
 
     @Test
     public void getUserRoleTest(){
-
-        List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(2);
-        System.out.println(aclUserRoles.size());
-        for (AclUserRole aclUserRole : aclUserRoles) {
-            System.out.println(aclUserRole.getAclRole().getRoleName());
+        List<AclRolePermission> result= aclRolePermissionDao.selectByRoleId(1);
+        System.out.println(result.size());
+        for (AclRolePermission r : result) {
+            System.out.println(r.getAclPermission().getPermission());
         }
 
     }
