@@ -53,6 +53,7 @@ public class UserServiceImpl implements IUserService {
         Set<String> roles = new HashSet<String>();
         roles.add("admin");
         roles.add("user");
+
         return roles;
     }
 

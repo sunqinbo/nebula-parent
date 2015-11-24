@@ -5,6 +5,8 @@
 package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.service.IPublishEventService;
+import com.olymtech.nebula.service.impl.PublishEventServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +20,17 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
-public class ChangeLnActionTest {
+public class CreateDirActionTest {
+
 
     @Autowired
-    private ChangeLnAction changeLnAction;
+    private IPublishEventService publishEventService;
+
+
+    @Autowired
+    private CreateDirAciton createDirAciton;
 
     @Before
     public void init() throws Exception {
@@ -34,8 +41,11 @@ public class ChangeLnActionTest {
     @Test
     public void createDirActionTest(){
 
+        System.out.println(publishEventService);
+
+
         try {
-            changeLnAction.doAction(new NebulaPublishEvent());
+            createDirAciton.doAction(new NebulaPublishEvent());
         } catch (Exception e) {
             e.printStackTrace();
         }

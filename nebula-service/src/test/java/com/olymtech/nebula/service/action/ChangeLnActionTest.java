@@ -4,45 +4,44 @@
  */
 package com.olymtech.nebula.service.action;
 
-import com.olymtech.nebula.core.action.ActionChain;
-import com.olymtech.nebula.core.action.Dispatcher;
-import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
- * @author taoshanchang 15/11/5
+ * @author taoshanchang 15/11/4
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
-public class ActionChainTest {
+public class ChangeLnActionTest {
+
+    @Autowired
+    private ChangeLnAction changeLnAction;
 
     @Before
     public void init() throws Exception {
 
+
     }
 
     @Test
-    public void actionChainTest(){
-
-        ActionChain actionChain = new ActionChain( );
-
-        actionChain.addAction(SpringUtils.getBean(CpEtcAction.class));
-        actionChain.addAction(SpringUtils.getBean(CreateDirAciton.class));
+    public void createDirActionTest(){
 
         try {
-            Dispatcher dispatcher = new Dispatcher(actionChain,null,null);
-            dispatcher.doDispatch(new NebulaPublishEvent());
+            changeLnAction.doAction(new NebulaPublishEvent());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
+
+
 }
