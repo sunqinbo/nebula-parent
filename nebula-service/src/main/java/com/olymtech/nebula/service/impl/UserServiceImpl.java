@@ -53,6 +53,7 @@ public class UserServiceImpl implements IUserService {
         Set<String> roles = new HashSet<String>();
         roles.add("admin");
         roles.add("user");
+        //List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
         return roles;
     }
 
@@ -67,7 +68,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, Integer[] roleIds) {
         Integer id = nebulaUserInfoDao.insert(nebulaUserInfo);
-//        int idInt=roleIds.get(0);
         for (Integer roleId : roleIds) {
             AclUserRole aclUserRole = new AclUserRole();
             aclUserRole.setEmpId(nebulaUserInfo.getEmpId());
@@ -108,15 +108,12 @@ public class UserServiceImpl implements IUserService {
     public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId) {
         NebulaUserInfo userInfo = nebulaUserInfoDao.selectByEmpId(empId);
         List<Integer> roleIds = new ArrayList<>();
-        List<AclRole> roles = new ArrayList<>();
         List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);
         for (AclUserRole aclUserRole : aclUserRoles) {
             roleIds.add(aclUserRole.getRoleId());
         }
-        for (Integer roleId : roleIds) {
-            roles.add(aclRoleDao.selectById(roleId));
-        }
-        userInfo.setAclRoles(roles);
+        List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
+        userInfo.setAclRoles(aclRoles);
         return userInfo;
     }
 }

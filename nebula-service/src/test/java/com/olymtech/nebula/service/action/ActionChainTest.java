@@ -4,54 +4,45 @@
  */
 package com.olymtech.nebula.service.action;
 
+import com.olymtech.nebula.core.action.ActionChain;
+import com.olymtech.nebula.core.action.Dispatcher;
+import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.service.IPublishEventService;
-import com.olymtech.nebula.service.impl.PublishEventServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
- * @author taoshanchang 15/11/4
+ * @author taoshanchang 15/11/5
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
-public class CreateDirActionTest {
-
-
-    @Autowired
-    private IPublishEventService publishEventService;
-
-
-    @Autowired
-    private CreateDirAciton createDirAciton;
+public class ActionChainTest {
 
     @Before
     public void init() throws Exception {
 
-
     }
 
     @Test
-    public void createDirActionTest(){
+    public void actionChainTest(){
 
-        System.out.println(publishEventService);
+        ActionChain actionChain = new ActionChain( );
 
+        actionChain.addAction(SpringUtils.getBean(CpEtcAction.class));
+        actionChain.addAction(SpringUtils.getBean(CreateDirAciton.class));
 
         try {
-            createDirAciton.doAction(new NebulaPublishEvent());
+            Dispatcher dispatcher = new Dispatcher(actionChain,null,null);
+            dispatcher.doDispatch(new NebulaPublishEvent());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-
-
-
 }

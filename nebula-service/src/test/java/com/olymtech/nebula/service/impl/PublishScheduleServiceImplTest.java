@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * Created by Gavin on 2015-11-06 16:03.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
 public class PublishScheduleServiceImplTest {
 

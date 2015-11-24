@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * Created by WYQ on 2015/11/17.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.config.xml" })
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
 public class AclPermissionServiceImplTest {
 
