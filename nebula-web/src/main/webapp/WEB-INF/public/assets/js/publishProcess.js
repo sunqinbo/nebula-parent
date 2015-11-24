@@ -198,26 +198,28 @@ function Initialization(){
                     whichStep=whichStep+1;
                 }
                 else {
-                    if(actionGroup==2){
+                    actionGroup = actionGroup - 1 + 2;
+                    if(actionGroup==3){
                         $("#restartPublish").hide();
                     }
-                    actionGroup = actionGroup - 1 + 2;
-                    if (actionGroup == 4) {
+                    else if (actionGroup == 4) {
                         $("#btn_ConfirmResult").attr('disabled', false);
-                        $("#btn_ConfirmResult").addClass("btn-info")
+                        $("#btn_ConfirmResult").addClass("btn-info");
                         $("#btn4").attr('disabled', false);
                         $("#btn4").addClass("btn-info");
                         $("#step" + (3)).hide();
                     }
-                    for (var i = 1; i < 4; i++) {
-                        if (i == actionGroup) {
-                            $("#btn" + i).attr('disabled', false);
-                            $("#btn"+i).addClass("btn-info");
-                            $("#step" + (i - 1)).hide();
-                        }
-                        else {
-                            $("#btn" + i).attr('disabled', true);
-                            $("#btn4").removeClass("btn-info");
+                    else {
+                        for (var i = 1; i < 4; i++) {
+                            if (i == actionGroup) {
+                                $("#btn" + i).attr('disabled', false);
+                                $("#btn" + i).addClass("btn-info");
+                                $("#step" + (i - 1)).hide();
+                            }
+                            else {
+                                $("#btn" + i).attr('disabled', true);
+                                $("#btn4").removeClass("btn-info");
+                            }
                         }
                     }
                     return;
