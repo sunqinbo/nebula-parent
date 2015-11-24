@@ -383,8 +383,10 @@ public class PublishController extends BaseController {
             map.put("errorMsg", nebulaPublishSchedule.getErrorMsg());
         }
         //获取机器信息
-        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-        map.put("HostInfos", nebulaPublishHosts);
+        if(eventId!=null) {
+            List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
+            map.put("HostInfos", nebulaPublishHosts);
+        }
         return returnCallback("Success", map);
 
     }

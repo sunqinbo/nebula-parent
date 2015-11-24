@@ -74,7 +74,6 @@ function showSelect2(){
             $.notify({
                 icon: '',
                 message: "很抱歉载入角色失败，原因"+ errorThrown
-
             },{
                 type: 'info',
                 timer: 1000
