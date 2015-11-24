@@ -59,6 +59,27 @@
                     <p>发布工具</p>
                 </a>
             </li>
+            <li>
+                <a href="#">
+                    <i class="pe-7s-users"></i>
+
+                    <p>用户</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="pe-7s-id"></i>
+
+                    <p>角色</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="pe-7s-network"></i>
+
+                    <p>权限</p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

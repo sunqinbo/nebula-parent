@@ -3,17 +3,17 @@ package com.olymtech.nebula.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.IAclPermissionDao;
+import com.olymtech.nebula.dao.IAclRolePermissionDao;
 import com.olymtech.nebula.entity.AclPermission;
+import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.zNode;
 import com.olymtech.nebula.service.IAclPermissionService;
-import com.olymtech.nebula.service.IAclRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +26,9 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
 
     @Resource
     private IAclPermissionDao aclPermissionDao;
+
+    @Resource
+    private IAclRolePermissionDao aclRolePermissionDao;
 
     @Override
     public int insertAclPermission(AclPermission permission) {
@@ -79,5 +82,10 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
             zNodes.add(znode);
         }
         return zNodes;
+    }
+
+    @Override
+    public List<AclRolePermission> selectByRoleId(Integer roleId) {
+        return aclRolePermissionDao.selectByRoleId(roleId);
     }
 }

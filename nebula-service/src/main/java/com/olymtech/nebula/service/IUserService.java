@@ -19,9 +19,9 @@ public interface IUserService {
 
     public NebulaUserInfo findByUsername(String username);
 
-    Set<String> findRoles(String username);
+    public Set<String> findRolesByEmpId(Integer empId);
 
-    Set<String> findPermissions(String username);
+    public Set<String> findPermissionsByEmpId(Integer empId);
 
     public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, Integer[] roleIds);
 

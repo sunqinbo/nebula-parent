@@ -1,16 +1,14 @@
 package com.olymtech.nebula.entity;
 
-import java.util.List;
-
 public class AclUserRole extends BaseDO{
 
     private Integer empId;
 
     private Integer roleId;
 
-    private List<AclRole> aclRoleList;
+    private AclRole aclRole;
 
-    private List<NebulaUserInfo> nebulaUserInfoList;
+    private NebulaUserInfo nebulaUserInfo;
 
     public Integer getEmpId() {
         return empId;
@@ -28,19 +26,19 @@ public class AclUserRole extends BaseDO{
         this.roleId = roleId;
     }
 
-    public List<AclRole> getAclRoleList() {
-        return aclRoleList;
+    public NebulaUserInfo getNebulaUserInfo() {
+        return nebulaUserInfo;
     }
 
-    public void setAclRoleList(List<AclRole> aclRoleList) {
-        this.aclRoleList = aclRoleList;
+    public void setNebulaUserInfo(NebulaUserInfo nebulaUserInfo) {
+        this.nebulaUserInfo = nebulaUserInfo;
     }
 
-    public List<NebulaUserInfo> getNebulaUserInfoList() {
-        return nebulaUserInfoList;
+    public AclRole getAclRole() {
+        return aclRole;
     }
 
-    public void setNebulaUserInfoList(List<NebulaUserInfo> nebulaUserInfoList) {
-        this.nebulaUserInfoList = nebulaUserInfoList;
+    public void setAclRole(AclRole aclRole) {
+        this.aclRole = aclRole;
     }
 }
