@@ -82,24 +82,16 @@ $(document).ready(function(){
     //页面初次加载进度条控制
     Initialization();
     setInterval("Initialization()",5000);
-    //var btnwhich=${whichstep};
-    //btncontrol();
     //按钮点击事件
     $("#btn1").click(function(){
         $("#btn1").attr('disabled',true);
         $("#btn1").removeClass("btn-info");
         $("#step1").show();
-        //$("#step2").hide();
-        //$("#step3").hide();
-        //$("#step4").hide();
     });
     $("#btn2").click(function(){
         $("#btn2").attr('disabled',true);
         $("#btn2").removeClass("btn-info");
-        //$("#step1").hide();
         $("#step2").show();
-        //$("#step3").hide();
-        //$("#step4").hide();
     });
     $("#btn3").click(function(){
         $("#btn3").attr('disabled',true);
@@ -112,11 +104,7 @@ $(document).ready(function(){
         $("#btn4").removeClass("btn-info");
         $("#btn_ConfirmResult").attr('disabled',true);
         $("#btn_ConfirmResult").removeClass("btn-info");
-        //$("#step1").hide();
-        //$("#step2").hide();
-        //$("#step3").hide();
         $("#step4").show();
-        //$("#step5").hide();
     })
     $("#btn_ConfirmResult").click(function(){
         $("#btn_ConfirmResult").attr('disabled',true);
@@ -136,7 +124,7 @@ function Initialization(){
         data: {
             eventId: $("#eventId").val()
         },
-        url: "/publishProcessStep.htm",
+        url: "/publish/publishProcessStep",
         datetype: "json",
         success: function (data) {
             //机器信息列表相关
@@ -174,12 +162,6 @@ function Initialization(){
                 $("#loading-status").hide();
             }
 
-            //if(actionState=="false"){
-            //    $("#errorMsgDiv").html(data.responseContext.errorMsg);
-            //    $("#errorMsgDiv").show();
-            //}
-            //else
-            //    $("#errorMsgDiv").hide();
             //设置进度条长度
             var lastStep;
             switch (actionGroup){
@@ -190,7 +172,7 @@ function Initialization(){
                 case 5:lastStep=2;break;
             }
 
-            //动作成功执行 隐藏重试按钮
+            //动作成功执行 隐藏重试按钮,失败显示重试按钮并显示错误信息
             if(actionState=="false"){
                 var false_btn="<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
                 $("#false_btn").html(false_btn);
@@ -256,7 +238,7 @@ function Initialization(){
                     var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
                     if (ms == true) {
                         $.ajax({
-                            url:"/publish_event/updateEtcEnd.htm",
+                            url:"/publish/updateEtcEnd.htm",
                             type:"post",
                             data:{"id":$("#eventId").val()},
                             success:function(jsonData){
@@ -302,9 +284,6 @@ function Initialization(){
             });
         }
     });
-    //var whichStep=$("#whichStep").val();
-    //var actionGroup=$("#actionGroup").val()+"";
-    //var actionState=$("#actionState").val();
 }
 
 

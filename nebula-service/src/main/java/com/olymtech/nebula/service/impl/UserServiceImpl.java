@@ -104,9 +104,10 @@ public class UserServiceImpl implements IUserService {
         return pageInfo;
     }
 
+
     @Override
     public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId) {
-        NebulaUserInfo userInfo = nebulaUserInfoDao.selectById(empId);
+        NebulaUserInfo userInfo = nebulaUserInfoDao.selectByEmpId(empId);
         List<Integer> roleIds = new ArrayList<>();
         List<AclRole> roles = new ArrayList<>();
         List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);

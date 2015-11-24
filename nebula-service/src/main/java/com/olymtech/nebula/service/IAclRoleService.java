@@ -23,4 +23,6 @@ public interface IAclRoleService {
     public AclRole getAclRoleWithPermissionsByRoleId(Integer roleId);
 
     public List<Select2Data> getAllRoles();
+
+    public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles);
 }

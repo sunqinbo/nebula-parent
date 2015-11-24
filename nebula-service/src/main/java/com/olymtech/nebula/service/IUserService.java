@@ -32,4 +32,6 @@ public interface IUserService {
     public PageInfo getPageInfoAclUser(DataTablePage dataTablePage);
 
     public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId);
+
+
 }

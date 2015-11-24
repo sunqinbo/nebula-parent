@@ -8,7 +8,7 @@ $(function(){
             async: false,
             type:"post",
             data:{"empId":$("#empId").val()},
-            url:"/role/getAclUserWithRolesByEmpId",
+            url:"/user/get/empId",
             datatype:"json",
             success: function (data) {
                 $("#username").val(data["username"]);
@@ -48,6 +48,9 @@ $(function(){
     $("#submit").click(function(){
         btnClick(true);
     });
+    $("#save").click(function(){
+        btnClick(false);
+    });
 })
 
 //角色信息显示select2
@@ -57,7 +60,7 @@ function showSelect2(){
         async: false,
         type:"post",
         data:{
-            "id":$("#empId").val()
+            "empId":$("#empId").val()
         },
         url:"/role/selectRole",
         datatype:"json",
@@ -85,6 +88,7 @@ function showSelect2(){
 function btnClick(isCreate) {
 
     var isEnable = $('#isEnable input[name="isEnable"]:checked ').val();
+    var id=$("#id").val();
     var username = $("#username").val();
     var mobilePhone = $("#mobilePhone").val();
     var weixinAcc = $("#weixinAcc").val();
@@ -98,11 +102,11 @@ function btnClick(isCreate) {
     var password = $("#password").val();
     var url, tips;
     if (isCreate) {
-        url = "/user/insertUser.htm";
+        url = "/user/add";
         tips = "新增";
     }
     else {
-        url = "/user/updateUser.htm";
+        url = "/user/update";
         tips = "修改";
     }
     var roleList=$("#roleList").find("option:selected");
@@ -114,6 +118,7 @@ function btnClick(isCreate) {
         type: "post",
         url: url,
         data: {
+            "id":id,
             "roleIds": roleIds,
             "isEnable": isEnable,
             "username": username,

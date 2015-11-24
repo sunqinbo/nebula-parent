@@ -20,7 +20,7 @@ public class UserRoleController extends BaseController {
     @Resource
     private IAclUserRoleService aclUserRoleService;
 
-    @RequestMapping(value = "/insertAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertAclUserRole(AclUserRole aclUserRole) {
         aclUserRoleService.insertAclUserRole(aclUserRole);
@@ -28,14 +28,14 @@ public class UserRoleController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/deleteAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback deleteAclUserRole(Integer id) {
         aclUserRoleService.deleteAclUserRoleById(id);
         return returnCallback("Success", "删除用户角色成功");
     }
 
-    @RequestMapping(value = "/updateAclUserRole.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateAclUserRole(AclUserRole aclUserRole) {
         aclUserRoleService.updateAclUserRole(aclUserRole);

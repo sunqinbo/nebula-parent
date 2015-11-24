@@ -6,7 +6,7 @@ $(function(){
 function getjtb(pageNum){
     $.ajax({
         type: "post",
-        url: "/permission/selectAllPagingPermission",
+        url: "/permission/list",
         data: {
             "pageSize":10,
             "pageNum":pageNum
@@ -87,7 +87,7 @@ function listBtn(pageNum){
                 var id=$(this).parent().parent().parent().children().eq(0);
                 $.ajax({
                     type:"post",
-                    url:"/permission/deleteAclPermission.htm",
+                    url:"/permission/delete",
                     data:{"id":id.text()},
                     datatype:"json",
                     success: function (data) {
@@ -129,7 +129,7 @@ function listBtn(pageNum){
                     var url=$(this).parent().parent().parent().children().eq(5).children().eq(0).val();
                     $.ajax({
                         type:"post",
-                        url:"/permission/updateAclPermission.htm",
+                        url:"/permission/update",
                         data:{"id":id,
                             "permissionName":permissionName,
                             "permissionCname":permissionCname,

@@ -6,7 +6,7 @@ $(function(){
 function getLtb(pageNum){
     $.ajax({
         type: "post",
-        url: "/user/selectAllPagingUser",
+        url: "/user/list",
         data: {
             "pageSize":10,
             "pageNum":pageNum
@@ -94,7 +94,7 @@ function listBtn(pageNum){
                 var id=$(this).parent().parent().parent().children().eq(0);
                 $.ajax({
                     type:"post",
-                    url:"/user/deleteUser.htm",
+                    url:"/user/delete",
                     data:{"id":id.text()},
                     datatype:"json",
                     success: function (data) {
@@ -124,7 +124,8 @@ function listBtn(pageNum){
         if($(this).text()=="编辑") {
             $(this).click(function() {
                 var empId = $(this).parent().parent().parent().children().eq(9);
-                window.open('/editUser.html?id=' + empId.text());
+                var id = $(this).parent().parent().parent().children().eq(0);
+                window.open('/user/update.htm?empId=' + empId.text()+'&id='+id.text());
             })
         }
     });
