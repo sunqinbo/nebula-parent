@@ -43,7 +43,7 @@
                                 </td>
                                 <td>
                                     <label>发布环境：</label>
-                                    <label>$!{Event.publishEnv}</label>
+                                    <label id="publishEnv">$!{Event.publishEnv}</label>
                                 </td>
                                 <td>
                                     <label>发布类型：</label>
@@ -97,8 +97,7 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="col-md-12">
-                    <div id="publish_btn" class="card card-plain">
+                <div id="publish_btn" class="card card-plain">
                         <div class="header">发布操作</div>
                         <hr/>
                         <div class="content">
@@ -108,9 +107,9 @@
                             <button type="button" id="btn_ConfirmResult" class="btn btn-default" onclick="nebula.publish.process.publishSuccessEnd()">确认成功</button>
                             <button type="button" id="btn4" class="btn btn-default" onclick="nebula.publish.process.publishFailEnd()">我要回滚</button>
                             <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
+                            <button type="button" style="display: none" id="nextPublish" class="btn btn-info">醉了</button>
                         </div>
                     </div>
-                </div>
                 <div id="etc_edit" class="col-md-12">
                     <div id="step1" class="card card-plain">
                         <div class="header">发布准备</div>

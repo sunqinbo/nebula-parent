@@ -194,36 +194,65 @@ function Initialization(){
             }
             //动作为此阶段最后一步完成 下一步按钮可点
             if(whichStep==lastStep&&actionState=="true"){
-                if(actionGroup>=4){
-                    whichStep=whichStep+1;
-                }
-                else {
-                    actionGroup = actionGroup - 1 + 2;
-                    if(actionGroup==3){
-                        $("#restartPublish").hide();
-                    }
-                    else if (actionGroup == 4) {
-                        $("#btn_ConfirmResult").attr('disabled', false);
-                        $("#btn_ConfirmResult").addClass("btn-info");
-                        $("#btn4").attr('disabled', false);
-                        $("#btn4").addClass("btn-info");
-                        $("#step" + (3)).hide();
-                    }
-                    else {
-                        for (var i = 1; i < 4; i++) {
-                            if (i == actionGroup) {
-                                $("#btn" + i).attr('disabled', false);
-                                $("#btn" + i).addClass("btn-info");
-                                $("#step" + (i - 1)).hide();
+                actionGroup = actionGroup - 1 + 2;
+                switch(actionGroup){
+                    case 3:$("#restartPublish").hide();return;
+                    //阶段三完成，确认发布，和回滚可点
+                    case 4:$("#btn_ConfirmResult").attr('disabled', false);
+                            $("#btn_ConfirmResult").addClass("btn-info");
+                            $("#btn4").attr('disabled', false);
+                            $("#btn4").addClass("btn-info");
+                            $("#step" + (3)).hide();return;
+                    default :if(actionGroup<5){return;}
+                        whichStep=whichStep+1;
+                        var whichshow=actionGroup-1+"";
+                        $("#step"+whichshow).show();
+                        $("#processbar" + whichshow).setStep(whichStep);
+                        if(actionGroup==6){
+                            var btn_text;
+                            if($("#publishEnv").html()=="test"){
+                                btn_text="准生产";
                             }
-                            else {
-                                $("#btn" + i).attr('disabled', true);
-                                $("#btn4").removeClass("btn-info");
+                            if($("#publishEnv").val()=="stage"){
+                                btn_text="生产";
                             }
+                            $("#nextPublish").text("进入"+btn_text).show();
+                            $("#nextPublish").click(function(){
+                                nextPublish(btn_text);
+                            })
                         }
-                    }
-                    return;
+                        return;
                 }
+                //if(actionGroup>=4){
+                //    whichStep=whichStep+1;
+                //}
+                //else {
+                //    actionGroup = actionGroup - 1 + 2;
+                //    if(actionGroup==3){
+                //        $("#restartPublish").hide();
+                //    }
+                //    else if (actionGroup == 4) {
+                //        $("#btn_ConfirmResult").attr('disabled', false);
+                //        $("#btn_ConfirmResult").addClass("btn-info");
+                //        $("#btn4").attr('disabled', false);
+                //        $("#btn4").addClass("btn-info");
+                //        $("#step" + (3)).hide();
+                //    }
+                //    else {
+                //        for (var i = 1; i < 4; i++) {
+                //            if (i == actionGroup) {
+                //                $("#btn" + i).attr('disabled', false);
+                //                $("#btn" + i).addClass("btn-info");
+                //                $("#step" + (i - 1)).hide();
+                //            }
+                //            else {
+                //                $("#btn" + i).attr('disabled', true);
+                //                $("#btn4").removeClass("btn-info");
+                //            }
+                //        }
+                //    }
+                //    return;
+                //}
             }
             //动作为ect开始时
             if (actionGroup==1&&whichStep==4&&(actionState == ""||actionState=="null")) {
@@ -296,4 +325,29 @@ function btnUnclick(){
     $("#btn3").attr('disabled',true);
     $("#btn4").attr('disabled',true);
     $("#btn_ConfirmResult").attr('disabled',true);
+}
+
+//下一阶段的发布事件的点击事件
+function nextPublish(nowPublish){
+    $.ajax({
+        async: false,
+        type:"post",
+        data:{
+            eventId: $("#eventId").val()
+        },
+        url:"/publish/add/nextpublish",
+        datatype:"json",
+        success: function (data) {
+            location.href="/publish/publishProcess.htm?id=9";
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $.notify({
+                icon: '',
+                message: "很抱歉插入发布事件单失败，原因"+ errorThrown
+            },{
+                type: 'info',
+                timer: 1000
+            });
+        }
+    })
 }
