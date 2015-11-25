@@ -35,17 +35,27 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Integer submitEmpId;
 
+    private Integer publishEmpId;
+
     private Boolean isSuccessPublish;
 
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     private PublishStatus publishStatus;
 
-    private Boolean isApproved;
+    private Boolean isApproved = false;
 
     private PublishActionGroup publishActionGroup;
 
     private List<NebulaPublishModule> publishModules;
+
+    public Integer getPublishEmpId() {
+        return publishEmpId;
+    }
+
+    public void setPublishEmpId(Integer publishEmpId) {
+        this.publishEmpId = publishEmpId;
+    }
 
     public PublishActionGroup getPublishActionGroup() {
         return publishActionGroup;

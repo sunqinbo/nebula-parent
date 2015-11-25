@@ -19,6 +19,18 @@
         from nebula_publish_app
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="Nebula-NebulaPublishAppDao-Select-By-Event-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishApp">
+        select
+        <include refid="NebulaPublishApp-Base-Column-List"/>
+        from nebula_publish_app
+        where publish_event_id = #{publishEventId,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishAppDao-Select-By-Module-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishApp">
+        select
+        <include refid="NebulaPublishApp-Base-Column-List"/>
+        from nebula_publish_app
+        where publish_module_id = #{publish_module_id,jdbcType=INTEGER}
+    </select>
     <select id="Nebula-NebulaPublishAppDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from nebula_publish_app
     </select>
