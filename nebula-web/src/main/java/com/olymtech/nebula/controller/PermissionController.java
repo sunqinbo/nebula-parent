@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +42,8 @@ public class PermissionController extends BaseController {
 
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback insertAclPermission(AclPermission permission) throws Exception{
+    public Callback insertAclPermission(@Valid AclPermission permission){
         permissionService.insertAclPermission(permission);
-
         return returnCallback("Success", "插入权限成功");
     }
 

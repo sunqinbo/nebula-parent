@@ -2,6 +2,7 @@ package com.olymtech.nebula.entity;
 
 import com.olymtech.nebula.common.utils.CustomDateSerializer;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.entity.enums.PublishStatus;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -36,7 +37,15 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Boolean isSuccessPublish;
 
+    private Boolean isDelete;
+
+    private PublishStatus publishStatus;
+
+    private Boolean isApproved;
+
     private PublishActionGroup publishActionGroup;
+
+    private List<NebulaPublishModule> publishModules;
 
     public PublishActionGroup getPublishActionGroup() {
         return publishActionGroup;
@@ -45,8 +54,6 @@ public class NebulaPublishEvent extends BaseDO {
     public void setPublishActionGroup(PublishActionGroup publishActionGroup) {
         this.publishActionGroup = publishActionGroup;
     }
-
-    private List<NebulaPublishModule> publishModules;
 
     public List<NebulaPublishModule> getPublishModules() {
         return publishModules;
@@ -160,5 +167,29 @@ public class NebulaPublishEvent extends BaseDO {
 
     public void setIsSuccessPublish(Boolean isSuccessPublish) {
         this.isSuccessPublish = isSuccessPublish;
+    }
+
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public PublishStatus getPublishStatus() {
+        return publishStatus;
+    }
+
+    public void setPublishStatus(PublishStatus publishStatus) {
+        this.publishStatus = publishStatus;
+    }
+
+    public Boolean getIsApproved() {
+        return isApproved;
+    }
+
+    public void setIsApproved(Boolean isApproved) {
+        this.isApproved = isApproved;
     }
 }
