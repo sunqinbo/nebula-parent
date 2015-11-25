@@ -401,5 +401,14 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success","");
 //    }
+    @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object addnextpublish(Integer eventId,String nowPublish) {
+        NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        nebulaPublishEvent.setPublishEnv(nowPublish);
+        nebulaPublishEvent.setId(null);
+        int id=publishEventService.createPublishEvent(nebulaPublishEvent);
+        return returnCallback("Success", id);
+    }
 
 }

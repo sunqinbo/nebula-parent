@@ -25,7 +25,6 @@ import java.util.Set;
 /**
  * @author taoshanchang 15/11/9
  */
-
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -52,8 +51,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Set<String> findRolesByEmpId(Integer empId) {
         Set<String> roles = new HashSet<String>();
-        roles.add("admin");
-        roles.add("user");
         List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);
         for (AclUserRole aclUserRole : aclUserRoles) {
             roles.add(aclUserRole.getAclRole().getRoleName());
@@ -65,8 +62,6 @@ public class UserServiceImpl implements IUserService {
     @Deprecated
     public Set<String> findPermissionsByEmpId(Integer empId) {
         Set<String> permissions = new HashSet<String>();
-        permissions.add("add");
-        permissions.add("delete");
         List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(empId);
         for (AclUserRole aclUserRole : aclUserRoles) {
             List<AclRolePermission> aclRolePermissions = aclRolePermissionDao.selectByRoleId(aclUserRole.getRoleId());
