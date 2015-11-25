@@ -1,5 +1,6 @@
 package com.olymtech.nebula.controller;
 
+import com.olymtech.nebula.entity.Callback;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by taoshanchang on 2015/11/3.
@@ -31,6 +33,16 @@ public class LoginController {
         }
         model.addAttribute("error", error);
         return "login";
+    }
+
+    @RequestMapping(value = "/test")
+    public Callback test(HttpServletRequest request, HttpServletResponse response){
+        throw new NullPointerException("xxxx");
+    }
+
+    @RequestMapping(value = "/test2")
+    public String test2(HttpServletRequest request, HttpServletResponse response){
+        throw new NullPointerException("xxxx");
     }
 
 }

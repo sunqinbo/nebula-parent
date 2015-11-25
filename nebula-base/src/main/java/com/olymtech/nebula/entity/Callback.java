@@ -13,8 +13,21 @@ public class Callback {
     /* 请求返回 具体内容*/
     private Object responseContext;
 
+    /**
+     * default
+     */
+    private int code = 200;
+
     public Callback() {
         super();
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public Callback(String callbackMsg, Object responseContext){
