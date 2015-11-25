@@ -8,6 +8,7 @@ import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.entity.enums.PublishStatus;
 import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by WYQ on 2015/11/3.
@@ -87,6 +90,16 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
+        String publishSvn = nebulaPublishEvent.getPublishSvn();
+        String pattern = "svn://svn.olymtech.com/warspace/";
+        Pattern p = Pattern.compile(pattern);
+        Matcher match = p.matcher(publishSvn);
+        if(!match.find()){
+            return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
+        }
+        Integer empId = getLoginUser().getEmpId();
+        nebulaPublishEvent.setSubmitEmpId(empId);
+        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
         return returnCallback("Success", id);
     }

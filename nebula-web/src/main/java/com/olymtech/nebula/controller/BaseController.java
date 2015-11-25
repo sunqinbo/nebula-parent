@@ -5,6 +5,8 @@
 package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.entity.Callback;
+import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.web.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,11 @@ public class BaseController {
         callback.setCallbackMsg(callBackMsg);
         callback.setResponseContext(responseContext);
         return callback;
+    }
+
+    public NebulaUserInfo getLoginUser(){
+        NebulaUserInfo nebulaUserInfo = (NebulaUserInfo) getRequest().getAttribute(Constants.CURRENT_USER);
+        return nebulaUserInfo;
     }
 
     public Logger getLogger() {

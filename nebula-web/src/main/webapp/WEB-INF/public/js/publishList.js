@@ -12,17 +12,18 @@ $(document).ready(function(){
                         var tbString="";
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
-                            tbString=tbString+"<tr><td>"+data["list"][i]["id"]+
-                                "</td><td>"+data["list"][i]["publishSubject"]+"</td><td>"+
-                                    data["list"][i]["publishEnv"]+"</td><td>"+data["list"][i]["模块"]+
-                                "</td><td>"+data["list"][i]["submitDatetime"]+
-                                "</td><td>"+""+
-                                "</td><td>"+data["list"][i]["isSuccessPublish"]+
-                                "</td><td>"+data["list"][i]["submitEmpId"]+
-                                "</td><td>"+data["list"][i]["submitEmpId"]+
-                                "</td><td>"+data["list"][i]["publishProductCname"]+
-                                "</td><td>"+""+"</td><td><a href='/publish/process.htm?id="+
-                                data["list"][i]["id"]+"'>详情</a></td>"
+                            var event = data["list"][i];
+                            tbString=tbString+"<tr><td>"+event.id+
+                                "</td><td>"+event.publishSubject+
+                                "</td><td>"+nebula.common.transform.publishEnv(event.publishEnv)+
+                                "</td><td>"+event.submitDatetime+
+                                "</td><td>"+
+                                "</td><td>"+event.isSuccessPublish+
+                                "</td><td>"+event.submitEmpId+
+                                "</td><td>"+event.publishEmpId+
+                                "</td><td>"+event.publishProductCname+
+                                "</td><td>"+
+                                "</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>"
                         }
                         totalPage=data["pages"];
                         if(totalPage>0) {

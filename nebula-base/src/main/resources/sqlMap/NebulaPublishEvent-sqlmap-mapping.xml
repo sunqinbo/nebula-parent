@@ -15,6 +15,7 @@
         <result column="publish_datetime" property="publishDatetime" jdbcType="TIMESTAMP" />
         <result column="submit_datetime" property="submitDatetime" jdbcType="TIMESTAMP" />
         <result column="submit_emp_id" property="submitEmpId" jdbcType="INTEGER" />
+        <result column="publish_emp_id" property="publishEmpId" jdbcType="INTEGER" />
         <result column="is_success_publish" property="isSuccessPublish" jdbcType="INTEGER" />
         <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
         <result column="publish_status" property="publishStatus" />
@@ -34,6 +35,7 @@
         publish_datetime,
         submit_datetime,
         submit_emp_id,
+        publish_emp_id,
         is_success_publish,
         is_delete,
         publish_status,
@@ -95,6 +97,7 @@
         publish_datetime,
         submit_datetime,
         submit_emp_id,
+        publish_emp_id,
         is_success_publish,
         is_delete,
         publish_status,
@@ -112,6 +115,7 @@
         #{publishDatetime,jdbcType=TIMESTAMP},
         #{submitDatetime,jdbcType=TIMESTAMP},
         #{submitEmpId,jdbcType=INTEGER},
+        #{publishEmpId,jdbcType=INTEGER},
         #{isSuccessPublish,jdbcType=INTEGER},
         #{isDelete,jdbcType=INTEGER},
         #{publishStatus,jdbcType=VARCHAR},
@@ -161,6 +165,9 @@
             </if>
             <if test="submitEmpId != null" >
                 submit_emp_id,
+            </if>
+            <if test="publishEmpId != null" >
+                publish_emp_id,
             </if>
             <if test="isSuccessPublish != null" >
                 is_success_publish,
@@ -215,6 +222,9 @@
             <if test="submitEmpId != null" >
                 #{submitEmpId,jdbcType=INTEGER},
             </if>
+            <if test="publishEmpId != null" >
+                #{publishEmpId,jdbcType=INTEGER},
+            </if>
             <if test="isSuccessPublish != null" >
                 #{isSuccessPublish,jdbcType=INTEGER},
             </if>
@@ -268,6 +278,9 @@
             <if test="submitEmpId != null" >
                 submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
             </if>
+            <if test="publishEmpId != null" >
+                publish_emp_id = #{publishEmpId,jdbcType=INTEGER},
+            </if>
             <if test="isSuccessPublish != null" >
                 is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
             </if>
@@ -297,6 +310,7 @@
         publish_datetime = #{publishDatetime,jdbcType=TIMESTAMP},
         submit_datetime = #{submitDatetime,jdbcType=TIMESTAMP},
         submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
+        publish_emp_id = #{publishEmpId,jdbcType=INTEGER},
         is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
         is_delete = #{isDelete,jdbcType=INTEGER},
         publish_status = #{publishStatus,jdbcType=VARCHAR},
