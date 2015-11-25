@@ -1,37 +1,6 @@
 $(function(){
     showSelect2();
 
-    $("#insertform").validate({
-        rules:{
-            username:{required:true},
-            mobilePhone:{required:true},
-            weixinAcc:{required:true},
-            qqAcc:{required:true},
-            email:{required:true},
-            nickname:{required:true},
-            deptName:{required:true},
-            jobTitle:{required:true},
-            empId:{required:true},
-            supervisorEmpId:{required:true},
-            //roleList:{required:true},
-            isEnable:{required:true},
-        },
-        messages:{
-            username:{required:"用户名不能为空"},
-            mobilePhone:{required:"手机号码不能为空"},
-            weixinAcc:{required:"微信账号不能为空"},
-            qqAcc:{required:"qq账号不能为空"},
-            email:{required:"邮箱不能为空"},
-            nickname:{required:"昵称不能为空"},
-            deptName:{required:"部门名称不能为空"},
-            jobTitle:{required:"职位不能为空"},
-            empId:{required:"工号不能为空"},
-            supervisorEmpId:{required:"主管工号不能为空"},
-            //roleList:{required:"角色不能为空"},
-            isEnable:{required:"请选择是否启用"}
-        }
-    });
-
     $("#save").hide();
     //为编辑页面时
     if($("#isEdit").val()!=""){
@@ -77,14 +46,10 @@ $(function(){
 
     //提交按钮
     $("#submit").click(function(){
-        if($("#insertform").valid()) {
-            btnClick(true);
-        }
+        btnClick(true);
     });
     $("#save").click(function(){
-        if($("#insertform").valid()) {
-            btnClick(false);
-        }
+        btnClick(false);
     });
 })
 

@@ -7,23 +7,6 @@ $(function(){
     //    checkable : true                  //每个节点上是否显示 CheckBox
     //};
     //var permissionList;
-
-    $("#insertform").validate({
-        rules:{
-            roleName:{required:true},
-            roleCname:{required:true},
-            roleDesc:{required:true},
-            permissionList:{required:true},
-            isEnable:{required:true},
-        },
-        messages:{
-            roleName:{required:"角色名称不能为空"},
-            roleCname:{required:"角色中文名称不能为空"},
-            roleDesc:{required:"角色描述不能为空"},
-            permissionList:{required:"角色的权限不能为空"},
-            isEnable:{required:"请选择是否启用"}
-        }
-    });
     //为编辑页面时
     $("#save").hide();
     if($("#isEdit").val()!=""){
@@ -58,19 +41,7 @@ $(function(){
         $("#submit").hide();
         $("#save").show();
     }
-    //提交按钮
-    $("#submit").click(function(){
-        if($("#insertform").valid()) {
-            btnClick(true);
-        }
-    });
 
-    //保存按钮
-    $("#save").click(function(){
-        if($("#insertform").valid()) {
-            btnClick(false);
-        }
-    });
     //zTree的配置
     var checkSetting =
     {
@@ -117,6 +88,15 @@ $(function(){
         }
     });
 
+    //提交按钮
+    $("#submit").click(function(){
+        btnClick(true);
+    });
+
+    //保存按钮
+    $("#save").click(function(){
+        btnClick(false);
+    });
     //zTree结点点击控制选中
     function onClick(e,treeId, treeNode) {
         var zTree = $.fn.zTree.getZTreeObj("permissionList");

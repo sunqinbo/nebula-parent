@@ -6,15 +6,11 @@
 ##<link rel="public/plugins/select2-4.0.1-rc.1/dist/css/select2.min.css">
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
- <script src="/public/plugins/jQueryValidation/jquery.validate-1.13.1.js" type="text/javascript"></script>
- <script src="/public/js/createUser.js" type="text/javascript"></script>
+<script src="/public/js/createUser.js" type="text/javascript"></script>
 
 <style>
     .select2{
         width:100% !important;
-    }
-    #insertform label.error{
-        color: red;
     }
 </style>
 
@@ -31,76 +27,76 @@
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="username" class="col-sm-2 control-label">用户名</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="username" name="username" type="text" class="form-control" placeholder="请输入用户名"/>
+                                    <input id="username" type="text" class="form-control" placeholder="请输入用户名"/>
                                 </div>
                             </div>
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="mobilePhone" class="col-sm-2 control-label">手机号码</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="mobilePhone" name="mobilePhone" type="text" class="form-control" placeholder="请输入用户手机号码"/>
+                                    <input id="mobilePhone" type="text" class="form-control" placeholder="请输入用户手机号码"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="weixinAcc" class="col-sm-2 control-label">微信账号</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="weixinAcc" name="weixinAcc" type="text" class="form-control" placeholder="请输入用户微信账号"/>
+                                    <input id="weixinAcc" type="text" class="form-control" placeholder="请输入用户微信账号"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="qqAcc" class="col-sm-2 control-label">qq账号</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="qqAcc" name="qqAcc" type="text" class="form-control" placeholder="请输入用户qq账号"/>
+                                    <input id="qqAcc" type="text" class="form-control" placeholder="请输入用户qq账号"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="email" class="col-sm-2 control-label">邮箱</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="email" name="email" type="text" class="form-control" placeholder="请输入用户邮箱"/>
+                                    <input id="email" type="text" class="form-control" placeholder="请输入用户邮箱"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="nickname" class="col-sm-2 control-label">昵称</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="nickname" name="nickname" type="text" class="form-control" placeholder="请输入用户昵称"/>
+                                    <input id="nickname" type="text" class="form-control" placeholder="请输入用户昵称"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="deptName" class="col-sm-2 control-label">部门名称</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="deptName" name="deptName" type="text" class="form-control" placeholder="请输入用户部门名称"/>
+                                    <input id="deptName" type="text" class="form-control" placeholder="请输入用户部门名称"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="jobTitle" class="col-sm-2 control-label">职位</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="jobTitle" name="jobTitle" type="text" class="form-control" placeholder="请输入用户职位"/>
+                                    <input id="jobTitle" type="text" class="form-control" placeholder="请输入用户职位"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="empId" class="col-sm-2 control-label">工号</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="empId" name="empId" type="text" class="form-control" value="$!{empId}" placeholder="请输入用户工号"/>
+                                    <input id="empId" type="text" class="form-control" value="$!{empId}" placeholder="请输入用户工号"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="supervisorEmpId" class="col-sm-2 control-label">主管工号</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="supervisorEmpId" name="supervisorEmpId" type="text" class="form-control" placeholder="请输入用户主管工号"/>
+                                    <input id="supervisorEmpId" type="text" class="form-control" placeholder="请输入用户主管工号"/>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="roleList" class="col-sm-2 control-label">添加角色</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <select id="roleList" name="roleList" class="js-example-tags form-control select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
+                                    <select id="roleList" class="js-example-tags form-control select2-hidden-accessible" multiple="" tabindex="-1" aria-hidden="true">
                                     </select>
                                 </div>
                             </div>
@@ -120,7 +116,7 @@
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="password" class="col-sm-2 control-label">密码</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="password" name="password" type="text" class="form-control" placeholder="请输入用户密码"/>
+                                    <input id="password" type="text" class="form-control" placeholder="请输入用户密码"/>
                                 </div>
                             </div>
 
