@@ -32,12 +32,12 @@
                             <tr>
                                 <td>
                                     <label>发布产品：</label>
-                                ##                                    <label>运价2014</label>
+                                ##   <label>运价2014</label>
                                     <label>$!{Event.publishProductCname}</label>
                                     <input id="eventId" style="display:none" type="text" value=$!{Event.id}>
-                                ##                                    <input id="actionGroup" style="display:none" type="text" value=$!{actionGroup}>
-                                ##                                    <input id="whichStep" style="display:none" type="text" value=$!{whichStep}>
-                                ##                                    <input id="actionState" style="display:none" type="text" value=$!{actionState}>
+                                ##  <input id="actionGroup" style="display:none" type="text" value=$!{actionGroup}>
+                                ##  <input id="whichStep" style="display:none" type="text" value=$!{whichStep}>
+                                ##  <input id="actionState" style="display:none" type="text" value=$!{actionState}>
                                 </td>
                                 <td>
                                     <label>发布模块：</label>
@@ -57,14 +57,14 @@
                                     <label>发布状态：</label>
                                     <label>$!{Event.zhuantai}</label>
                                 </td>
-                            ##                                <td>
-                            ##                                    <label>发布结果：</label>
-                            ##                                    <label>$!{Event.isSuccessPublish}</label>
-                            ##                                </td>
-                            ##                                <td>
-                            ##                                    <label>发布分批：</label>
-                            ##                                    <label>是/否</label>
-                            ##                                </td>
+                            ##  <td>
+                            ##   <label>发布结果：</label>
+                            ##   <label>$!{Event.isSuccessPublish}</label>
+                            ##  </td>
+                            ##  <td>
+                            ##    <label>发布分批：</label>
+                            ##    <label>是/否</label>
+                            ##  </td>
                                 <td>
                                     <label>发布人：</label>
                                     <label>$!{Event.submitEmpId}</label>
@@ -103,34 +103,13 @@
                         <div class="header">发布操作</div>
                         <hr/>
                         <div class="content">
-<<<<<<< HEAD
-                            <button type="button" id="btn1" class="btn btn-default"
-                                    onclick="nebula.publish.process.preMasterPublish()">发布准备
-                            </button>
-                            <button type="button" id="btn2" class="btn btn-default"
-                                    onclick="nebula.publish.process.preMinionPublish()">启动预发布
-                            </button>
-                            <button type="button" id="btn3" class="btn btn-default"
-                                    onclick="nebula.publish.process.publishReal()">启动正式发布
-                            </button>
-                            <button type="button" id="btn_ConfirmResult" class="btn btn-default"
-                                    onclick="nebula.publish.process.publishSuccessEnd()">确认成功
-                            </button>
-                            <button type="button" id="btn4" class="btn btn-default"
-                                    onclick="nebula.publish.process.publishFailEnd()">我要回滚
-                            </button>
-                            <button type="button" style="display: none" id="restartPublish" class="btn btn-danger"
-                                    onclick="nebula.publish.process.retryPublishRollback()">重新发布
-                            </button>
-=======
                             <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
                             <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
                             <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>
                             <button type="button" id="btn_ConfirmResult" class="btn btn-default" onclick="nebula.publish.process.publishSuccessEnd()">确认成功</button>
                             <button type="button" id="btn4" class="btn btn-default" onclick="nebula.publish.process.publishFailEnd()">我要回滚</button>
                             <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
-                            <button type="button" style="display: none" id="nextPublish" class="btn btn-info">醉了</button>
->>>>>>> origin/master
+                            <button type="button" style="display: none" id="nextPublish" class="btn btn-info"></button>
                         </div>
                     </div>
                 <div id="etc_edit" class="col-md-12">
@@ -197,7 +176,7 @@
                                 #foreach($module in ${Event.publishModules})
                                     #foreach($host in ${module.publishHosts})
                                     <tr>
-                                    ##                                 <td>$!{module.publishModuleName}</td>
+                                    ##   <td>$!{module.publishModuleName}</td>
                                         <td>$!{host.passPublishHostName}</td>
                                         <td>$!{host.passPublishHostIp}</td>
                                         <td>$!{host.actionName}</td>
@@ -206,14 +185,6 @@
                                     </tr>
                                     #end
                                 #end
-                            ##                            <tr>
-                            ##                                <td>P_main1</td>
-                            ##                                <td>测试</td>
-                            ##                            </tr>
-                            ##                            <tr>
-                            ##                                <td>P_main2</td>
-                            ##                                <td>测试</td>
-                            ##                            </tr>
                             </tbody>
                         </table>
                     </div>
