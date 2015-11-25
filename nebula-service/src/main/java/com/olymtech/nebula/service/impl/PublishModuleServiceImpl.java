@@ -4,7 +4,9 @@
  */
 package com.olymtech.nebula.service.impl;
 
+import com.olymtech.nebula.dao.INebulaPublishAppDao;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
+import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.service.INebulaPublishModuleService;
 import org.slf4j.Logger;
@@ -24,14 +26,21 @@ public class PublishModuleServiceImpl implements INebulaPublishModuleService {
 
     @Resource
     INebulaPublishModuleDao nebulaPublishModuleDao;
+    @Resource
+    INebulaPublishAppDao nebulaPublishAppDao;
 
     @Override
-    public List<NebulaPublishModule> selectByEventId(Integer eventId){
-        return nebulaPublishModuleDao.selectModulesByEventId(eventId);
+    public List<NebulaPublishModule> selectByEventId(Integer eventId) {
+        List<NebulaPublishModule> publishModules = nebulaPublishModuleDao.selectModulesByEventId(eventId);
+        for (NebulaPublishModule module : publishModules) {
+            List<NebulaPublishApp> publishApps = nebulaPublishAppDao.selectByModuleId(module.getId());
+            module.setPublishApps(publishApps);
+        }
+        return publishModules;
     }
 
     @Override
-    public void deleteByEventId(Integer eventId){
+    public void deleteByEventId(Integer eventId) {
         nebulaPublishModuleDao.deleteByEventId(eventId);
     }
 

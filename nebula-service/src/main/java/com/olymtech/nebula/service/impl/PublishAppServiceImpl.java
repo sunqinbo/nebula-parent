@@ -26,24 +26,26 @@ public class PublishAppServiceImpl implements IPublishAppService {
     private INebulaPublishAppDao nebulaPublishAppDao;
 
     @Override
-    public List<NebulaPublishApp> selectByEventIdAndModuleId(Integer eventId, Integer moduleId){
+    public List<NebulaPublishApp> selectByEventIdAndModuleId(Integer eventId, Integer moduleId) {
         List<NebulaPublishApp> nebulaPublishApps = new ArrayList<>();
-        try{
+        try {
             NebulaPublishApp nebulaPublishApp = new NebulaPublishApp();
             nebulaPublishApp.setPublishEventId(eventId);
             nebulaPublishApp.setPublishModuleId(moduleId);
             nebulaPublishApps = nebulaPublishAppDao.selectAllPaging(nebulaPublishApp);
-        }catch (Exception e){
-            logger.error("selectByEventIdAndModuleId error:",e);
+        } catch (Exception e) {
+            logger.error("selectByEventIdAndModuleId error:", e);
         }
         return nebulaPublishApps;
     }
 
     @Override
-    public void deleteByEventId(Integer eventId){
+    public void deleteByEventId(Integer eventId) {
         nebulaPublishAppDao.deleteByEventId(eventId);
     }
 
-
-
+    @Override
+    public List<NebulaPublishApp> selectByEventId(Integer eventId) {
+        return nebulaPublishAppDao.selectByEventId(eventId);
+    }
 }

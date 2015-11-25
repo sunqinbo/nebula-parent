@@ -23,7 +23,7 @@ import static com.suse.saltstack.netapi.AuthModule.PAM;
 public class SaltClientFactory {
 
     // CONSTANT
-    private static final String RESOURCE_SALT_PROPERTIES = "/salt.properties";
+    private static final String RESOURCE_SALT_PROPERTIES = "/nebula.properties";
 
     protected static final String SALT_URI = "uri";
     protected static final String TRUST_STOR_NAME = "trust_stor_name";

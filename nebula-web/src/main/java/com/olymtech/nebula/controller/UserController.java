@@ -5,6 +5,7 @@ import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
+import com.olymtech.nebula.web.utils.PasswordHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,9 @@ public class UserController extends BaseController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private PasswordHelper passwordHelper;
+
     @RequestMapping(value="/add.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String createUser (){
         return "user/createUser";
@@ -40,6 +44,7 @@ public class UserController extends BaseController {
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") Integer[] roleIds) {
         try {
+            passwordHelper.encryptPassword(userInfo);
             userService.insertNebulaUserInfo(userInfo,roleIds);
             return returnCallback("Success", "插入用户成功");
         } catch (Exception e) {

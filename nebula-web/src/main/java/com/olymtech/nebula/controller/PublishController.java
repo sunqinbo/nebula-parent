@@ -45,6 +45,9 @@ public class PublishController extends BaseController {
     IPublishBaseService publishBaseService;
     @Resource
     HttpServletRequest request;
+    @Resource
+    INebulaPublishModuleService publishModuleService;
+
 
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -60,7 +63,7 @@ public class PublishController extends BaseController {
         return "event/publishEvent";
     }
 
-    @RequestMapping(value = "/getProductTreeList/pid", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/productTreeList/pid", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback getProductTreeListByPid(Integer pid) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(pid);
@@ -72,19 +75,22 @@ public class PublishController extends BaseController {
         return "event/publishList";
     }
 
-    @RequestMapping(value = "/publishProcess.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/process.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishProcess(HttpServletRequest request, Model model) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
 //        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(id);
+        List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
+        model.addAttribute("Modules", publishModules);
         model.addAttribute("Event", nebulaPublishEvent);
+
         return "event/publishProcess";
     }
 
     /**
      * public event
      */
-    @RequestMapping(value = "/createPublishEvent", method = {RequestMethod.POST})
+    @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);

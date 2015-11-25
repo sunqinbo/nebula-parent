@@ -21,7 +21,7 @@ $(document).ready(function(){
                                 "</td><td>"+data["list"][i]["submitEmpId"]+
                                 "</td><td>"+data["list"][i]["submitEmpId"]+
                                 "</td><td>"+data["list"][i]["publishProductCname"]+
-                                "</td><td>"+""+"</td><td><a href='/publish/publishProcess.htm?id="+
+                                "</td><td>"+""+"</td><td><a href='/publish/process.htm?id="+
                                 data["list"][i]["id"]+"'>详情</a></td>"
                         }
                         totalPage=data["pages"];
