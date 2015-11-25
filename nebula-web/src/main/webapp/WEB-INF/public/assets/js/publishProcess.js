@@ -333,12 +333,13 @@ function nextPublish(nowPublish){
         async: false,
         type:"post",
         data:{
-            eventId: $("#eventId").val()
+            "nowPublish":nowPublish,
+            "eventId": $("#eventId").val()
         },
         url:"/publish/add/nextpublish",
         datatype:"json",
         success: function (data) {
-            location.href="/publish/publishProcess.htm?id=9";
+            location.href="/publish/publishProcess.htm?id="+data.responseContext;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
