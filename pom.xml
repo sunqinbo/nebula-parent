@@ -193,13 +193,6 @@
                 <version>${javax.servlet.jsp.jstlapi.version}</version>
             </dependency>
 
-            <!--&lt;!&ndash; ibatis start &ndash;&gt;-->
-            <!--<dependency>-->
-            <!--<groupId>com.ibatis</groupId>-->
-            <!--<artifactId>ibatis</artifactId>-->
-            <!--<version>${ibatis.version}</version>-->
-            <!--</dependency>-->
-
             <!-- mybatis -->
             <dependency>
                 <groupId>org.mybatis</groupId>
@@ -392,6 +385,12 @@
                 <version>${olym.cc.util.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate.validator.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -433,6 +432,9 @@
         <shiro.ehcache.version>1.2.2</shiro.ehcache.version>
         <shiro.quartz.version>1.2.2</shiro.quartz.version>
         <shiro.spring.version>1.2.2</shiro.spring.version>
+
+        <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
+
     </properties>
 
     <build>
