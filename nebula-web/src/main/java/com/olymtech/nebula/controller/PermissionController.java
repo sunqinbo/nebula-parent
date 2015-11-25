@@ -29,47 +29,47 @@ public class PermissionController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
-    @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
-    public String jurisdiction (){
+    @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public String jurisdiction() throws Exception {
         return "permission/permissionList";
     }
 
-    @RequestMapping(value="/add.htm",method= {RequestMethod.POST,RequestMethod.GET})
-    public String createPermission (){
+    @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public String createPermission() throws Exception {
         return "permission/createPermission";
     }
 
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback insertAclPermission( AclPermission permission){
+    public Callback insertAclPermission(AclPermission permission) throws Exception {
         permissionService.insertAclPermission(permission);
         return returnCallback("Success", "插入权限成功");
     }
 
     @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback deleteAclPermission(Integer id) {
+    public Callback deleteAclPermission(Integer id) throws Exception {
         permissionService.deleteAclPermissionById(id);
         return returnCallback("Success", "删除权限成功");
     }
 
     @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback updateAclPermission(AclPermission permission) {
+    public Callback updateAclPermission(AclPermission permission) throws Exception {
         permissionService.updateAclPermission(permission);
         return returnCallback("Success", "更新权限成功");
     }
 
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object selectAllPagingPermission(DataTablePage dataTablePage) {
+    public Object selectAllPagingPermission(DataTablePage dataTablePage) throws Exception {
         PageInfo pageInfo = permissionService.getPageInfoAclPermission(dataTablePage);
         return pageInfo;
     }
 
     @RequestMapping(value = "/selectPermission", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object selectPermission(Integer id) {
+    public Object selectPermission(Integer id) throws Exception {
         List<AclPermission> permissionList = new ArrayList<>();
         if (id != null) {
             permissionList = aclRoleService.getAclRoleWithPermissionsByRoleId(id).getAclPermissions();
