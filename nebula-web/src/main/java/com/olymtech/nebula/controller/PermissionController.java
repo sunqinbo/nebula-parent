@@ -78,6 +78,14 @@ public class PermissionController extends BaseController {
         return zNodes;
     }
 
+    @RequestMapping(value = "/getList/noPid", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object selectPermissionsWithNoPid() {
+        List<AclPermission> permissionList = new ArrayList<>();
+        permissionList = permissionService.getPermissionsWithNoPid();
+        return permissionList;
+    }
+
 }
 
 

@@ -111,9 +111,11 @@ public class AclRoleServiceImpl implements IAclRoleService {
             Select2Data select2Data=new Select2Data();
             select2Data.setId(aclRole.getId());
             select2Data.setText(aclRole.getRoleCname());
-            for(AclRole aclRoleHas:aclRoles){
-                if(aclRole.getId()==aclRoleHas.getId()){
-                    select2Data.setSelected(true);
+            if(aclRoles!=null) {
+                for (AclRole aclRoleHas : aclRoles) {
+                    if (aclRole.getId() == aclRoleHas.getId()) {
+                        select2Data.setSelected(true);
+                    }
                 }
             }
             select2Datas.add(select2Data);

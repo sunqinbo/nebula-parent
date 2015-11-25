@@ -60,6 +60,9 @@
             <if test="permission != null">
                 AND permission = #{permission}
             </if>
+            <if test="permissionType != null">
+                AND permission_type = #{permissionType}
+            </if>
         </trim>
         group by id order by id desc
     </select>

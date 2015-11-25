@@ -26,4 +26,6 @@ public interface IAclPermissionService {
     List<zNode> getzNodes(List<AclPermission> permissionList);
 
     public List<AclRolePermission> selectByRoleId(Integer roleId);
+
+    public List<AclPermission> getPermissionsWithNoPid();
 }
