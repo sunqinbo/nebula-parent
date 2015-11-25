@@ -35,7 +35,7 @@ nebula.publish.event.main = function(){
             var pid = $("#select-bu").val();
             $("#select-product").html("<option value=''>请选择</option>");
             $.ajax({
-                url:"/publish_event/getProductTreeListByPid.htm",
+                url:"/publish/productTreeList/pid",
                 type:"post",
                 data:{"pid":pid},
                 success:function(jsonData){
@@ -74,7 +74,7 @@ nebula.publish.event.createPublishEvent = function(){
         });
     }
     $.ajax({
-        url:"/publish_event/createPublishEvent.htm",
+        url:"/publish/add",
         type:"post",
         data:(function(){
             var data={};
@@ -90,7 +90,7 @@ nebula.publish.event.createPublishEvent = function(){
         })(),
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                window.location.href="/publishProcess.htm?id="+jsonData.responseContext;
+                window.location.href="/publish/process.htm?id="+jsonData.responseContext;
             }
         }
     });
@@ -107,7 +107,7 @@ nebula.publish.process.main= function () {
 nebula.publish.process.preMasterPublish = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/preMasterPublish.htm",
+        url:"/publish/preMasterPublish",
         type:"post",
         data:{"id":id},
         success:function(jsonData){
@@ -127,7 +127,7 @@ nebula.publish.process.preMasterPublish = function(){
 nebula.publish.process.preMinionPublish = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/preMinionPublish.htm",
+        url:"/publish/preMinionPublish",
         type:"post",
         data:{"id":id},
         success:function(jsonData){
@@ -148,7 +148,7 @@ nebula.publish.process.preMinionPublish = function(){
 nebula.publish.process.publishReal = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/publishReal.htm",
+        url:"/publish/publishReal",
         type:"post",
         data:{"id":id},
         success:function(jsonData){
@@ -168,7 +168,7 @@ nebula.publish.process.publishReal = function(){
 nebula.publish.process.publishContinue = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/publishContinue.htm",
+        url:"/publish/publishContinue",
         type:"post",
         data:{"id":id},
         success:function(jsonData){
@@ -188,7 +188,7 @@ nebula.publish.process.publishContinue = function(){
 nebula.publish.process.publishSuccessEnd = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/publishSuccessEnd.htm",
+        url:"/publish/publishSuccessEnd",
         type:"post",
         data:{"id":id},
         success:function(jsonData){
@@ -209,7 +209,7 @@ nebula.publish.process.publishSuccessEnd = function(){
 nebula.publish.process.publishFailEnd = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/publishFailEnd.htm",
+        url:"/publish/publishFailEnd",
         type:"post",
         data:{"id":id},
         success:function(jsonData){
@@ -230,7 +230,7 @@ nebula.publish.process.publishFailEnd = function(){
 nebula.publish.process.retryPublishRollback = function(){
     var id = $("#eventId").val();
     $.ajax({
-        url:"/publish_event/retryPublishRollback.htm",
+        url:"/publish/retryPublishRollback",
         type:"post",
         data:{"id":id},
         success:function(jsonData){

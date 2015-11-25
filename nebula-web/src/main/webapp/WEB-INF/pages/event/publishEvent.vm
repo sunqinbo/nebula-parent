@@ -45,7 +45,6 @@
                                         <option>请选择</option>
                                         <option value="test">测试</option>
                                         <option value="stage">准生产</option>
-                                        <option value="product">生产</option>
                                     </select>
                                 </div>
                             </div>
