@@ -60,21 +60,21 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/user/list.htm">
                     <i class="pe-7s-users"></i>
 
                     <p>用户</p>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/role/list.htm">
                     <i class="pe-7s-id"></i>
 
                     <p>角色</p>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/permission/list.htm">
                     <i class="pe-7s-network"></i>
 
                     <p>权限</p>

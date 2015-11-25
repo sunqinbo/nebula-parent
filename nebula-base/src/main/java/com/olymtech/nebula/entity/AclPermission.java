@@ -1,9 +1,5 @@
 package com.olymtech.nebula.entity;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
-
 public class AclPermission extends BaseDO{
 
     private String permissionName;

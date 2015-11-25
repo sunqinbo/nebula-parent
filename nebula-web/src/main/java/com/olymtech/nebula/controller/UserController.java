@@ -42,7 +42,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Callback insertUser(NebulaUserInfo userInfo,@RequestParam("roleIds[]") Integer[] roleIds) {
+    public Callback insertUser(NebulaUserInfo userInfo,@RequestParam(value="roleIds[]",required = false) Integer[] roleIds) {
         try {
             passwordHelper.encryptPassword(userInfo);
             userService.insertNebulaUserInfo(userInfo,roleIds);

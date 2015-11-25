@@ -18,7 +18,7 @@ public class NebulaPublishModuleDaoImpl extends BaseDaoImpl<NebulaPublishModule,
 
     @Override
     public List<NebulaPublishModule> selectModulesByEventId(Integer publishEventId){
-        return getSqlSession().selectList(CLASS_NAME + "-Select-By-PublishEventId", publishEventId);
+        return getSqlSession().selectList(CLASS_NAME + "-Select-By-Publish-Event-Id", publishEventId);
     }
 
     @Override
