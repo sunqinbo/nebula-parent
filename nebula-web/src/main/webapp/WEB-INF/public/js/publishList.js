@@ -13,17 +13,18 @@ $(document).ready(function(){
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
                             var event = data["list"][i];
+                            var detailString ="</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>";
+                            //if()
                             tbString=tbString+"<tr><td>"+event.id+
                                 "</td><td>"+event.publishSubject+
                                 "</td><td>"+nebula.common.transform.publishEnv(event.publishEnv)+
                                 "</td><td>"+event.submitDatetime+
-                                "</td><td>"+
+                                "</td><td>"+event.publishStatus+
                                 "</td><td>"+event.isSuccessPublish+
                                 "</td><td>"+event.submitEmpId+
                                 "</td><td>"+event.publishEmpId+
                                 "</td><td>"+event.publishProductCname+
-                                "</td><td>"+
-                                "</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>"
+                                "</td><td>"+detailString;
                         }
                         totalPage=data["pages"];
                         if(totalPage>0) {
