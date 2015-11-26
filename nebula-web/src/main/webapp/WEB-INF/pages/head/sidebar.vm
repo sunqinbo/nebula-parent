@@ -17,13 +17,15 @@
             </a>
         </div>
         <ul class="nav">
-            <li>
-                <a href="/publish/event.htm">
-                    <i class="pe-7s-upload"></i>
+##            #if($shiro.hasPermission("publishapply:*"))
+                <li>
+                    <a href="/publish/event.htm">
+                        <i class="pe-7s-upload"></i>
 
-                    <p>发布申请</p>
-                </a>
-            </li>
+                        <p>发布申请</p>
+                    </a>
+                </li>
+##            #end
             <li>
                 <a href="/publish/list.htm">
                     <i class="pe-7s-user"></i>
@@ -52,7 +54,7 @@
                     <p>发布工具</p>
                 </a>
             </li>
-            #if($shiro.hasPermission("user:*"))
+            #if($shiro.hasPermission("user:view"))
                 <li id="sidebarUser">
                     <a href="/user/list.htm">
                         <i class="pe-7s-users"></i>
@@ -61,20 +63,25 @@
                     </a>
                 </li>
             #end
-            <li>
-                <a href="/role/list.htm">
-                    <i class="pe-7s-id"></i>
+            #if($shiro.hasPermission("role:view"))
+                <li>
+                    <a href="/role/list.htm">
+                        <i class="pe-7s-id"></i>
 
-                    <p>角色</p>
-                </a>
-            </li>
-            <li>
-                <a href="/permission/list.htm">
-                    <i class="pe-7s-network"></i>
+                        <p>角色</p>
+                    </a>
+                </li>
+            #end
 
-                    <p>权限</p>
-                </a>
-            </li>
+            #if($shiro.hasPermission("permission:view"))
+                <li>
+                    <a href="/permission/list.htm">
+                        <i class="pe-7s-network"></i>
+
+                        <p>权限</p>
+                    </a>
+                </li>
+            #end
         </ul>
     </div>
 </div>
