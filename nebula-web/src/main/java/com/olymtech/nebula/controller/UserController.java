@@ -1,11 +1,12 @@
 package com.olymtech.nebula.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.service.utils.PasswordHelper;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
+import com.olymtech.nebula.service.utils.PasswordHelper;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,17 +30,20 @@ public class UserController extends BaseController {
     @Resource
     private PasswordHelper passwordHelper;
 
+    @RequiresPermissions("user:add")
     @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String createUser() {
         return "user/createUser";
     }
 
+    @RequiresPermissions("user:view")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String userList() {
         return "user/userList";
     }
 
 
+    @RequiresPermissions("user:add")
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo, @RequestParam(value = "roleIds[]", required = false) Integer[] roleIds) {
@@ -48,6 +52,7 @@ public class UserController extends BaseController {
         return returnCallback("Success", "插入用户成功");
     }
 
+    @RequiresPermissions("user:delete")
     @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback deleteUser(Integer id) {
@@ -55,6 +60,7 @@ public class UserController extends BaseController {
         return returnCallback("Success", "删除用户成功");
     }
 
+    @RequiresPermissions("user:update")
     @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateUser(NebulaUserInfo userInfo, @RequestParam("roleIds[]") List<Integer> roleIds) {
@@ -62,6 +68,7 @@ public class UserController extends BaseController {
         return returnCallback("Success", "更新用户成功");
     }
 
+    @RequiresPermissions("user:admin")
     @RequestMapping(value = "/update/password", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updatePassword(Integer userId, String newPassword) {
@@ -69,6 +76,7 @@ public class UserController extends BaseController {
         return returnCallback("Success", "更新用户密码成功");
     }
 
+    @RequiresPermissions("user:view")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingUser(DataTablePage dataTablePage) {
@@ -82,6 +90,7 @@ public class UserController extends BaseController {
         return userService.getAclUserWithRolesByEmpId(empId);
     }
 
+    @RequiresPermissions("user:update")
     @RequestMapping(value = "/update.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String editUser(Model model, Integer empId, Integer id) {
         model.addAttribute("edit", true);
