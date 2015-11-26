@@ -39,7 +39,7 @@ public class FileController extends BaseController {
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
 
-    @RequestMapping(value="/fileEdit.html",method= RequestMethod.GET)
+    @RequestMapping(value="/fileEdit.htm",method= RequestMethod.GET)
     public String fileEdit(Model model){
         String idString = request.getParameter("id");
         if(StringUtils.isNotEmpty(idString)){
@@ -62,7 +62,7 @@ public class FileController extends BaseController {
         return returnCallback("success",filecontent);
     }
 
-    @RequestMapping(value = {"/etcList.htm"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"/etcList"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object productList(HttpServletRequest request) throws UnsupportedEncodingException {
         String idString = request.getParameter("id");

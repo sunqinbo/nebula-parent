@@ -23,7 +23,7 @@ $(document).ready(function(){
                 }
                 $.ajax({
                     type: "post",
-                    url: "/filePath",
+                    url: "/etc_edit/filePath",
                     data: {
                         "path": path
                     },
@@ -57,7 +57,7 @@ $(document).ready(function(){
                     var filecontent=$("#fileView").val();
                     $.ajax({
                         type:"post",
-                        url:"/fileSave",
+                        url:"/etc_edit/fileSave",
                         data:{
                             "path":path,
                             "filecontent":filecontent
@@ -91,7 +91,7 @@ $(document).ready(function(){
         .jstree({
             'core' : {
                 'data' : {
-                    "url" : "/etcList.htm",
+                    "url" : "/etc_edit/etcList",
                     "data" : function (node) {
                         return { "id" : node.id ,"eventId":$("#event-id").val()};
                     }

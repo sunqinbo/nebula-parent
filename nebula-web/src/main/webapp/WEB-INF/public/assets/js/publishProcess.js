@@ -263,7 +263,7 @@ function Initialization(){
                     "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
                 $("#etc_btns").html(etc_btn);
                 $("#etc_btn").click(function () {
-                    window.open('/etc_edit/fileEdit.html?id='+$("#eventId").val());
+                    window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
                 })
                 $("#edit_success").click(function () {
                     var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
