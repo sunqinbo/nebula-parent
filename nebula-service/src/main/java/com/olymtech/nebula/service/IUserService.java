@@ -29,6 +29,8 @@ public interface IUserService {
 
     public void updateNebulaUserInfo(NebulaUserInfo nebulaUserInfo, List<Integer> roleIds);
 
+    public void updatePassword(Integer userId, String newPassword);
+
     public PageInfo getPageInfoAclUser(DataTablePage dataTablePage);
 
     public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId);

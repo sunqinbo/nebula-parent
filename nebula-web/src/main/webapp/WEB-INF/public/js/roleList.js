@@ -1,5 +1,8 @@
 $(function(){
     getLtb(1);
+    $("#create_btn").click(function(){
+        location.href="/role/add.htm";
+    });
 })
 
 //页面加载显示列表

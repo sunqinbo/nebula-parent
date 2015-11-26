@@ -1,5 +1,8 @@
 $(function(){
     getjtb(1);
+    $("#create_btn").click(function(){
+        location.href="/permission/add.htm";
+    });
 })
 
 //页面加载显示列表

@@ -15,6 +15,8 @@ $(document).ready(function(){
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
                             var event = data["list"][i];
+                            var detailString ="</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>";
+                            //if()
                             tbString=tbString+"<tr><td>"+event.id+
                                 "</td><td>"+event.publishSubject+
                                 "</td><td>"+nebula.common.transform.publishEnv(event.publishEnv)+
@@ -24,8 +26,7 @@ $(document).ready(function(){
                                 "</td><td>"+(event.submitUser?event.submitUser.nickname:"")+
                                 "</td><td>"+(event.publishUser?event.publishUser.nickname:"")+
                                 "</td><td>"+event.publishProductCname+
-                                "</td><td>"+
-                                "</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>"
+                                "</td><td>"+detailString;
                         }
                         totalPage=data["pages"];
                         if(totalPage>0) {
