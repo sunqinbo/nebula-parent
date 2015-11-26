@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    $("#navbar-header-name").html("发布数据");
+
     function gettb(pageNum){
         $.ajax({
                     type: "post",
@@ -19,10 +21,10 @@ $(document).ready(function(){
                                 "</td><td>"+event.publishSubject+
                                 "</td><td>"+nebula.common.transform.publishEnv(event.publishEnv)+
                                 "</td><td>"+event.submitDatetime+
-                                "</td><td>"+event.publishStatus+
-                                "</td><td>"+event.isSuccessPublish+
-                                "</td><td>"+event.submitEmpId+
-                                "</td><td>"+event.publishEmpId+
+                                "</td><td>"+nebula.common.transform.publishStatus(event.publishStatus)+
+                                "</td><td>"+nebula.common.transform.isSuccessPublish(event.isSuccessPublish)+
+                                "</td><td>"+(event.submitUser?event.submitUser.nickname:"")+
+                                "</td><td>"+(event.publishUser?event.publishUser.nickname:"")+
                                 "</td><td>"+event.publishProductCname+
                                 "</td><td>"+detailString;
                         }

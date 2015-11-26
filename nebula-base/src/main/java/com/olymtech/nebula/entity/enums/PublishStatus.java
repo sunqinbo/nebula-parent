@@ -9,6 +9,7 @@ package com.olymtech.nebula.entity.enums;
  */
 public enum PublishStatus {
     PENDING_APPROVE("待审批"),
+    PENDING_PRE("待准备"),
     PENDING_PUBLISH("待发布"),
     PUBLISHING("发布中"),
     PUBLISHED("已发布"),

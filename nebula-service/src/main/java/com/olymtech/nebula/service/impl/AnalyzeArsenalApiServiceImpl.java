@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liwenji on 2015/11/2.
@@ -48,15 +50,33 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
         }
     }
 
+
+    /**
+     *
+     * @param productName 产品名
+     * @param appNames 发布的应用名列表
+     * @param publishEnv
+     * @return
+     * 会返回三种情况
+     * 1.捕捉异常返回为空
+     * 2.返回正常（没有Msg,有result）
+     * 3.没有返回结果，有msg
+     */
     @Override
-    public List<ProductTree> getSimpleHostListByProductAndModule(String productName, String appNames, String publishEnv) {
+    public Map<String,Object> getSimpleHostListByProductAndModule(String productName, String appNames, String publishEnv) {
         List<ProductTree> productTrees=new ArrayList<>();
+        Map<String, Object> objectMap = new HashMap<>();
         try {
             String url = ARSENAL_SERVER+"/arsenal-api/productName/"+productName+"/appNames/"+appNames+"/publishEnv/"+publishEnv;
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url);
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {
                 return null;
+            }
+            if (jsonObject.get("callbackMsg").toString().equals("Success_No_App")) {
+                objectMap.put("msg", jsonObject.get("responseContext").toString());
+                objectMap.put("result", productTrees);
+                return objectMap;
             }
             if(!jsonObject.get("callbackMsg").toString().equals("Success")){
                 return null;
@@ -66,7 +86,9 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
                 return null;
             }
             productTrees=instancesJsonArrayToModularTreeList(jsonObjectData);
-            return productTrees;
+            objectMap.put("msg","");
+            objectMap.put("result", productTrees);
+            return objectMap;
         }catch (Exception e) {
             return null;
         }

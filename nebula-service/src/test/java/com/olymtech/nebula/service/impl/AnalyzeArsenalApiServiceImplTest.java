@@ -38,7 +38,7 @@ public class AnalyzeArsenalApiServiceImplTest extends TestCase {
 
     @Test
     public void testGetSimpleHostListByProductAndModule() throws Exception {
-        List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule("yjt2014","priceservice,schedulerboss,serviceportal,ebooking","test");
+//        List<ProductTree> productTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule("yjt2014","priceservice,schedulerboss,serviceportal,ebooking","test");
         System.out.println("success");
     }
 }

@@ -1,9 +1,9 @@
 package com.olymtech.nebula.service;
 
 import com.olymtech.nebula.entity.ProductTree;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liwenji on 2015/11/2.
@@ -22,5 +22,5 @@ public interface IAnalyzeArsenalApiService {
      * @param appNames 发布的应用名列表
      * @return
      */
-    public List<ProductTree> getSimpleHostListByProductAndModule(String productName,String appNames,String publishEnv);
+    public Map<String,Object> getSimpleHostListByProductAndModule(String productName,String appNames,String publishEnv);
 }

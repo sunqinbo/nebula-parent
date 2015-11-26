@@ -20,6 +20,39 @@
         <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
         <result column="publish_status" property="publishStatus" />
         <result column="is_approved" property="isApproved" jdbcType="INTEGER" />
+
+        <association property="submitUser" column="submit_emp_id" javaType="com.olymtech.nebula.entity.NebulaUserInfo">
+            <id column="s_id" property="id" jdbcType="INTEGER" />
+            <result column="s_username" property="username" jdbcType="VARCHAR" />
+            <result column="s_mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+            <result column="s_weixin_acc" property="weixinAcc" jdbcType="VARCHAR" />
+            <result column="s_qq_acc" property="qqAcc" jdbcType="VARCHAR" />
+            <result column="s_email" property="email" jdbcType="VARCHAR" />
+            <result column="s_nickname" property="nickname" jdbcType="VARCHAR" />
+            <result column="s_dept_name" property="deptName" jdbcType="VARCHAR" />
+            <result column="s_job_title" property="jobTitle" jdbcType="VARCHAR" />
+            <result column="s_emp_id" property="empId" jdbcType="INTEGER" />
+            <result column="s_supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER" />
+            <result column="s_is_enable" property="isEnable" jdbcType="INTEGER" />
+            <result column="s_password" property="password" jdbcType="VARCHAR" />
+            <result column="s_security_key" property="securityKey" jdbcType="VARCHAR" />
+        </association>
+        <association property="publishUser" column="publish_emp_id" javaType="com.olymtech.nebula.entity.NebulaUserInfo">
+            <id column="p_id" property="id" jdbcType="INTEGER" />
+            <result column="p_username" property="username" jdbcType="VARCHAR" />
+            <result column="p_mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+            <result column="p_weixin_acc" property="weixinAcc" jdbcType="VARCHAR" />
+            <result column="p_qq_acc" property="qqAcc" jdbcType="VARCHAR" />
+            <result column="p_email" property="email" jdbcType="VARCHAR" />
+            <result column="p_nickname" property="nickname" jdbcType="VARCHAR" />
+            <result column="p_dept_name" property="deptName" jdbcType="VARCHAR" />
+            <result column="p_job_title" property="jobTitle" jdbcType="VARCHAR" />
+            <result column="p_emp_id" property="empId" jdbcType="INTEGER" />
+            <result column="p_supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER" />
+            <result column="p_is_enable" property="isEnable" jdbcType="INTEGER" />
+            <result column="p_password" property="password" jdbcType="VARCHAR" />
+            <result column="p_security_key" property="securityKey" jdbcType="VARCHAR" />
+        </association>
     </resultMap>
     <sql id="NebulaPublishEvent-Base-Column-List">
         id,
@@ -40,6 +73,54 @@
         is_delete,
         publish_status,
         is_approved
+    </sql>
+    <sql id="NebulaPublishEvent-User-Base-Column-List">
+        npe.id as id,
+        publish_subject,
+        publish_bu_name,
+        publish_bu_cname,
+        publish_product_name,
+        publish_product_cname,
+        publish_env,
+        publish_svn,
+        product_src_svn,
+        publish_product_key,
+        publish_datetime,
+        submit_datetime,
+        submit_emp_id,
+        publish_emp_id,
+        is_success_publish,
+        is_delete,
+        publish_status,
+        is_approved,
+        snui.id as s_id,
+        snui.username as s_username,
+        snui.mobile_phone as s_mobile_phone,
+        snui.weixin_acc as s_weixin_acc,
+        snui.qq_acc as s_qq_acc,
+        snui.email as s_email,
+        snui.nickname as s_nickname,
+        snui.dept_name as s_dept_name,
+        snui.job_title as s_job_title,
+        snui.emp_id as s_emp_id,
+        snui.supervisor_emp_id as s_supervisor_emp_id,
+        snui.is_enable as s_is_enable,
+        snui.password as s_password,
+        snui.security_key as s_security_key,
+        pnui.id as p_id,
+        pnui.username as p_username,
+        pnui.mobile_phone as p_mobile_phone,
+        pnui.weixin_acc as p_weixin_acc,
+        pnui.qq_acc as p_qq_acc,
+        pnui.email as p_email,
+        pnui.nickname as p_nickname,
+        pnui.dept_name as p_dept_name,
+        pnui.job_title as p_job_title,
+        pnui.emp_id as p_emp_id,
+        pnui.supervisor_emp_id as p_supervisor_emp_id,
+        pnui.is_enable as p_is_enable,
+        pnui.password as p_password,
+        pnui.security_key as p_security_key
     </sql>
     <select id="Nebula-NebulaPublishEventDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishEvent">
         select
@@ -79,6 +160,38 @@
         </trim>
         group by id order by id desc
     </select>
+
+    <select id="Nebula-NebulaPublishEventDao-Select-Count-With-User-Where" parameterType="NebulaPublishEvent" resultType="java.lang.Integer">
+        select count(npe.id) from nebula_publish_event npe left join nebula_user_info nui on npe.submit_emp_id = nui.emp_id
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEnv != null">
+                publish_env = #{publishEnv}
+            </if>
+            <if test="publishProductName != null">
+                AND publish_product_name = #{publishProductName}
+            </if>
+            <if test="isSuccessPublish != null">
+                AND is_success_publish = #{isSuccessPublish}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-With-User-Where" parameterType="NebulaPublishEvent" resultMap="RM-NebulaPublishEvent">
+        select <include refid="NebulaPublishEvent-User-Base-Column-List"/>
+        from nebula_publish_event npe left join nebula_user_info snui on npe.submit_emp_id = snui.emp_id LEFT JOIN nebula_user_info pnui on npe.publish_emp_id = pnui.emp_id
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEnv != null">
+                publish_env = #{publishEnv}
+            </if>
+            <if test="publishProductName != null">
+                AND publish_product_name = #{publishProductName}
+            </if>
+            <if test="isSuccessPublish != null">
+                AND is_success_publish = #{isSuccessPublish}
+            </if>
+        </trim>
+        order by npe.id desc
+    </select>
+
     <delete id="Nebula-NebulaPublishEventDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from nebula_publish_event
         where id = #{id,jdbcType=INTEGER}

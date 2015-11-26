@@ -38,14 +38,10 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
         return aclPermissionDao.insert(permission);
     }
 
+
     @Override
     public void deleteAclPermissionById(Integer id) {
         aclPermissionDao.deleteById(id);
-    }
-
-    @Override
-    public void updateAclPermission(AclPermission permission) {
-        aclPermissionDao.update(permission);
     }
 
     @Override
@@ -59,6 +55,11 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
     @Override
     public List<AclPermission> getPermissions() {
         return aclPermissionDao.selectAllPaging(new AclPermission());
+    }
+
+    @Override
+    public void updateAclPermission(AclPermission permission) {
+        aclPermissionDao.update(permission);
     }
 
     @Override
