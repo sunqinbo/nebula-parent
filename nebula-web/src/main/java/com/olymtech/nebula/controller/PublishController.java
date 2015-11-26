@@ -62,11 +62,11 @@ public class PublishController extends BaseController {
         return pageInfo;
     }
 
-    @RequestMapping(value = "/event", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/event.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishEvent(Model model) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
         model.addAttribute("productTrees", productTrees);
-        return "event/publishEvent";
+            return "event/publishEvent";
     }
 
     @RequestMapping(value = "/productTreeList/pid", method = {RequestMethod.POST, RequestMethod.GET})
@@ -75,7 +75,6 @@ public class PublishController extends BaseController {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(pid);
         return returnCallback("Success", productTrees);
     }
-
 
     @RequiresPermissions("publishevent:view")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
