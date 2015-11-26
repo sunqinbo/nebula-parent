@@ -38,6 +38,11 @@ $(function(){
     //为编辑页面时
     if($("#isEdit").val()!=""){
         $("#password").hide();
+        $("#password_div").append("<button id='updatePass' type='button' class='btn btn-info'>修改密码</button>");
+        $("#updatePass").click(function () {
+            $("#password").show();
+            $("#updatePass").hide();
+        });
         $.ajax({
             async: false,
             type:"post",

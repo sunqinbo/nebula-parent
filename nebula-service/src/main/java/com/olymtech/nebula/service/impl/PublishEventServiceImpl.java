@@ -71,7 +71,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Override
     public PageInfo getPublishEvent(DataTablePage dataTablePage) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
-        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPaging(new NebulaPublishEvent());
+        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPagingWithUser(new NebulaPublishEvent());
         PageInfo pageInfo = new PageInfo(nebulaPublishEvents);
         return pageInfo;
     }
@@ -113,6 +113,16 @@ public class PublishEventServiceImpl implements IPublishEventService {
             logger.error("retryPublishRollback error:", e);
         }
         return result;
+    }
+
+    @Override
+    public List<NebulaPublishEvent> selectAllPagingWithUser(NebulaPublishEvent event){
+        return nebulaPublishEventDao.selectAllPagingWithUser(event);
+    }
+
+    @Override
+    public Integer selectCountWithUser(NebulaPublishEvent event){
+        return nebulaPublishEventDao.selectCountWithUser(event);
     }
 
 }

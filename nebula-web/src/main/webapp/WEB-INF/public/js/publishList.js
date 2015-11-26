@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    $("#navbar-header-name").html("发布数据");
+
     function gettb(pageNum){
         $.ajax({
                     type: "post",
@@ -13,17 +15,18 @@ $(document).ready(function(){
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
                             var event = data["list"][i];
+                            var detailString ="</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>";
+                            //if()
                             tbString=tbString+"<tr><td>"+event.id+
                                 "</td><td>"+event.publishSubject+
                                 "</td><td>"+nebula.common.transform.publishEnv(event.publishEnv)+
                                 "</td><td>"+event.submitDatetime+
-                                "</td><td>"+
-                                "</td><td>"+event.isSuccessPublish+
-                                "</td><td>"+event.submitEmpId+
-                                "</td><td>"+event.publishEmpId+
+                                "</td><td>"+nebula.common.transform.publishStatus(event.publishStatus)+
+                                "</td><td>"+nebula.common.transform.isSuccessPublish(event.isSuccessPublish)+
+                                "</td><td>"+(event.submitUser?event.submitUser.nickname:"")+
+                                "</td><td>"+(event.publishUser?event.publishUser.nickname:"")+
                                 "</td><td>"+event.publishProductCname+
-                                "</td><td>"+
-                                "</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>"
+                                "</td><td>"+detailString;
                         }
                         totalPage=data["pages"];
                         if(totalPage>0) {

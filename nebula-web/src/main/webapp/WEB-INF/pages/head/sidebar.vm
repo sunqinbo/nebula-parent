@@ -46,20 +46,6 @@
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <i class="pe-7s-lock"></i>
-
-                    <p>权限管理</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="pe-7s-tools"></i>
-
-                    <p>发布工具</p>
-                </a>
-            </li>
-            <li>
                 <a href="/user/list.htm">
                     <i class="pe-7s-users"></i>
 

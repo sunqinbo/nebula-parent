@@ -1,5 +1,7 @@
 package com.olymtech.nebula.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.olymtech.nebula.dao.INebulaPublishEventDao;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishEventService;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -24,6 +28,9 @@ public class PublishEventServiceImplTest {
 
     @Autowired
     private IPublishEventService publishEventService;
+
+    @Autowired
+    private INebulaPublishEventDao publishEventDao;
 
     @Before
     public void setUp() throws Exception {
@@ -39,5 +46,12 @@ public class PublishEventServiceImplTest {
     public void testSelectWithChildByEventId() throws Exception {
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(6);
         System.out.println("Success");
+    }
+
+    @Test
+    public void testSelectAllPagingWithUser() throws Exception {
+        PageHelper.startPage(1, 10);
+        List<NebulaPublishEvent> eventList = publishEventDao.selectAllPagingWithUser(new NebulaPublishEvent());
+        System.out.println("sucess");
     }
 }
