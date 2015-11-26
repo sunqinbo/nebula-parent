@@ -25,4 +25,6 @@ public interface IAclRoleService {
     public List<Select2Data> getAllRoles();
 
     public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles);
+
+
 }

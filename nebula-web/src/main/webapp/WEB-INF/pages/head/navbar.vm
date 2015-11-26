@@ -43,7 +43,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="">
-                            用户登入$shiro.hasRole("admin")
+                            欢迎 $user.username
                         </a>
                     </li>
                     <li>
@@ -57,13 +57,9 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something</a></li>
+                            <li><a href="#">相关帮助</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
+                            <li><a href="#">取消</a></li>
                         </ul>
                     </li>
                 </ul>

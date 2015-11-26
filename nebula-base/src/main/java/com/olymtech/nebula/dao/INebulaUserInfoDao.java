@@ -14,4 +14,6 @@ public interface INebulaUserInfoDao extends IBaseDao<NebulaUserInfo,Integer> {
     public NebulaUserInfo selectByUsername(String username);
 
     public NebulaUserInfo selectByEmpId(Integer empId);
+
+    public void updatePassword(NebulaUserInfo user);
 }

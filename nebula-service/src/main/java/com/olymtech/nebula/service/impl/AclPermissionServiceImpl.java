@@ -89,4 +89,11 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
     public List<AclRolePermission> selectByRoleId(Integer roleId) {
         return aclRolePermissionDao.selectByRoleId(roleId);
     }
+
+    @Override
+    public List<AclPermission> getPermissionsWithNoPid() {
+        AclPermission aclPermission=new AclPermission();
+        aclPermission.setPermissionType("menu");
+        return aclPermissionDao.selectAllPaging(aclPermission);
+    }
 }

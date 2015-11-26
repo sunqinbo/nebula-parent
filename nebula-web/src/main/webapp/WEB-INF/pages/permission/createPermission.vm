@@ -2,7 +2,13 @@
 #parse("./head/sidebar.vm")
 #parse("./head/navbar.vm")
 
+<script src="/public/plugins/jQueryValidation/jquery.validate-1.13.1.js" type="text/javascript"></script>
 <script src="/public/js/createPermission.js" type="text/javascript"></script>
+<style>
+    #insertform label.error{
+        color: red;
+    }
+</style>
 
 <div class="content">
     <div class="container-fluid">
@@ -39,10 +45,16 @@
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="permissionType" class="col-sm-2 control-label">类型</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <select name="permissionType" class="form-control">
-                                        <option value="menu">菜单</option>
-                                        <option value="button">按钮</option>
-                                    </select>
+                                    <div style="float: left">
+                                        <select id="permissionType"  name="permissionType" class="form-control">
+                                            <option value="menu">菜单</option>
+                                            <option value="button">按钮</option>
+                                        </select>
+                                    </div>
+                                    <div id="pidSelectDiv" style="float: left;display: none">
+                                        <select id="pidSelect" name="pid" class="form-control">
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group" style="margin-left: 25%">

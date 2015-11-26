@@ -3,7 +3,7 @@
  * Copyright (c) 2002-2015 All Rights Reserved.
  */
 var nebula = {};
-var BASE_SITE_URL = "http://127.0.0.1:8080";
+//var BASE_SITE_URL = "http://127.0.0.1:8080";
 
 
 nebula.main = function(){
@@ -23,6 +23,68 @@ nebula.common.timestapToDate=function(timestap){
     var m = date.getMinutes() + ':';
     var s = date.getSeconds();
     return Y+M+D+h+m+s;
+};
+
+nebula.common.transform = {};
+
+nebula.common.transform.publishEnv = function(publishEnv){
+    var result = "";
+    switch (publishEnv){
+        case "test":
+            result = "测试";
+            break;
+        case "stage":
+            result = "准生产";
+            break;
+        case "product":
+            result = "生产";
+            break;
+        default:
+            result = "";
+    }
+    return result;
+};
+
+nebula.common.alert = {};
+
+nebula.common.alert.info= function (msg,second) {
+    $.notify({
+        icon: '',
+        message: msg
+    },{
+        type: 'info',
+        timer: second
+    });
+};
+
+nebula.common.alert.danger= function (msg,second) {
+    $.notify({
+        icon: '',
+        message: msg
+    },{
+        type: 'danger',
+        timer: second
+    });
+};
+
+nebula.common.alert.success= function (msg,second) {
+    $.notify({
+        icon: '',
+        message: msg
+    },{
+        type: 'success',
+        timer: second
+    });
+};
+
+nebula.common.alert.warning= function (msg,second) {
+    $.notify({
+        icon: '',
+        message: msg
+    },{
+        type: 'warning',
+        timer: second
+    });
 };
 
 nebula.publish = {};
@@ -64,14 +126,9 @@ nebula.publish.event.createPublishEvent = function(){
     var publishEnv = $("#select-publich-env").val();
     var publishSvn = $("#publich-svn").val();
 
-    if(publishSubject==null||publishBuCname==null||publishProductCname==null||productSrcSvn==null||publishEnv==null||publishSvn==null){
-        $.notify({
-            icon: '',
-            message: "请确认选择的所有字段"
-        },{
-            type: 'error',
-            timer: 1000
-        });
+    if(publishSubject==""||publishBuCname=="请选择"||publishProductCname=="请选择"||publishEnv==""||publishSvn==""){
+        nebula.common.alert.danger("请确认选择的所有字段",1000);
+        return false;
     }
     $.ajax({
         url:"/publish/add",
@@ -91,6 +148,8 @@ nebula.publish.event.createPublishEvent = function(){
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 window.location.href="/publish/process.htm?id="+jsonData.responseContext;
+            }else{
+                nebula.common.alert.danger(jsonData.responseContext,1000);
             }
         }
     });
@@ -112,13 +171,7 @@ nebula.publish.process.preMasterPublish = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                $.notify({
-                    icon: '',
-                    message: "准备发布成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("准备发布成功",2000);
             }
         }
     });
@@ -132,13 +185,7 @@ nebula.publish.process.preMinionPublish = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                $.notify({
-                    icon: '',
-                    message: "预发布成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("预发布成功",2000);
             }
         }
     });
@@ -153,13 +200,7 @@ nebula.publish.process.publishReal = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                $.notify({
-                    icon: '',
-                    message: "正式发布成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("正式发布成功",2000);
             }
         }
     });
@@ -173,13 +214,7 @@ nebula.publish.process.publishContinue = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                $.notify({
-                    icon: '',
-                    message: "正式发布成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("正式发布成功",2000);
             }
         }
     });
@@ -194,13 +229,7 @@ nebula.publish.process.publishSuccessEnd = function(){
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                $.notify({
-                    icon: '',
-                    message: "确认发布成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("确认发布成功",2000);
             }
         }
     });
@@ -215,13 +244,7 @@ nebula.publish.process.publishFailEnd = function(){
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                $.notify({
-                    icon: '',
-                    message: "回滚成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("回滚成功",2000);
             }
         }
     });
@@ -237,16 +260,11 @@ nebula.publish.process.retryPublishRollback = function(){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
                 window.location.href="/publishProcess.htm?id="+id;
-                $.notify({
-                    icon: '',
-                    message: "正式发布成功"
-                },{
-                    type: 'info',
-                    timer: 2000
-                });
+                nebula.common.alert.info("正式发布成功",2000);
             }
         }
     });
 };
+
 
 

@@ -14,6 +14,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="请输入查询内容">
                                 <button type="button" id="query_btn" class="btn btn-primary">查询</button>
+                                <button type="button" id="create_btn" class="btn btn-primary">新增</button>
                             </div>
                         </form>
                     </div>
@@ -38,7 +39,6 @@
                 <th>工号</th>
                 <th>主管工号</th>
                 <th>是否启用</th>
-                <th>密码</th>
                 <th>操作</th>
             </tr>
             </thead>
