@@ -45,6 +45,39 @@ nebula.common.transform.publishEnv = function(publishEnv){
     return result;
 };
 
+nebula.common.transform.isSuccessPublish = function(isSuccessPublish){
+    var result = "";
+    if(isSuccessPublish == null){
+        return result;
+    }
+    isSuccessPublish?(result="成功"):(result="失败");
+    return result;
+};
+
+nebula.common.transform.publishStatus = function(publishStatus){
+    var result = "";
+    switch (publishStatus){
+        case "PENDING_APPROVE":
+            result = "待审批";
+            break;
+        case "PENDING_PUBLISH":
+            result = "待发布";
+            break;
+        case "PUBLISHING":
+            result = "发布中";
+            break;
+        case "PUBLISHED":
+            result = "已发布";
+            break;
+        case "ROLLBACK":
+            result = "已回滚";
+            break;
+        default:
+            result = "";
+    }
+    return result;
+};
+
 nebula.common.alert = {};
 
 nebula.common.alert.info= function (msg,second) {
@@ -93,6 +126,8 @@ nebula.publish.event = {};
 
 nebula.publish.event.main = function(){
     $(document).ready(function(){
+        $("#navbar-header-name").html("发布申请");
+
         $("#select-bu").change(function(){
             var pid = $("#select-bu").val();
             $("#select-product").html("<option value=''>请选择</option>");

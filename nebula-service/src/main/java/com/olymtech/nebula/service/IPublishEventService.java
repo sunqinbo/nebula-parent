@@ -6,6 +6,8 @@ import com.olymtech.nebula.entity.BaseDO;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishModule;
 
+import java.util.List;
+
 /**
  * Created by liwenji on 2015/11/4.
  */
@@ -25,4 +27,7 @@ public interface IPublishEventService {
 
     public Boolean retryPublishRollback(Integer eventId);
 
+    public List<NebulaPublishEvent> selectAllPagingWithUser(NebulaPublishEvent event);
+
+    public Integer selectCountWithUser(NebulaPublishEvent event);
 }

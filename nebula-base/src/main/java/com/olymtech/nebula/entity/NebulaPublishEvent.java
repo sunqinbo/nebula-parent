@@ -35,7 +35,11 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Integer submitEmpId;
 
+    private NebulaUserInfo submitUser;
+
     private Integer publishEmpId;
+
+    private NebulaUserInfo publishUser;
 
     private Boolean isSuccessPublish;
 
@@ -48,6 +52,22 @@ public class NebulaPublishEvent extends BaseDO {
     private PublishActionGroup publishActionGroup;
 
     private List<NebulaPublishModule> publishModules;
+
+    public NebulaUserInfo getSubmitUser() {
+        return submitUser;
+    }
+
+    public void setSubmitUser(NebulaUserInfo submitUser) {
+        this.submitUser = submitUser;
+    }
+
+    public NebulaUserInfo getPublishUser() {
+        return publishUser;
+    }
+
+    public void setPublishUser(NebulaUserInfo publishUser) {
+        this.publishUser = publishUser;
+    }
 
     public Integer getPublishEmpId() {
         return publishEmpId;
