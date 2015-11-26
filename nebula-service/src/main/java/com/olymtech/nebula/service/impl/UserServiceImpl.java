@@ -119,8 +119,10 @@ public class UserServiceImpl implements IUserService {
         for (AclUserRole aclUserRole : aclUserRoles) {
             roleIds.add(aclUserRole.getRoleId());
         }
-        List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
-        userInfo.setAclRoles(aclRoles);
+        if(roleIds.size()>0) {
+            List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
+            userInfo.setAclRoles(aclRoles);
+        }
         return userInfo;
     }
 }

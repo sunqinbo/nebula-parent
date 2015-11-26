@@ -7,6 +7,25 @@ $(function(){
     //    checkable : true                  //每个节点上是否显示 CheckBox
     //};
     //var permissionList;
+
+    $("#insertform").validate({
+        rules:{
+            roleName:{required:true},
+            roleCname:{required:true},
+            roleDesc:{required:true},
+            //permissionList:{required:true},
+            isEnable:{required:true},
+        },
+        messages:{
+            roleName:{required:"角色名称不能为空"},
+            roleCname:{required:"角色中文名称不能为空"},
+            roleDesc:{required:"角色描述不能为空"},
+            //permissionList:{required:"角色的权限不能为空"},
+            isEnable:{required:"请选择是否启用"}
+        }
+    });
+
+
     //为编辑页面时
     $("#save").hide();
     if($("#isEdit").val()!=""){
@@ -90,12 +109,16 @@ $(function(){
 
     //提交按钮
     $("#submit").click(function(){
-        btnClick(true);
+        if($("#insertform").valid()) {
+            btnClick(true);
+        }
     });
 
     //保存按钮
     $("#save").click(function(){
-        btnClick(false);
+        if($("#insertform").valid()) {
+            btnClick(false);
+        }
     });
     //zTree结点点击控制选中
     function onClick(e,treeId, treeNode) {
@@ -109,6 +132,11 @@ $(function(){
 function btnClick(isCreate){
     var treeObj = $.fn.zTree.getZTreeObj("permissionList");
     var nodes=treeObj.getCheckedNodes();
+    if(nodes.length<1){
+        $("#permissionTip").html("请选择角色权限");
+        return;
+    }
+    else  $("#permissionTip").html();
     var permissionIds=[];
     for(var i=0;i<nodes.length;i++){
         if(nodes[i]["pId"]!=null)

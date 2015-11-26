@@ -27,7 +27,7 @@
         <include refid="AclRole-Base-Column-List"/>
         from acl_role
         where id in
-        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
     </select>

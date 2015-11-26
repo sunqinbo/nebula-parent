@@ -1,9 +1,43 @@
 $(function(){
     showSelect2();
 
+    $("#insertform").validate({
+        rules:{
+            username:{required:true},
+            mobilePhone:{required:true},
+            weixinAcc:{required:true},
+            qqAcc:{required:true},
+            email:{required:true},
+            nickname:{required:true},
+            deptName:{required:true},
+            jobTitle:{required:true},
+            empId:{required:true},
+            supervisorEmpId:{required:true},
+            roleList:{required:true},
+            isEnable:{required:true},
+            password:{required:true},
+        },
+        messages:{
+            username:{required:"用户名不能为空"},
+            mobilePhone:{required:"手机号码不能为空"},
+            weixinAcc:{required:"微信账号不能为空"},
+            qqAcc:{required:"qq账号不能为空"},
+            email:{required:"邮箱不能为空"},
+            nickname:{required:"昵称不能为空"},
+            deptName:{required:"部门名称不能为空"},
+            jobTitle:{required:"职位不能为空"},
+            empId:{required:"工号不能为空"},
+            supervisorEmpId:{required:"主管工号不能为空"},
+            roleList:{required:"角色不能为空"},
+            isEnable:{required:"请选择是否启用"},
+            password:{required:"密码不能为空"}
+        }
+    });
+
     $("#save").hide();
     //为编辑页面时
     if($("#isEdit").val()!=""){
+        $("#password").hide();
         $.ajax({
             async: false,
             type:"post",
@@ -22,7 +56,7 @@ $(function(){
                 $("#empId").val(data["empId"]);
                 $("#supervisorEmpId").val(data["supervisorEmpId"]);
                 $("#isEnable").val(data["isEnable"]);
-                $("#password").val(data["password"]);
+                //$("#password").val(data["password"]);
                 if(data["isEnable"]==1) {
                     $("#enableRadio").attr("checked", true);
                 }
@@ -46,10 +80,14 @@ $(function(){
 
     //提交按钮
     $("#submit").click(function(){
-        btnClick(true);
+        if($("#insertform").valid()) {
+            btnClick(true);
+        }
     });
     $("#save").click(function(){
-        btnClick(false);
+        if($("#insertform").valid()) {
+            btnClick(false);
+        }
     });
 })
 

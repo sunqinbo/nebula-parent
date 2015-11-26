@@ -54,7 +54,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object PublishList(DataTablePage dataTablePage) {
+    public Object PublishList(DataTablePage dataTablePage) throws Exception{
         PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage);
         return pageInfo;
     }
@@ -95,7 +95,7 @@ public class PublishController extends BaseController {
      */
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody
-    public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
+    public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent)  throws Exception{
         String publishSvn = nebulaPublishEvent.getPublishSvn();
         String pattern = "svn://svn.olymtech.com/warspace/";
         Pattern p = Pattern.compile(pattern);
@@ -106,6 +106,7 @@ public class PublishController extends BaseController {
         Integer empId = getLoginUser().getEmpId();
         nebulaPublishEvent.setSubmitEmpId(empId);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
+   
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
         return returnCallback("Success", id);
     }
@@ -148,7 +149,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/preMinionPublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response) {
+    public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response) throws Exception{
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "id is null");
@@ -176,7 +177,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/publishReal", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishReal(HttpServletRequest request, HttpServletResponse response) {
+    public Callback publishReal(HttpServletRequest request, HttpServletResponse response) throws Exception{
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "id is null");
@@ -202,7 +203,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/publishContinue", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishContinue() {
+    public Callback publishContinue() throws Exception{
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -252,7 +253,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/publishSuccessEnd", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishSuccessEnd() {
+    public Callback publishSuccessEnd() throws Exception{
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -293,7 +294,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/publishFailEnd", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishFailEnd() {
+    public Callback publishFailEnd() throws Exception{
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -342,7 +343,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/updateEtcEnd", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback updateEtcEnd(HttpServletRequest request) {
+    public Callback updateEtcEnd(HttpServletRequest request) throws Exception{
         String eventId = request.getParameter("id");
         if (!StringUtils.isNotEmpty(eventId)) {
             return returnCallback("Error", "id参数为空");
@@ -353,7 +354,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object publishProcessGetStep(Integer eventId) {
+    public Object publishProcessGetStep(Integer eventId) throws Exception{
         String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC"};
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
@@ -422,7 +423,7 @@ public class PublishController extends BaseController {
 //    }
     @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Object addnextpublish(Integer eventId,String nowPublish) {
+    public Object addnextpublish(Integer eventId,String nowPublish) throws Exception{
         NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setPublishEnv(nowPublish);
         nebulaPublishEvent.setId(null);
