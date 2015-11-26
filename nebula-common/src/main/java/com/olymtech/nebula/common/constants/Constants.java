@@ -2,7 +2,7 @@
  * Olymtech.com Inc.
  * Copyright (c) 2002-2015 All Rights Reserved
  */
-package com.olymtech.nebula.web.utils;
+package com.olymtech.nebula.common.constants;
 
 /**
  * @author taoshanchang 15/10/26

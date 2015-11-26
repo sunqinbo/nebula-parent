@@ -1,7 +1,7 @@
 package com.olymtech.nebula.web.filter;
 
 import com.olymtech.nebula.service.IUserService;
-import com.olymtech.nebula.web.utils.Constants;
+import com.olymtech.nebula.common.constants.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
