@@ -9,6 +9,29 @@
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
+    <script>
+        var globelLoginUserRoles=$user.aclRoles;
+##                $.ajax({
+##                    async: false,
+##                    type:"post",
+##                    data:{"empId":$user.empId},
+##                    url:"/user/get/empId",
+##                    datatype:"json",
+##                    success: function (data) {
+##                        globelLoginUserRoles=data;
+##                    },
+##                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+##                        $.notify({
+##                            icon: '',
+##                            message: "很抱歉载入用户信息失败，原因"+ errorThrown
+##
+##                        },{
+##                            type: 'info',
+##                            timer: 1000
+##                        });
+##                    }
+##                })
+    </script>
 </head>
 <body>
 

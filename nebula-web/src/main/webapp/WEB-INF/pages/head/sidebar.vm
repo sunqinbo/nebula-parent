@@ -46,6 +46,13 @@
                 </a>
             </li>
             <li>
+                <a href="#">
+                    <i class="pe-7s-tools"></i>
+
+                    <p>发布工具</p>
+                </a>
+            </li>
+            <li id="sidebarUser">
                 <a href="/user/list.htm">
                     <i class="pe-7s-users"></i>
 

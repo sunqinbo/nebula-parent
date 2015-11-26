@@ -1,6 +1,6 @@
 $(function(){
     showSelect2();
-
+    //var username=globelLoginUserRoles.username;
     $("#insertform").validate({
         rules:{
             username:{required:true},
@@ -41,7 +41,7 @@ $(function(){
         $("#password_div").append("<button id='updatePass' type='button' class='btn btn-info'>修改密码</button>");
         $("#updatePass").click(function () {
             $("#password").show();
-            $("#updatePass").hide();
+            $("#updatePass")
         });
         $.ajax({
             async: false,

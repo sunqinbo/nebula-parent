@@ -49,6 +49,15 @@ public class UserServiceImpl implements IUserService {
     @Override
     public NebulaUserInfo findByUsername(String username) {
         NebulaUserInfo nebulaUserInfo = nebulaUserInfoDao.selectByUsername(username);
+        List<Integer> roleIds = new ArrayList<>();
+        List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(nebulaUserInfo.getEmpId());
+        for (AclUserRole aclUserRole : aclUserRoles) {
+            roleIds.add(aclUserRole.getRoleId());
+        }
+        if (roleIds.size() > 0) {
+            List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
+            nebulaUserInfo.setAclRoles(aclRoles);
+        }
         return nebulaUserInfo;
     }
 
