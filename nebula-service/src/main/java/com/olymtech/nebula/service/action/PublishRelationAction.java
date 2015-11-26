@@ -6,10 +6,10 @@ import com.olymtech.nebula.dao.INebulaPublishHostDao;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
-import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IPublishScheduleService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
 
@@ -71,7 +72,21 @@ public class PublishRelationAction extends AbstractAction {
         appNames += appname;
         try {
             List<NebulaPublishModule> modules = new ArrayList<>();
-            List<ProductTree> moduleTrees = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames,event.getPublishEnv());
+            Map<String ,Object> resultMap = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames,event.getPublishEnv());
+            if (resultMap == null) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "请求基础数据库异常");
+                return false;
+            }
+            String msg = resultMap.get("msg").toString();
+            List<ProductTree> moduleTrees =(List)resultMap.get("result");
+            if (StringUtils.isNotEmpty(msg)) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, msg);
+                return false;
+            }
+            if (moduleTrees == null) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "匹配工程名称出错");
+                return false;
+            }
             for (ProductTree moduleTree : moduleTrees) {
                 NebulaPublishModule nebulaPublishModule = new NebulaPublishModule();
                 nebulaPublishModule.setPublishEventId(event.getId());
