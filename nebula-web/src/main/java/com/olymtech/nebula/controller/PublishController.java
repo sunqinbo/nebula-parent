@@ -414,6 +414,7 @@ public class PublishController extends BaseController {
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
         String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
         String[] group5 = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
+        String[] group6 = {"CLEAN_PUBLISH_DIR"};
         List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
@@ -444,6 +445,9 @@ public class PublishController extends BaseController {
                 case "SUCCESS_END":
                     actionGroup = 5;
                     group = group5;
+                    break;
+                case "CLEAN_END":
+                    actionGroup = 6;
                     break;
             }
             for (int i = 0; i < group.length; i++) {

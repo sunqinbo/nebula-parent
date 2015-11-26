@@ -155,6 +155,21 @@ function Initialization() {
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState + "";
 
+            //发布完成，不管成功或失败
+            if(actionGroup==6){
+                var btn_text;
+                if ($("#publishEnv").html() == "test") {
+                    btn_text = "准生产";
+                }
+                if ($("#publishEnv").val() == "stage") {
+                    btn_text = "生产";
+                }
+                $("#nextPublish").text("进入" + btn_text).show();
+                $("#nextPublish").click(function () {
+                    nextPublish(btn_text);
+                })
+                return;
+            }
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
                 $("#loading-status").show();
             } else {
@@ -244,20 +259,9 @@ function Initialization() {
                         whichStep = whichStep + 1;
                         var whichshow = actionGroup - 1 + "";
                         $("#step" + whichshow).show();
+                        $("#btn4").removeClass("btn-info");
+                        $("#btn5").removeClass("btn-info");
                         $("#processbar" + whichshow).setStep(whichStep);
-                        if (actionGroup == 6) {
-                            var btn_text;
-                            if ($("#publishEnv").html() == "test") {
-                                btn_text = "准生产";
-                            }
-                            if ($("#publishEnv").val() == "stage") {
-                                btn_text = "生产";
-                            }
-                            $("#nextPublish").text("进入" + btn_text).show();
-                            $("#nextPublish").click(function () {
-                                nextPublish(btn_text);
-                            })
-                        }
                         return;
                 }
                 //if(actionGroup>=4){
