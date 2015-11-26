@@ -12,6 +12,7 @@ import com.olymtech.nebula.entity.enums.PublishStatus;
 import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +53,7 @@ public class PublishController extends BaseController {
     INebulaPublishModuleService publishModuleService;
 
 
+    @RequiresPermissions("publishevent:view")
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object PublishList(DataTablePage dataTablePage) throws Exception{
@@ -73,11 +75,14 @@ public class PublishController extends BaseController {
         return returnCallback("Success", productTrees);
     }
 
+
+    @RequiresPermissions("publishevent:view")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishList() throws Exception {
         return "event/publishList";
     }
 
+    @RequiresPermissions("publishevent:view")
     @RequestMapping(value = "/process.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishProcess(HttpServletRequest request, Model model) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
@@ -93,6 +98,7 @@ public class PublishController extends BaseController {
     /**
      * public event
      */
+    @RequiresPermissions("publishapply:commit")
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent)  throws Exception{
@@ -126,6 +132,10 @@ public class PublishController extends BaseController {
         return returnCallback("Success", nebulaPublishSchedules);
     }
 
+    /**
+     * 启动预发布
+     */
+    @RequiresPermissions("publishevnt:prePublishMaster")
     @RequestMapping(value = "/preMasterPublish", method = {RequestMethod.POST})
     @ResponseBody
     public Callback prePublishMaster(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -147,6 +157,7 @@ public class PublishController extends BaseController {
         return returnCallback("Success", "发布准备执行完成");
     }
 
+    @RequiresPermissions("publishevnt:prePublishMinion")
     @RequestMapping(value = "/preMinionPublish", method = {RequestMethod.POST})
     @ResponseBody
     public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -175,6 +186,10 @@ public class PublishController extends BaseController {
         return returnCallback("Success", "预发布完成");
     }
 
+    /**
+     * 启动正式发布
+     */
+    @RequiresPermissions("publishevnt:publishReal")
     @RequestMapping(value = "/publishReal", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishReal(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -201,6 +216,10 @@ public class PublishController extends BaseController {
         return returnCallback("Success", "预发布完成");
     }
 
+    /**
+     * 单步发布重试
+     */
+    @RequiresPermissions("publishevnt:publishContinue")
     @RequestMapping(value = "/publishContinue", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishContinue() throws Exception{
@@ -209,7 +228,6 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "参数id为空");
         }
         try {
-
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
             List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
@@ -251,6 +269,10 @@ public class PublishController extends BaseController {
         return returnCallback("Error", "继续发布出错");
     }
 
+    /**
+     * 确认发布成功
+     */
+    @RequiresPermissions("publishevnt:publishSuccessEnd")
     @RequestMapping(value = "/publishSuccessEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishSuccessEnd() throws Exception{
@@ -292,6 +314,10 @@ public class PublishController extends BaseController {
         return returnCallback("Error", "成功发布确认失败");
     }
 
+    /**
+     *回滚
+     */
+    @RequiresPermissions("publishevnt:publishFailEnd")
     @RequestMapping(value = "/publishFailEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback publishFailEnd() throws Exception{
@@ -325,6 +351,10 @@ public class PublishController extends BaseController {
         return returnCallback("Error", "服务器异常");
     }
 
+    /**
+     * 重新发布
+     */
+    @RequiresPermissions("publishevnt:retryPublishRollback")
     @RequestMapping(value = "/retryPublishRollback", method = {RequestMethod.POST})
     @ResponseBody
     public Callback retryPublishRollback(HttpServletRequest request) {
@@ -341,6 +371,10 @@ public class PublishController extends BaseController {
         return returnCallback("Error", "重新发布回退失败");
     }
 
+    /**
+     * 确认编辑etc
+     */
+    @RequiresPermissions("publishevnt:updateEtcEnd")
     @RequestMapping(value = "/updateEtcEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback updateEtcEnd(HttpServletRequest request) throws Exception{
@@ -421,6 +455,11 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success","");
 //    }
+
+    /**
+     * 发布升级
+     */
+    @RequiresPermissions("publishevnt:addnextpublish")
     @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
     @ResponseBody
     public Object addnextpublish(Integer eventId,String nowPublish) throws Exception{

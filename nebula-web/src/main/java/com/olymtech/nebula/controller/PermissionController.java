@@ -7,6 +7,7 @@ import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.zNode;
 import com.olymtech.nebula.service.IAclPermissionService;
 import com.olymtech.nebula.service.IAclRoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,16 +30,19 @@ public class PermissionController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
+    @RequiresPermissions("permission:view")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String jurisdiction() throws Exception {
         return "permission/permissionList";
     }
 
+    @RequiresPermissions("permission:add")
     @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String createPermission() throws Exception {
         return "permission/createPermission";
     }
 
+    @RequiresPermissions("permission:add")
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertAclPermission(AclPermission permission) throws Exception {
@@ -46,6 +50,7 @@ public class PermissionController extends BaseController {
         return returnCallback("Success", "插入权限成功");
     }
 
+    @RequiresPermissions("permission:delete")
     @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback deleteAclPermission(Integer id) throws Exception {
@@ -53,6 +58,7 @@ public class PermissionController extends BaseController {
         return returnCallback("Success", "删除权限成功");
     }
 
+    @RequiresPermissions("permission:update")
     @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateAclPermission(AclPermission permission) throws Exception {
@@ -60,6 +66,7 @@ public class PermissionController extends BaseController {
         return returnCallback("Success", "更新权限成功");
     }
 
+    @RequiresPermissions("permission:view")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingPermission(DataTablePage dataTablePage) throws Exception {

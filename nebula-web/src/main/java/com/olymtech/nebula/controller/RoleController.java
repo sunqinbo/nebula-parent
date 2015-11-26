@@ -7,6 +7,7 @@ import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.Select2Data;
 import com.olymtech.nebula.service.IAclRoleService;
 import com.olymtech.nebula.service.IUserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,16 +32,19 @@ public class RoleController extends BaseController {
     @Resource
     private IUserService userService;
 
+    @RequiresPermissions("role:view")
     @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String roleList (){
         return "role/roleList";
     }
 
+    @RequiresPermissions("role:add")
     @RequestMapping(value="/add.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String createRole (){
         return "role/createRole";
     }
 
+    @RequiresPermissions("user:update")
     @RequestMapping(value="/update.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String editRole(Model model,Integer id){
         model.addAttribute("edit",true);
@@ -48,6 +52,7 @@ public class RoleController extends BaseController {
         return "role/createRole";
     }
 
+    @RequiresPermissions("role:add")
     @RequestMapping(value = "/add", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Callback insertAclRole(AclRole aclRole, @RequestParam("permissionIds[]") List<Integer> permissionIds) {
@@ -55,6 +60,7 @@ public class RoleController extends BaseController {
         return returnCallback("Success", "插入角色成功");
     }
 
+    @RequiresPermissions("role:delete")
     @RequestMapping(value = "/delete", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Callback deleteAclRole(Integer id) {
@@ -62,6 +68,7 @@ public class RoleController extends BaseController {
         return returnCallback("Success", "删除角色成功");
     }
 
+    @RequiresPermissions("role:update")
     @RequestMapping(value = "/update", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Callback updateAclRole(AclRole aclRole, @RequestParam("permissionIds[]") List<Integer> permissionIds) {
@@ -69,6 +76,7 @@ public class RoleController extends BaseController {
         return returnCallback("Success", "更新角色成功");
     }
 
+    @RequiresPermissions("role:view")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingRole(DataTablePage dataTablePage) {
