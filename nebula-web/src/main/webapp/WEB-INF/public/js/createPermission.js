@@ -46,6 +46,10 @@ $(function(){
             });
             $("#pidSelectDiv").show();
         }
+        else{
+            $("#pidSelect").empty();
+            $("#pidSelectDiv").hide();
+        }
     })
     $("#submit").click(function(){
         if($("#insertform").valid()) {

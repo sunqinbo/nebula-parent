@@ -32,6 +32,9 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
 
     @Override
     public int insertAclPermission(AclPermission permission) {
+        if(permission.getPid()==null){
+            permission.setPid(0);
+        }
         return aclPermissionDao.insert(permission);
     }
 

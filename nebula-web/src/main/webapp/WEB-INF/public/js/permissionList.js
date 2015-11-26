@@ -19,13 +19,20 @@ function getjtb(pageNum){
             var tbString="";
             var totalPage;
             for(var i=0;i<data["list"].length;i++){
+                var id=data["list"][i]["id"];
+                var pid=data["list"][i]["pid"];
+                var isEnable=data["list"][i]["isEnable"];
+                var permission=data["list"][i]["permission"];
                 tbString=tbString+"<tr><td>"+data["list"][i]["id"]+"</td><td>"+
                     data["list"][i]["permissionName"]+"</td><td>"+data["list"][i]["permissionCname"]+
                     "</td><td>"+data["list"][i]["permissionDesc"]+
                     "</td><td>"+data["list"][i]["permissionType"]+
                     "</td><td>"+data["list"][i]["url"]+
                     "</td><td><div id='listBtn' class='btn-group'><button class='btn btn-success btn-sm' type='button'>编辑</button>"+
-                    "<button class='btn btn-danger btn-sm' type='button'>删除</button>"+"</div></td>"
+                    "<button class='btn btn-danger btn-sm' type='button'>删除</button>"+"</div></td>"+
+                    "<td>"+"<input type='text' style='display:none' id='"+id+"pid' value='"+pid+"'>"+
+                    "<input type='text' style='display:none' id='"+id+"permission' value='"+permission+"'>"+
+                    "<input type='text' style='display:none' id='"+id+"isEnable' value='"+isEnable+"'>"+"</td>";
             }
             $("tbody").html(tbString);
             listBtn(pageNum);
@@ -134,6 +141,9 @@ function listBtn(pageNum){
                         type:"post",
                         url:"/permission/update",
                         data:{"id":id,
+                            "pid":$("#"+id+"pid").val(),
+                            "permission":$("#"+id+"permission").val(),
+                            "isEnable":$("#"+id+"isEnable").val(),
                             "permissionName":permissionName,
                             "permissionCname":permissionCname,
                             "permissionDesc":permissionDesc,
@@ -169,6 +179,9 @@ function listBtn(pageNum){
                     whichTd++;
                     obj_text = $(this).find("input:text");    // 判断单元格下是否有文本框
                     var width=$(this).width();
+                    if(whichTd==7){
+                        return;
+                    }
                     if(whichTd==5){
                         var selectString="<select name='permissionType' class='form-control'>"+
                         "<option value='menu'>菜单</option><option value='button'>按钮</option></select>"
