@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +137,7 @@ public class PublishController extends BaseController {
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PRE_MASTER);
+
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(GetPublishSvnAction.class));
@@ -144,6 +146,11 @@ public class PublishController extends BaseController {
 
         Dispatcher dispatcher = new Dispatcher(chain, request, response);
         dispatcher.doDispatch(nebulaPublishEvent);
+        /** 修改发布状态 */
+        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
+        nebulaPublishEvent.setPublishDatetime(new Date());
+        publishEventService.update(nebulaPublishEvent);
+
         return returnCallback("Success", "发布准备执行完成");
     }
 
@@ -157,6 +164,11 @@ public class PublishController extends BaseController {
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PRE_MINION);
+
+        /** 修改发布状态 */
+        nebulaPublishEvent.setPublishStatus(PublishStatus.PUBLISHING);
+        publishEventService.update(nebulaPublishEvent);
+
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(CreateDirAciton.class));
@@ -172,6 +184,7 @@ public class PublishController extends BaseController {
             logger.error("publishReal error:", e);
             return returnCallback("Error", "预发布出现错误");
         }
+
         return returnCallback("Success", "预发布完成");
     }
 
@@ -283,6 +296,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 成功发布 */
             publishEvent.setIsSuccessPublish(true);
+            publishEvent.setPublishStatus(PublishStatus.PUBLISHED);
             publishEventService.update(publishEvent);
 
             return returnCallback("Success", "成功发布确认成功");
@@ -316,6 +330,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 失败发布 */
             publishEvent.setIsSuccessPublish(false);
+            publishEvent.setPublishStatus(PublishStatus.ROLLBACK);
             publishEventService.update(publishEvent);
 
             return returnCallback("Success", "失败发布确认成功");
@@ -333,7 +348,13 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "参数id为空");
         }
         try {
-            publishEventService.retryPublishRollback(Integer.parseInt(idString));
+            Integer eventId = Integer.parseInt(idString);
+            publishEventService.retryPublishRollback(eventId);
+
+            NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
+            publishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+            publishEventService.update(publishEvent);
+
             return returnCallback("Success", "重新发布回退成功");
         } catch (Exception e) {
             logger.error("retryPublishRollback error:", e);
