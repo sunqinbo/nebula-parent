@@ -27,7 +27,6 @@ function getLtb(pageNum){
                     "</td><td>"+data["list"][i]["empId"]+
                     "</td><td>"+data["list"][i]["supervisorEmpId"]+
                     "</td><td>"+data["list"][i]["isEnable"]+
-                    "</td><td>"+data["list"][i]["password"]+
                     "</td><td><div id='listBtn' class='btn-group'><button class='btn btn-success btn-sm' type='button'>编辑</button>"+
                     "<button class='btn btn-danger btn-sm' type='button'>删除</button>"+"</div></td>"
             }
