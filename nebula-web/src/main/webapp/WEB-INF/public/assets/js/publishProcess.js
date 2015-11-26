@@ -206,6 +206,17 @@ function Initialization() {
                 switch (actionGroup) {
                     case 3:
                         $("#restartPublish").hide();
+                        for (var i = 1; i < 4; i++) {
+                            if (i == actionGroup) {
+                                $("#btn" + i).attr('disabled', false);
+                                $("#btn" + i).addClass("btn-info");
+                                $("#step" + (i - 1)).hide();
+                            }
+                            else {
+                                $("#btn" + i).attr('disabled', true);
+                                $("#btn"+i).removeClass("btn-info");
+                            }
+                        }
                         return;
                     //阶段三完成，确认发布，和回滚可点
                     case 4:
