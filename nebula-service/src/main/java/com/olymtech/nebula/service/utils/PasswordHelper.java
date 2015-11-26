@@ -1,4 +1,4 @@
-package com.olymtech.nebula.web.utils;
+package com.olymtech.nebula.service.utils;
 
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import org.apache.shiro.crypto.RandomNumberGenerator;

@@ -25,4 +25,9 @@ public class NebulaUserInfoDaoImpl extends BaseDaoImpl<NebulaUserInfo,Integer> i
     public NebulaUserInfo selectByEmpId(Integer empId) {
         return getSqlSession().selectOne(CLASS_NAME + "-Select-By-Emp-Id", empId);
     }
+
+    @Override
+    public void updatePassword(NebulaUserInfo user) {
+        getSqlSession().update(CLASS_NAME + "-UpdatePassWord-By-Id", user);
+    }
 }

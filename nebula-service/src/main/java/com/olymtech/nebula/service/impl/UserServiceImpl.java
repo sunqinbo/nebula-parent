@@ -6,6 +6,7 @@ package com.olymtech.nebula.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.olymtech.nebula.service.utils.PasswordHelper;
 import com.olymtech.nebula.dao.IAclRoleDao;
 import com.olymtech.nebula.dao.IAclRolePermissionDao;
 import com.olymtech.nebula.dao.IAclUserRoleDao;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private IAclRolePermissionDao aclRolePermissionDao;
+
+    @Resource
+    private PasswordHelper passwordHelper;
 
     @Override
     public NebulaUserInfo findByUsername(String username) {
@@ -103,6 +107,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public void updatePassword(Integer userId ,String newPassword){
+        NebulaUserInfo nebulaUserInfo = nebulaUserInfoDao.selectById(userId);
+        nebulaUserInfo.setPassword(newPassword);
+        passwordHelper.encryptPassword(nebulaUserInfo);
+        nebulaUserInfoDao.updatePassword(nebulaUserInfo);
+    }
+
+    @Override
     public PageInfo getPageInfoAclUser(DataTablePage dataTablePage) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
         List<NebulaUserInfo> users = nebulaUserInfoDao.selectAllPaging(new NebulaUserInfo());
@@ -119,7 +131,7 @@ public class UserServiceImpl implements IUserService {
         for (AclUserRole aclUserRole : aclUserRoles) {
             roleIds.add(aclUserRole.getRoleId());
         }
-        if(roleIds.size()>0) {
+        if (roleIds.size() > 0) {
             List<AclRole> aclRoles = aclRoleDao.selectByIds(roleIds);
             userInfo.setAclRoles(aclRoles);
         }

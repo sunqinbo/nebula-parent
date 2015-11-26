@@ -6,7 +6,7 @@ package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.NebulaUserInfo;
-import com.olymtech.nebula.web.utils.Constants;
+import com.olymtech.nebula.common.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
