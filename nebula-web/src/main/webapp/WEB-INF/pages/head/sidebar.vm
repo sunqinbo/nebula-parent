@@ -52,13 +52,15 @@
                     <p>发布工具</p>
                 </a>
             </li>
-            <li id="sidebarUser">
-                <a href="/user/list.htm">
-                    <i class="pe-7s-users"></i>
+            #if($shiro.hasPermission("user:*"))
+                <li id="sidebarUser">
+                    <a href="/user/list.htm">
+                        <i class="pe-7s-users"></i>
 
-                    <p>用户</p>
-                </a>
-            </li>
+                        <p>用户</p>
+                    </a>
+                </li>
+            #end
             <li>
                 <a href="/role/list.htm">
                     <i class="pe-7s-id"></i>

@@ -1,6 +1,5 @@
 $(function(){
     showSelect2();
-    //var username=globelLoginUserRoles.username;
     $("#insertform").validate({
         rules:{
             username:{required:true},
