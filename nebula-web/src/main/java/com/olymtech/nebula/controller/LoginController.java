@@ -1,10 +1,11 @@
 package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.entity.Callback;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +38,11 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/test")
-    @RequiresPermissions("user:add")
+    //@RequiresPermissions("user:add")
     public Callback test(HttpServletRequest request, HttpServletResponse response){
-        //System.out.println(SecurityUtils.getSubject().isPermitted("user:add"));
+        Subject subject = SecurityUtils.getSubject();
+        //subject.checkPermissions("user:update,delete");
+        subject.checkPermissions("user:add");
         //throw new NullPointerException("xxxx");
 
         System.out.println("test");

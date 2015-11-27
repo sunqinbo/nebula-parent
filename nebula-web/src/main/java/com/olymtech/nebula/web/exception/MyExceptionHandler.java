@@ -28,17 +28,10 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        log.error("异常捕获", ex);
-
         Map<String, Object> model = new HashMap<String, Object>();
-        model.put("ex", ex);
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod method = (HandlerMethod) handler;
-            System.out.println("exception in Controller of: " + method.getBeanType());
-            System.out.println("exception in method of: " + method.getMethod());
-            System.out.println(method.getMethod().getReturnType());
-
             log.error(ex.getMessage());
             log.error(ex.getStackTrace());
 
@@ -65,6 +58,7 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
                 }
                 return null;
             }else{
+                model.put("ex", ex);
                 //根据不同错误转向不同页面
                 if (ex instanceof BusinessException) {
                     return new ModelAndView("error/error-business", model);
