@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSvnBaseline;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.entity.enums.PublishEnv;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.olymtech.nebula.service.IPublishSvnBaselineService;
 import org.slf4j.Logger;
@@ -43,6 +44,11 @@ public class UpdateSrcSvnAction extends AbstractAction {
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.UPDATE_SRC_SVN, event.getPublishActionGroup(), null, "");
+
+//        if(event.getPublishEnv().equals(PublishEnv.product.toString())){
+//
+//        }
+
         String svnUrl = event.getProductSrcSvn()+"/"+event.getPublishEnv();
         SVNClientManager svnClientManager = SvnUtils.createSvnClientManager(svnUrl, SrcSvnUsername, SrcSvnPassword);
         try{
