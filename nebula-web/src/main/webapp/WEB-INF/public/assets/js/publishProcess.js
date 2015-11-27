@@ -168,6 +168,9 @@ function Initialization() {
                 $("#nextPublish").click(function () {
                     nextPublish(btn_text);
                 })
+                //轮询过慢
+                $("#processbar4" ).setStep(4);
+                $("#processbar5" ).setStep(3);
                 return;
             }
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
