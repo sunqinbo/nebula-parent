@@ -154,14 +154,14 @@ function Initialization() {
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState + "";
-
+            btnUnclick();
             //发布完成，不管成功或失败
-            if(actionGroup==6){
+            if(actionGroup==5){
                 var btn_text;
                 if ($("#publishEnv").html() == "test") {
                     btn_text = "准生产";
                 }
-                if ($("#publishEnv").val() == "stage") {
+                if ($("#publishEnv").html() == "stage") {
                     btn_text = "生产";
                 }
                 $("#nextPublish").text("进入" + btn_text).show();
@@ -219,7 +219,7 @@ function Initialization() {
                 }
                 return;
             }
-            //动作为此阶段最后一步完成 下一步按钮可点
+            //动作为此阶段最后一步完成 下一步按钮可点   (否则调用初始化 按钮不可点样式移除)
             if (whichStep == lastStep && actionState == "true") {
                 actionGroup = actionGroup - 1 + 2;
                 switch (actionGroup) {
@@ -339,7 +339,7 @@ function Initialization() {
             else {
                 $("#restartPublish").hide()
             }
-            btnUnclick();
+            //btnUnclick();
             //控制进度条显示
             for (var i = 1; i <= 5; i++) {
                 if (i == actionGroup) {

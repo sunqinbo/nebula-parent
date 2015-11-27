@@ -22,10 +22,10 @@ function getLtb(pageNum){
                 var edit_btn="";
                 var delete_btn="";
                 for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
-                    if (globelLoginUserPermission[j] == "permission:update") {
+                    if (globelLoginUserPermission[j] == "role:update") {
                         edit_btn = "<button class='btn btn-success btn-sm' type='button'>编辑</button>";
                     }
-                    if (globelLoginUserPermission[j] == "permission:delete") {
+                    if (globelLoginUserPermission[j] == "role:delete") {
                         delete_btn = "<button class='btn btn-danger btn-sm' type='button'>删除</button>";
                     }
                 }

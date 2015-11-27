@@ -30,7 +30,7 @@ public class PermissionController extends BaseController {
     @Resource
     private IAclRoleService aclRoleService;
 
-    @RequiresPermissions("permission:view")
+    @RequiresPermissions("permission:page")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String jurisdiction() throws Exception {
         return "permission/permissionList";
@@ -66,7 +66,7 @@ public class PermissionController extends BaseController {
         return returnCallback("Success", "更新权限成功");
     }
 
-    @RequiresPermissions("permission:view")
+    @RequiresPermissions("permission:page")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingPermission(DataTablePage dataTablePage) throws Exception {

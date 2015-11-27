@@ -54,7 +54,7 @@ public class PublishController extends BaseController {
     INebulaPublishModuleService publishModuleService;
 
 
-    @RequiresPermissions("publishevent:view")
+    @RequiresPermissions("publishevent:page")
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object PublishList(DataTablePage dataTablePage) throws Exception{
@@ -76,13 +76,13 @@ public class PublishController extends BaseController {
         return returnCallback("Success", productTrees);
     }
 
-    @RequiresPermissions("publishevent:view")
+    @RequiresPermissions("publishevent:page")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishList() throws Exception {
         return "event/publishList";
     }
 
-    @RequiresPermissions("publishevent:view")
+    @RequiresPermissions("publishevent:page")
     @RequestMapping(value = "/process.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishProcess(HttpServletRequest request, Model model) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
