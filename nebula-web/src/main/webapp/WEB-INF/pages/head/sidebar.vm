@@ -17,7 +17,7 @@
             </a>
         </div>
         <ul class="nav">
-##            #if($shiro.hasPermission("publishapply:*"))
+            #if($shiro.hasPermission("publishapply:page"))
                 <li>
                     <a href="/publish/event.htm">
                         <i class="pe-7s-upload"></i>
@@ -25,21 +25,26 @@
                         <p>发布申请</p>
                     </a>
                 </li>
-##            #end
-            <li>
-                <a href="/publish/list.htm">
-                    <i class="pe-7s-user"></i>
+            #end
+            #if($shiro.hasPermission("publishevent:page"))
+                <li>
+                    <a href="/publish/list.htm">
+                        <i class="pe-7s-user"></i>
 
-                    <p>我的发布</p>
-                </a>
-            </li>
-            <li>
-                <a href="/publish/list.htm">
-                    <i class="pe-7s-note2"></i>
+                        <p>我的发布</p>
+                    </a>
+                </li>
+            #end
+            #if($shiro.hasPermission("publishevent:page"))
+                <li>
+                    <a href="/publish/list.htm">
+                        <i class="pe-7s-note2"></i>
 
-                    <p>发布数据</p>
-                </a>
-            </li>
+                        <p>发布数据</p>
+                    </a>
+                </li>
+            #end
+
             <li>
                 <a href="#">
                     <i class="pe-7s-config"></i>
@@ -54,7 +59,7 @@
                     <p>发布工具</p>
                 </a>
             </li>
-            #if($shiro.hasPermission("user:view"))
+            #if($shiro.hasPermission("user:page"))
                 <li id="sidebarUser">
                     <a href="/user/list.htm">
                         <i class="pe-7s-users"></i>
@@ -63,7 +68,7 @@
                     </a>
                 </li>
             #end
-            #if($shiro.hasPermission("role:view"))
+            #if($shiro.hasPermission("role:page"))
                 <li>
                     <a href="/role/list.htm">
                         <i class="pe-7s-id"></i>
@@ -73,7 +78,7 @@
                 </li>
             #end
 
-            #if($shiro.hasPermission("permission:view"))
+            #if($shiro.hasPermission("permission:page"))
                 <li>
                     <a href="/permission/list.htm">
                         <i class="pe-7s-network"></i>

@@ -201,8 +201,9 @@ function Initialization() {
 
             //动作成功执行 隐藏重试按钮,失败显示重试按钮并显示错误信息
             if (actionState == "false") {
-                var false_btn = "<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
-                $("#false_btn").html(false_btn);
+                //var false_btn = "<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
+                //$("#false_btn").html(false_btn);
+                $("#false_btn").show();
                 $("#errorMsgDiv").html(data.responseContext.errorMsg);
                 $("#errorMsgDiv").show();
             }
@@ -303,9 +304,10 @@ function Initialization() {
                 //添加编辑按钮
                 $("#restartPublish").show();
 
-                var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
-                    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
-                $("#etc_btns").html(etc_btn);
+                //var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
+                //    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
+                //$("#etc_btns").html(etc_btn);
+                $("#etc_btns").show();
                 $("#etc_btn").click(function () {
                     window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
                 })
@@ -329,8 +331,8 @@ function Initialization() {
                                 }
                             }
                         });
-
-                        $("#etc_btns").empty();
+                        $("#etc_btns").hide();
+                        //$("#etc_btns").empty();
                     }
                 });
             }

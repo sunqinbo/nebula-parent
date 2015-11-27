@@ -139,7 +139,7 @@ function btnClick(isCreate){
     else  $("#permissionTip").html();
     var permissionIds=[];
     for(var i=0;i<nodes.length;i++){
-        if(nodes[i]["pId"]!=null)
+        //if(nodes[i]["pId"]!=null)
             permissionIds.push(nodes[i]["id"]);
     }
     var isEnable=$('#isEnable input[name="isEnable"]:checked ').val();

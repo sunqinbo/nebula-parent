@@ -15,7 +15,12 @@ $(document).ready(function(){
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
                             var event = data["list"][i];
-                            var detailString ="</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>";
+                            var detailString="";
+                            for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
+                                //权限判断
+                                if(globelLoginUserPermission[j]=="publishevent:view")
+                                    detailString = "</td><td><a href='/publish/process.htm?id=" + event.id + "'>详情</a></td>";
+                            }
                             //if()
                             tbString=tbString+"<tr><td>"+event.id+
                                 "</td><td>"+event.publishSubject+
