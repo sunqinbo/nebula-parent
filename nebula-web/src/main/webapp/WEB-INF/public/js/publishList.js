@@ -15,7 +15,21 @@ $(document).ready(function(){
                         var totalPage;
                         for(var i=0;i<data["list"].length;i++){
                             var event = data["list"][i];
-                            var detailString ="</td><td><a href='/publish/process.htm?id="+event.id+"'>详情</a></td>";
+                            var detailString="";
+                            for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
+                                //权限判断
+                                if(globelLoginUserPermission[j]=="publishevent:view")
+                                    detailString = detailString+"<a href='/publish/process.htm?id=" + event.id + "'>详情</a>";
+                                //增加删除按钮
+                                if(globelLoginUserPermission[j]=="publishevnt:delete"&&event.isApproved){
+                                    detailString=detailString+"<button name='delete_button' class='btn btn-danger btn-sm' type='button'>删除</button>"
+                                }
+                            }
+                            $("button[name='delete_button']").each(function(){
+                                this.click(function () {
+                                    alert("删除功能");
+                                })
+                            });
                             //if()
                             tbString=tbString+"<tr><td>"+event.id+
                                 "</td><td>"+event.publishSubject+
@@ -26,7 +40,7 @@ $(document).ready(function(){
                                 "</td><td>"+(event.submitUser?event.submitUser.nickname:"")+
                                 "</td><td>"+(event.publishUser?event.publishUser.nickname:"")+
                                 "</td><td>"+event.publishProductCname+
-                                "</td><td>"+detailString;
+                                "</td><td></td><td>"+detailString+"</td>";
                         }
                         totalPage=data["pages"];
                         if(totalPage>0) {

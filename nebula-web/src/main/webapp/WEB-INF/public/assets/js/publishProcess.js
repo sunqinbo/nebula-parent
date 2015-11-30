@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+    $("#approval_btn").click(function(){
+        approvalBtn();
+        $("#approval_btn").attr('disabled', true).removeClass("btn-info");
+    });
+
     //初始化隐藏所有进度条的DIV及设置按钮不可点
     $("#step1").hide();
     $("#step2").hide();
@@ -154,20 +159,23 @@ function Initialization() {
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState + "";
-
+            btnUnclick();
             //发布完成，不管成功或失败
-            if(actionGroup==6){
+            if(actionGroup==5){
                 var btn_text;
                 if ($("#publishEnv").html() == "test") {
                     btn_text = "准生产";
                 }
-                if ($("#publishEnv").val() == "stage") {
+                if ($("#publishEnv").html() == "stage") {
                     btn_text = "生产";
                 }
                 $("#nextPublish").text("进入" + btn_text).show();
                 $("#nextPublish").click(function () {
                     nextPublish(btn_text);
                 })
+                //轮询过慢
+                $("#processbar4" ).setStep(4);
+                $("#processbar5" ).setStep(3);
                 return;
             }
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
@@ -198,8 +206,9 @@ function Initialization() {
 
             //动作成功执行 隐藏重试按钮,失败显示重试按钮并显示错误信息
             if (actionState == "false") {
-                var false_btn = "<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
-                $("#false_btn").html(false_btn);
+                //var false_btn = "<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
+                //$("#false_btn").html(false_btn);
+                $("#false_btn").show();
                 $("#errorMsgDiv").html(data.responseContext.errorMsg);
                 $("#errorMsgDiv").show();
             }
@@ -215,7 +224,7 @@ function Initialization() {
                 }
                 return;
             }
-            //动作为此阶段最后一步完成 下一步按钮可点
+            //动作为此阶段最后一步完成 下一步按钮可点   (否则调用初始化 按钮不可点样式移除)
             if (whichStep == lastStep && actionState == "true") {
                 actionGroup = actionGroup - 1 + 2;
                 switch (actionGroup) {
@@ -300,9 +309,10 @@ function Initialization() {
                 //添加编辑按钮
                 $("#restartPublish").show();
 
-                var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
-                    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
-                $("#etc_btns").html(etc_btn);
+                //var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
+                //    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
+                //$("#etc_btns").html(etc_btn);
+                $("#etc_btns").show();
                 $("#etc_btn").click(function () {
                     window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
                 })
@@ -326,15 +336,15 @@ function Initialization() {
                                 }
                             }
                         });
-
-                        $("#etc_btns").empty();
+                        $("#etc_btns").hide();
+                        //$("#etc_btns").empty();
                     }
                 });
             }
             else {
                 $("#restartPublish").hide()
             }
-            btnUnclick();
+            //btnUnclick();
             //控制进度条显示
             for (var i = 1; i <= 5; i++) {
                 if (i == actionGroup) {
@@ -382,6 +392,36 @@ function nextPublish(nowPublish) {
         datatype: "json",
         success: function (data) {
             location.href = "/publish/publishProcess.htm?id=" + data.responseContext;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $.notify({
+                icon: '',
+                message: "很抱歉插入发布事件单失败，原因" + errorThrown
+            }, {
+                type: 'info',
+                timer: 1000
+            });
+        }
+    })
+}
+
+function approvalBtn(){
+    $.ajax({
+        async: false,
+        type: "post",
+        data: {
+            "eventId": $("#eventId").val()
+        },
+        url: "/publish/update/approval",
+        datatype: "json",
+        success: function (data) {
+            $.notify({
+                icon: '',
+                message: "审批完成"
+            }, {
+                type: 'info',
+                timer: 1000
+            });
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({

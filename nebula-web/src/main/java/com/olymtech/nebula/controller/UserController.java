@@ -36,7 +36,7 @@ public class UserController extends BaseController {
         return "user/createUser";
     }
 
-    @RequiresPermissions("user:view")
+    @RequiresPermissions("user:page")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String userList() {
         return "user/userList";
@@ -76,7 +76,7 @@ public class UserController extends BaseController {
         return returnCallback("Success", "更新用户密码成功");
     }
 
-    @RequiresPermissions("user:view")
+    @RequiresPermissions("user:page")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingUser(DataTablePage dataTablePage) {

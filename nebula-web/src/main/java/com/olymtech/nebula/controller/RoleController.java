@@ -32,7 +32,7 @@ public class RoleController extends BaseController {
     @Resource
     private IUserService userService;
 
-    @RequiresPermissions("role:view")
+    @RequiresPermissions("role:page")
     @RequestMapping(value="/list.htm",method= {RequestMethod.POST,RequestMethod.GET})
     public String roleList (){
         return "role/roleList";
@@ -76,7 +76,7 @@ public class RoleController extends BaseController {
         return returnCallback("Success", "更新角色成功");
     }
 
-    @RequiresPermissions("role:view")
+    @RequiresPermissions("role:page")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingRole(DataTablePage dataTablePage) {

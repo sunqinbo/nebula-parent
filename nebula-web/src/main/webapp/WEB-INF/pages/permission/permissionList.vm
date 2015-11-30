@@ -14,7 +14,9 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="请输入查询内容">
                                 <button type="button" id="query_btn" class="btn btn-primary">查询</button>
-                                <button type="button" id="create_btn" class="btn btn-primary">新增</button>
+                                #if($shiro.hasPermission("permission:add"))
+                                    <button type="button" id="create_btn" class="btn btn-primary">新增</button>
+                                #end
                             </div>
                         </form>
                     </div>

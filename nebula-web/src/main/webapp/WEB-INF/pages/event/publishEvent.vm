@@ -56,7 +56,9 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button id="publish-event-submit" class="btn btn-default" onclick="nebula.publish.event.createPublishEvent()">提交</button>
+                                    #if($shiro.hasPermission("publishapply:commit"))
+                                        <button id="publish-event-submit" class="btn btn-default" onclick="nebula.publish.event.createPublishEvent()">提交</button>
+                                    #end
                                 </div>
                             </div>
                         </div>

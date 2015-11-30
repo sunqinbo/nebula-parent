@@ -19,12 +19,21 @@ function getLtb(pageNum){
             var tbString="";
             var totalPage;
             for(var i=0;i<data["list"].length;i++){
+                var edit_btn="";
+                var delete_btn="";
+                for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
+                    if (globelLoginUserPermission[j] == "role:update") {
+                        edit_btn = "<button class='btn btn-success btn-sm' type='button'>编辑</button>";
+                    }
+                    if (globelLoginUserPermission[j] == "role:delete") {
+                        delete_btn = "<button class='btn btn-danger btn-sm' type='button'>删除</button>";
+                    }
+                }
                 tbString=tbString+"<tr><td>"+data["list"][i]["id"]+"</td><td>"+
                     data["list"][i]["roleName"]+"</td><td>"+data["list"][i]["roleCname"]+
                     "</td><td>"+data["list"][i]["roleDesc"]+
                     "</td><td>"+data["list"][i]["isEnable"]+
-                    "</td><td><div id='listBtn' class='btn-group'><button class='btn btn-success btn-sm' type='button'>编辑</button>"+
-                    "<button class='btn btn-danger btn-sm' type='button'>删除</button>"+"</div></td>"
+                    "</td><td><div id='listBtn' class='btn-group'>"+edit_btn+delete_btn+"</div></td>";
             }
             $("tbody").html(tbString);
             listBtn(pageNum);

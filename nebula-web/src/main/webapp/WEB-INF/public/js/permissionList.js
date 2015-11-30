@@ -23,13 +23,23 @@ function getjtb(pageNum){
                 var pid=data["list"][i]["pid"];
                 var isEnable=data["list"][i]["isEnable"];
                 var permission=data["list"][i]["permission"];
+                var edit_btn="";
+                var delete_btn="";
+                for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
+                    if (globelLoginUserPermission[j] == "permission:update") {
+                        edit_btn = "<button class='btn btn-success btn-sm' type='button'>编辑</button>";
+                    }
+                    if (globelLoginUserPermission[j] == "permission:delete") {
+                        delete_btn = "<button class='btn btn-danger btn-sm' type='button'>删除</button>";
+                    }
+                }
                 tbString=tbString+"<tr><td>"+data["list"][i]["id"]+"</td><td>"+
                     data["list"][i]["permissionName"]+"</td><td>"+data["list"][i]["permissionCname"]+
                     "</td><td>"+data["list"][i]["permissionDesc"]+
                     "</td><td>"+data["list"][i]["permissionType"]+
                     "</td><td>"+data["list"][i]["url"]+
-                    "</td><td><div id='listBtn' class='btn-group'><button class='btn btn-success btn-sm' type='button'>编辑</button>"+
-                    "<button class='btn btn-danger btn-sm' type='button'>删除</button>"+"</div></td>"+
+                    "</td><td><div id='listBtn' class='btn-group'>"+edit_btn+delete_btn+
+                    "</div></td>"+
                     "<td>"+"<input type='text' style='display:none' id='"+id+"pid' value='"+pid+"'>"+
                     "<input type='text' style='display:none' id='"+id+"permission' value='"+permission+"'>"+
                     "<input type='text' style='display:none' id='"+id+"isEnable' value='"+isEnable+"'>"+"</td>";
