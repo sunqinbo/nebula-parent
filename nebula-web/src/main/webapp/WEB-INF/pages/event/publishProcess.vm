@@ -100,7 +100,9 @@
             </div>
             #if(!${Event.isApproved})
                 <div style="text-align: center;" class="col-md-12">
-                    <button type="button" id="approval_btn" class="btn btn-default btn-info">审批</button>
+                    #if($shiro.hasPermission("publishevent:approval"))
+                        <button type="button" id="approval_btn" class="btn btn-default btn-info">审批</button>
+                    #end
                 </div>
             #else
                 <div class="col-md-12">

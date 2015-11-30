@@ -497,7 +497,7 @@ public class PublishController extends BaseController {
     /**
      * 发布审批
      */
-    @RequiresPermissions("publishevnt:addnextpublish")
+    @RequiresPermissions("publishevent:approval")
     @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
     @ResponseBody
     public Object approvalPublish(Integer eventId) throws Exception{
@@ -505,6 +505,17 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setIsApproved(true);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
         publishEventService.update(nebulaPublishEvent);
+        return returnCallback("Success", "");
+    }
+
+    /**
+     *删除发布事件
+     */
+    @RequiresPermissions("publishevnt:delete")
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object deletePublish(Integer eventId) throws Exception{
+        publishEventService.delete(eventId);
         return returnCallback("Success", "");
     }
 
