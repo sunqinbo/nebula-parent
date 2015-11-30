@@ -89,7 +89,6 @@ public class CreateDirAciton extends AbstractAction {
                         throw new SaltStackException(entry.getValue().toString());
                     }
                 }
-
             } else {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), false ,"error message");
                 return false;

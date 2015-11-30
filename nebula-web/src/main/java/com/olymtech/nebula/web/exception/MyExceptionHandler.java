@@ -35,7 +35,17 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
             log.error(ex.getMessage());
             log.error(ex.getStackTrace());
 
-            if (method.getMethod().getReturnType().getTypeName().endsWith("com.olymtech.nebula.entity.Callback")){
+            if (method.getMethod().getReturnType().getTypeName().equals("java.lang.String")){
+                model.put("ex", ex);
+                //根据不同错误转向不同页面
+                if (ex instanceof BusinessException) {
+                    return new ModelAndView("error/error-business", model);
+                } else if (ex instanceof ParameterException) {
+                    return new ModelAndView("error/error-parameter", model);
+                } else {
+                    return new ModelAndView("error/error", model);
+                }
+            }else{
                 PrintWriter writer = null;
                 try {
                     writer = response.getWriter();
@@ -57,19 +67,7 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
                     writer.close();
                 }
                 return null;
-            }else{
-                model.put("ex", ex);
-                //根据不同错误转向不同页面
-                if (ex instanceof BusinessException) {
-                    return new ModelAndView("error/error-business", model);
-                } else if (ex instanceof ParameterException) {
-                    return new ModelAndView("error/error-parameter", model);
-                } else {
-                    return new ModelAndView("error/error", model);
-                }
-
             }
-
         }
         return new ModelAndView("error/error", model);
     }
