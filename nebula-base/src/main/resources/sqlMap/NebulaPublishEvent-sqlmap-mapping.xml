@@ -188,6 +188,9 @@
             <if test="isSuccessPublish != null">
                 AND is_success_publish = #{isSuccessPublish}
             </if>
+            <if test="1">
+                npe.is_delete != 1
+            </if>
         </trim>
         order by npe.id desc
     </select>

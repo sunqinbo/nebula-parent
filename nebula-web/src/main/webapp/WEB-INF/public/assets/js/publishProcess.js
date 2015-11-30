@@ -2,7 +2,36 @@ $(document).ready(function(){
 
     $("#approval_btn").click(function(){
         approvalBtn();
+        window.location.reload();
         $("#approval_btn").attr('disabled', true).removeClass("btn-info");
+    });
+
+    $("#etc_btn").click(function () {
+        window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
+    })
+    $("#edit_success").click(function () {
+        var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
+        if (ms == true) {
+            $.ajax({
+                url: "/publish/updateEtcEnd.htm",
+                type: "post",
+                data: {"id": $("#eventId").val()},
+                success: function (jsonData) {
+                    if (jsonData.callbackMsg.match(/Success/)) {
+                        $.notify({
+                            icon: '',
+                            message: "保存成功"
+
+                        }, {
+                            type: 'info',
+                            timer: 1000
+                        });
+                    }
+                }
+            });
+            $("#etc_btns").hide();
+            //$("#etc_btns").empty();
+        }
     });
 
     //初始化隐藏所有进度条的DIV及设置按钮不可点
@@ -313,33 +342,6 @@ function Initialization() {
                 //    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
                 //$("#etc_btns").html(etc_btn);
                 $("#etc_btns").show();
-                $("#etc_btn").click(function () {
-                    window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
-                })
-                $("#edit_success").click(function () {
-                    var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
-                    if (ms == true) {
-                        $.ajax({
-                            url: "/publish/updateEtcEnd.htm",
-                            type: "post",
-                            data: {"id": $("#eventId").val()},
-                            success: function (jsonData) {
-                                if (jsonData.callbackMsg.match(/Success/)) {
-                                    $.notify({
-                                        icon: '',
-                                        message: "保存成功"
-
-                                    }, {
-                                        type: 'info',
-                                        timer: 1000
-                                    });
-                                }
-                            }
-                        });
-                        $("#etc_btns").hide();
-                        //$("#etc_btns").empty();
-                    }
-                });
             }
             else {
                 $("#restartPublish").hide()

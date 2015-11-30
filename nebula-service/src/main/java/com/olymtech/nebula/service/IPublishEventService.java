@@ -30,4 +30,5 @@ public interface IPublishEventService {
     public List<NebulaPublishEvent> selectAllPagingWithUser(NebulaPublishEvent event);
 
     public Integer selectCountWithUser(NebulaPublishEvent event);
+
 }
