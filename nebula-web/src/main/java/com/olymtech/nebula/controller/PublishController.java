@@ -494,4 +494,18 @@ public class PublishController extends BaseController {
         return returnCallback("Success", id);
     }
 
+    /**
+     * 发布审批
+     */
+    @RequiresPermissions("publishevnt:addnextpublish")
+    @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object approvalPublish(Integer eventId) throws Exception{
+        NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        nebulaPublishEvent.setIsApproved(true);
+        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
+        publishEventService.update(nebulaPublishEvent);
+        return returnCallback("Success", "");
+    }
+
 }

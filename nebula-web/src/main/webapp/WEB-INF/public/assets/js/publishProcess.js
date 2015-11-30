@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+    $("#approval_btn").click(function(){
+        approvalBtn();
+        $("#approval_btn").attr('disabled', true).removeClass("btn-info");
+    });
+
     //初始化隐藏所有进度条的DIV及设置按钮不可点
     $("#step1").hide();
     $("#step2").hide();
@@ -387,6 +392,36 @@ function nextPublish(nowPublish) {
         datatype: "json",
         success: function (data) {
             location.href = "/publish/publishProcess.htm?id=" + data.responseContext;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $.notify({
+                icon: '',
+                message: "很抱歉插入发布事件单失败，原因" + errorThrown
+            }, {
+                type: 'info',
+                timer: 1000
+            });
+        }
+    })
+}
+
+function approvalBtn(){
+    $.ajax({
+        async: false,
+        type: "post",
+        data: {
+            "eventId": $("#eventId").val()
+        },
+        url: "/publish/update/approval",
+        datatype: "json",
+        success: function (data) {
+            $.notify({
+                icon: '',
+                message: "审批完成"
+            }, {
+                type: 'info',
+                timer: 1000
+            });
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
