@@ -99,4 +99,9 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
         aclPermission.setPermissionType("menu");
         return aclPermissionDao.selectAllPaging(aclPermission);
     }
+
+    @Override
+    public AclPermission getPermissionById(Integer permissionId) {
+        return aclPermissionDao.selectById(permissionId);
+    }
 }

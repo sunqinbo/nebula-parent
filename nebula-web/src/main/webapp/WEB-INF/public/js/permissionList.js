@@ -39,10 +39,10 @@ function getjtb(pageNum){
                     "</td><td>"+data["list"][i]["permissionType"]+
                     "</td><td>"+data["list"][i]["url"]+
                     "</td><td><div id='listBtn' class='btn-group'>"+edit_btn+delete_btn+
-                    "</div></td>"+
-                    "<td>"+"<input type='text' style='display:none' id='"+id+"pid' value='"+pid+"'>"+
-                    "<input type='text' style='display:none' id='"+id+"permission' value='"+permission+"'>"+
-                    "<input type='text' style='display:none' id='"+id+"isEnable' value='"+isEnable+"'>"+"</td>";
+                    "</div></td></tr>"
+                    //"<td>"+"<input type='text' style='display:none' id='"+id+"pid' value='"+pid+"'>"+
+                    //"<input type='text' style='display:none' id='"+id+"permission' value='"+permission+"'>"+
+                    //"<input type='text' style='display:none' id='"+id+"isEnable' value='"+isEnable+"'>"+"</td>";
             }
             $("tbody").html(tbString);
             listBtn(pageNum);
@@ -134,76 +134,10 @@ function listBtn(pageNum){
                 });
             });
         }
-        if($(this).text()=="编辑"||$(this).text()=="保存") {
-            $(this).click(function(){
-                if($(this).text()=="编辑") {
-                    $(this).text("保存");
-                }
-                else {
-                    $(this).text("编辑");
-                    var id=$(this).parent().parent().parent().children().eq(0).children().eq(0).val();
-                    var permissionName=$(this).parent().parent().parent().children().eq(1).children().eq(0).val();
-                    var permissionCname=$(this).parent().parent().parent().children().eq(2).children().eq(0).val();
-                    var permissionDesc=$(this).parent().parent().parent().children().eq(3).children().eq(0).val();
-                    var permissionType=$(this).parent().parent().parent().children().eq(4).children().eq(0).val();
-                    var url=$(this).parent().parent().parent().children().eq(5).children().eq(0).val();
-                    $.ajax({
-                        type:"post",
-                        url:"/permission/update",
-                        data:{"id":id,
-                            "pid":$("#"+id+"pid").val(),
-                            "permission":$("#"+id+"permission").val(),
-                            "isEnable":$("#"+id+"isEnable").val(),
-                            "permissionName":permissionName,
-                            "permissionCname":permissionCname,
-                            "permissionDesc":permissionDesc,
-                            "permissionType":permissionType,
-                            "url":url
-                        },
-                        datatype:"json",
-                        success: function (data) {
-                            getjtb(pageNum);
-                            $.notify({
-                                icon: '',
-                                message: "修改权限成功"
-
-                            },{
-                                type: 'info',
-                                timer: 1000
-                            });
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            $.notify({
-                                icon: '',
-                                message: "很抱歉，修改权限失败，原因"+ errorThrown
-
-                            },{
-                                type: 'info',
-                                timer: 1000
-                            });
-                        }
-                    });
-                }
-                var whichTd=0;
-                $(this).parent().parent().siblings("td").each(function() {  // 获取当前行的其他单元格
-                    whichTd++;
-                    obj_text = $(this).find("input:text");    // 判断单元格下是否有文本框
-                    var width=$(this).width();
-                    if(whichTd==7){
-                        return;
-                    }
-                    if(whichTd==5){
-                        var selectString="<select name='permissionType' class='form-control'>"+
-                        "<option value='menu'>菜单</option><option value='button'>按钮</option></select>"
-                        $(this).html(selectString);
-                    }
-                    else {
-                        if (!obj_text.length)   // 如果没有文本框，则添加文本框使之可以编辑
-                            $(this).html("<input class='form-control' style='width:" + width + "px;' type='text' value='" + $(this).text() + "'>");
-                        else   // 如果已经存在文本框，则将其显示为文本框修改的值
-                            $(this).html(obj_text.val());
-                    }
-                });
+        if($(this).text()=="编辑") {
+            $(this).click(function() {
+                var id = $(this).parent().parent().parent().children().eq(0);
+                window.open('/permission/update.htm?id=' + id.text());
             })
         }
     });

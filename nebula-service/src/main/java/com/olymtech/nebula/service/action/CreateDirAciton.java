@@ -65,7 +65,7 @@ public class CreateDirAciton extends AbstractAction {
 
             List<String> pathList = new ArrayList<String >();
             pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
-            pathList.add(BaseEtcDir + publishModule.getPublishModuleKey()+ "/etc");
+            pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
 
             ResultInfoSet result = saltStackService.mkDir(new SaltTarget(targes), pathList, true);
 

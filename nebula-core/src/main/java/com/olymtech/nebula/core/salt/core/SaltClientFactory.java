@@ -38,7 +38,7 @@ public class SaltClientFactory {
     protected static Properties conf;
 
     // SINGLETON
-    public static synchronized SaltStackClient getSaltClient() {
+    public static synchronized SaltStackClient getSaltClient() throws SaltStackException {
 
         if (client == null) {
             InputStream ip = null;
@@ -78,6 +78,7 @@ public class SaltClientFactory {
                 token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
             } catch (SaltStackException e) {
                 e.printStackTrace();
+                throw e;
             }
 
             return client;
@@ -89,6 +90,7 @@ public class SaltClientFactory {
                 token = client.login(conf.get(USERNAME).toString(), conf.get(PASSWORD).toString(), PAM);
             } catch (SaltStackException e) {
                 e.printStackTrace();
+                throw e;
             }
         }
 

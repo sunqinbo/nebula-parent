@@ -9,6 +9,7 @@ import com.olymtech.nebula.service.IAclPermissionService;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,6 +60,14 @@ public class PermissionController extends BaseController {
     }
 
     @RequiresPermissions("permission:update")
+    @RequestMapping(value="/update.htm",method= {RequestMethod.POST,RequestMethod.GET})
+    public String editPermission(Model model,Integer id){
+        model.addAttribute("edit",true);
+        model.addAttribute("id",id);
+        return "permission/createPermission";
+    }
+
+    @RequiresPermissions("permission:update")
     @RequestMapping(value = "/update", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateAclPermission(AclPermission permission) throws Exception {
@@ -91,6 +100,12 @@ public class PermissionController extends BaseController {
         List<AclPermission> permissionList = new ArrayList<>();
         permissionList = permissionService.getPermissionsWithNoPid();
         return permissionList;
+    }
+
+    @RequestMapping(value = "/get/permissionId", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object getPermissionById(Integer permissionId) {
+        return permissionService.getPermissionById(permissionId);
     }
 
 }

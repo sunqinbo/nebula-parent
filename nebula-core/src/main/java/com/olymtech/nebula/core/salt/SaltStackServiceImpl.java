@@ -27,12 +27,16 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
     private static final Logger logger = LoggerFactory.getLogger(SaltStackServiceImpl.class);
 
-    SaltStackClient saltClient = SaltClientFactory.getSaltClient();
+    SaltStackClient saltClient = null;
 
     public static final String BaseDirPrefix = "salt://";
     public static final String CommandCpFile = "cp.get_file";
     public static final String CommandCpDir = "cp.get_dir";
     public static final String CommandCmdRun = "cmd.run";
+
+    public SaltStackServiceImpl() throws SaltStackException {
+        this.saltClient = SaltClientFactory.getSaltClient();
+    }
 
     @Override
     public <T> ResultInfoSet cpFileRemote(Target<T> target, String from, String to) throws SaltStackException {
