@@ -31,5 +31,4 @@ public interface IPublishEventService {
 
     public Integer selectCountWithUser(NebulaPublishEvent event);
 
-    void delete(Integer eventId);
 }

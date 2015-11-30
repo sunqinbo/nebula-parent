@@ -2,6 +2,7 @@ $(document).ready(function(){
 
     $("#approval_btn").click(function(){
         approvalBtn();
+        window.location.reload();
         $("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 

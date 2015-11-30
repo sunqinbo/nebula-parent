@@ -125,9 +125,5 @@ public class PublishEventServiceImpl implements IPublishEventService {
         return nebulaPublishEventDao.selectCountWithUser(event);
     }
 
-    @Override
-    public void delete(Integer eventId) {
-        nebulaPublishEventDao.deleteById(eventId);
-    }
 
 }

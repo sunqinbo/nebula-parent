@@ -515,7 +515,9 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     @ResponseBody
     public Object deletePublish(Integer eventId) throws Exception{
-        publishEventService.delete(eventId);
+        NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        nebulaPublishEvent.setIsDelete(true);
+        publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
     }
 

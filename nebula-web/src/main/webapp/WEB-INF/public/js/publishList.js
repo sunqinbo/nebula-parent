@@ -24,7 +24,7 @@ function gettb(pageNum){
                         detailString = detailString+"<a href='/publish/process.htm?id=" + event.id + "'>详情</a>";
                     //增加删除按钮
                     if(globelLoginUserPermission[j]=="publishevnt:delete"&&event.isApproved){
-                        detailString=detailString+"<button name='delete_button' class='btn btn-danger btn-sm' type='button'>删除</button>"
+                        detailString=detailString+"<button name='delete_button' style='margin-left:15px;float: right;' class='btn btn-danger btn-sm' type='button'>删除</button>"
                     }
                 }
                 //if()
