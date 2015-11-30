@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+    $("#approval_btn").click(function(){
+        approvalBtn();
+        $("#approval_btn").attr('disabled', true).removeClass("btn-info");
+    });
+
     //初始化隐藏所有进度条的DIV及设置按钮不可点
     $("#step1").hide();
     $("#step2").hide();
@@ -154,14 +159,14 @@ function Initialization() {
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState + "";
-
+            btnUnclick();
             //发布完成，不管成功或失败
-            if(actionGroup==6){
+            if(actionGroup==5){
                 var btn_text;
                 if ($("#publishEnv").html() == "test") {
                     btn_text = "准生产";
                 }
-                if ($("#publishEnv").val() == "stage") {
+                if ($("#publishEnv").html() == "stage") {
                     btn_text = "生产";
                 }
                 $("#nextPublish").text("进入" + btn_text).show();
@@ -219,7 +224,7 @@ function Initialization() {
                 }
                 return;
             }
-            //动作为此阶段最后一步完成 下一步按钮可点
+            //动作为此阶段最后一步完成 下一步按钮可点   (否则调用初始化 按钮不可点样式移除)
             if (whichStep == lastStep && actionState == "true") {
                 actionGroup = actionGroup - 1 + 2;
                 switch (actionGroup) {
@@ -339,7 +344,7 @@ function Initialization() {
             else {
                 $("#restartPublish").hide()
             }
-            btnUnclick();
+            //btnUnclick();
             //控制进度条显示
             for (var i = 1; i <= 5; i++) {
                 if (i == actionGroup) {
@@ -387,6 +392,36 @@ function nextPublish(nowPublish) {
         datatype: "json",
         success: function (data) {
             location.href = "/publish/publishProcess.htm?id=" + data.responseContext;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $.notify({
+                icon: '',
+                message: "很抱歉插入发布事件单失败，原因" + errorThrown
+            }, {
+                type: 'info',
+                timer: 1000
+            });
+        }
+    })
+}
+
+function approvalBtn(){
+    $.ajax({
+        async: false,
+        type: "post",
+        data: {
+            "eventId": $("#eventId").val()
+        },
+        url: "/publish/update/approval",
+        datatype: "json",
+        success: function (data) {
+            $.notify({
+                icon: '',
+                message: "审批完成"
+            }, {
+                type: 'info',
+                timer: 1000
+            });
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
