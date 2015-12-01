@@ -1,6 +1,10 @@
 $(document).ready(function(){
     $("#navbar-header-name").html("发布数据");
     gettb(1);
+    //查询
+    $("#query_btn").click(function(){
+        alert("查询");
+    });
 })
 
 function gettb(pageNum){

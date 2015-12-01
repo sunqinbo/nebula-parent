@@ -1,14 +1,17 @@
 $(document).ready(function(){
 
+    //审批按钮
     $("#approval_btn").click(function(){
         approvalBtn();
-        window.location.reload();
+        refresh();
         $("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 
+    //编辑etc
     $("#etc_btn").click(function () {
         window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
     })
+    //编辑etc完成
     $("#edit_success").click(function () {
         var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
         if (ms == true) {
@@ -188,25 +191,34 @@ function Initialization() {
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState + "";
+            var lastGroup=data.responseContext.lastGroup;
             btnUnclick();
             //发布完成，不管成功或失败
-            if(actionGroup==5){
-                var btn_text;
-                if ($("#publishEnv").html() == "test") {
-                    btn_text = "准生产";
-                }
-                if ($("#publishEnv").html() == "stage") {
-                    btn_text = "生产";
-                }
-                $("#nextPublish").text("进入" + btn_text).show();
-                $("#nextPublish").click(function () {
-                    nextPublish(btn_text);
-                })
-                //轮询过慢
-                $("#processbar4" ).setStep(4);
-                $("#processbar5" ).setStep(3);
-                return;
-            }
+            //if(actionGroup>=5){
+            //    //if(actionGroup==5) {
+            //    //    var btn_text;
+            //    //    if ($("#publishEnv").html() == "test") {
+            //    //        btn_text = "准生产";
+            //    //    }
+            //    //    if ($("#publishEnv").html() == "stage") {
+            //    //        btn_text = "生产";
+            //    //    }
+            //    //    $("#nextPublish").text("进入" + btn_text).show();
+            //    //    $("#nextPublish").click(function () {
+            //    //        nextPublish(btn_text);
+            //    //    });
+            //    //}
+            //    //轮询过慢
+            //    if(lastGroup==4) {
+            //        $("#processbar4").setStep(4);
+            //        $("#step4").show();
+            //    }
+            //    if(lastGroup==5) {
+            //        $("#processbar5").setStep(3);
+            //        $("#step5").show();
+            //    }
+            //    //return;
+            //}
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
                 $("#loading-status").show();
             } else {
@@ -230,6 +242,9 @@ function Initialization() {
                     break;
                 case 5:
                     lastStep = 2;
+                    break;
+                case 6:
+                    lastStep = 1;
                     break;
             }
 
@@ -278,6 +293,28 @@ function Initialization() {
                         $("#btn4").attr('disabled', false);
                         $("#btn4").addClass("btn-info");
                         $("#step" + (3)).hide();
+                        return;
+                    case 7: if(lastGroup==5) {
+                        var btn_text;
+                        if ($("#publishEnv").html() == "test") {
+                            btn_text = "准生产";
+                        }
+                        if ($("#publishEnv").html() == "stage") {
+                            btn_text = "生产";
+                        }
+                        $("#nextPublish").text("进入" + btn_text).show();
+                        $("#nextPublish").click(function () {
+                            nextPublish(btn_text);
+                        });
+                        if(lastGroup==5) {
+                            $("#processbar5").setStep(3);
+                            $("#step5").show();
+                        }
+                    }
+                        if(lastGroup==4){
+                            $("#processbar4").setStep(4);
+                            $("#step4").show();
+                        }
                         return;
                     default :
                         if (actionGroup < 5) {
