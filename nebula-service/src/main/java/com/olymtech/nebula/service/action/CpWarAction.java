@@ -15,7 +15,6 @@ import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,9 +64,9 @@ public class CpWarAction extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            String oldModule =  publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());
-            if (oldModule==null){
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC,event.getPublishActionGroup(), true, "");
+            String oldModule = publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());
+            if (oldModule == null) {
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC, event.getPublishActionGroup(), true, "");
                 continue;
             }
 
@@ -76,32 +75,31 @@ public class CpWarAction extends AbstractAction {
 
             ResultInfoSet result = saltStackService.cpFile(new SaltTarget(targes), map);
 
-            if (result.getInfoList().size() == 1) {
-                ResultInfo resultInfo = result.get(0);
-                Map<String, Object> results = resultInfo.getResults();
-                int i = 0;
-                for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                    nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
-                    nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_WAR);
-                    if (entry.getValue().equals("")) {
-                        nebulaPublishHost.setActionResult("success");
-                        nebulaPublishHost.setIsSuccessAction(true);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                    } else {
-                        nebulaPublishHost.setActionResult(entry.getValue().toString());
-                        nebulaPublishHost.setIsSuccessAction(false);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR,event.getPublishActionGroup(), false, "error message");
-                        throw new SaltStackException(entry.getValue().toString());
-                    }
+            ResultInfo resultInfo = result.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            int i = 0;
+            int successCount = 0;
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+                NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_WAR);
+                if (entry.getValue().equals("")) {
+                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setIsSuccessAction(true);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    successCount++;
+                } else {
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(false);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
                 }
-            } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR,event.getPublishActionGroup(), false, "error message");
+            }
+            if (successCount!=targes.size()){
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR, event.getPublishActionGroup(), false, "error message");
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR,event.getPublishActionGroup(), true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR, event.getPublishActionGroup(), true, "");
         return true;
     }
 
