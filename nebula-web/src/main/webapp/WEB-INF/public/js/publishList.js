@@ -1,19 +1,52 @@
 $(document).ready(function(){
     $("#navbar-header-name").html("发布数据");
+
+    $("#select-bu").change(function(){
+        var pid = $("#select-bu").val();
+        $("#select-product").html("<option value=''>请选择</option>");
+        $.ajax({
+            url:"/publish/productTreeList/pid",
+            type:"post",
+            data:{"pid":pid},
+            success:function(jsonData){
+                if(jsonData.callbackMsg.match(/Success/)){
+                    var productTrees = jsonData.responseContext;
+                    for(var i=0;i<productTrees.length;i++){
+                        var productTree = productTrees[i];
+                        $("#select-product").append("<option value-svn='"+productTree.srcSvn+"' value-hidden='"+productTree.nodeName+"' value='"+productTree.id+"'>"+productTree.nodeCname+"</option>");
+                    }
+                }
+            }
+        });
+    });
+
     gettb(1);
     //查询
     $("#query_btn").click(function(){
-        alert("查询");
+        //alert("查询");
+        gettb(1);
     });
 })
 
 function gettb(pageNum){
+    var publishBuCname=null;
+    var publishProductCname=null;
+    if($("#select-bu").find("option:selected").text()!="请选择"){
+        publishBuCname=$("#select-bu").find("option:selected").text();
+    }
+    if($("#select-product").find("option:selected").text()!="请选择"){
+        publishProductCname=$("#select-product").find("option:selected").text();
+    }
     $.ajax({
         type: "post",
         url: "/publish/list",
         data: {
             "pageSize":10,
-            "pageNum":pageNum
+            "pageNum":pageNum,
+            "starTime":$("#begintime").val(),
+            "endTime":$("#endtime").val(),
+            "publishBuCname":publishBuCname,
+            "publishProductCname":publishProductCname
         },
         datetype: "json",
         success: function (data) {
@@ -25,10 +58,11 @@ function gettb(pageNum){
                 for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
                     //权限判断
                     if(globelLoginUserPermission[j]=="publishevent:view")
-                        detailString = detailString+"<a href='/publish/process.htm?id=" + event.id + "'>详情</a>";
+                        detailString = detailString+"<button name='detail_button' class='btn btn-info btn-sm' type='button' onclick='detailBtn("+event.id+")'>详情</button>";
+                    //detailString = detailString+"<a href='/publish/process.htm?id=" + event.id + "'>详情</a>";
                     //增加删除按钮
-                    if(globelLoginUserPermission[j]=="publishevnt:delete"&&event.isApproved){
-                        detailString=detailString+"<button name='delete_button' style='margin-left:15px;float: right;' class='btn btn-danger btn-sm' type='button'>删除</button>"
+                    if(globelLoginUserPermission[j]=="publishevnt:delete"&&(event.publishStatus=="PENDING_APPROVE"||event.publishStatus=="PENDING_PRE")){
+                        detailString=detailString+"<button name='delete_button' style='float: right;' class='btn btn-danger btn-sm' type='button'>删除</button>"
                     }
                 }
                 //if()
@@ -94,44 +128,45 @@ function gettb(pageNum){
 };
 function listBtn(pageNum) {
     $("#listBtn>button").each(function () {
-        $(this).click(function () {
-            var id=$(this).parent().parent().parent().children().eq(0);
-            $.ajax({
-                type:"post",
-                url:"/publish/delete",
-                data:{"eventId":id.text()},
-                datatype:"json",
-                success: function (data) {
-                    gettb(pageNum);
-                    $.notify({
-                        icon: '',
-                        message: "成功删除发布事件"
+        if($(this).text()=="删除") {
+            $(this).click(function () {
+                var ms = confirm("确认删除么？");
+                if (ms == true) {
+                    var id = $(this).parent().parent().parent().children().eq(0);
+                    $.ajax({
+                        type: "post",
+                        url: "/publish/delete",
+                        data: {"eventId": id.text()},
+                        datatype: "json",
+                        success: function (data) {
+                            gettb(pageNum);
+                            $.notify({
+                                icon: '',
+                                message: "成功删除发布事件"
 
-                    },{
-                        type: 'info',
-                        timer: 1000
-                    });
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $.notify({
-                        icon: '',
-                        message: "很抱歉，删除发布事件失败，原因"+ errorThrown
+                            }, {
+                                type: 'info',
+                                timer: 1000
+                            });
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            $.notify({
+                                icon: '',
+                                message: "很抱歉，删除发布事件失败，原因" + errorThrown
 
-                    },{
-                        type: 'info',
-                        timer: 1000
+                            }, {
+                                type: 'info',
+                                timer: 1000
+                            });
+                        }
                     });
                 }
             });
-        });
+        }
     });
 }
 
+function detailBtn(eventId){
+    window.open('/publish/process.htm?id='+eventId);
+}
 
-//function listBtn(pageNum){
-//    $("#listBtn>button").each(function(){
-//        $(this).click(function(){
-//            alert("什么鬼");
-//        });
-//    });
-//}

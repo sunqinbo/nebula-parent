@@ -101,36 +101,39 @@ function pageSort(totalPage,pageNum){
 function listBtn(pageNum){
     $("#listBtn>button").each(function(){
         if($(this).text()=="删除") {
-            $(this).click(function(){
-                var id=$(this).parent().parent().parent().children().eq(0);
-                $.ajax({
-                    type:"post",
-                    url:"/user/delete",
-                    data:{"id":id.text()},
-                    datatype:"json",
-                    success: function (data) {
-                        getLtb(pageNum);
-                        $.notify({
-                            icon: '',
-                            message: "删除角色成功"
+            var ms = confirm("确认删除么？");
+            if (ms == true) {
+                $(this).click(function () {
+                    var id = $(this).parent().parent().parent().children().eq(0);
+                    $.ajax({
+                        type: "post",
+                        url: "/user/delete",
+                        data: {"id": id.text()},
+                        datatype: "json",
+                        success: function (data) {
+                            getLtb(pageNum);
+                            $.notify({
+                                icon: '',
+                                message: "删除角色成功"
 
-                        },{
-                            type: 'info',
-                            timer: 1000
-                        });
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        $.notify({
-                            icon: '',
-                            message: "很抱歉，删除角色失败，原因"+ errorThrown
+                            }, {
+                                type: 'info',
+                                timer: 1000
+                            });
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            $.notify({
+                                icon: '',
+                                message: "很抱歉，删除角色失败，原因" + errorThrown
 
-                        },{
-                            type: 'info',
-                            timer: 1000
-                        });
-                    }
+                            }, {
+                                type: 'info',
+                                timer: 1000
+                            });
+                        }
+                    });
                 });
-            });
+            }
         }
         if($(this).text()=="编辑") {
             $(this).click(function() {

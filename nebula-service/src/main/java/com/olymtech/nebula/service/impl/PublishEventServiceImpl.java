@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
-import static com.olymtech.nebula.common.utils.DateUtils.longDate;
 
 /**
  * Created by liwenji on 2015/11/4.
@@ -69,9 +68,9 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     @Override
-    public PageInfo getPublishEvent(DataTablePage dataTablePage) {
+    public PageInfo getPublishEvent(DataTablePage dataTablePage, NebulaPublishEvent nebulaPublishEvent) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
-        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPagingWithUser(new NebulaPublishEvent());
+        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPagingWithUser(nebulaPublishEvent);
         PageInfo pageInfo = new PageInfo(nebulaPublishEvents);
         return pageInfo;
     }
