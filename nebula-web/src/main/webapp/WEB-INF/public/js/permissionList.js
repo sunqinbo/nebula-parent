@@ -21,8 +21,8 @@ function getjtb(pageNum){
             for(var i=0;i<data["list"].length;i++){
                 var id=data["list"][i]["id"];
                 var pid=data["list"][i]["pid"];
-                var isEnable=data["list"][i]["isEnable"];
-                var permission=data["list"][i]["permission"];
+                //var isEnable=data["list"][i]["isEnable"];
+                //var permission=data["list"][i]["permission"];
                 var edit_btn="";
                 var delete_btn="";
                 for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {

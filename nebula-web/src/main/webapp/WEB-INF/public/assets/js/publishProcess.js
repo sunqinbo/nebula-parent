@@ -3,8 +3,8 @@ $(document).ready(function(){
     //审批按钮
     $("#approval_btn").click(function(){
         approvalBtn();
-        refresh();
-        $("#approval_btn").attr('disabled', true).removeClass("btn-info");
+        window.location.reload();
+        //$("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 
     //编辑etc
