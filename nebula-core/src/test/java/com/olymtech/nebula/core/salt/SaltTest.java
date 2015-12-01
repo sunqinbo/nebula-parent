@@ -19,11 +19,13 @@ import java.util.*;
  * @author taoshanchang 15/10/30
  */
 public class SaltTest {
+
+    //@Resource
     private SaltStackServiceImpl service;
 
     @Before
     public void init() throws Exception {
-        //service = new SaltStackServiceImpl();
+        service = new SaltStackServiceImpl();
     }
 
     @Test
@@ -45,7 +47,7 @@ public class SaltTest {
     public void cpFileTest() throws SaltStackException {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("/home/saas/*.war", "/root");
-        map.put("/home/saas/b", "/root/b");
+        map.put("/home/saas/a", "/root/");
 
         ResultInfoSet resultInfos = service.cpFile(new Glob(), map);
         List<ResultInfo> infoList = resultInfos.getInfoList();
@@ -94,7 +96,7 @@ public class SaltTest {
     @Test
     public void cmdMakeDir() throws SaltStackException {
         ArrayList<String> strings = new ArrayList<>();
-        strings.add("/home/saas/tomcat/public_etcs/test4");
+        strings.add("/home/saas/tomcat/public_etcs/test5");
 
         ResultInfoSet b = service.mkDir(new Glob(), strings, false);
 
@@ -140,8 +142,6 @@ public class SaltTest {
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
-            System.out.println(info.getMinions());
-            System.out.println(info.getStartTime());
         }
     }
 }

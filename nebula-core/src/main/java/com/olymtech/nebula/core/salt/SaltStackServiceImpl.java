@@ -5,7 +5,6 @@
 package com.olymtech.nebula.core.salt;
 
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
-import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.ScheduledJob;
 import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -27,16 +26,11 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
     private static final Logger logger = LoggerFactory.getLogger(SaltStackServiceImpl.class);
 
-    SaltStackClient saltClient = null;
-
     public static final String BaseDirPrefix = "salt://";
     public static final String CommandCpFile = "cp.get_file";
     public static final String CommandCpDir = "cp.get_dir";
     public static final String CommandCmdRun = "cmd.run";
 
-    public SaltStackServiceImpl() throws SaltStackException {
-        this.saltClient = SaltClientFactory.getSaltClient();
-    }
 
     @Override
     public <T> ResultInfoSet cpFileRemote(Target<T> target, String from, String to) throws SaltStackException {
@@ -44,9 +38,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCpFile, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCpFile, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
 
         return jobResult;
     }
@@ -57,9 +51,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCpDir, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCpDir, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
         return jobResult;
     }
 
@@ -98,9 +92,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
         }
         args.add(buffer.toString());
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
 
         return jobResult;
     }
@@ -118,9 +112,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
             args.add("mkdir " + paths);
         }
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
         return jobResult;
     }
 
@@ -136,8 +130,8 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
     @Override
     public <T> ResultInfoSet cmdRun(Target<T> target, List<Object> args, Map<String, Object> kwargs) throws SaltStackException {
-        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, kwargs);
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, kwargs);
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
         return jobResult;
     }
 
@@ -151,9 +145,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         args.add(paths);
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
         return jobResult;
     }
 
@@ -171,9 +165,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
             args.add("rm " + paths);
         }
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
 
         return jobResult;
     }
@@ -196,9 +190,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         args.add(buffer.toString());
 
-        ScheduledJob job = saltClient.startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = saltClient.getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
 
         return jobResult;
     }
