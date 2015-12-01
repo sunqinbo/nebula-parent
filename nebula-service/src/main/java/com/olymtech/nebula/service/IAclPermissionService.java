@@ -28,4 +28,6 @@ public interface IAclPermissionService {
     public List<AclRolePermission> selectByRoleId(Integer roleId);
 
     public List<AclPermission> getPermissionsWithNoPid();
+
+    public AclPermission getPermissionById(Integer permissionId);
 }
