@@ -456,30 +456,32 @@ public class PublishController extends BaseController {
                     whichStep = i + 1;
                 }
             }
-            int lastGroup=0;
-            NebulaPublishSchedule nebulaPublishScheduleLast = nebulaPublishSchedules.get(last - 2);
-            switch (String.valueOf(nebulaPublishScheduleLast.getPublishActionGroup())) {
-                case "PRE_MASTER":
-                    lastGroup = 1;
-                    break;
-                case "PRE_MINION":
-                    lastGroup = 2;
-                    break;
-                case "PUBLISH_REAL":
-                    lastGroup = 3;
-                    break;
-                case "FAIL_END":
-                    lastGroup = 4;
-                    break;
-                case "SUCCESS_END":
-                    lastGroup = 5;
-                    break;
-                case "CLEAN_END":
-                    lastGroup = 6;
-                    break;
+            int lastGroup = 0;
+            if(last>2) {
+                NebulaPublishSchedule nebulaPublishScheduleLast = nebulaPublishSchedules.get(last - 2);
+                switch (String.valueOf(nebulaPublishScheduleLast.getPublishActionGroup())) {
+                    case "PRE_MASTER":
+                        lastGroup = 1;
+                        break;
+                    case "PRE_MINION":
+                        lastGroup = 2;
+                        break;
+                    case "PUBLISH_REAL":
+                        lastGroup = 3;
+                        break;
+                    case "FAIL_END":
+                        lastGroup = 4;
+                        break;
+                    case "SUCCESS_END":
+                        lastGroup = 5;
+                        break;
+                    case "CLEAN_END":
+                        lastGroup = 6;
+                        break;
+                }
             }
-            map.put("actionGroup", actionGroup);
             map.put("lastGroup", lastGroup);
+            map.put("actionGroup", actionGroup);
             map.put("whichStep", whichStep);
             map.put("actionState", actionState);
             map.put("errorMsg", nebulaPublishSchedule.getErrorMsg());
