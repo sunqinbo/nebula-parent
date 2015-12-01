@@ -3,9 +3,12 @@ package com.olymtech.nebula.file.analyze.impl;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +22,7 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
 
+    @Override
     public List<String> getFileListByDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
         try{
@@ -34,6 +38,7 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
         }
         return fileList;
     }
+
     @Override
     public List<String> getFileListByRecursionDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
@@ -46,6 +51,7 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
         return fileList;
     }
 
+    @Override
     public Map<String,Boolean> getDirMapByDirPath(String dirPath) {
         Map<String,Boolean> fileList = new HashMap<>();
         try{
@@ -76,6 +82,21 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
                 reverseRecursionDirPath(newfile,fileList);
             }
         }
+    }
+
+    @Override
+    public Boolean copyFile(String srcFilePath, String destFilePath){
+        Boolean result = false;
+        try{
+            FileOutputStream dest = new FileOutputStream(new File(srcFilePath));
+            FileSystemResource src = new FileSystemResource(destFilePath);
+            FileCopyUtils.copy(src.getInputStream(), dest);
+            result = true;
+        }catch (Exception e){
+            logger.error("copyFile error:",e);
+            result = false;
+        }
+        return result;
     }
 
 //    public void reverseRecursionMapByDirPath(File file,Map<String,Boolean> fileList){
