@@ -83,7 +83,6 @@ public class SaltClientFactory {
 
             return client;
         }
-        System.out.println(client);
 
         if (token==null){
             try {
@@ -93,8 +92,6 @@ public class SaltClientFactory {
                 throw e;
             }
         }
-
-        System.out.println(token);
 
         if (token.getExpire().getTime()<=System.currentTimeMillis()){
             try {
