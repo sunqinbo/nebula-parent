@@ -97,9 +97,11 @@ public class CpWarAction extends AbstractAction {
             if (successCount!=targes.size()){
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR, event.getPublishActionGroup(), false, "success count:"+ successCount +",  targes count:"+targes.size());
                 return false;
+            }else{
+                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR, event.getPublishActionGroup(), true, "success");
+                return true;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_WAR, event.getPublishActionGroup(), true, "success");
         return true;
     }
 
