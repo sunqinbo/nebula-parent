@@ -66,6 +66,15 @@
             <version>4.5</version>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch</groupId>-->
+            <!--<artifactId>elasticsearch</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch.plugin</groupId>-->
+            <!--<artifactId>shield</artifactId>-->
+        <!--</dependency>-->
+
     </dependencies>
 
 
