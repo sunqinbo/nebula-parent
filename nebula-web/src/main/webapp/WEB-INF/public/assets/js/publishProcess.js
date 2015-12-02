@@ -121,22 +121,26 @@ $(document).ready(function(){
     setInterval("Initialization()", 5000);
     //按钮点击事件
     $("#btn1").click(function () {
+        $("#loading-status").show();
         $("#btn1").attr('disabled', true);
         $("#btn1").removeClass("btn-info");
         $("#step1").show();
     });
     $("#btn2").click(function () {
+        $("#loading-status").show();
         $("#btn2").attr('disabled', true);
         $("#btn2").removeClass("btn-info");
         $("#step2").show();
     });
     $("#btn3").click(function () {
+        $("#loading-status").show();
         $("#btn3").attr('disabled', true);
         $("#btn3").removeClass("btn-info");
         $("#step3").show();
         $("#restartPublish").hide();
     });
     $("#btn4").click(function () {
+        $("#loading-status").show();
         $("#btn4").attr('disabled', true);
         $("#btn4").removeClass("btn-info");
         $("#btn_ConfirmResult").attr('disabled', true);
@@ -144,6 +148,7 @@ $(document).ready(function(){
         $("#step4").show();
     })
     $("#btn_ConfirmResult").click(function () {
+        $("#loading-status").show();
         $("#btn_ConfirmResult").attr('disabled', true);
         $("#btn_ConfirmResult").removeClass("btn-info");
         $("#btn4").attr('disabled', true);

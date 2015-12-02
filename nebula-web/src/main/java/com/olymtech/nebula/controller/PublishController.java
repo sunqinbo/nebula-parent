@@ -57,8 +57,8 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevent:page")
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object PublishList(DataTablePage dataTablePage) throws Exception{
-        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage);
+    public Object PublishList(DataTablePage dataTablePage,NebulaPublishEvent nebulaPublishEvent) throws Exception{
+        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage,nebulaPublishEvent);
         return pageInfo;
     }
 
@@ -78,7 +78,9 @@ public class PublishController extends BaseController {
 
     @RequiresPermissions("publishevent:page")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public String publishList() throws Exception {
+    public String publishList(Model model) throws Exception {
+        List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
+        model.addAttribute("productTrees", productTrees);
         return "event/publishList";
     }
 
@@ -529,7 +531,7 @@ public class PublishController extends BaseController {
     public Object approvalPublish(Integer eventId) throws Exception{
         NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsApproved(true);
-        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
+        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
     }

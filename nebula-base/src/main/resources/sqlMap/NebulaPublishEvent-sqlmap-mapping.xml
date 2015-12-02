@@ -188,8 +188,20 @@
             <if test="isSuccessPublish != null">
                 AND is_success_publish = #{isSuccessPublish}
             </if>
+            <if test="starTime != null and starTime!=''">
+                AND unix_timestamp(submit_datetime) >= unix_timestamp(#{starTime})
+            </if>
+            <if test="endTime != null and endTime!=''">
+                AND unix_timestamp(submit_datetime) <![CDATA[<]]>= unix_timestamp(#{endTime})
+            </if>
+            <if test="publishBuCname != null and publishBuCname!=''">
+                AND publish_bu_cname = #{publishBuCname}
+            </if>
+            <if test="publishProductCname != null and publishProductCname!=''">
+                AND publish_product_cname = #{publishProductCname}
+            </if>
             <if test="1">
-                npe.is_delete != 1
+                AND npe.is_delete != 1
             </if>
         </trim>
         order by npe.id desc

@@ -12,28 +12,49 @@
                     <div class="content">
                         <form>
                             <div class="row">
-                                <div class="col-md-3">
+##                                <div class="col-md-3">
+##                                    <div class="form-group">
+##                                        <label>发布模块</label>
+##                                        <input type="text" id="productname" class="form-control" >
+##                                    </div>
+##                                </div>
+                                <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>发布模块</label>
-                                        <input type="text" id="productname" class="form-control" >
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-
                                           <label>开始时间</label>
                                         <input type="text" id="begintime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>结束时间</label>
                                         <input type="text" id="endtime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                        <button id="query_btn" style="margin-top:25px;width:100px " class="btn btn-info" type="button">查 询</button>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>事业部</label>
+                                        <select id="select-bu" class="form-control">
+                                            <option value="">请选择</option>
+                                            #foreach($productTree in $productTrees)
+                                                <option value-hidden="$productTree.nodeName" value="$productTree.id">$productTree.nodeCname</option>
+                                            #end
+                                        </select>
+                                    </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>产品</label>
+                                            <select id="select-product" class="form-control">
+                                                <option value="">请选择</option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button id="query_btn" style="margin-top:25px;width:100px " class="btn btn-info" type="button">查 询</button>
+                                </div>
+##                                <div class="col-md-3">
+##                                        <button id="query_btn" style="margin-top:25px;width:100px " class="btn btn-info" type="button">查 询</button>
+##                                </div>
                             </div>
                         </form>
                     </div>

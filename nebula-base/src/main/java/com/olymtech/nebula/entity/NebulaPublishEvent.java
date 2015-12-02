@@ -51,6 +51,10 @@ public class NebulaPublishEvent extends BaseDO {
 
     private PublishActionGroup publishActionGroup;
 
+    private String starTime;
+
+    private String endTime;
+
     private List<NebulaPublishModule> publishModules;
 
     public NebulaUserInfo getSubmitUser() {
@@ -221,5 +225,21 @@ public class NebulaPublishEvent extends BaseDO {
 
     public void setIsApproved(Boolean isApproved) {
         this.isApproved = isApproved;
+    }
+
+    public String getStarTime() {
+        return starTime;
+    }
+
+    public void setStarTime(String starTime) {
+        this.starTime = starTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
