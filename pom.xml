@@ -48,6 +48,17 @@
                         <enabled>true</enabled>
                     </snapshots>
                 </repository>
+
+                <repository>
+                    <id>elasticsearch-releases</id>
+                    <url>https://maven.elasticsearch.org/releases</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
@@ -391,6 +402,19 @@
                 <version>${hibernate.validator.version}</version>
             </dependency>
 
+
+            <!--<dependency>-->
+                <!--<groupId>org.elasticsearch</groupId>-->
+                <!--<artifactId>elasticsearch</artifactId>-->
+                <!--<version>${shield.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.elasticsearch.plugin</groupId>-->
+                <!--<artifactId>shield</artifactId>-->
+                <!--<version>${shield.version}</version>-->
+            <!--</dependency>-->
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -435,6 +459,7 @@
 
         <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 
+        <shield.version>2.1.0</shield.version>
     </properties>
 
     <build>
