@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -122,6 +123,13 @@ public class PublishEventServiceImpl implements IPublishEventService {
     @Override
     public Integer selectCountWithUser(NebulaPublishEvent event){
         return nebulaPublishEventDao.selectCountWithUser(event);
+    }
+
+    @Override
+    public List<NebulaPublishEvent> isPUBLISHING(NebulaPublishEvent nebulaPublishEvent) {
+        List<NebulaPublishEvent> nebulaPublishEvents=new ArrayList<>();
+        nebulaPublishEvents=nebulaPublishEventDao.selectNoPUBLISHING(nebulaPublishEvent);
+        return nebulaPublishEvents;
     }
 
 

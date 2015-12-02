@@ -127,10 +127,45 @@ $(document).ready(function(){
         $("#step1").show();
     });
     $("#btn2").click(function () {
-        $("#loading-status").show();
-        $("#btn2").attr('disabled', true);
-        $("#btn2").removeClass("btn-info");
-        $("#step2").show();
+        $.ajax({
+            async: false,
+            data: {
+                "publishBuName": $("#publishBuName").val(),
+                "publishProductName": $("#publishProductName").val()
+            },
+            type: "post",
+            url: "/publish/get/noPublish",
+            datetype: "json",
+            success: function (data) {
+                if(data.length>0){
+                    var msg=""
+                    for(var i= 0,len=data.length;i<len;i++){
+                        msg+=data[i]["id"]+",";
+                    }
+                    msg="很抱歉，该产品正在发布中,事件单id为："+msg+"请稍后再试";
+                    nebula.common.alert.danger(msg,1000);
+                    return;
+                }
+                else {
+                    $("#loading-status").show();
+                    $("#btn2").attr('disabled', true);
+                    $("#btn2").removeClass("btn-info");
+                    $("#step2").show();
+                    //nebula.publish.process.preMinionPublish();
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.notify({
+                    icon: '',
+                    message: "很抱歉，获取发布事件信息失败，原因" + errorThrown
+
+                }, {
+                    type: 'info',
+                    timer: 1000
+                });
+                return;
+            }
+        });
     });
     $("#btn3").click(function () {
         $("#loading-status").show();
@@ -449,6 +484,7 @@ function nextPublish(nowPublish) {
     })
 }
 
+//审批功能
 function approvalBtn(){
     $.ajax({
         async: false,

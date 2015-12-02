@@ -35,6 +35,8 @@
                                 ##   <label>运价2014</label>
                                     <label>$!{Event.publishProductCname}</label>
                                     <input id="eventId" style="display:none" type="text" value=$!{Event.id}>
+                                    <input id="publishBuName" style="display:none" type="text" value=$!{Event.publishBuName}>
+                                    <input id="publishProductName" style="display:none" type="text" value=$!{Event.publishProductName}>
                                 ##  <input id="actionGroup" style="display:none" type="text" value=$!{actionGroup}>
                                 ##  <input id="whichStep" style="display:none" type="text" value=$!{whichStep}>
                                 ##  <input id="actionState" style="display:none" type="text" value=$!{actionState}>
@@ -111,10 +113,10 @@
                         <hr/>
                         <div class="content">
                             #if($shiro.hasPermission("publishevnt:prePublishMaster"))
-                                <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish()">发布准备</button>
+                                <button type="button" id="btn1" class="btn btn-default" onclick="nebula.publish.process.preMasterPublish();">发布准备</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:prePublishMinion"))
-                                <button type="button" id="btn2" class="btn btn-default" onclick="nebula.publish.process.preMinionPublish()">启动预发布</button>
+                                <button type="button" id="btn2" class="btn btn-default">启动预发布</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:publishReal"))
                                 <button type="button" id="btn3" class="btn btn-default" onclick="nebula.publish.process.publishReal()">启动正式发布</button>

@@ -31,4 +31,5 @@ public interface IPublishEventService {
 
     public Integer selectCountWithUser(NebulaPublishEvent event);
 
+    public List<NebulaPublishEvent> isPUBLISHING(NebulaPublishEvent nebulaPublishEvent);
 }

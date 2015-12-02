@@ -60,6 +60,9 @@ nebula.common.transform.publishStatus = function(publishStatus){
         case "PENDING_APPROVE":
             result = "待审批";
             break;
+        case "PENDING_PRE":
+            result = "待准备";
+            break;
         case "PENDING_PUBLISH":
             result = "待发布";
             break;

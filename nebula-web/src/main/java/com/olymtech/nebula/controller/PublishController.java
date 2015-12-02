@@ -549,4 +549,12 @@ public class PublishController extends BaseController {
         return returnCallback("Success", "");
     }
 
+    /**
+     *查询发布事件
+     */
+    @RequestMapping(value = "/get/noPublish", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object getPublishStatus(NebulaPublishEvent nebulaPublishEvent) throws Exception{
+        return publishEventService.isPUBLISHING(nebulaPublishEvent);
+    }
 }

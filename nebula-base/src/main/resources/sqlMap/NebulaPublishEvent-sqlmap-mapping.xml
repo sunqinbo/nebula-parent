@@ -207,6 +207,14 @@
         order by npe.id desc
     </select>
 
+    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-No-PUBLISHING" parameterType="NebulaPublishEvent" resultMap="RM-NebulaPublishEvent">
+        select <include refid="NebulaPublishEvent-Base-Column-List"/> from nebula_publish_event
+        where publish_product_name= #{publishProductName}
+        AND publish_bu_cname = #{publishBuCname}
+        AND (publish_status ='PENDING_PUBLISH'
+        OR publish_status ='PUBLISHING')
+    </select>
+
     <delete id="Nebula-NebulaPublishEventDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from nebula_publish_event
         where id = #{id,jdbcType=INTEGER}

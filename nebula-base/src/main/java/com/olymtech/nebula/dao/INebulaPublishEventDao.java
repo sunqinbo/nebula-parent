@@ -16,4 +16,6 @@ public interface INebulaPublishEventDao extends IBaseDao<NebulaPublishEvent,Inte
     public List<NebulaPublishEvent> selectAllPagingWithUser(NebulaPublishEvent event);
 
     public int selectCountWithUser(NebulaPublishEvent event);
+
+    public List<NebulaPublishEvent> selectNoPUBLISHING(NebulaPublishEvent nebulaPublishEvent);
 }

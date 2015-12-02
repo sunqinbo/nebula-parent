@@ -27,4 +27,9 @@ public class NebulaPublishEventDaoImpl extends BaseDaoImpl<NebulaPublishEvent,In
         return (Integer) getSqlSession().selectOne(CLASS_NAME + "-Select-Count-With-User-Where", event);
     }
 
+    @Override
+    public List<NebulaPublishEvent> selectNoPUBLISHING(NebulaPublishEvent nebulaPublishEvent) {
+        return getSqlSession().selectList(CLASS_NAME + "-Select-All-Paging-No-PUBLISHING", nebulaPublishEvent);
+    }
+
 }
