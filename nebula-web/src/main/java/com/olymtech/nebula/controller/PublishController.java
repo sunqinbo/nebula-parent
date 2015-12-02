@@ -57,8 +57,8 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevent:page")
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object PublishList(DataTablePage dataTablePage) throws Exception{
-        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage);
+    public Object PublishList(DataTablePage dataTablePage,NebulaPublishEvent nebulaPublishEvent) throws Exception{
+        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage,nebulaPublishEvent);
         return pageInfo;
     }
 
@@ -78,7 +78,9 @@ public class PublishController extends BaseController {
 
     @RequiresPermissions("publishevent:page")
     @RequestMapping(value = "/list.htm", method = {RequestMethod.POST, RequestMethod.GET})
-    public String publishList() throws Exception {
+    public String publishList(Model model) throws Exception {
+        List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
+        model.addAttribute("productTrees", productTrees);
         return "event/publishList";
     }
 
@@ -448,6 +450,7 @@ public class PublishController extends BaseController {
                     break;
                 case "CLEAN_END":
                     actionGroup = 6;
+                    group = group6;
                     break;
             }
             for (int i = 0; i < group.length; i++) {
@@ -455,6 +458,31 @@ public class PublishController extends BaseController {
                     whichStep = i + 1;
                 }
             }
+            int lastGroup = 0;
+            if(last>2) {
+                NebulaPublishSchedule nebulaPublishScheduleLast = nebulaPublishSchedules.get(last - 2);
+                switch (String.valueOf(nebulaPublishScheduleLast.getPublishActionGroup())) {
+                    case "PRE_MASTER":
+                        lastGroup = 1;
+                        break;
+                    case "PRE_MINION":
+                        lastGroup = 2;
+                        break;
+                    case "PUBLISH_REAL":
+                        lastGroup = 3;
+                        break;
+                    case "FAIL_END":
+                        lastGroup = 4;
+                        break;
+                    case "SUCCESS_END":
+                        lastGroup = 5;
+                        break;
+                    case "CLEAN_END":
+                        lastGroup = 6;
+                        break;
+                }
+            }
+            map.put("lastGroup", lastGroup);
             map.put("actionGroup", actionGroup);
             map.put("whichStep", whichStep);
             map.put("actionState", actionState);
@@ -503,7 +531,7 @@ public class PublishController extends BaseController {
     public Object approvalPublish(Integer eventId) throws Exception{
         NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsApproved(true);
-        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
+        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
     }

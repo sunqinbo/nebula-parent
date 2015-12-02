@@ -140,7 +140,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
-            paths.append("sh " + path+";");
+            paths.append(path+";");
         }
 
         args.add(paths);

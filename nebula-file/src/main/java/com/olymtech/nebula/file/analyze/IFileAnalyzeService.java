@@ -19,4 +19,6 @@ public interface IFileAnalyzeService {
     public List<String> getFileListByRecursionDirPath(String dirPath);
 
     public Map<String,Boolean> getDirMapByDirPath(String dirPath);
+
+    public Boolean copyFile(String srcFile, String destFile);
 }

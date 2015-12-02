@@ -19,7 +19,7 @@ public interface IPublishEventService {
 
     public BaseDO getPublishEventById(Integer id);
 
-    public PageInfo getPublishEvent(DataTablePage dataTablePage);
+    public PageInfo getPublishEvent(DataTablePage dataTablePage, NebulaPublishEvent nebulaPublishEvent);
 
     public NebulaPublishEvent selectById(Integer eventId);
 

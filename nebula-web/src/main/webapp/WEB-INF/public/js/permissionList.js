@@ -21,8 +21,8 @@ function getjtb(pageNum){
             for(var i=0;i<data["list"].length;i++){
                 var id=data["list"][i]["id"];
                 var pid=data["list"][i]["pid"];
-                var isEnable=data["list"][i]["isEnable"];
-                var permission=data["list"][i]["permission"];
+                //var isEnable=data["list"][i]["isEnable"];
+                //var permission=data["list"][i]["permission"];
                 var edit_btn="";
                 var delete_btn="";
                 for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
@@ -104,34 +104,37 @@ function listBtn(pageNum){
     $("#listBtn>button").each(function(){
         if($(this).text()=="删除") {
             $(this).click(function(){
-                var id=$(this).parent().parent().parent().children().eq(0);
-                $.ajax({
-                    type:"post",
-                    url:"/permission/delete",
-                    data:{"id":id.text()},
-                    datatype:"json",
-                    success: function (data) {
-                        getjtb(pageNum);
-                        $.notify({
-                            icon: '',
-                            message: "删除权限成功"
+                var ms = confirm("确认删除么？");
+                if (ms == true) {
+                    var id = $(this).parent().parent().parent().children().eq(0);
+                    $.ajax({
+                        type: "post",
+                        url: "/permission/delete",
+                        data: {"id": id.text()},
+                        datatype: "json",
+                        success: function (data) {
+                            getjtb(pageNum);
+                            $.notify({
+                                icon: '',
+                                message: "删除权限成功"
 
-                        },{
-                            type: 'info',
-                            timer: 1000
-                        });
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        $.notify({
-                            icon: '',
-                            message: "很抱歉，删除权限失败，原因"+ errorThrown
+                            }, {
+                                type: 'info',
+                                timer: 1000
+                            });
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            $.notify({
+                                icon: '',
+                                message: "很抱歉，删除权限失败，原因" + errorThrown
 
-                        },{
-                            type: 'info',
-                            timer: 1000
-                        });
-                    }
-                });
+                            }, {
+                                type: 'info',
+                                timer: 1000
+                            });
+                        }
+                    });
+                }
             });
         }
         if($(this).text()=="编辑") {
