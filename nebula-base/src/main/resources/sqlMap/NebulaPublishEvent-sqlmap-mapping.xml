@@ -211,8 +211,7 @@
         select <include refid="NebulaPublishEvent-Base-Column-List"/> from nebula_publish_event
         where publish_product_name= #{publishProductName}
         AND publish_bu_name = #{publishBuName}
-        AND (publish_status ='PENDING_PUBLISH'
-        OR publish_status ='PUBLISHING')
+        AND publish_status ='PUBLISHING'
     </select>
 
     <delete id="Nebula-NebulaPublishEventDao-Delete-By-Id" parameterType="java.lang.Integer">
