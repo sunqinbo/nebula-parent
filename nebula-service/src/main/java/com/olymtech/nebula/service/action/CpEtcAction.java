@@ -74,7 +74,7 @@ public class CpEtcAction extends AbstractAction {
             HashMap<String, String> map = new HashMap<String, String>();
             map.put(BaseEtcDir + oldModule + "/*", BaseEtcDir + publishModule.getPublishModuleKey());
 
-            ResultInfoSet result = saltStackService.cpDir(new SaltTarget(targes), map);
+            ResultInfoSet result = saltStackService.cpFileAndDir(new SaltTarget(targes), null, map);
 
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
@@ -106,7 +106,7 @@ public class CpEtcAction extends AbstractAction {
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC, event.getPublishActionGroup(), true, "all models and sub targes success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC, event.getPublishActionGroup(), true, "");
         return true;
     }
 
