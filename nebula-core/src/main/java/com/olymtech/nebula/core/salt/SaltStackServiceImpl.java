@@ -5,6 +5,7 @@
 package com.olymtech.nebula.core.salt;
 
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.suse.saltstack.netapi.datatypes.ScheduledJob;
 import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
@@ -46,6 +47,12 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         long startTime = System.currentTimeMillis();   //获取开始时间
 
+        int targetCount = 0;
+        if (target instanceof SaltTarget) {
+            SaltTarget t = (SaltTarget) target;
+            targetCount = t.getTargets().size();
+        }
+
         do {
             jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
             ResultInfo resultInfo = jobResult.get(0);
@@ -54,9 +61,10 @@ public class SaltStackServiceImpl implements ISaltStackService {
             if ((endTime - startTime) / 1000 / 60 > 30) {
                 logger.error("cpFileRemote is waiting timeout");
                 break;
+
             }
 
-        } while (results.size() == 0);
+        } while (results.size() != targetCount);
 
         return jobResult;
     }
@@ -73,6 +81,11 @@ public class SaltStackServiceImpl implements ISaltStackService {
         ResultInfoSet jobResult = null;
 
         long startTime = System.currentTimeMillis();   //获取开始时间
+        int targetCount = 0;
+        if (target instanceof SaltTarget) {
+            SaltTarget t = (SaltTarget) target;
+            targetCount = t.getTargets().size();
+        }
 
         do {
             jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
@@ -84,7 +97,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
                 break;
             }
 
-        } while (results.size() == 0);
+        } while (results.size() != targetCount);
 
         return jobResult;
     }
@@ -126,6 +139,11 @@ public class SaltStackServiceImpl implements ISaltStackService {
         ResultInfoSet jobResult = null;
 
         long startTime = System.currentTimeMillis();   //获取开始时间
+        int targetCount = 0;
+        if (target instanceof SaltTarget) {
+            SaltTarget t = (SaltTarget) target;
+            targetCount = t.getTargets().size();
+        }
 
         do {
             jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
@@ -137,7 +155,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
                 break;
             }
 
-        } while (results.size() == 0);
+        } while (results.size() != targetCount);
 
         return jobResult;
     }
