@@ -252,10 +252,12 @@ public class PublishController extends BaseController {
             NebulaPublishSchedule publishSchedule = nebulaPublishSchedules.get(size - 1);
             List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(publishSchedule.getPublishActionGroup());
 
+
             //创建任务队列
             ActionChain chain = new ActionChain();
             Boolean flag = false;
             for (NebulaPublishSequence publishSequence : publishSequences) {
+                nebulaPublishEvent.setPublishActionGroup(publishSequence.getActionGroup());
                 if (publishSequence.getActionName() == publishSchedule.getPublishAction()) {
                     flag = true;
                 }
