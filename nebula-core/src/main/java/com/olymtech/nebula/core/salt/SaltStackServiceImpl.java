@@ -71,9 +71,10 @@ public class SaltStackServiceImpl implements ISaltStackService {
                     buffer.append("&& cp -R " + entry.getKey() + " " + entry.getValue());
                 }
             }
+            buffer.append(";");
         }
         if (fileKeyValue!=null && fileKeyValue.size()!=0) {
-            buffer.append(";");
+
             for (Map.Entry<String, String> entry : fileKeyValue.entrySet()) {
                 if (i == 0) {
                     buffer.append("cp " + entry.getKey() + " " + entry.getValue());
@@ -83,6 +84,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
                 }
             }
         }
+        logger.info("当前执行的命令:"+buffer.toString());
         args.add(buffer.toString());
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
@@ -106,6 +108,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             args.add("mkdir " + paths);
         }
 
+        logger.info("当前执行的命令:"+paths.toString());
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
@@ -137,6 +140,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             paths.append(path+";");
         }
 
+        logger.info("当前执行的命令:"+paths.toString());
         args.add(paths);
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
@@ -158,6 +162,8 @@ public class SaltStackServiceImpl implements ISaltStackService {
         } else {
             args.add("rm " + paths);
         }
+        logger.info("当前执行的命令:"+paths.toString());
+
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
@@ -181,6 +187,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             buffer.append(" && ln -s " + entry.getKey() + " " + entry.getValue());
 
         }
+        logger.info("当前执行的命令:"+buffer.toString());
 
         args.add(buffer.toString());
 

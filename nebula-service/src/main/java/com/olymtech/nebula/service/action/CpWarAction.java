@@ -74,7 +74,7 @@ public class CpWarAction extends AbstractAction {
             fileMap.put(BaseWarDir + oldModule + "/*.war", BaseWarDir + publishModule.getPublishModuleKey());
 
             Map<String, String> dirMap = new HashMap<String, String>();
-            fileMap.put(BaseWarDir + oldModule + "/ROOT", BaseWarDir + publishModule.getPublishModuleKey());
+            dirMap.put(BaseWarDir + oldModule + "/ROOT/", BaseWarDir + publishModule.getPublishModuleKey());
 
             ResultInfoSet result = saltStackService.cpFileAndDir(new SaltTarget(targes), fileMap, dirMap);
 
