@@ -109,7 +109,12 @@ public class PublishRelationAction extends AbstractAction {
                     hosts.add(nebulaPublishHost);
                 }
                 List<NebulaPublishApp> apps = new ArrayList<>();
+                int hostNum=hosts.size();
                 int n = moduleTree.getApps().size();
+                if(hostNum==0||n==0){
+                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "您提交的SVN地址无法正确解析主机及应用的信息");
+                    return false;
+                }
                 for (int i = 0; i < n; i++) {
                     NebulaPublishApp nebulaPublishApp = new NebulaPublishApp();
                     nebulaPublishApp.setPublishAppName(moduleTree.getApps().get(i));
