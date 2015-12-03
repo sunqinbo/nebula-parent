@@ -31,7 +31,7 @@
                             <div class="form-group" style="margin-left: 25%">
                                 <label for="username" class="col-sm-2 control-label">用户名</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="username" name="username" type="text" class="form-control" placeholder="请输入用户名"/>
+                                    <input id="username" name="username" type="text" class="form-control" placeholder="请输入邮箱前缀"/>
                                 </div>
                             </div>
                             <div class="form-group" style="margin-left: 25%">
@@ -63,9 +63,9 @@
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
-                                <label for="nickname" class="col-sm-2 control-label">昵称</label>
+                                <label for="nickname" class="col-sm-2 control-label">姓名</label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input id="nickname" name="nickname" type="text" class="form-control" placeholder="请输入用户昵称"/>
+                                    <input id="nickname" name="nickname" type="text" class="form-control" placeholder="请输入用户姓名"/>
                                 </div>
                             </div>
 
@@ -117,10 +117,14 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-left: 25%">
+                            <div id="updatePassword" class="form-group" style="margin-left: 25%">
                                 <label for="password" class="col-sm-2 control-label">密码</label>
                                 <div id="password_div" class="col-sm-10" style="width: 300px;">
-                                    <input id="password" name="password" type="text" class="form-control" placeholder="请输入用户密码"/>
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="请输入用户密码"/>
+                                    #if($shiro.hasPermission("user:updatePassword"))
+                                        <button id='updatePass' style="display: none;" type='button' class='btn btn-info'>修改密码</button>
+                                    #else <script>$("#updatePassword").hide();</script>
+                                    #end
                                 </div>
                             </div>
 

@@ -32,16 +32,45 @@ $(function(){
             password:{required:"密码不能为空"}
         }
     });
-
+    if($("#updatePass")){
+        $("#updatePass").hide();
+    }
     $("#save").hide();
     //为编辑页面时
     if($("#isEdit").val()!=""){
         $("#password").hide();
-        $("#password_div").append("<button id='updatePass' type='button' class='btn btn-info'>修改密码</button>");
-        $("#updatePass").click(function () {
-            $("#password").show();
-            $("#updatePass")
-        });
+        //$("#password_div").append("<button id='updatePass' type='button' class='btn btn-info'>修改密码</button>");
+        if($("#updatePass")) {
+            $("#updatePass").show();
+            $("#updatePass").click(function () {
+                $("#password").show();
+                if ($("#updatePass").text() == "修改密码") {
+                    $("#updatePass").text("保存");
+                }
+                else {
+                    $("#updatePass").text("修改密码");
+                    $("#password").hide();
+                    $.ajax({
+                        async: false,
+                        type: "post",
+                        data: {
+                            "userId": $("#id").val(),
+                            "newPassword": $("#password").val()
+                        },
+                        url: "/user/update/password",
+                        datatype: "json",
+                        success: function (data) {
+                            var msg = "修改密码成功"
+                            nebula.common.alert.success(msg, 1000);
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            var msg = "很抱歉修改密码失败，原因" + errorThrown
+                            nebula.common.alert.danger(msg, 1000);
+                        }
+                    });
+                }
+            });
+        }
         $.ajax({
             async: false,
             type:"post",

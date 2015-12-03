@@ -7,11 +7,6 @@ $(document).ready(function(){
         //$("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 
-    //进入下一阶段
-    $("#nextPublish").click(function () {
-        nextPublish(btn_text);
-    });
-
     //编辑etc
     $("#etc_btn").click(function () {
         window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
@@ -302,7 +297,8 @@ function Initialization() {
                 $("#errorMsgDiv").show();
             }
             else {
-                $("#false_btn").html("");
+                $("#false_btn").hide();
+                //$("#false_btn").html("");
                 $("#errorMsgDiv").hide();
             }
             //当动作为创建发布事件且成功时，发布准备可点

@@ -31,11 +31,15 @@ $(document).ready(function(){
 function gettb(pageNum){
     var publishBuCname=null;
     var publishProductCname=null;
+    var publishStatus=null;
     if($("#select-bu").find("option:selected").text()!="请选择"){
         publishBuCname=$("#select-bu").find("option:selected").text();
     }
     if($("#select-product").find("option:selected").text()!="请选择"){
         publishProductCname=$("#select-product").find("option:selected").text();
+    }
+    if($("#select-status").find("option:selected").text()!="请选择"){
+        publishStatus=$("#select-status").find("option:selected").val();
     }
     $.ajax({
         type: "post",
@@ -46,7 +50,8 @@ function gettb(pageNum){
             "starTime":$("#begintime").val(),
             "endTime":$("#endtime").val(),
             "publishBuCname":publishBuCname,
-            "publishProductCname":publishProductCname
+            "publishProductCname":publishProductCname,
+            "publishStatus":publishStatus
         },
         datetype: "json",
         success: function (data) {

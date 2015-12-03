@@ -8,6 +8,7 @@ import com.olymtech.nebula.core.salt.core.SaltClientFactory;
 import com.suse.saltstack.netapi.datatypes.ScheduledJob;
 import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
+import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,22 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCpFile, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        Map<String, Object> results = null;
+        ResultInfoSet jobResult = null;
+
+        long startTime = System.currentTimeMillis();   //获取开始时间
+
+        do {
+            jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+            ResultInfo resultInfo = jobResult.get(0);
+            results = resultInfo.getResults();
+            long endTime = System.currentTimeMillis(); //获取结束时间
+            if ((endTime - startTime) / 1000 / 60 > 30) {
+                logger.error("cpFileRemote is waiting timeout");
+                break;
+            }
+
+        } while (results.size() == 0);
 
         return jobResult;
     }
@@ -53,7 +69,23 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCpDir, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        Map<String, Object> results = null;
+        ResultInfoSet jobResult = null;
+
+        long startTime = System.currentTimeMillis();   //获取开始时间
+
+        do {
+            jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+            ResultInfo resultInfo = jobResult.get(0);
+            results = resultInfo.getResults();
+            long endTime = System.currentTimeMillis(); //获取结束时间
+            if ((endTime - startTime) / 1000 / 60 > 30) {
+                logger.error("cpDirRemote is waiting timeout");
+                break;
+            }
+
+        } while (results.size() == 0);
+
         return jobResult;
     }
 
@@ -62,7 +94,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
         List<Object> args = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
         int i = 0;
-        if (dirKeyValue!=null && dirKeyValue.size()!=0) {
+        if (dirKeyValue != null && dirKeyValue.size() != 0) {
             for (Map.Entry<String, String> entry : dirKeyValue.entrySet()) {
                 if (i == 0) {
                     buffer.append("cp -R " + entry.getKey() + " " + entry.getValue());
@@ -74,7 +106,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             buffer.append(";");
         }
         i = 0;
-        if (fileKeyValue!=null && fileKeyValue.size()!=0) {
+        if (fileKeyValue != null && fileKeyValue.size() != 0) {
 
             for (Map.Entry<String, String> entry : fileKeyValue.entrySet()) {
                 if (i == 0) {
@@ -85,12 +117,27 @@ public class SaltStackServiceImpl implements ISaltStackService {
                 }
             }
         }
-        logger.info("当前执行的命令:"+buffer.toString());
+        logger.info("当前执行的命令:" + buffer.toString());
         args.add(buffer.toString());
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        Map<String, Object> results = null;
+        ResultInfoSet jobResult = null;
+
+        long startTime = System.currentTimeMillis();   //获取开始时间
+
+        do {
+            jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+            ResultInfo resultInfo = jobResult.get(0);
+            results = resultInfo.getResults();
+            long endTime = System.currentTimeMillis(); //获取结束时间
+            if ((endTime - startTime) / 1000 / 60 > 30) {
+                logger.error("cpFileAndDir is waiting timeout");
+                break;
+            }
+
+        } while (results.size() == 0);
 
         return jobResult;
     }
@@ -109,7 +156,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             args.add("mkdir " + paths);
         }
 
-        logger.info("当前执行的命令:"+paths.toString());
+        logger.info("当前执行的命令:" + paths.toString());
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
@@ -138,10 +185,10 @@ public class SaltStackServiceImpl implements ISaltStackService {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
-            paths.append(path+";");
+            paths.append(path + ";");
         }
 
-        logger.info("当前执行的命令:"+paths.toString());
+        logger.info("当前执行的命令:" + paths.toString());
         args.add(paths);
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
@@ -163,7 +210,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
         } else {
             args.add("rm " + paths);
         }
-        logger.info("当前执行的命令:"+paths.toString());
+        logger.info("当前执行的命令:" + paths.toString());
 
 
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
@@ -188,7 +235,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             buffer.append(" && ln -s " + entry.getKey() + " " + entry.getValue());
 
         }
-        logger.info("当前执行的命令:"+buffer.toString());
+        logger.info("当前执行的命令:" + buffer.toString());
 
         args.add(buffer.toString());
 

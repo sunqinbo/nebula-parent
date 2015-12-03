@@ -50,6 +50,20 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>发布状态</label>
+                                        <select id="select-status" class="form-control">
+                                            <option value="">请选择</option>
+                                            <option value="PENDING_APPROVE">待审批</option>
+                                            <option value="PENDING_PRE">待准备</option>
+                                            <option value="PENDING_PUBLISH">待发布</option>
+                                            <option value="PUBLISHING">发布中</option>
+                                            <option value="PUBLISHED">已发布</option>
+                                            <option value="ROLLBACK">已回滚</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
                                     <button id="query_btn" style="margin-top:25px;width:100px " class="btn btn-info" type="button">查 询</button>
                                 </div>
 ##                                <div class="col-md-3">
