@@ -68,7 +68,7 @@ public class UserController extends BaseController {
         return returnCallback("Success", "更新用户成功");
     }
 
-    @RequiresPermissions("user:admin")
+    @RequiresPermissions("user:updatePassword")
     @RequestMapping(value = "/update/password", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updatePassword(Integer userId, String newPassword) {
