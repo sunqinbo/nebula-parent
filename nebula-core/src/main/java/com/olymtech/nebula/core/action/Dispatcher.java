@@ -77,14 +77,14 @@ public class Dispatcher implements Observer {
                 action.setObserver(this);
                 boolean result = false;
                 try {
-                    logger.debug(action.getActionName() + "开始执行..." + "在链中的id为" + i);
+                    logger.info(action.getActionName() + "开始执行..." + "在链中的id为" + i);
                     result = action.doAction(event);
                     if (!result) {
-                        logger.debug(action.getActionName() + "执行失败");
+                        logger.info(action.getActionName() + "执行失败");
                         triggerFailure(event);
                         return;
                     }
-                    logger.debug(action.getActionName() + "执行成功");
+                    logger.info(action.getActionName() + "执行成功");
                 } catch (Exception e) {
                     throw e;
                 }
@@ -104,9 +104,9 @@ public class Dispatcher implements Observer {
         List<Action> actions = actionChain.getActions();
         try {
             for (int i = actionIndex; i >= 0; i--) {
-                logger.debug(actions.get(i).getActionName() + "执行回滚中..." + "当前链中action id为" + i);
+                logger.info(actions.get(i).getActionName() + "执行回滚中..." + "当前链中action id为" + i);
                 actions.get(i).doFailure(event);
-                logger.debug(actions.get(i).getActionName() + "执行回滚完成");
+                logger.info(actions.get(i).getActionName() + "执行回滚完成");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
