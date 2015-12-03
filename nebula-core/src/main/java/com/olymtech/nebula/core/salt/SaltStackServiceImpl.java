@@ -73,6 +73,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
             }
             buffer.append(";");
         }
+        i = 0;
         if (fileKeyValue!=null && fileKeyValue.size()!=0) {
 
             for (Map.Entry<String, String> entry : fileKeyValue.entrySet()) {
