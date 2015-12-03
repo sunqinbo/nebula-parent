@@ -4,9 +4,6 @@
  */
 package com.olymtech.nebula.core.action;
 
-import com.olymtech.nebula.core.action.exception.ActionException;
-import com.olymtech.nebula.core.action.exception.ActionNullException;
-import com.olymtech.nebula.core.salt.core.SaltNullTargesException;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +18,7 @@ public class ActoinTest {
     }
 
     @Test
-    public void actionTest() throws ActionException, SaltNullTargesException, ActionNullException {
+    public void actionTest() throws Exception {
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(new Action1("dir")).addAction(new Action2("svn")).addAction(new Action3("salt"));

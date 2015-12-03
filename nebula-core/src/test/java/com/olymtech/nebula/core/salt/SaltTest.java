@@ -49,7 +49,7 @@ public class SaltTest {
         map.put("/home/saas/*.war", "/root");
         map.put("/home/saas/a", "/root/");
 
-        ResultInfoSet resultInfos = service.cpFile(new Glob(), map);
+        ResultInfoSet resultInfos = service.cpFileAndDir(new Glob(), map,null);
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
@@ -64,7 +64,7 @@ public class SaltTest {
         map.put("/home/saas/test", "/root/test");
         map.put(" /home/saas/test2", "/root/test");
 
-        ResultInfoSet resultInfos = service.cpDir(new Glob(), map);
+        ResultInfoSet resultInfos = service.cpFileAndDir(new Glob(), null,map);
 
         int size = resultInfos.getInfoList().size();
 
