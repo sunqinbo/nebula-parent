@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     <label>发布模块：</label>
-                                    <label>$!{Event.mokuai}</label>
+                                    <label>$!{Event.publishProductKey}</label>
                                 </td>
                                 <td>
                                     <label>发布环境：</label>
@@ -244,6 +244,7 @@
                             <thead>
                             <tr>
                                 <th>发布模块</th>
+                                <th>发布模块Key</th>
                                 <th>应用</th>
                             </tr>
                             </thead>
@@ -252,6 +253,7 @@
                                 #foreach($module in ${Modules})
                                 <tr>
                                     <td>$!{module.publishModuleName}</td>
+
                                     <td>
                                         #foreach($app in ${module.publishApps})
                                         $!{app.publishAppName};
