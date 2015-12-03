@@ -58,21 +58,12 @@ public class SaltStackServiceImpl implements ISaltStackService {
     }
 
     @Override
-    public <T> ResultInfoSet cpFile(Target<T> target, HashMap<String, String> keyValue) throws SaltStackException {
-        return this.cp(target, keyValue, false);
-    }
-
-    @Override
-    public <T> ResultInfoSet cpDir(Target<T> target, HashMap<String, String> keyValue) throws SaltStackException {
-        return this.cp(target, keyValue, true);
-    }
-
-    private <T> ResultInfoSet cp(Target<T> target, HashMap<String, String> keyValue, boolean isDir) throws SaltStackException {
+    public <T> ResultInfoSet cpFileAndDir(Target<T> target, Map<String, String> fileKeyValue, Map<String, String> dirKeyValue) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
         int i = 0;
-        if (isDir) {
-            for (Map.Entry<String, String> entry : keyValue.entrySet()) {
+        if (dirKeyValue!=null && dirKeyValue.size()!=0) {
+            for (Map.Entry<String, String> entry : dirKeyValue.entrySet()) {
                 if (i == 0) {
                     buffer.append("cp -R " + entry.getKey() + " " + entry.getValue());
                     i = 1;
@@ -80,8 +71,10 @@ public class SaltStackServiceImpl implements ISaltStackService {
                     buffer.append("&& cp -R " + entry.getKey() + " " + entry.getValue());
                 }
             }
-        } else {
-            for (Map.Entry<String, String> entry : keyValue.entrySet()) {
+        }
+        if (fileKeyValue!=null && fileKeyValue.size()!=0) {
+            buffer.append(";");
+            for (Map.Entry<String, String> entry : fileKeyValue.entrySet()) {
                 if (i == 0) {
                     buffer.append("cp " + entry.getKey() + " " + entry.getValue());
                     i = 1;
@@ -98,6 +91,7 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         return jobResult;
     }
+
 
     @Override
     public <T> ResultInfoSet mkDir(Target<T> target, List<String> pathList, boolean parents) throws SaltStackException {

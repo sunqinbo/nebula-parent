@@ -70,10 +70,13 @@ public class CpWarAction extends AbstractAction {
                 continue;
             }
 
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put(BaseWarDir + oldModule + "/*.war", BaseWarDir + publishModule.getPublishModuleKey());
+            Map<String, String> fileMap = new HashMap<String, String>();
+            fileMap.put(BaseWarDir + oldModule + "/*.war", BaseWarDir + publishModule.getPublishModuleKey());
 
-            ResultInfoSet result = saltStackService.cpFile(new SaltTarget(targes), map);
+            Map<String, String> dirMap = new HashMap<String, String>();
+            fileMap.put(BaseWarDir + oldModule + "/ROOT", BaseWarDir + publishModule.getPublishModuleKey());
+
+            ResultInfoSet result = saltStackService.cpFileAndDir(new SaltTarget(targes), fileMap, dirMap);
 
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
