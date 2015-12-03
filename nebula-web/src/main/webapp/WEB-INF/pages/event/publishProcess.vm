@@ -253,7 +253,7 @@
                                 #foreach($module in ${Modules})
                                 <tr>
                                     <td>$!{module.publishModuleName}</td>
-
+                                    <td>$!{module.publishModuleKey}</td>
                                     <td>
                                         #foreach($app in ${module.publishApps})
                                         $!{app.publishAppName};
