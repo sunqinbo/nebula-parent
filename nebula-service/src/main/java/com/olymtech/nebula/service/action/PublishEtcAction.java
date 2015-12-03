@@ -73,28 +73,32 @@ public class PublishEtcAction extends AbstractAction {
 
             ResultInfoSet result = saltStackService.cpDirRemote(new SaltTarget(targes), etcFrom, BaseEtcDir + publishModule.getPublishModuleKey());
 
-            if (result.getInfoList().size() == 1) {
-                ResultInfo resultInfo = result.get(0);
-                Map<String, Object> results = resultInfo.getResults();
-                int i = 0;
-                for (Map.Entry<String, Object> entry : results.entrySet()) {
-
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                    nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
-                    nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_ETC);
-                    nebulaPublishHost.setActionResult(entry.getValue().toString());
-                    nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
-                    publishHostService.updatePublishHost(nebulaPublishHost);
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, event.getPublishActionGroup(), false, entry.getValue().toString());
-                    //throw new SaltStackException(entry.getValue().toString());
-                }
-            } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, event.getPublishActionGroup(), false, "error message");
+            ResultInfo resultInfo = result.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            int i = 0;
+            int successCount = 0;
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+                NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_ETC);
+                nebulaPublishHost.setActionResult(entry.getValue().toString());
+                nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                publishHostService.updatePublishHost(nebulaPublishHost);
+                successCount++;
+            }
+            if (successCount != targes.size()) {
+                publishScheduleService.logScheduleByAction(
+                        event.getId(),
+                        PublishAction.PUBLISH_NEW_ETC,
+                        event.getPublishActionGroup(),
+                        false,
+                        "success count:" + successCount + ",  targes count:" + targes.size()
+                );
                 return false;
             }
         }
 
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, event.getPublishActionGroup(), true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, event.getPublishActionGroup(), true, "all models and sub targes success");
         return true;
     }
 

@@ -15,7 +15,6 @@ import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,34 +71,39 @@ public class ChangeFailLnAction extends AbstractAction {
             lnMap.put(BaseEtcDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()) + "/etc", EtcLink);
             ResultInfoSet result = saltStackService.makeLn(new SaltTarget(targes), lnMap);
 
-            if (result.getInfoList().size() == 1) {
-                ResultInfo resultInfo = result.get(0);
-                Map<String, Object> results = resultInfo.getResults();
-                int i = 0;
-                for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                    nebulaPublishHost.setActionGroup(PublishActionGroup.FAIL_END);
-                    nebulaPublishHost.setActionName(PublishAction.CHANGE_LN);
-                    if (entry.getValue().equals("")) {
-                        nebulaPublishHost.setActionResult("success");
-                        nebulaPublishHost.setIsSuccessAction(true);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                    } else {
-                        nebulaPublishHost.setActionResult(entry.getValue().toString());
-                        nebulaPublishHost.setIsSuccessAction(false);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), false, "error message");
-                        throw new SaltStackException(entry.getValue().toString());
-                    }
+            ResultInfo resultInfo = result.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            int i = 0;
+            int successCount = 0;
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+                NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                nebulaPublishHost.setActionGroup(PublishActionGroup.FAIL_END);
+                nebulaPublishHost.setActionName(PublishAction.CHANGE_LN);
+                if (entry.getValue().equals("")) {
+                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setIsSuccessAction(true);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    successCount++;
+                } else {
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(false);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
                 }
+            }
 
-            } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), false, "error message");
+            if (successCount!= targes.size()){
+                publishScheduleService.logScheduleByAction(
+                        event.getId(),
+                        PublishAction.CHANGE_LN,
+                        event.getPublishActionGroup(),
+                        false,
+                        "success count:" + successCount + ",  targes count:" + targes.size()
+                );
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), true, "all models and sub targes success");
         return true;
     }
 
