@@ -74,30 +74,42 @@ public class PublishWarAction extends AbstractAction {
 
             List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
 
+            int AppSuccessCount = 0;
             for (NebulaPublishApp app : appList) {
 
-                ResultInfoSet result = saltStackService.cpFileRemote(new SaltTarget(targes), warFromBase + app.getPublishAppName()+".war", BaseWarDir + publishModule.getPublishModuleKey()+"/"+app.getPublishAppName()+".war");
+                ResultInfoSet result = saltStackService.cpFileRemote(new SaltTarget(targes), warFromBase + app.getPublishAppName() + ".war", BaseWarDir + publishModule.getPublishModuleKey() + "/" + app.getPublishAppName() + ".war");
 
-                if (result.getInfoList().size() == 1) {
-                    ResultInfo resultInfo = result.get(0);
-                    Map<String, Object> results = resultInfo.getResults();
-                    int i = 0;
-                    for (Map.Entry<String, Object> entry : results.entrySet()) {
-                        NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                        nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
-                        nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_WAR);
-                        nebulaPublishHost.setActionResult(entry.getValue().toString());
-                        nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,event.getPublishActionGroup(), false, entry.getValue().toString());
-                    }
-                } else {
-                    publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,event.getPublishActionGroup(), false, "error message");
+                ResultInfo resultInfo = result.get(0);
+                Map<String, Object> results = resultInfo.getResults();
+                int i = 0;
+                int successCount = 0;
+                for (Map.Entry<String, Object> entry : results.entrySet()) {
+                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                    nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                    nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_WAR);
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    successCount++;
+                }
+                if (successCount != targes.size()) {
                     return false;
+                }else{
+                    AppSuccessCount++;
                 }
             }
+            if (AppSuccessCount != appList.size()) {
+                publishScheduleService.logScheduleByAction(
+                        event.getId(),
+                        PublishAction.PUBLISH_NEW_WAR,
+                        event.getPublishActionGroup(),
+                        false,
+                        "success count:" + AppSuccessCount + ",  targes count:" + targes.size()
+                );
+                return false;
+            }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR,event.getPublishActionGroup(), true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, event.getPublishActionGroup(), true, "all models and sub targes success");
         return true;
     }
 

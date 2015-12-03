@@ -14,7 +14,6 @@ import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,33 +59,38 @@ public class StopTomcatAction extends AbstractAction {
 
             ResultInfoSet resultInfos = saltStackService.doCommand(new SaltTarget(targes), pathList);
 
-            if (resultInfos.getInfoList().size() == 1) {
-                ResultInfo resultInfo = resultInfos.get(0);
-                Map<String, Object> results = resultInfo.getResults();
-                int i = 0;
-                for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                    nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
-                    nebulaPublishHost.setActionName(PublishAction.STOP_TOMCAT);
-                    if (entry.getValue().equals("")) {
-                        nebulaPublishHost.setActionResult("success");
-                        nebulaPublishHost.setIsSuccessAction(true);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                    } else {
-                        nebulaPublishHost.setActionResult(entry.getValue().toString());
-                        nebulaPublishHost.setIsSuccessAction(false);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.STOP_TOMCAT, event.getPublishActionGroup(), false, "error message");
-                        throw new SaltStackException(entry.getValue().toString());
-                    }
+            ResultInfo resultInfo = resultInfos.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            int i = 0;
+            int successCount = 0;
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+                NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                nebulaPublishHost.setActionGroup(PublishActionGroup.PUBLISH_REAL);
+                nebulaPublishHost.setActionName(PublishAction.STOP_TOMCAT);
+                if (entry.getValue().equals("")) {
+                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setIsSuccessAction(true);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    successCount++;
+                } else {
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(false);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
                 }
-            } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.STOP_TOMCAT, event.getPublishActionGroup(), false, "error message");
+            }
+            if (successCount != targes.size()) {
+                publishScheduleService.logScheduleByAction(
+                        event.getId(),
+                        PublishAction.STOP_TOMCAT,
+                        event.getPublishActionGroup(),
+                        false,
+                        "success count:" + successCount + ",  targes count:" + targes.size()
+                );
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.STOP_TOMCAT, event.getPublishActionGroup(), true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.STOP_TOMCAT, event.getPublishActionGroup(), true, "all models and sub targes success");
         return true;
     }
 

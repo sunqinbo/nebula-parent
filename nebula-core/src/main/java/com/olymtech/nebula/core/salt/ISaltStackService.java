@@ -42,21 +42,14 @@ public interface ISaltStackService {
 
     /**
      * 文件拷贝接口
-     * @param target 目标机
-     * @param keyValue   minion指定目录,minion指定目录
+     * @param target 目标机器
+     * @param fileKeyValue 拷贝文件列表
+     * @param dirKeyValue 拷贝文件夹列表
+     * @param <T>
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpFile(final Target<T> target,  HashMap<String, String> keyValue) throws SaltStackException;
-
-    /**
-     * 文件夹拷贝接口
-     * @param target 目标机
-     * @param keyValue   minion指定目录,minion指定目录
-     * @return
-     * @throws SaltStackException
-     */
-    public <T> ResultInfoSet cpDir(final Target<T> target,  HashMap<String, String> keyValue) throws SaltStackException;
+    public <T> ResultInfoSet cpFileAndDir(Target<T> target, Map<String, String> fileKeyValue, Map<String, String> dirKeyValue) throws SaltStackException;
 
     /**
      * 创建文件夹并选择自动建立好那些尚不存在的目录

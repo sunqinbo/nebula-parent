@@ -14,7 +14,6 @@ import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
-import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class CreateDirAciton extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), null ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -63,38 +62,43 @@ public class CreateDirAciton extends AbstractAction {
                 targes.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
-            List<String> pathList = new ArrayList<String >();
+            List<String> pathList = new ArrayList<String>();
             pathList.add(BaseWarDir + publishModule.getPublishModuleKey());
             pathList.add(BaseEtcDir + publishModule.getPublishModuleKey());
 
             ResultInfoSet result = saltStackService.mkDir(new SaltTarget(targes), pathList, true);
 
-            if (result.getInfoList().size() == 1) {
-                ResultInfo resultInfo = result.get(0);
-                Map<String, Object> results = resultInfo.getResults();
-                int i = 0;
-                for (Map.Entry<String, Object> entry : results.entrySet()) {
-                    NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
-                    nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
-                    nebulaPublishHost.setActionName(PublishAction.CREATE_PUBLISH_DIR);
-                    if (entry.getValue().equals("")) {
-                        nebulaPublishHost.setActionResult("success");
-                        nebulaPublishHost.setIsSuccessAction(true);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                    } else {
-                        nebulaPublishHost.setActionResult(entry.getValue().toString());
-                        nebulaPublishHost.setIsSuccessAction(false);
-                        publishHostService.updatePublishHost(nebulaPublishHost);
-                        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), false ,"error message");
-                        throw new SaltStackException(entry.getValue().toString());
-                    }
+            ResultInfo resultInfo = result.get(0);
+            Map<String, Object> results = resultInfo.getResults();
+            int i = 0;
+            int successCount = 0;
+            for (Map.Entry<String, Object> entry : results.entrySet()) {
+                NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
+                nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
+                nebulaPublishHost.setActionName(PublishAction.CREATE_PUBLISH_DIR);
+                if (entry.getValue().equals("")) {
+                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setIsSuccessAction(true);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
+                    successCount++;
+                } else {
+                    nebulaPublishHost.setActionResult(entry.getValue().toString());
+                    nebulaPublishHost.setIsSuccessAction(false);
+                    publishHostService.updatePublishHost(nebulaPublishHost);
                 }
-            } else {
-                publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), false ,"error message");
+            }
+            if (successCount != targes.size()) {
+                publishScheduleService.logScheduleByAction(
+                        event.getId(),
+                        PublishAction.CREATE_PUBLISH_DIR,
+                        event.getPublishActionGroup(),
+                        false,
+                        "success count:" + successCount + ",  targes count:" + targes.size()
+                );
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), true ,"");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), true, "all models and sub targes success");
         return true;
     }
 
