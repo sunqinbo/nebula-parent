@@ -142,8 +142,8 @@ $(document).ready(function(){
                     for(var i= 0,len=data.length;i<len;i++){
                         msg+=data[i]["id"]+",";
                     }
-                    msg="很抱歉，该产品正在发布中,事件单id为："+msg+"请稍后再试";
-                    nebula.common.alert.danger(msg,1000);
+                    msg="很抱歉，该产品正在发布中,发布id为:"+msg+"请稍后再试";
+                    nebula.common.alert.warning(msg,1000);
                     return;
                 }
                 else {
@@ -151,7 +151,7 @@ $(document).ready(function(){
                     $("#btn2").attr('disabled', true);
                     $("#btn2").removeClass("btn-info");
                     $("#step2").show();
-                    //nebula.publish.process.preMinionPublish();
+                    nebula.publish.process.preMinionPublish();
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
