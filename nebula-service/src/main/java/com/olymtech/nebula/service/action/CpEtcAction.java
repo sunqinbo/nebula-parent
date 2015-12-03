@@ -76,6 +76,8 @@ public class CpEtcAction extends AbstractAction {
 
             ResultInfoSet result = saltStackService.cpFileAndDir(new SaltTarget(targes), null, map);
 
+
+
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
             int i = 0;
