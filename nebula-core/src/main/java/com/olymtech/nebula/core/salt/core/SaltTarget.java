@@ -41,4 +41,8 @@ public class SaltTarget implements Target<String> {
     public String getType() {
         return "list";
     }
+
+    public List<String> getTargets() {
+        return targets;
+    }
 }
