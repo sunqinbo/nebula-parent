@@ -7,6 +7,11 @@ $(document).ready(function(){
         //$("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 
+    //进入下一阶段
+    $("#nextPublish").click(function () {
+        nextPublish(btn_text);
+    });
+
     //编辑etc
     $("#etc_btn").click(function () {
         window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
@@ -343,9 +348,6 @@ function Initialization() {
                             btn_text = "生产";
                         }
                         $("#nextPublish").text("进入" + btn_text).show();
-                        $("#nextPublish").click(function () {
-                            nextPublish(btn_text);
-                        });
                         if(lastGroup==5) {
                             $("#processbar5").setStep(3);
                             $("#step5").show();
@@ -470,7 +472,7 @@ function nextPublish(nowPublish) {
         url: "/publish/add/nextpublish",
         datatype: "json",
         success: function (data) {
-            location.href = "/publish/publishProcess.htm?id=" + data.responseContext;
+            location.href = "/publish/process.htm?id=" + data.responseContext;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
