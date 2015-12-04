@@ -6,7 +6,6 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishApp;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
@@ -65,9 +64,9 @@ public class PublishWarAction extends AbstractAction {
         for (NebulaPublishModule publishModule : publishModules) {
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
-            List<String> targes = new ArrayList<String>();
+            List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targets.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             String warFromBase = event.getPublishProductKey() + "/publish_war/";
@@ -77,7 +76,7 @@ public class PublishWarAction extends AbstractAction {
             int AppSuccessCount = 0;
             for (NebulaPublishApp app : appList) {
 
-                ResultInfoSet result = saltStackService.cpFileRemote(new SaltTarget(targes), warFromBase + app.getPublishAppName() + ".war", BaseWarDir + publishModule.getPublishModuleKey() + "/" + app.getPublishAppName() + ".war");
+                ResultInfoSet result = saltStackService.cpFileRemote(targets, warFromBase + app.getPublishAppName() + ".war", BaseWarDir + publishModule.getPublishModuleKey() + "/" + app.getPublishAppName() + ".war");
 
                 ResultInfo resultInfo = result.get(0);
                 Map<String, Object> results = resultInfo.getResults();
@@ -92,7 +91,7 @@ public class PublishWarAction extends AbstractAction {
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     successCount++;
                 }
-                if (successCount != targes.size()) {
+                if (successCount != targets.size()) {
                     return false;
                 }else{
                     AppSuccessCount++;
@@ -104,7 +103,7 @@ public class PublishWarAction extends AbstractAction {
                         PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + AppSuccessCount + ",  targes count:" + targes.size()
+                        "success count:" + AppSuccessCount + ",  targes count:" + targets.size()
                 );
                 return false;
             }

@@ -5,10 +5,9 @@
 package com.olymtech.nebula.core.salt;
 
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
+import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.suse.saltstack.netapi.datatypes.ScheduledJob;
-import com.suse.saltstack.netapi.datatypes.target.Target;
 import com.suse.saltstack.netapi.exception.SaltStackException;
-import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,63 +33,33 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
 
     @Override
-    public <T> ResultInfoSet cpFileRemote(Target<T> target, String from, String to) throws SaltStackException {
+    public <T> ResultInfoSet cpFileRemote(List<String> targets, String from, String to) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCpFile, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCpFile, args, null);
 
-        Map<String, Object> results = null;
-        ResultInfoSet jobResult = null;
-
-        long startTime = System.currentTimeMillis();   //获取开始时间
-
-        do {
-            jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
-            ResultInfo resultInfo = jobResult.get(0);
-            results = resultInfo.getResults();
-            long endTime = System.currentTimeMillis(); //获取结束时间
-            if ((endTime - startTime) / 1000 / 60 > 30) {
-                logger.error("cpFileRemote is waiting timeout");
-                break;
-            }
-
-        } while (results.size() == 0);
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
 
         return jobResult;
     }
 
     @Override
-    public <T> ResultInfoSet cpDirRemote(Target<T> target, String from, String to) throws SaltStackException {
+    public <T> ResultInfoSet cpDirRemote(List<String> targets, String from, String to) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         args.add(BaseDirPrefix + from);
         args.add(to);
 
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCpDir, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCpDir, args, null);
 
-        Map<String, Object> results = null;
-        ResultInfoSet jobResult = null;
-
-        long startTime = System.currentTimeMillis();   //获取开始时间
-
-        do {
-            jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
-            ResultInfo resultInfo = jobResult.get(0);
-            results = resultInfo.getResults();
-            long endTime = System.currentTimeMillis(); //获取结束时间
-            if ((endTime - startTime) / 1000 / 60 > 30) {
-                logger.error("cpDirRemote is waiting timeout");
-                break;
-            }
-
-        } while (results.size() == 0);
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
 
         return jobResult;
     }
 
     @Override
-    public <T> ResultInfoSet cpFileAndDir(Target<T> target, Map<String, String> fileKeyValue, Map<String, String> dirKeyValue) throws SaltStackException {
+    public <T> ResultInfoSet cpFileAndDir(List<String> targets, Map<String, String> fileKeyValue, Map<String, String> dirKeyValue) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
         int i = 0;
@@ -120,31 +89,16 @@ public class SaltStackServiceImpl implements ISaltStackService {
         logger.info("当前执行的命令:" + buffer.toString());
         args.add(buffer.toString());
 
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
 
-        Map<String, Object> results = null;
-        ResultInfoSet jobResult = null;
-
-        long startTime = System.currentTimeMillis();   //获取开始时间
-
-        do {
-            jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
-            ResultInfo resultInfo = jobResult.get(0);
-            results = resultInfo.getResults();
-            long endTime = System.currentTimeMillis(); //获取结束时间
-            if ((endTime - startTime) / 1000 / 60 > 30) {
-                logger.error("cpFileAndDir is waiting timeout");
-                break;
-            }
-
-        } while (results.size() == 0);
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
 
         return jobResult;
     }
 
 
     @Override
-    public <T> ResultInfoSet mkDir(Target<T> target, List<String> pathList, boolean parents) throws SaltStackException {
+    public <T> ResultInfoSet mkDir(List<String> targets, List<String> pathList, boolean parents) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
@@ -157,31 +111,31 @@ public class SaltStackServiceImpl implements ISaltStackService {
         }
 
         logger.info("当前执行的命令:" + paths.toString());
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
         return jobResult;
     }
 
     @Override
-    public <T> ResultInfoSet mkDir(Target<T> target, List<String> pathList) throws SaltStackException {
-        return this.mkDir(target, pathList, false);
+    public <T> ResultInfoSet mkDir(List<String> targets, List<String> pathList) throws SaltStackException {
+        return this.mkDir(targets, pathList, false);
     }
 
     @Override
-    public <T> ResultInfoSet mkDirWithParents(Target<T> target, List<String> pathList) throws SaltStackException {
-        return this.mkDir(target, pathList, true);
+    public <T> ResultInfoSet mkDirWithParents(List<String> targets, List<String> pathList) throws SaltStackException {
+        return this.mkDir(targets, pathList, true);
     }
 
     @Override
-    public <T> ResultInfoSet cmdRun(Target<T> target, List<Object> args, Map<String, Object> kwargs) throws SaltStackException {
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, kwargs);
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+    public <T> ResultInfoSet cmdRun(List<String> targets, List<Object> args, Map<String, Object> kwargs) throws SaltStackException {
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, kwargs);
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
         return jobResult;
     }
 
     @Override
-    public <T> ResultInfoSet doCommand(Target<T> target, List<String> pathList) throws SaltStackException {
+    public <T> ResultInfoSet doCommand(List<String> targets, List<String> pathList) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
@@ -191,15 +145,16 @@ public class SaltStackServiceImpl implements ISaltStackService {
         logger.info("当前执行的命令:" + paths.toString());
         args.add(paths);
 
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
+
         return jobResult;
     }
 
 
     @Override
-    public <T> ResultInfoSet deleteFile(Target<T> target, List<String> pathList, boolean recursion) throws SaltStackException {
+    public <T> ResultInfoSet deleteFile(List<String> targets, List<String> pathList, boolean recursion) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer paths = new StringBuffer();
         for (String path : pathList) {
@@ -213,15 +168,15 @@ public class SaltStackServiceImpl implements ISaltStackService {
         logger.info("当前执行的命令:" + paths.toString());
 
 
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
 
         return jobResult;
     }
 
     @Override
-    public <T> ResultInfoSet makeLn(Target<T> target, HashMap<String, String> keyValue) throws SaltStackException {
+    public <T> ResultInfoSet makeLn(List<String> targets, HashMap<String, String> keyValue) throws SaltStackException {
         List<Object> args = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
         int i = 0;
@@ -239,9 +194,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
 
         args.add(buffer.toString());
 
-        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(target, CommandCmdRun, args, null);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
 
-        ResultInfoSet jobResult = SaltClientFactory.getSaltClient().getJobResult(job.getJid());
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
 
         return jobResult;
     }
