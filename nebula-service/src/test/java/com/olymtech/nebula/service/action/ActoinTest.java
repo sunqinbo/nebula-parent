@@ -42,9 +42,9 @@ public class ActoinTest {
         try {
             //执行拦截器
             NebulaPublishEvent event=new NebulaPublishEvent();
-            event.setPublishProductName("ywpt");
+            event.setPublishProductName("cargo");
             event.setId(9);
-            event.setPublishEnv("test");
+            event.setPublishEnv("stage");
             event.setPublishProductKey("test.ywpt.2015.11.11");
 
 
@@ -52,11 +52,14 @@ public class ActoinTest {
             NebulaPublishModule publishModule = new NebulaPublishModule();
 
             List<NebulaPublishHost> hosts = new ArrayList<>();
-            hosts.add(new NebulaPublishHost());
-            hosts.add(new NebulaPublishHost());
+            NebulaPublishHost publishHost = new NebulaPublishHost();
+            publishHost.setId(12);
+            hosts.add(publishHost);
+            publishHost.setId(13);
+            hosts.add(publishHost);
             publishModule.setPublishHosts(hosts);
             publishModules.add(publishModule);
-
+            event.setPublishModules(publishModules);
 
 
             dispatcher.doDispatch(event);
