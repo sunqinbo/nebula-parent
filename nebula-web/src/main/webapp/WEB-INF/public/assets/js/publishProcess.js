@@ -202,6 +202,7 @@ function Initialization() {
             eventId: $("#eventId").val()
         },
         url: "/publish/publishProcessStep",
+        type: "post",
         datetype: "json",
         success: function (data) {
             //机器信息列表相关
@@ -233,32 +234,6 @@ function Initialization() {
             actionState = data.responseContext.actionState + "";
             var lastGroup=data.responseContext.lastGroup;
             btnUnclick();
-            //发布完成，不管成功或失败
-            //if(actionGroup>=5){
-            //    //if(actionGroup==5) {
-            //    //    var btn_text;
-            //    //    if ($("#publishEnv").html() == "test") {
-            //    //        btn_text = "准生产";
-            //    //    }
-            //    //    if ($("#publishEnv").html() == "stage") {
-            //    //        btn_text = "生产";
-            //    //    }
-            //    //    $("#nextPublish").text("进入" + btn_text).show();
-            //    //    $("#nextPublish").click(function () {
-            //    //        nextPublish(btn_text);
-            //    //    });
-            //    //}
-            //    //轮询过慢
-            //    if(lastGroup==4) {
-            //        $("#processbar4").setStep(4);
-            //        $("#step4").show();
-            //    }
-            //    if(lastGroup==5) {
-            //        $("#processbar5").setStep(3);
-            //        $("#step5").show();
-            //    }
-            //    //return;
-            //}
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
                 $("#loading-status").show();
             } else {
@@ -270,6 +245,33 @@ function Initialization() {
             switch (actionGroup) {
                 case 1:
                     lastStep = 4;
+                    if(whichStep>2&&$("#moduleAndApps tr").length==0){
+                        $.ajax({
+                            data:{eventId: $("#eventId").val()},
+                            url:"/publish/list/moduleAndApps",
+                            datatype:"json",
+                            type: "post",
+                            success:function(data){
+                                var moduletbString=""
+                                for(var i= 0,len=data.length;i<len;i++){
+                                    var module=data[i];
+                                    moduletbString+="<tr><td>"+module.publishModuleName+"</td>"
+                                    +"<td>"+module.publishModuleKey+"</td><td>";
+                                    for(var j= 0,len1=module.publishApps.length;j<len1;j++){
+                                        var app=module.publishApps[j];
+                                        moduletbString+=app.publishAppName+";";
+                                    }
+                                    moduletbString+="</td></tr>"
+                                }
+                                $("#moduleAndApps").html("");
+                                $("#moduleAndApps").html(moduletbString);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                var msg="很抱歉，获取发布模块信息失败，原因" + errorThrown
+                                nebula.common.alert.danger(msg,1000);
+                            }
+                        })
+                    }
                     break;
                 case 2:
                     lastStep = 5;
@@ -377,36 +379,6 @@ function Initialization() {
                         $("#processbar" + whichshow).setStep(whichStep);
                         return;
                 }
-                //if(actionGroup>=4){
-                //    whichStep=whichStep+1;
-                //}
-                //else {
-                //    actionGroup = actionGroup - 1 + 2;
-                //    if(actionGroup==3){
-                //        $("#restartPublish").hide();
-                //    }
-                //    else if (actionGroup == 4) {
-                //        $("#btn_ConfirmResult").attr('disabled', false);
-                //        $("#btn_ConfirmResult").addClass("btn-info");
-                //        $("#btn4").attr('disabled', false);
-                //        $("#btn4").addClass("btn-info");
-                //        $("#step" + (3)).hide();
-                //    }
-                //    else {
-                //        for (var i = 1; i < 4; i++) {
-                //            if (i == actionGroup) {
-                //                $("#btn" + i).attr('disabled', false);
-                //                $("#btn" + i).addClass("btn-info");
-                //                $("#step" + (i - 1)).hide();
-                //            }
-                //            else {
-                //                $("#btn" + i).attr('disabled', true);
-                //                $("#btn4").removeClass("btn-info");
-                //            }
-                //        }
-                //    }
-                //    return;
-                //}
             }
             //动作为ect开始时
             if (actionGroup == 1 && whichStep == 4 && (actionState == "" || actionState == "null")) {

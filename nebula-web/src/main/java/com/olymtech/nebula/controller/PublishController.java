@@ -22,10 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -561,5 +559,16 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Object getPublishStatus(NebulaPublishEvent nebulaPublishEvent) throws Exception{
         return publishEventService.isPUBLISHING(nebulaPublishEvent);
+    }
+
+    /**
+     * 获取模块信息
+     */
+    @RequestMapping(value="/list/moduleAndApps",method={RequestMethod.POST})
+    @ResponseBody
+    public  Object getmoduleAndApps(Integer eventId){
+        List<NebulaPublishModule> publishModules=new ArrayList<>();
+        publishModules = publishModuleService.selectByEventId(eventId);
+        return publishModules;
     }
 }

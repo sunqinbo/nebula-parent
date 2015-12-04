@@ -106,6 +106,12 @@
                             ##                                    <label>$!{Event.publishDatetime}</label>
                             ##                                </td>
                             ##                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <label>提交SVN地址：</label>
+                                    <label>$!{Event.publishSvn}</label>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
