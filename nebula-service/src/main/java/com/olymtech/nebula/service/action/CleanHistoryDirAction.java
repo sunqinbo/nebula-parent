@@ -6,7 +6,6 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -57,16 +56,16 @@ public class CleanHistoryDirAction extends AbstractAction {
         for (NebulaPublishModule publishModule : publishModules) {
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
-            List<String> targes = new ArrayList<String>();
+            List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targets.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             List<String> pathList = new ArrayList<String>();
             pathList.add(BaseWarDir + publishBaseService.checkoutHistoryDirKey(event, publishModule));
             pathList.add(BaseEtcDir + publishBaseService.checkoutHistoryDirKey(event, publishModule));
 
-            ResultInfoSet result = saltStackService.deleteFile(new SaltTarget(targes), pathList, true);
+            ResultInfoSet result = saltStackService.deleteFile(targets, pathList, true);
 
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
@@ -87,13 +86,13 @@ public class CleanHistoryDirAction extends AbstractAction {
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }
             }
-            if (successCount != targes.size()) {
+            if (successCount != targets.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
                         PublishAction.CLEAN_HISTORY_DIR,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targes.size()
+                        "success count:" + successCount + ",  targes count:" + targets.size()
                 );
                 return false;
             }

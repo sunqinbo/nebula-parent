@@ -6,7 +6,6 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -59,9 +58,9 @@ public class CpWarAction extends AbstractAction {
         for (NebulaPublishModule publishModule : publishModules) {
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
-            List<String> targes = new ArrayList<String>();
+            List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targets.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             String oldModule = publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());
@@ -76,7 +75,7 @@ public class CpWarAction extends AbstractAction {
             Map<String, String> dirMap = new HashMap<String, String>();
             dirMap.put(BaseWarDir + oldModule + "/ROOT/", BaseWarDir + publishModule.getPublishModuleKey());
 
-            ResultInfoSet result = saltStackService.cpFileAndDir(new SaltTarget(targes), fileMap, dirMap);
+            ResultInfoSet result = saltStackService.cpFileAndDir(targets, fileMap, dirMap);
 
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
@@ -97,13 +96,13 @@ public class CpWarAction extends AbstractAction {
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }
             }
-            if (successCount != targes.size()) {
+            if (successCount != targets.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
                         PublishAction.COPY_PUBLISH_OLD_WAR,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targes.size());
+                        "success count:" + successCount + ",  targes count:" + targets.size());
                 return false;
             }
         }

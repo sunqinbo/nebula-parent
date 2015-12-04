@@ -4,14 +4,20 @@
  */
 package com.olymtech.nebula.core.salt.core;
 
+import com.olymtech.nebula.core.salt.SaltStackServiceImpl;
 import com.suse.saltstack.netapi.client.SaltStackClient;
 import com.suse.saltstack.netapi.datatypes.Token;
 import com.suse.saltstack.netapi.exception.SaltStackException;
+import com.suse.saltstack.netapi.results.ResultInfo;
+import com.suse.saltstack.netapi.results.ResultInfoSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
@@ -22,6 +28,8 @@ import static com.suse.saltstack.netapi.AuthModule.PAM;
  */
 public class SaltClientFactory {
 
+    private static final Logger logger = LoggerFactory.getLogger(SaltStackServiceImpl.class);
+
     // CONSTANT
     private static final String RESOURCE_SALT_PROPERTIES = "/nebula.properties";
 
@@ -30,6 +38,8 @@ public class SaltClientFactory {
     protected static final String PORT = "port";
     protected static final String USERNAME = "username";
     protected static final String PASSWORD = "password";
+
+    protected static final String TIMEOUT = "timeout";
 
     private static SaltStackClient client = null;
     private static Token token = null;
@@ -103,6 +113,37 @@ public class SaltClientFactory {
 
         return client;
 
+    }
+
+    public static ResultInfoSet getResult(String jobId,int targetsCount) throws SaltStackException {
+        Map<String, Object> results = null;
+        ResultInfoSet jobResult = null;
+
+        int time = 30;
+        if (conf.get(TIMEOUT)!=null){
+            String timeStr = conf.get(TIMEOUT).toString();
+            try {
+                time = Integer.getInteger(timeStr);
+            }catch (Exception e){
+                //do nothing but the default timeout is 30s
+            }
+        }
+
+        long startTime = System.currentTimeMillis();   //获取开始时间
+
+        do {
+            jobResult = SaltClientFactory.getSaltClient().getJobResult(jobId);
+            ResultInfo resultInfo = jobResult.get(0);
+            results = resultInfo.getResults();
+            long endTime = System.currentTimeMillis(); //获取结束时间
+            if ((endTime - startTime) / 1000 > time) {
+                logger.error("cpFileAndDir is waiting timeout");
+                break;
+            }
+
+        } while (results.size() != targetsCount);
+
+        return jobResult;
     }
 
 }
