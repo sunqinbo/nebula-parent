@@ -5,9 +5,7 @@
 package com.olymtech.nebula.core.salt;
 
 import com.olymtech.nebula.core.salt.core.SaltClientFactory;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.suse.saltstack.netapi.client.SaltStackClient;
-import com.suse.saltstack.netapi.datatypes.target.Glob;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfo;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
@@ -21,6 +19,8 @@ import java.util.*;
  */
 public class SaltTest {
     private SaltStackServiceImpl service;
+
+    List<String> targets = new ArrayList<String>();
 
     @Before
     public void init() throws Exception {
@@ -48,7 +48,7 @@ public class SaltTest {
         map.put("/home/saas/*.war", "/root");
         map.put("/home/saas/b", "/root/b");
 
-        ResultInfoSet resultInfos = service.cpFileAndDir(new Glob(), map, null);
+        ResultInfoSet resultInfos = service.cpFileAndDir(targets, map, null);
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
@@ -63,7 +63,7 @@ public class SaltTest {
         map.put("/home/saas/test", "/root/test");
         map.put(" /home/saas/test2", "/root/test");
 
-        ResultInfoSet resultInfos = service.cpFileAndDir(new Glob(), null, map);
+        ResultInfoSet resultInfos = service.cpFileAndDir(targets, null, map);
 
         int size = resultInfos.getInfoList().size();
 
@@ -83,7 +83,7 @@ public class SaltTest {
 
         Map<String, Object> kwargs = new LinkedHashMap<>();
 
-        ResultInfoSet resultInfos = service.cmdRun(new Glob(), args1, kwargs);
+        ResultInfoSet resultInfos = service.cmdRun(targets, args1, kwargs);
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
@@ -98,11 +98,10 @@ public class SaltTest {
         strings.add("/home/saas/tomcat/public_wars/test.yjt2014.yjt2014_m.20151111.132208");
         strings.add("/home/saas/tomcat/public_etcs/test.yjt2014.yjt2014_m.20151111.132208");
 
-        List<String> targes = new ArrayList<String>();
-        targes.add("minion-tiny");
+        targets.add("minion-tiny");
 
         //ResultInfoSet infoList = service.mkDir(new MinionList(targes), strings, true);
-        ResultInfoSet infoList = service.mkDir(new SaltTarget(targes), strings, true);
+        ResultInfoSet infoList = service.mkDir(targets, strings, true);
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
             System.out.println(info.getMinions());
@@ -118,7 +117,7 @@ public class SaltTest {
 
         Map<String, Object> kwargs = new LinkedHashMap<>();
 
-        ResultInfoSet resultInfos = service.cmdRun(new Glob(), args1, kwargs);
+        ResultInfoSet resultInfos = service.cmdRun(targets, args1, kwargs);
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
@@ -134,7 +133,7 @@ public class SaltTest {
 
         Map<String, Object> kwargs = new LinkedHashMap<>();
 
-        ResultInfoSet resultInfos = service.cmdRun(new Glob(), args1, kwargs);
+        ResultInfoSet resultInfos = service.cmdRun(targets, args1, kwargs);
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
@@ -145,7 +144,7 @@ public class SaltTest {
 
     @Test
     public void cpFileRemote() throws SaltStackException {
-        ResultInfoSet resultInfos = service.cpFileRemote(new Glob(), "a.war", "/home/saas/webapps/a.war");
+        ResultInfoSet resultInfos = service.cpFileRemote(targets, "a.war", "/home/saas/webapps/a.war");
         List<ResultInfo> infoList = resultInfos.getInfoList();
         for (ResultInfo info : infoList) {
             System.out.println(info.getResults());
