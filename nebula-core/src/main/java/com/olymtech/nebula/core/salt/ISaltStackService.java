@@ -27,7 +27,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpFileRemote(final Target<T> target, String from, String to) throws SaltStackException;
+    public <T> ResultInfoSet cpFileRemote(final List<String> targets, String from, String to) throws SaltStackException;
 
     /**
      * 远程拷贝文件夹
@@ -38,7 +38,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpDirRemote(final Target<T> target, String from, String to) throws SaltStackException;
+    public <T> ResultInfoSet cpDirRemote(final List<String> targets, String from, String to) throws SaltStackException;
 
     /**
      * 文件拷贝接口
@@ -49,7 +49,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cpFileAndDir(Target<T> target, Map<String, String> fileKeyValue, Map<String, String> dirKeyValue) throws SaltStackException;
+    public <T> ResultInfoSet cpFileAndDir(List<String> targets, Map<String, String> fileKeyValue, Map<String, String> dirKeyValue) throws SaltStackException;
 
     /**
      * 创建文件夹并选择自动建立好那些尚不存在的目录
@@ -60,7 +60,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet mkDir(final Target<T> target, List<String> pathList, boolean parents) throws SaltStackException;
+    public <T> ResultInfoSet mkDir(final List<String> targets, List<String> pathList, boolean parents) throws SaltStackException;
 
     /**
      * 创建文件夹
@@ -70,7 +70,7 @@ public interface ISaltStackService {
      * @param <T>
      * @return
      */
-    public <T> ResultInfoSet mkDir(final Target<T> target, List<String> pathList) throws SaltStackException;
+    public <T> ResultInfoSet mkDir(final List<String> targets, List<String> pathList) throws SaltStackException;
 
     /**
      * 创建文件夹并自动建立好那些尚不存在的目录
@@ -80,7 +80,7 @@ public interface ISaltStackService {
      * @param <T>
      * @return
      */
-    public <T> ResultInfoSet mkDirWithParents(final Target<T> target, List<String> pathList) throws SaltStackException;
+    public <T> ResultInfoSet mkDirWithParents(final List<String> targets, List<String> pathList) throws SaltStackException;
 
     /**
      * 远程运行cmd命令
@@ -91,7 +91,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet cmdRun(final Target<T> target, List<Object> args, Map<String, Object> kwargs) throws SaltStackException;
+    public <T> ResultInfoSet cmdRun(final List<String> targets, List<Object> args, Map<String, Object> kwargs) throws SaltStackException;
 
     /**
      * 远程运行cmd命令
@@ -101,7 +101,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet doCommand(final Target<T> target, List<String> pathList) throws SaltStackException;
+    public <T> ResultInfoSet doCommand(final List<String> targets, List<String> pathList) throws SaltStackException;
 
     /**
      * 删除文件或文件
@@ -112,7 +112,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet deleteFile(final Target<T> target,List<String> pathList, boolean recursion) throws SaltStackException;
+    public <T> ResultInfoSet deleteFile(final List<String> targets,List<String> pathList, boolean recursion) throws SaltStackException;
 
     /**
      * 创建软连接
@@ -122,7 +122,7 @@ public interface ISaltStackService {
      * @return
      * @throws SaltStackException
      */
-    public <T> ResultInfoSet makeLn(final Target<T> target,HashMap<String, String> keyValue) throws SaltStackException;
+    public <T> ResultInfoSet makeLn(final List<String> targets,HashMap<String, String> keyValue) throws SaltStackException;
 
 
 }

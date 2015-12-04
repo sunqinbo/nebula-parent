@@ -6,7 +6,6 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -64,14 +63,14 @@ public class PublishEtcAction extends AbstractAction {
         for (NebulaPublishModule publishModule : publishModules) {
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
-            List<String> targes = new ArrayList<String>();
+            List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targets.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             String etcFrom = event.getPublishProductKey() + "/src_svn/etc";
 
-            ResultInfoSet result = saltStackService.cpDirRemote(new SaltTarget(targes), etcFrom, BaseEtcDir + publishModule.getPublishModuleKey());
+            ResultInfoSet result = saltStackService.cpDirRemote(targets, etcFrom, BaseEtcDir + publishModule.getPublishModuleKey());
 
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
@@ -86,13 +85,13 @@ public class PublishEtcAction extends AbstractAction {
                 publishHostService.updatePublishHost(nebulaPublishHost);
                 successCount++;
             }
-            if (successCount != targes.size()) {
+            if (successCount != targets.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
                         PublishAction.PUBLISH_NEW_ETC,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targes.size()
+                        "success count:" + successCount + ",  targes count:" + targets.size()
                 );
                 return false;
             }

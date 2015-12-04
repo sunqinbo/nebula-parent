@@ -6,7 +6,6 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -61,15 +60,16 @@ public class ChangeFailLnAction extends AbstractAction {
         for (NebulaPublishModule publishModule : publishModules) {
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
-            List<String> targes = new ArrayList<String>();
+            List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targets.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
             lnMap.put(BaseWarDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()), WarLink);
             lnMap.put(BaseEtcDir + publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName()) + "/etc", EtcLink);
-            ResultInfoSet result = saltStackService.makeLn(new SaltTarget(targes), lnMap);
+
+            ResultInfoSet result = saltStackService.makeLn(targets, lnMap);
 
             ResultInfo resultInfo = result.get(0);
             Map<String, Object> results = resultInfo.getResults();
@@ -91,19 +91,19 @@ public class ChangeFailLnAction extends AbstractAction {
                 }
             }
 
-            if (successCount!= targes.size()){
+            if (successCount!= targets.size()){
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
                         PublishAction.CHANGE_LN,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targes.size()
+                        "success count:" + successCount + ",  targets count:" + targets.size()
                 );
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), true, "all models and sub targes success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), true, "all models and sub targets success");
         return true;
     }
 

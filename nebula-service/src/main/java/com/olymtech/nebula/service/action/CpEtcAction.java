@@ -6,7 +6,6 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
-import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -59,9 +58,9 @@ public class CpEtcAction extends AbstractAction {
         for (NebulaPublishModule publishModule : publishModules) {
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
-            List<String> targes = new ArrayList<String>();
+            List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targes.add(nebulaPublishHost.getPassPublishHostIp());
+                targets.add(nebulaPublishHost.getPassPublishHostIp());
             }
 
             String oldModule = publishBaseService.selectLastModuleKeyByPublishEvent(event, publishModule.getPublishModuleName());
@@ -74,7 +73,7 @@ public class CpEtcAction extends AbstractAction {
             HashMap<String, String> map = new HashMap<String, String>();
             map.put(BaseEtcDir + oldModule + "/*", BaseEtcDir + publishModule.getPublishModuleKey());
 
-            ResultInfoSet result = saltStackService.cpFileAndDir(new SaltTarget(targes), null, map);
+            ResultInfoSet result = saltStackService.cpFileAndDir(targets, null, map);
 
 
 
@@ -97,13 +96,13 @@ public class CpEtcAction extends AbstractAction {
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }
             }
-            if (successCount != targes.size()) {
+            if (successCount != targets.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
                         PublishAction.COPY_PUBLISH_OLD_ETC,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targes.size()
+                        "success count:" + successCount + ",  targes count:" + targets.size()
                 );
                 return false;
             }
