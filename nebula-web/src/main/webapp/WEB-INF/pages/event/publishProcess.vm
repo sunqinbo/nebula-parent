@@ -158,10 +158,10 @@
                         <hr/>
                         <div id="processbar1" class="ystep4"></div>
                         <div id="etc_btns" style="display: none;margin-top: 30px">
-                            #if($shiro.hasPermission("publishevnt:updateEtc"))
+                            #if($shiro.hasPermission("publishevnt:updateEtc")||$!{Event.publishEnv}=="test")
                                 <button type='button' id='etc_btn' class='btn btn-info'>编辑etc</button>
                             #end
-                            #if($shiro.hasPermission("publishevnt:updateEtcEnd"))
+                            #if($shiro.hasPermission("publishevnt:updateEtcEnd")||$!{Event.publishEnv}=="test")
                                 <button type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info'>编辑完成</button>
                             #end
                         </div>
