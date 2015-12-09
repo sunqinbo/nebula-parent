@@ -131,7 +131,8 @@ function listBtn(pageNum){
         if($(this).text()=="编辑") {
             $(this).click(function() {
                 var id = $(this).parent().parent().parent().children().eq(0);
-                window.open('/role/update.htm?id=' + id.text());
+                //window.open('/role/update.htm?id=' + id.text());
+                window.location.href='/role/update.htm?id=' + id.text();
             })
         }
     });

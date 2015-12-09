@@ -2,6 +2,7 @@ $(function(){
     getjtb(1);
     $("#create_btn").click(function(){
         location.href="/permission/add.htm";
+
     });
 })
 
@@ -140,7 +141,8 @@ function listBtn(pageNum){
         if($(this).text()=="编辑") {
             $(this).click(function() {
                 var id = $(this).parent().parent().parent().children().eq(0);
-                window.open('/permission/update.htm?id=' + id.text());
+                //window.open('/permission/update.htm?id=' + id.text());
+                window.location.href='/permission/update.htm?id=' + id.text();
             })
         }
     });

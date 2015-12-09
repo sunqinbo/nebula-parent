@@ -180,6 +180,9 @@ $(document).ready(function(){
         $("#btn4").removeClass("btn-info");
         $("#btn_ConfirmResult").attr('disabled', true);
         $("#btn_ConfirmResult").removeClass("btn-info");
+        $("#restartTomcat_btn").hide();
+        $("#restartPublish").hide();
+        $("#cancelPublish").hide();
         $("#step4").show();
     })
     $("#btn_ConfirmResult").click(function () {
@@ -188,6 +191,9 @@ $(document).ready(function(){
         $("#btn_ConfirmResult").removeClass("btn-info");
         $("#btn4").attr('disabled', true);
         $("#btn4").removeClass("btn-info");
+        $("#restartTomcat_btn").hide();
+        $("#restartPublish").hide();
+        $("#cancelPublish").hide();
         $("#step5").show();
     })
 
@@ -316,7 +322,9 @@ function Initialization() {
                 actionGroup = actionGroup - 1 + 2;
                 switch (actionGroup) {
                     case 3:
-                        $("#restartPublish").hide();
+                        //$("#restartPublish").hide();
+                        $("#restartPublish").show();
+                        $("#cancelPublish").show();
                         for (var i = 1; i < 4; i++) {
                             if (i == actionGroup) {
                                 $("#btn" + i).attr('disabled', false);
@@ -336,6 +344,7 @@ function Initialization() {
                         $("#btn4").attr('disabled', false);
                         $("#btn4").addClass("btn-info");
                         $("#step" + (3)).hide();
+                        $("#restartTomcat_btn").show();
                         return;
                     case 7: if(lastGroup==5) {
                         var btn_text;
@@ -345,6 +354,7 @@ function Initialization() {
                         if ($("#publishEnv").html() == "stage") {
                             btn_text = "生产";
                         }
+                        $("#backPublish").show();
                         $("#nextPublish").text("进入" + btn_text).show();
                         if(lastGroup==5) {
                             $("#processbar5").setStep(3);
@@ -358,6 +368,8 @@ function Initialization() {
                         return;
                     default :
                         if (actionGroup < 5) {
+                            $("#restartPublish").show();
+                            $("#cancelPublish").show();
                             for (var i = 1; i < 4; i++) {
                                 if (i == actionGroup) {
                                     $("#btn" + i).attr('disabled', false);
@@ -375,7 +387,8 @@ function Initialization() {
                         var whichshow = actionGroup - 1 + "";
                         $("#step" + whichshow).show();
                         $("#btn4").removeClass("btn-info");
-                        $("#btn5").removeClass("btn-info");
+                        $("#btn_ConfirmResult").removeClass("btn-info");
+                        $("#restartTomcat_btn").hide();
                         $("#processbar" + whichshow).setStep(whichStep);
                         return;
                 }
@@ -384,6 +397,7 @@ function Initialization() {
             if (actionGroup == 1 && whichStep == 4 && (actionState == "" || actionState == "null")) {
                 //添加编辑按钮
                 $("#restartPublish").show();
+                $("#cancelPublish").show();
 
                 //var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
                 //    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
@@ -391,7 +405,8 @@ function Initialization() {
                 $("#etc_btns").show();
             }
             else {
-                $("#restartPublish").hide()
+                $("#restartPublish").hide();
+                $("#cancelPublish").hide();
             }
             //btnUnclick();
             //控制进度条显示
