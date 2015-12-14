@@ -19,10 +19,6 @@
             <div class="col-md-4">
                 <div class="card">
                     <div  Style="min-height: 400px">
-##                        <button id="file_btn" type="button" class="btn btn-info">打开etc</button>
-##                        <form class="form-horizontal">
-##                            <input id="path" class="form-control" style="width: 230px" type="text" placeholder="请输入您的文件地址">
-##                        </form>
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="box box-success">
@@ -41,17 +37,19 @@
             </div>
 
             <div class="col-md-8">
-                <div class="card">
-                    <!--放文本 -->
-                    <div style="height: 400px">
-                        <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
-                        </div>
-                        <div id="btnputer" style="text-align: center">
+                <div style="position: fixed;width: 50%">
+                    <div class="card">
+                        <!--放文本 -->
+                        <div style="height: 400px">
+                            <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
+                            </div>
+                            <div id="btnputer" style="text-align: center">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div style="text-align: center">
-                    <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
+                    <div style="text-align: center">
+                        <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
+                    </div>
                 </div>
             </div>
         </div>

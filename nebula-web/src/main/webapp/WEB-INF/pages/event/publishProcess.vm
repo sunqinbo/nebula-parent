@@ -80,7 +80,7 @@
                             ##  </td>
                                 <td>
                                     <label>发布人：</label>
-                                    <label>$!{Event.publishUser.username}</label>
+                                    <label>$!{Event.publishUser.nickname}</label>
                                 </td>
                                 <td>
                                     <label>发布进度：</label>
@@ -91,21 +91,20 @@
                                     <label> $!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
                                 </td>
                             </tr>
-                            ##                            <tr>
-                            ####                                <td>
-                            ####                                    <label>发布批次：</label>
-                            ####                                    <label>当前1/分一批</label>
-                            ####                                </td>
-                            ##                                <td>
-                            ##                                    <label>发布进度：</label>
-                            ####                                    <label>完成0/总数1</label>
-                            ##                                    <label></label>
-                            ##                                </td>
-                            ##                                <td>
-                            ##                                    <label>发布时间：</label>
-                            ##                                    <label>$!{Event.publishDatetime}</label>
-                            ##                                </td>
-                            ##                            </tr>
+                            <tr>
+                                <td>
+                                    <label>提交人：</label>
+                                    <label>$!{Event.submitUser.nickname}</label>
+                                </td>
+                                <td>
+                                    <label>提交时间：</label>
+                                    <label>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</label>
+                                </td>
+                                <td colspan="2">
+                                    <label>提交SVN地址：</label>
+                                    <label>$!{Event.publishSvn}</label>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -138,8 +137,17 @@
                             #if($shiro.hasPermission("publishevnt:publishFailEnd"))
                                 <button type="button" id="btn4" class="btn btn-default" onclick="nebula.publish.process.publishFailEnd()">我要回滚</button>
                             #end
+                            #if($shiro.hasPermission("publishevnt:publishReal"))
+                                <button type="button" style="display: none" id="restartTomcat_btn" class="btn btn-danger" >重启tomcat</button>
+                            #end
                             #if($shiro.hasPermission("publishevnt:retryPublishRollback"))
                                 <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
+                            #end
+                            #if($shiro.hasPermission("publishevnt:publishReal"))
+                                <button type="button" style="display: none" id="cancelPublish" class="btn btn-danger">取消发布</button>
+                            #end
+                            #if($shiro.hasPermission("publishevnt:publishReal"))
+                                <button type="button" style="display: none" id="backPublish" class="btn btn-danger">版本回退</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:addnextpublish"))
                                 <button type="button" style="display: none" id="nextPublish" class="btn btn-info"></button>
@@ -152,10 +160,10 @@
                         <hr/>
                         <div id="processbar1" class="ystep4"></div>
                         <div id="etc_btns" style="display: none;margin-top: 30px">
-                            #if($shiro.hasPermission("publishevnt:updateEtc"))
+                            #if($shiro.hasPermission("publishevnt:updateEtc")||$!{Event.publishEnv}=="test")
                                 <button type='button' id='etc_btn' class='btn btn-info'>编辑etc</button>
                             #end
-                            #if($shiro.hasPermission("publishevnt:updateEtcEnd"))
+                            #if($shiro.hasPermission("publishevnt:updateEtcEnd")||$!{Event.publishEnv}=="test")
                                 <button type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info'>编辑完成</button>
                             #end
                         </div>
