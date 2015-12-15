@@ -33,4 +33,10 @@ public interface IPublishBaseService {
      */
     public String checkoutHistoryDirKey(NebulaPublishEvent event, NebulaPublishModule module);
 
+    /**
+     * 清楚基线
+     * @param eventId
+     */
+    public void cleanBaseByEventId(Integer eventId);
+
 }

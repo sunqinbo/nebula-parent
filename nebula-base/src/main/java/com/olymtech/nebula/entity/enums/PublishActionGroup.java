@@ -14,7 +14,8 @@ public enum PublishActionGroup {
     SUCCESS_END("发布成功收尾"),
     FAIL_END("发布失败收尾"),
     CLEAN_END("清理发布目录"),
-    RESTART_TOMCAT("重启tomcat");
+    RESTART_TOMCAT("重启tomcat"),
+    CANCEL_END("取消发布");
 
 
     private String description;

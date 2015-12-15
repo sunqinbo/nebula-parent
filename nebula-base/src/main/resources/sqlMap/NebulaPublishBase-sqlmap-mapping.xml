@@ -71,6 +71,10 @@
         delete from nebula_publish_base
         where id = #{id,jdbcType=INTEGER}
     </delete>
+    <delete id="Nebula-NebulaPublishBaseDao-Delete-By-EventId" parameterType="java.lang.Integer">
+        delete from nebula_publish_base
+        where publish_event_id = #{publishEventId,jdbcType=INTEGER}
+    </delete>
     <insert id="Nebula-NebulaPublishBaseDao-Insert" parameterType="NebulaPublishBase">
         insert into nebula_publish_base (
         id,
@@ -162,4 +166,6 @@
         publish_module_key = #{publishModuleKey,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+
 </mapper>

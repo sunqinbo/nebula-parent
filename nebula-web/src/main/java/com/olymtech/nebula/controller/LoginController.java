@@ -3,6 +3,7 @@ package com.olymtech.nebula.controller;
 import com.olymtech.nebula.entity.Callback;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
@@ -30,7 +31,9 @@ public class LoginController {
             error = "用户名/密码错误";
         }else if (AuthenticationException.class.getName().equals(exceptionClassName)) {
         	error = "用户名/密码错误";
-		} else if(exceptionClassName != null) {
+		} else if(ExcessiveAttemptsException.class.getName().equals(exceptionClassName)){
+            error = "请求次数过多，用户被锁定";
+        }else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
         model.addAttribute("error", error);

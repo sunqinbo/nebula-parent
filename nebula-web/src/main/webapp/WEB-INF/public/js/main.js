@@ -75,6 +75,9 @@ nebula.common.transform.publishStatus = function(publishStatus){
         case "ROLLBACK":
             result = "已回滚";
             break;
+        case "CANCEL":
+            result = "已取消";
+            break;
         default:
             result = "";
     }
