@@ -199,7 +199,7 @@ $(document).ready(function(){
         $("#cancelPublish").hide();
         $("#step4").show();
         $("#step6").hide();
-    })
+    });
     $("#btn_ConfirmResult").click(function () {
         $("#loading-status").show();
         $("#btn_ConfirmResult").attr('disabled', true);
@@ -211,7 +211,7 @@ $(document).ready(function(){
         $("#cancelPublish").hide();
         $("#step5").show();
         $("#step6").hide();
-    })
+    });
     $("#restartTomcat_btn").click(function () {
         $("#loading-status").show();
         $("#restartTomcat_btn").attr('disabled', true);
@@ -221,6 +221,15 @@ $(document).ready(function(){
         $("#btn_ConfirmResult").removeClass("btn-info");
         $("#btn4").attr('disabled', true);
         $("#btn4").removeClass("btn-info");
+    });
+    $("#backPublish").click(function(){
+        $("#loading-status").show();
+        $("#restartTomcat_btn").hide();
+        $("#restartPublish").hide();
+        $("#cancelPublish").hide();
+        $("#step4").show();
+        $("#step6").hide();
+        $("#nextPublish").hide();
     });
 
 })
@@ -377,7 +386,8 @@ function Initialization() {
                         $("#restartTomcat_btn").show();
                         $("#restartTomcat_btn").attr('disabled', false);
                         return;
-                    case 7: if(lastGroup==5) {
+                    case 7:$("#restartTomcat_btn").attr('disabled', false).show();
+                        if(lastGroup==5) {
                         var btn_text;
                         if ($("#publishEnv").html() == "test") {
                             btn_text = "准生产";
@@ -387,10 +397,8 @@ function Initialization() {
                         }
                         $("#backPublish").show();
                         $("#nextPublish").text("进入" + btn_text).show();
-                        if(lastGroup==5) {
-                            $("#processbar5").setStep(3);
-                            $("#step5").show();
-                        }
+                        $("#processbar5").setStep(3);
+                        $("#step5").show();
                     }
                         if(lastGroup==4){
                             $("#processbar4").setStep(4);
@@ -399,7 +407,8 @@ function Initialization() {
                         return;
                     case 8: $("#step6").show();
                         $("#restartTomcat_btn").show();
-                        $("#restartTomcat_btn").removeClass("btn-danger");
+                        $("#restartTomcat_btn").attr('disabled', false);
+                        $("#restartTomcat_btn").addClass("btn-danger");
                         $("#processbar6").setStep(3);
                         $("#btn_ConfirmResult").attr('disabled', false);
                         $("#btn_ConfirmResult").addClass("btn-info");
@@ -428,7 +437,8 @@ function Initialization() {
                         $("#step" + whichshow).show();
                         $("#btn4").removeClass("btn-info");
                         $("#btn_ConfirmResult").removeClass("btn-info");
-                        $("#restartTomcat_btn").hide();
+                        //$("#restartTomcat_btn").hide();
+                        $("#restartTomcat_btn").attr('disabled', false).show();
                         $("#processbar" + whichshow).setStep(whichStep);
                         return;
                 }
@@ -458,8 +468,11 @@ function Initialization() {
                     $("#step" + i).hide();
                 }
             }
-            if(actionGroup==7) {
+            if(actionGroup>5){
                 $("#restartTomcat_btn").show();
+            }
+            if(actionGroup==7) {
+                //$("#restartTomcat_btn").show();
                 $("#restartTomcat_btn").removeClass("btn-danger");
                 $("#step6").show();
                 $("#processbar6").setStep(whichStep);
