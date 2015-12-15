@@ -104,7 +104,6 @@ function listBtn(pageNum){
             $(this).click(function() {
                 var ms = confirm("确认删除么？");
                 if (ms == true) {
-                    $(this).click(function () {
                         var id = $(this).parent().parent().parent().children().eq(0);
                         $.ajax({
                             type: "post",
@@ -133,7 +132,6 @@ function listBtn(pageNum){
                                 });
                             }
                         });
-                    });
                 }
             });
         }
