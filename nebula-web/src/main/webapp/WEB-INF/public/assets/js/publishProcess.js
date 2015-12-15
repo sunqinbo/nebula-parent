@@ -103,6 +103,8 @@ $(document).ready(function(){
         }, {
             title: "启动tomcat",
         }, {
+            title: "清楚失败目录",
+        }, {
             title: "回滚完成",
         }]
     });
@@ -311,7 +313,7 @@ function Initialization() {
                     lastStep = 3;
                     break;
                 case 4:
-                    lastStep = 3;
+                    lastStep = 4;
                     break;
                 case 5:
                     lastStep = 2;

@@ -480,7 +480,7 @@ public class PublishController extends BaseController {
         String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC"};
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
-        String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
+        String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
         String[] group5 = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
         String[] group6 = {"CLEAN_PUBLISH_DIR"};
         String[] group7 = {"STOP_TOMCAT","START_TOMCAT"};
