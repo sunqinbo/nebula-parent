@@ -13,7 +13,8 @@ public enum PublishStatus {
     PENDING_PUBLISH("待发布"),
     PUBLISHING("发布中"),
     PUBLISHED("已发布"),
-    ROLLBACK("已回滚");
+    ROLLBACK("已回滚"),
+    CANCEL("已取消");
 
     private String description;
 

@@ -138,16 +138,16 @@
                                 <button type="button" id="btn4" class="btn btn-default" onclick="nebula.publish.process.publishFailEnd()">我要回滚</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:publishReal"))
-                                <button type="button" style="display: none" id="restartTomcat_btn" class="btn btn-danger" >重启tomcat</button>
+                                <button type="button" style="display: none" id="restartTomcat_btn" class="btn btn-danger" onclick="nebula.publish.process.restartTomcat()">重启tomcat</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:retryPublishRollback"))
                                 <button type="button" style="display: none" id="restartPublish" class="btn btn-danger" onclick="nebula.publish.process.retryPublishRollback()">重新发布</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:publishReal"))
-                                <button type="button" style="display: none" id="cancelPublish" class="btn btn-danger">取消发布</button>
+                                <button type="button" style="display: none" id="cancelPublish" class="btn btn-danger" onclick="nebula.publish.process.cancelPublish()">取消发布</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:publishReal"))
-                                <button type="button" style="display: none" id="backPublish" class="btn btn-danger">版本回退</button>
+                                <button type="button" style="display: none" id="backPublish" class="btn btn-danger" onclick="nebula.publish.process.publishFailEnd()">版本回退</button>
                             #end
                             #if($shiro.hasPermission("publishevnt:addnextpublish"))
                                 <button type="button" style="display: none" id="nextPublish" class="btn btn-info"></button>
