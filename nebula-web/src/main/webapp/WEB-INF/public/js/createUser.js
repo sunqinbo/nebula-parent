@@ -87,6 +87,7 @@ $(function(){
                 $("#deptName").val(data["deptName"]);
                 $("#jobTitle").val(data["jobTitle"]);
                 $("#empId").val(data["empId"]);
+                $("#empId").attr('disabled',true);
                 $("#supervisorEmpId").val(data["supervisorEmpId"]);
                 $("#isEnable").val(data["isEnable"]);
                 //$("#password").val(data["password"]);
