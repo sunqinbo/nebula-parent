@@ -43,6 +43,7 @@ $(document).ready(function(){
     $("#step3").hide();
     $("#step4").hide();
     $("#step5").hide();
+    $("#step6").hide();
     btnUnclick();
     //根据jQuery选择器找到需要加载ystep的容器
     //loadStep 方法可以初始化ystep
@@ -116,6 +117,17 @@ $(document).ready(function(){
             title: "确认完成",
         }]
     });
+    $("#processbar6").loadStep({
+        size: "large",
+        color: "blue",
+        steps: [{
+            title: "停止Tomcat",
+        }, {
+            title: "启动tomcat",
+        }, {
+            title: "重启完成",
+        }]
+    });
     //页面初次加载进度条控制
     Initialization();
     setInterval("Initialization()", 5000);
@@ -184,6 +196,7 @@ $(document).ready(function(){
         $("#restartPublish").hide();
         $("#cancelPublish").hide();
         $("#step4").show();
+        $("#step6").hide();
     })
     $("#btn_ConfirmResult").click(function () {
         $("#loading-status").show();
@@ -195,7 +208,18 @@ $(document).ready(function(){
         $("#restartPublish").hide();
         $("#cancelPublish").hide();
         $("#step5").show();
+        $("#step6").hide();
     })
+    $("#restartTomcat_btn").click(function () {
+        $("#loading-status").show();
+        $("#restartTomcat_btn").attr('disabled', true);
+        $("#restartTomcat_btn").removeClass("btn-danger");
+        $("#step6").show();
+        $("#btn_ConfirmResult").attr('disabled', true);
+        $("#btn_ConfirmResult").removeClass("btn-info");
+        $("#btn4").attr('disabled', true);
+        $("#btn4").removeClass("btn-info");
+    });
 
 })
 
@@ -240,6 +264,7 @@ function Initialization() {
             actionState = data.responseContext.actionState + "";
             var lastGroup=data.responseContext.lastGroup;
             btnUnclick();
+            //动作不为编辑ETC 且正在执行，显示等待条
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
                 $("#loading-status").show();
             } else {
@@ -294,6 +319,9 @@ function Initialization() {
                 case 6:
                     lastStep = 1;
                     break;
+                case 7:
+                    lastStep = 2;
+                    break;
             }
 
             //动作成功执行 隐藏重试按钮,失败显示重试按钮并显示错误信息
@@ -345,6 +373,7 @@ function Initialization() {
                         $("#btn4").addClass("btn-info");
                         $("#step" + (3)).hide();
                         $("#restartTomcat_btn").show();
+                        $("#restartTomcat_btn").attr('disabled', false);
                         return;
                     case 7: if(lastGroup==5) {
                         var btn_text;
@@ -365,6 +394,15 @@ function Initialization() {
                             $("#processbar4").setStep(4);
                             $("#step4").show();
                         }
+                        return;
+                    case 8: $("#step6").show();
+                        $("#restartTomcat_btn").show();
+                        $("#restartTomcat_btn").removeClass("btn-danger");
+                        $("#processbar6").setStep(3);
+                        $("#btn_ConfirmResult").attr('disabled', false);
+                        $("#btn_ConfirmResult").addClass("btn-info");
+                        $("#btn4").attr('disabled', false);
+                        $("#btn4").addClass("btn-info");
                         return;
                     default :
                         if (actionGroup < 5) {
@@ -414,11 +452,20 @@ function Initialization() {
                 if (i == actionGroup) {
                     $("#step" + i).show();
                 }
-                else
+                else {
                     $("#step" + i).hide();
+                }
             }
-            //设置进度条进度
-            $("#processbar" + actionGroup).setStep(whichStep);
+            if(actionGroup==7) {
+                $("#restartTomcat_btn").show();
+                $("#restartTomcat_btn").removeClass("btn-danger");
+                $("#step6").show();
+                $("#processbar6").setStep(whichStep);
+            }
+            else {
+                //设置进度条进度
+                $("#processbar" + actionGroup).setStep(whichStep);
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
@@ -441,6 +488,7 @@ function btnUnclick() {
     $("#btn3").attr('disabled', true);
     $("#btn4").attr('disabled', true);
     $("#btn_ConfirmResult").attr('disabled', true);
+    $("#restartTomcat_btn").attr('disabled',true)
 }
 
 //下一阶段的发布事件的点击事件

@@ -13,6 +13,7 @@ public enum PublishActionGroup {
     PUBLISH_REAL("正式发布"),
     SUCCESS_END("发布成功收尾"),
     FAIL_END("发布失败收尾"),
+    RESTART_TOMCAT("重启tomcat"),
     CLEAN_END("清理发布目录");
 
     private String description;

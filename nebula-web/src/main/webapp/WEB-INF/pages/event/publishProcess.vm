@@ -199,6 +199,15 @@
                         <div id="processbar4" class="ystep4"></div>
                     </div>
                 </div>
+
+                    <div class="col-md-12">
+                        <div id="step6" class="card card-plain">
+                            <div class="header">重启Tomcat</div>
+                            <hr/>
+                            <div id="processbar6" class="ystep4"></div>
+                        </div>
+                    </div>
+
                 <div id="false_btn" style="display: none;">
                     #if($shiro.hasPermission("publishevnt:publishContinue"))
                         <Button  type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>
