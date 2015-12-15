@@ -56,7 +56,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object PublishList(DataTablePage dataTablePage,NebulaPublishEvent nebulaPublishEvent) throws Exception{
-        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage,nebulaPublishEvent);
+        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage, nebulaPublishEvent);
         return pageInfo;
     }
 
@@ -158,6 +158,7 @@ public class PublishController extends BaseController {
         /** 修改发布状态 */
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
         nebulaPublishEvent.setPublishDatetime(new Date());
+        nebulaPublishEvent.setPublishEmpId(getLoginUser().getEmpId());
         publishEventService.update(nebulaPublishEvent);
 
         return returnCallback("Success", "发布准备执行完成");
@@ -391,6 +392,71 @@ public class PublishController extends BaseController {
             logger.error("retryPublishRollback error:", e);
         }
         return returnCallback("Error", "重新发布回退失败");
+    }
+
+    /**
+     * 重启tomcat
+     * */
+    @RequiresPermissions("publishevnt:publishReal")
+    @RequestMapping(value = "/restartTomcat", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback restartTomcat(HttpServletRequest request){
+        String idString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(idString)) {
+            return returnCallback("Error", "参数id为空");
+        }
+        try {
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            publishEvent.setPublishActionGroup(PublishActionGroup.RESTART_TOMCAT);
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+
+            Dispatcher dispatcher = new Dispatcher(chain, request, response);
+            dispatcher.doDispatch(publishEvent);
+
+            return returnCallback("Success", "重启tomcat成功");
+        } catch (Exception e) {
+            logger.error("restartTomcat error:", e);
+        }
+        return returnCallback("Error", "服务器异常");
+    }
+
+    /**
+     * 取消发布
+     * */
+    @RequiresPermissions("publishevnt:publishReal")
+    @RequestMapping(value = "/cancelPublish", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback cancelpublish(HttpServletRequest request){
+        String idString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(idString)) {
+            return returnCallback("Error", "参数id为空");
+        }
+        try {
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            publishEvent.setPublishActionGroup(PublishActionGroup.FAIL_END);
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
+            chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
+
+            Dispatcher dispatcher = new Dispatcher(chain, request, response);
+            dispatcher.doDispatch(publishEvent);
+
+            /** 更新事件单为 失败发布 */
+            publishEvent.setIsSuccessPublish(false);
+            publishEvent.setPublishStatus(PublishStatus.CANCEL);
+            publishEventService.update(publishEvent);
+
+            return returnCallback("Success", "取消发布确认成功");
+        } catch (Exception e) {
+            logger.error("cancelPublish error:", e);
+        }
+        return returnCallback("Error", "服务器异常");
     }
 
     /**

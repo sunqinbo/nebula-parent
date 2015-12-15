@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Nebula-发布系统</title>
+    <title>Nebula</title>
 
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
@@ -37,7 +37,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <b>发布系统</b>
+        <b>Nebula</b>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg"></p>

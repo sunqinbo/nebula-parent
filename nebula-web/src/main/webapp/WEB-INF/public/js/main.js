@@ -304,5 +304,35 @@ nebula.publish.process.retryPublishRollback = function(){
     });
 };
 
+nebula.publish.process.restartTomcat = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish/restartTomcat",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                $("#restartPublish").hide();
+                nebula.common.alert.info("重启tomcat成功",2000);
+            }
+        }
+    });
+};
+
+nebula.publish.process.cancelPublish = function () {
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish/cancelPublish",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                $("#restartPublish").hide();
+                nebula.common.alert.info("取消发布成功",2000);
+            }
+        }
+    });
+};
+
 
 
