@@ -80,4 +80,15 @@ public class PublishBaseServiceImpl implements IPublishBaseService {
         return historyDirKey;
     }
 
+    /**
+     * 清楚基线
+     *
+     * @param eventId
+     */
+    @Override
+    public void cleanBaseByEventId(Integer eventId) {
+        nebulaPublishBaseDao.cleanBaseByEventId(eventId);
+    }
+
+
 }

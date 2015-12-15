@@ -356,6 +356,9 @@ public class PublishController extends BaseController {
             Dispatcher dispatcher = new Dispatcher(chain, request, response);
             dispatcher.doDispatch(publishEvent);
 
+            /** 清楚基线 */
+            publishBaseService.cleanBaseByEventId(eventId);
+
             /** 更新事件单为 失败发布 */
             publishEvent.setIsSuccessPublish(false);
             publishEvent.setPublishStatus(PublishStatus.ROLLBACK);
@@ -438,7 +441,7 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
-            publishEvent.setPublishActionGroup(PublishActionGroup.FAIL_END);
+            publishEvent.setPublishActionGroup(PublishActionGroup.CANCEL_END);
             //创建任务队列
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
