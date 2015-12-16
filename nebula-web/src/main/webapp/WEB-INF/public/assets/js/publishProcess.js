@@ -43,6 +43,7 @@ $(document).ready(function(){
     $("#step3").hide();
     $("#step4").hide();
     $("#step5").hide();
+    $("#step6").hide();
     btnUnclick();
     //根据jQuery选择器找到需要加载ystep的容器
     //loadStep 方法可以初始化ystep
@@ -102,6 +103,8 @@ $(document).ready(function(){
         }, {
             title: "启动tomcat",
         }, {
+            title: "清楚失败目录",
+        }, {
             title: "回滚完成",
         }]
     });
@@ -114,6 +117,17 @@ $(document).ready(function(){
             title: "更新源SVN",
         }, {
             title: "确认完成",
+        }]
+    });
+    $("#processbar6").loadStep({
+        size: "large",
+        color: "blue",
+        steps: [{
+            title: "停止Tomcat",
+        }, {
+            title: "启动tomcat",
+        }, {
+            title: "重启完成",
         }]
     });
     //页面初次加载进度条控制
@@ -180,16 +194,43 @@ $(document).ready(function(){
         $("#btn4").removeClass("btn-info");
         $("#btn_ConfirmResult").attr('disabled', true);
         $("#btn_ConfirmResult").removeClass("btn-info");
+        $("#restartTomcat_btn").hide();
+        $("#restartPublish").hide();
+        $("#cancelPublish").hide();
         $("#step4").show();
-    })
+        $("#step6").hide();
+    });
     $("#btn_ConfirmResult").click(function () {
         $("#loading-status").show();
         $("#btn_ConfirmResult").attr('disabled', true);
         $("#btn_ConfirmResult").removeClass("btn-info");
         $("#btn4").attr('disabled', true);
         $("#btn4").removeClass("btn-info");
+        $("#restartTomcat_btn").hide();
+        $("#restartPublish").hide();
+        $("#cancelPublish").hide();
         $("#step5").show();
-    })
+        $("#step6").hide();
+    });
+    $("#restartTomcat_btn").click(function () {
+        $("#loading-status").show();
+        $("#restartTomcat_btn").attr('disabled', true);
+        $("#restartTomcat_btn").removeClass("btn-danger");
+        $("#step6").show();
+        $("#btn_ConfirmResult").attr('disabled', true);
+        $("#btn_ConfirmResult").removeClass("btn-info");
+        $("#btn4").attr('disabled', true);
+        $("#btn4").removeClass("btn-info");
+    });
+    $("#backPublish").click(function(){
+        $("#loading-status").show();
+        $("#restartTomcat_btn").hide();
+        $("#restartPublish").hide();
+        $("#cancelPublish").hide();
+        $("#step4").show();
+        $("#step6").hide();
+        $("#nextPublish").hide();
+    });
 
 })
 
@@ -202,6 +243,7 @@ function Initialization() {
             eventId: $("#eventId").val()
         },
         url: "/publish/publishProcessStep",
+        type: "post",
         datetype: "json",
         success: function (data) {
             //机器信息列表相关
@@ -233,32 +275,7 @@ function Initialization() {
             actionState = data.responseContext.actionState + "";
             var lastGroup=data.responseContext.lastGroup;
             btnUnclick();
-            //发布完成，不管成功或失败
-            //if(actionGroup>=5){
-            //    //if(actionGroup==5) {
-            //    //    var btn_text;
-            //    //    if ($("#publishEnv").html() == "test") {
-            //    //        btn_text = "准生产";
-            //    //    }
-            //    //    if ($("#publishEnv").html() == "stage") {
-            //    //        btn_text = "生产";
-            //    //    }
-            //    //    $("#nextPublish").text("进入" + btn_text).show();
-            //    //    $("#nextPublish").click(function () {
-            //    //        nextPublish(btn_text);
-            //    //    });
-            //    //}
-            //    //轮询过慢
-            //    if(lastGroup==4) {
-            //        $("#processbar4").setStep(4);
-            //        $("#step4").show();
-            //    }
-            //    if(lastGroup==5) {
-            //        $("#processbar5").setStep(3);
-            //        $("#step5").show();
-            //    }
-            //    //return;
-            //}
+            //动作不为编辑ETC 且正在执行，显示等待条
             if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
                 $("#loading-status").show();
             } else {
@@ -270,6 +287,33 @@ function Initialization() {
             switch (actionGroup) {
                 case 1:
                     lastStep = 4;
+                    if(whichStep>2&&$("#moduleAndApps tr").length==0){
+                        $.ajax({
+                            data:{eventId: $("#eventId").val()},
+                            url:"/publish/list/moduleAndApps",
+                            datatype:"json",
+                            type: "post",
+                            success:function(data){
+                                var moduletbString=""
+                                for(var i= 0,len=data.length;i<len;i++){
+                                    var module=data[i];
+                                    moduletbString+="<tr><td>"+module.publishModuleName+"</td>"
+                                    +"<td>"+module.publishModuleKey+"</td><td>";
+                                    for(var j= 0,len1=module.publishApps.length;j<len1;j++){
+                                        var app=module.publishApps[j];
+                                        moduletbString+=app.publishAppName+";";
+                                    }
+                                    moduletbString+="</td></tr>"
+                                }
+                                $("#moduleAndApps").html("");
+                                $("#moduleAndApps").html(moduletbString);
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                var msg="很抱歉，获取发布模块信息失败，原因" + errorThrown
+                                nebula.common.alert.danger(msg,1000);
+                            }
+                        })
+                    }
                     break;
                 case 2:
                     lastStep = 5;
@@ -278,13 +322,16 @@ function Initialization() {
                     lastStep = 3;
                     break;
                 case 4:
-                    lastStep = 3;
+                    lastStep = 4;
                     break;
                 case 5:
                     lastStep = 2;
                     break;
                 case 6:
                     lastStep = 1;
+                    break;
+                case 7:
+                    lastStep = 2;
                     break;
             }
 
@@ -314,7 +361,9 @@ function Initialization() {
                 actionGroup = actionGroup - 1 + 2;
                 switch (actionGroup) {
                     case 3:
-                        $("#restartPublish").hide();
+                        //$("#restartPublish").hide();
+                        $("#restartPublish").show();
+                        $("#cancelPublish").show();
                         for (var i = 1; i < 4; i++) {
                             if (i == actionGroup) {
                                 $("#btn" + i).attr('disabled', false);
@@ -334,8 +383,11 @@ function Initialization() {
                         $("#btn4").attr('disabled', false);
                         $("#btn4").addClass("btn-info");
                         $("#step" + (3)).hide();
+                        $("#restartTomcat_btn").show();
+                        $("#restartTomcat_btn").attr('disabled', false);
                         return;
-                    case 7: if(lastGroup==5) {
+                    case 7:$("#restartTomcat_btn").attr('disabled', false).show();
+                        if(lastGroup==5) {
                         var btn_text;
                         if ($("#publishEnv").html() == "test") {
                             btn_text = "准生产";
@@ -343,19 +395,30 @@ function Initialization() {
                         if ($("#publishEnv").html() == "stage") {
                             btn_text = "生产";
                         }
+                        $("#backPublish").show();
                         $("#nextPublish").text("进入" + btn_text).show();
-                        if(lastGroup==5) {
-                            $("#processbar5").setStep(3);
-                            $("#step5").show();
-                        }
+                        $("#processbar5").setStep(3);
+                        $("#step5").show();
                     }
                         if(lastGroup==4){
                             $("#processbar4").setStep(4);
                             $("#step4").show();
                         }
                         return;
+                    case 8: $("#step6").show();
+                        $("#restartTomcat_btn").show();
+                        $("#restartTomcat_btn").attr('disabled', false);
+                        $("#restartTomcat_btn").addClass("btn-danger");
+                        $("#processbar6").setStep(3);
+                        $("#btn_ConfirmResult").attr('disabled', false);
+                        $("#btn_ConfirmResult").addClass("btn-info");
+                        $("#btn4").attr('disabled', false);
+                        $("#btn4").addClass("btn-info");
+                        return;
                     default :
                         if (actionGroup < 5) {
+                            $("#restartPublish").show();
+                            $("#cancelPublish").show();
                             for (var i = 1; i < 4; i++) {
                                 if (i == actionGroup) {
                                     $("#btn" + i).attr('disabled', false);
@@ -373,45 +436,18 @@ function Initialization() {
                         var whichshow = actionGroup - 1 + "";
                         $("#step" + whichshow).show();
                         $("#btn4").removeClass("btn-info");
-                        $("#btn5").removeClass("btn-info");
+                        $("#btn_ConfirmResult").removeClass("btn-info");
+                        //$("#restartTomcat_btn").hide();
+                        $("#restartTomcat_btn").attr('disabled', false).show();
                         $("#processbar" + whichshow).setStep(whichStep);
                         return;
                 }
-                //if(actionGroup>=4){
-                //    whichStep=whichStep+1;
-                //}
-                //else {
-                //    actionGroup = actionGroup - 1 + 2;
-                //    if(actionGroup==3){
-                //        $("#restartPublish").hide();
-                //    }
-                //    else if (actionGroup == 4) {
-                //        $("#btn_ConfirmResult").attr('disabled', false);
-                //        $("#btn_ConfirmResult").addClass("btn-info");
-                //        $("#btn4").attr('disabled', false);
-                //        $("#btn4").addClass("btn-info");
-                //        $("#step" + (3)).hide();
-                //    }
-                //    else {
-                //        for (var i = 1; i < 4; i++) {
-                //            if (i == actionGroup) {
-                //                $("#btn" + i).attr('disabled', false);
-                //                $("#btn" + i).addClass("btn-info");
-                //                $("#step" + (i - 1)).hide();
-                //            }
-                //            else {
-                //                $("#btn" + i).attr('disabled', true);
-                //                $("#btn4").removeClass("btn-info");
-                //            }
-                //        }
-                //    }
-                //    return;
-                //}
             }
             //动作为ect开始时
             if (actionGroup == 1 && whichStep == 4 && (actionState == "" || actionState == "null")) {
                 //添加编辑按钮
                 $("#restartPublish").show();
+                $("#cancelPublish").show();
 
                 //var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
                 //    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
@@ -419,7 +455,8 @@ function Initialization() {
                 $("#etc_btns").show();
             }
             else {
-                $("#restartPublish").hide()
+                $("#restartPublish").hide();
+                $("#cancelPublish").hide();
             }
             //btnUnclick();
             //控制进度条显示
@@ -427,11 +464,23 @@ function Initialization() {
                 if (i == actionGroup) {
                     $("#step" + i).show();
                 }
-                else
+                else {
                     $("#step" + i).hide();
+                }
             }
-            //设置进度条进度
-            $("#processbar" + actionGroup).setStep(whichStep);
+            if(actionGroup>5){
+                $("#restartTomcat_btn").show();
+            }
+            if(actionGroup==7) {
+                //$("#restartTomcat_btn").show();
+                $("#restartTomcat_btn").removeClass("btn-danger");
+                $("#step6").show();
+                $("#processbar6").setStep(whichStep);
+            }
+            else {
+                //设置进度条进度
+                $("#processbar" + actionGroup).setStep(whichStep);
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
@@ -454,6 +503,7 @@ function btnUnclick() {
     $("#btn3").attr('disabled', true);
     $("#btn4").attr('disabled', true);
     $("#btn_ConfirmResult").attr('disabled', true);
+    $("#restartTomcat_btn").attr('disabled',true)
 }
 
 //下一阶段的发布事件的点击事件

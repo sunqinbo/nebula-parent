@@ -104,7 +104,6 @@ function listBtn(pageNum){
             $(this).click(function() {
                 var ms = confirm("确认删除么？");
                 if (ms == true) {
-                    $(this).click(function () {
                         var id = $(this).parent().parent().parent().children().eq(0);
                         $.ajax({
                             type: "post",
@@ -133,7 +132,6 @@ function listBtn(pageNum){
                                 });
                             }
                         });
-                    });
                 }
             });
         }
@@ -141,7 +139,8 @@ function listBtn(pageNum){
             $(this).click(function() {
                 var empId = $(this).parent().parent().parent().children().eq(9);
                 var id = $(this).parent().parent().parent().children().eq(0);
-                window.open('/user/update.htm?empId=' + empId.text()+'&id='+id.text());
+                //window.open('/user/update.htm?empId=' + empId.text()+'&id='+id.text());
+                window.location.href='/user/update.htm?empId=' + empId.text()+'&id='+id.text();
             })
         }
     });

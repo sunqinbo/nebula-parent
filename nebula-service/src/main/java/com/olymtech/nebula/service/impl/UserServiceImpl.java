@@ -105,8 +105,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteNebulaUserInfo(Integer id) {
+        NebulaUserInfo userInfo = nebulaUserInfoDao.selectById(id);
         nebulaUserInfoDao.deleteById(id);
-        aclUserRoleDao.deleteById(id);
+        aclUserRoleDao.deleteByEmpId(userInfo.getEmpId());
     }
 
     @Override
@@ -154,5 +155,9 @@ public class UserServiceImpl implements IUserService {
             userInfo.setAclRoles(aclRoles);
         }
         return userInfo;
+    }
+
+    public NebulaUserInfo selectByEmpId(Integer empId){
+        return nebulaUserInfoDao.selectByEmpId(empId);
     }
 }

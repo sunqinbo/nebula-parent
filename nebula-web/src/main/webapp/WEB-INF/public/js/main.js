@@ -75,6 +75,9 @@ nebula.common.transform.publishStatus = function(publishStatus){
         case "ROLLBACK":
             result = "已回滚";
             break;
+        case "CANCEL":
+            result = "已取消";
+            break;
         default:
             result = "";
     }
@@ -299,6 +302,36 @@ nebula.publish.process.retryPublishRollback = function(){
                 $("#restartPublish").hide();
                 window.location.href="/publishProcess.htm?id="+id;
                 nebula.common.alert.info("正式发布成功",2000);
+            }
+        }
+    });
+};
+
+nebula.publish.process.restartTomcat = function(){
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish/restartTomcat",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                $("#restartPublish").hide();
+                nebula.common.alert.info("重启tomcat成功",2000);
+            }
+        }
+    });
+};
+
+nebula.publish.process.cancelPublish = function () {
+    var id = $("#eventId").val();
+    $.ajax({
+        url:"/publish/cancelPublish",
+        type:"post",
+        data:{"id":id},
+        success:function(jsonData){
+            if(jsonData.callbackMsg.match(/Success/)){
+                $("#restartPublish").hide();
+                nebula.common.alert.info("取消发布成功",2000);
             }
         }
     });

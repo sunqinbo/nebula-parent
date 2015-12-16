@@ -35,5 +35,5 @@ public interface IUserService {
 
     public NebulaUserInfo getAclUserWithRolesByEmpId(Integer empId);
 
-
+    public NebulaUserInfo selectByEmpId(Integer empId);
 }

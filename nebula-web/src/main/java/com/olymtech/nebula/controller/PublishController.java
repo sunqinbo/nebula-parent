@@ -22,10 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,7 +56,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object PublishList(DataTablePage dataTablePage,NebulaPublishEvent nebulaPublishEvent) throws Exception{
-        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage,nebulaPublishEvent);
+        PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage, nebulaPublishEvent);
         return pageInfo;
     }
 
@@ -160,6 +158,7 @@ public class PublishController extends BaseController {
         /** 修改发布状态 */
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
         nebulaPublishEvent.setPublishDatetime(new Date());
+        nebulaPublishEvent.setPublishEmpId(getLoginUser().getEmpId());
         publishEventService.update(nebulaPublishEvent);
 
         return returnCallback("Success", "发布准备执行完成");
@@ -357,6 +356,9 @@ public class PublishController extends BaseController {
             Dispatcher dispatcher = new Dispatcher(chain, request, response);
             dispatcher.doDispatch(publishEvent);
 
+            /** 清楚基线 */
+            publishBaseService.cleanBaseByEventId(eventId);
+
             /** 更新事件单为 失败发布 */
             publishEvent.setIsSuccessPublish(false);
             publishEvent.setPublishStatus(PublishStatus.ROLLBACK);
@@ -396,6 +398,71 @@ public class PublishController extends BaseController {
     }
 
     /**
+     * 重启tomcat
+     * */
+    @RequiresPermissions("publishevnt:publishReal")
+    @RequestMapping(value = "/restartTomcat", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback restartTomcat(HttpServletRequest request){
+        String idString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(idString)) {
+            return returnCallback("Error", "参数id为空");
+        }
+        try {
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            publishEvent.setPublishActionGroup(PublishActionGroup.RESTART_TOMCAT);
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+
+            Dispatcher dispatcher = new Dispatcher(chain, request, response);
+            dispatcher.doDispatch(publishEvent);
+
+            return returnCallback("Success", "重启tomcat成功");
+        } catch (Exception e) {
+            logger.error("restartTomcat error:", e);
+        }
+        return returnCallback("Error", "服务器异常");
+    }
+
+    /**
+     * 取消发布
+     * */
+    @RequiresPermissions("publishevnt:publishReal")
+    @RequestMapping(value = "/cancelPublish", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback cancelpublish(HttpServletRequest request){
+        String idString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(idString)) {
+            return returnCallback("Error", "参数id为空");
+        }
+        try {
+            Integer eventId = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+            publishEvent.setPublishActionGroup(PublishActionGroup.CANCEL_END);
+            //创建任务队列
+            ActionChain chain = new ActionChain();
+            chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
+            chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
+
+            Dispatcher dispatcher = new Dispatcher(chain, request, response);
+            dispatcher.doDispatch(publishEvent);
+
+            /** 更新事件单为 失败发布 */
+            publishEvent.setIsSuccessPublish(false);
+            publishEvent.setPublishStatus(PublishStatus.CANCEL);
+            publishEventService.update(publishEvent);
+
+            return returnCallback("Success", "取消发布确认成功");
+        } catch (Exception e) {
+            logger.error("cancelPublish error:", e);
+        }
+        return returnCallback("Error", "服务器异常");
+    }
+
+    /**
      * 确认编辑etc
      */
     @RequiresPermissions("publishevnt:updateEtcEnd")
@@ -416,9 +483,10 @@ public class PublishController extends BaseController {
         String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC"};
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
-        String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
+        String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
         String[] group5 = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
         String[] group6 = {"CLEAN_PUBLISH_DIR"};
+        String[] group7 = {"STOP_TOMCAT","START_TOMCAT"};
         List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
@@ -454,6 +522,10 @@ public class PublishController extends BaseController {
                     actionGroup = 6;
                     group = group6;
                     break;
+                case "RESTART_TOMCAT":
+                    actionGroup = 7;
+                    group = group7;
+                    break;
             }
             for (int i = 0; i < group.length; i++) {
                 if (actionNameString.equals(group[i])) {
@@ -481,6 +553,9 @@ public class PublishController extends BaseController {
                         break;
                     case "CLEAN_END":
                         lastGroup = 6;
+                        break;
+                    case "RESTART_TOMCAT":
+                        lastGroup = 7;
                         break;
                 }
             }
@@ -561,5 +636,16 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Object getPublishStatus(NebulaPublishEvent nebulaPublishEvent) throws Exception{
         return publishEventService.isPUBLISHING(nebulaPublishEvent);
+    }
+
+    /**
+     * 获取模块信息
+     */
+    @RequestMapping(value="/list/moduleAndApps",method={RequestMethod.POST})
+    @ResponseBody
+    public  Object getmoduleAndApps(Integer eventId){
+        List<NebulaPublishModule> publishModules=new ArrayList<>();
+        publishModules = publishModuleService.selectByEventId(eventId);
+        return publishModules;
     }
 }

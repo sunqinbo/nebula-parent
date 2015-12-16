@@ -6,6 +6,7 @@ import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +48,15 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo, @RequestParam(value = "roleIds[]", required = false) Integer[] roleIds) {
+        if(userInfo.getEmpId() == null){
+            return returnCallback("Error", "新增用户工号为空");
+        }
+        NebulaUserInfo userInfoInDB = userService.selectByEmpId(userInfo.getEmpId());
+
+        if(userInfoInDB != null){
+            return returnCallback("Error", "新增用户失败：工号 "+userInfo.getEmpId()+" 已存在");
+        }
+
         passwordHelper.encryptPassword(userInfo);
         userService.insertNebulaUserInfo(userInfo, roleIds);
         return returnCallback("Success", "插入用户成功");

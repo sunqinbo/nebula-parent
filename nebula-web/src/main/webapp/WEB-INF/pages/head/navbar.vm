@@ -19,20 +19,20 @@
                             <i class="fa fa-dashboard"></i>
                         </a>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-globe"></i>
-                            <b class="caret"></b>
-                            <span class="notification">5</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">消息通知 1</a></li>
-                            <li><a href="#">消息通知 2</a></li>
-                            <li><a href="#">消息通知 3</a></li>
-                            <li><a href="#">消息通知 4</a></li>
-                            <li><a href="#">更多消息通知</a></li>
-                        </ul>
-                    </li>
+##                    <li class="dropdown">
+##                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+##                            <i class="fa fa-globe"></i>
+##                            <b class="caret"></b>
+##                            <span class="notification">5</span>
+##                        </a>
+##                        <ul class="dropdown-menu">
+##                            <li><a href="#">消息通知 1</a></li>
+##                            <li><a href="#">消息通知 2</a></li>
+##                            <li><a href="#">消息通知 3</a></li>
+##                            <li><a href="#">消息通知 4</a></li>
+##                            <li><a href="#">更多消息通知</a></li>
+##                        </ul>
+##                    </li>
 ##                    <li>
 ##                        <a href="">
 ##                            <i class="fa fa-search"></i>
@@ -52,17 +52,17 @@
                             退出
                         </a>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            帮助$shiro.hasPermission("user:add")
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">相关帮助</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">取消</a></li>
-                        </ul>
-                    </li>
+##                    <li class="dropdown">
+##                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+##                            帮助$shiro.hasPermission("user:add")
+##                            <b class="caret"></b>
+##                        </a>
+##                        <ul class="dropdown-menu">
+##                            <li><a href="#">相关帮助</a></li>
+##                            <li class="divider"></li>
+##                            <li><a href="#">取消</a></li>
+##                        </ul>
+##                    </li>
                 </ul>
             </div>
         </div>

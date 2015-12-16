@@ -13,4 +13,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("nebulaPublishBaseDao")
 public class NebulaPublishBaseDaoImpl extends BaseDaoImpl<NebulaPublishBase,Integer> implements INebulaPublishBaseDao {
+
+    @Override
+    public void cleanBaseByEventId(Integer eventId) {
+        getSqlSession().delete(CLASS_NAME + "-Delete-By-EventId", eventId);
+    }
+
 }
