@@ -5,6 +5,7 @@ import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.core.utils.SpringUtils;
+import com.olymtech.nebula.dao.INebulaUserInfoDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
@@ -50,6 +51,8 @@ public class PublishController extends BaseController {
     HttpServletRequest request;
     @Resource
     INebulaPublishModuleService publishModuleService;
+    @Resource
+    IUserService        userService;
 
 
     @RequiresPermissions("publishevent:page")
@@ -88,10 +91,17 @@ public class PublishController extends BaseController {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
 //        NebulaPublishEvent nebulaPublishEvent=  publishEventService.selectWithChildByEventId(id);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(id);
+        Integer submitEmpId = nebulaPublishEvent.getSubmitEmpId();
+        Integer publishEmpId = nebulaPublishEvent.getPublishEmpId();
+        if(submitEmpId != null){
+            nebulaPublishEvent.setSubmitUser(userService.selectByEmpId(submitEmpId));
+        }
+        if(publishEmpId != null){
+            nebulaPublishEvent.setPublishUser(userService.selectByEmpId(publishEmpId));
+        }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
         model.addAttribute("Modules", publishModules);
         model.addAttribute("Event", nebulaPublishEvent);
-
         return "event/publishProcess";
     }
 
