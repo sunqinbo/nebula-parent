@@ -32,7 +32,7 @@ public class LoginController {
         }else if (AuthenticationException.class.getName().equals(exceptionClassName)) {
         	error = "用户名/密码错误";
 		} else if(ExcessiveAttemptsException.class.getName().equals(exceptionClassName)){
-            error = "请求次数过多，用户被锁定";
+            error = "密码尝试次数过多，锁定5分钟，请稍后尝试";
         }else if(exceptionClassName != null) {
             error = "其他错误：" + exceptionClassName;
         }
