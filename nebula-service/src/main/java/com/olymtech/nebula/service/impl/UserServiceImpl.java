@@ -13,6 +13,8 @@ import com.olymtech.nebula.dao.IAclUserRoleDao;
 import com.olymtech.nebula.dao.INebulaUserInfoDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IUserService;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author taoshanchang 15/11/9
@@ -45,6 +48,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private PasswordHelper passwordHelper;
+
+    @Resource
+    private CacheManager cacheManager;
 
     @Override
     public NebulaUserInfo findByUsername(String username) {
@@ -121,6 +127,9 @@ public class UserServiceImpl implements IUserService {
         NebulaUserInfo nebulaUserInfo = nebulaUserInfoDao.selectById(userId);
         nebulaUserInfo.setPassword(newPassword);
         passwordHelper.encryptPassword(nebulaUserInfo);
+        //更新密码重试缓存
+        Cache<String, AtomicInteger> passwordRetryCache = cacheManager.getCache("passwordRetryCache");
+        passwordRetryCache.remove(nebulaUserInfo.getUsername());
         nebulaUserInfoDao.updatePassword(nebulaUserInfo);
     }
 
