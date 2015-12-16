@@ -279,6 +279,10 @@ function Initialization() {
                     actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult + "</td></tr>";
             }
             $("#hostInfo").html(tbString);
+
+            //按钮显示控制
+            btnControl(data.responseContext.eventStatus);
+
             //进度条相关
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
@@ -396,25 +400,29 @@ function Initialization() {
                         $("#restartTomcat_btn").show();
                         $("#restartTomcat_btn").attr('disabled', false);
                         return;
-                    case 7:$("#restartTomcat_btn").attr('disabled', false).show();
-                        if(lastGroup==5) {
-                        var btn_text;
-                        if ($("#publishEnv").html() == "test") {
-                            btn_text = "准生产";
-                        }
-                        if ($("#publishEnv").html() == "stage") {
-                            btn_text = "生产";
-                        }
-                        $("#backPublish").show();
-                        $("#nextPublish").text("进入" + btn_text).show();
-                        $("#processbar5").setStep(3);
-                        $("#step5").show();
-                    }
-                        if(lastGroup==4){
-                            $("#processbar4").setStep(4);
-                            $("#step4").show();
-                        }
+                    case 7:$("#restartTomcat_btn").attr('disabled', false);
+                        $("#backPublish").attr('disabled', false);
+                        $("#nextPublish").attr('disabled', false);
                         return;
+                    //case 7:$("#restartTomcat_btn").attr('disabled', false).show();
+                    //    if(lastGroup==5) {
+                    //    var btn_text;
+                    //    if ($("#publishEnv").html() == "test") {
+                    //        btn_text = "准生产";
+                    //    }
+                    //    if ($("#publishEnv").html() == "stage") {
+                    //        btn_text = "生产";
+                    //    }
+                    //    $("#backPublish").show();
+                    //    $("#nextPublish").text("进入" + btn_text).show();
+                    //    $("#processbar5").setStep(3);
+                    //    $("#step5").show();
+                    //}
+                    //    if(lastGroup==4){
+                    //        $("#processbar4").setStep(4);
+                    //        $("#step4").show();
+                    //    }
+                    //    return;
                     case 8: $("#step6").show();
                         $("#restartTomcat_btn").show();
                         $("#restartTomcat_btn").attr('disabled', false);
@@ -422,8 +430,14 @@ function Initialization() {
                         $("#processbar6").setStep(3);
                         $("#btn_ConfirmResult").attr('disabled', false);
                         $("#btn_ConfirmResult").addClass("btn-info");
+                        $("#backPublish").addClass("btn-danger");
+                        $("#backPublish").attr('disabled', false);
+                        $("#nextPublish").addClass("btn-info");
+                        $("#nextPublish").attr('disabled', false);
                         $("#btn4").attr('disabled', false);
                         $("#btn4").addClass("btn-info");
+                        $("#step4").hide();
+                        $("#step5").hide();
                         return;
                     default :
                         if (actionGroup < 5) {
@@ -459,9 +473,6 @@ function Initialization() {
                 $("#restartPublish").show();
                 $("#cancelPublish").show();
 
-                //var etc_btn = "<input type='button' id='etc_btn' class='btn btn-info' value='编辑etc'/>" +
-                //    "<input type='button' id='edit_success' style='margin-left: 30px' class='btn btn-info' value='编辑完成'/>";
-                //$("#etc_btns").html(etc_btn);
                 $("#etc_btns").show();
             }
             else {
@@ -484,7 +495,11 @@ function Initialization() {
             if(actionGroup==7) {
                 //$("#restartTomcat_btn").show();
                 $("#restartTomcat_btn").removeClass("btn-danger");
+                $("#backPublish").removeClass("btn-danger");
+                $("#nextPublish").removeClass("btn-info");
                 $("#step6").show();
+                $("#step4").hide();
+                $("#step5").hide();
                 $("#processbar6").setStep(whichStep);
             }
             else {
@@ -505,6 +520,27 @@ function Initialization() {
     });
 }
 
+//按钮显示控制
+function btnControl(publishStatus){
+    switch (publishStatus){
+        case "PUBLISHED":var btn_text;
+            $("#restartTomcat_btn").show();
+            if ($("#publishEnv").html() == "test") {
+                btn_text = "准生产";
+            }
+            if ($("#publishEnv").html() == "stage") {
+                btn_text = "生产";
+            }
+            $("#backPublish").show();
+            $("#nextPublish").text("进入" + btn_text).show();
+            $("#processbar5").setStep(3);
+            $("#step5").show();
+            break;
+        case "ROLLBACK":$("#restartTomcat_btn").show();
+            $("#processbar4").setStep(4);
+            $("#step4").show();
+    }
+}
 
 //按钮设为不可点
 function btnUnclick() {
@@ -513,7 +549,9 @@ function btnUnclick() {
     $("#btn3").attr('disabled', true);
     $("#btn4").attr('disabled', true);
     $("#btn_ConfirmResult").attr('disabled', true);
-    $("#restartTomcat_btn").attr('disabled',true)
+    $("#restartTomcat_btn").attr('disabled',true);
+    $("#backPublish").attr('disabled', true);
+    $("#nextPublish").attr('disabled', true);
 }
 
 //下一阶段的发布事件的点击事件

@@ -29,17 +29,24 @@ function getLtb(pageNum){
                         delete_btn = "<button class='btn btn-danger btn-sm' type='button'>删除</button>";
                     }
                 }
+                var isEnable=data["list"][i]["isEnable"]==1?"是":"否";
+                var rolelist="";
+                for(var j= 0,rolelen=data["list"][i]["aclRoles"].length;j<rolelen;j++){
+                    rolelist+=data["list"][i]["aclRoles"][j]["roleCname"]+",";
+                }
+                rolelist=rolelist.substring(0, rolelist.length - 1);
                 tbString=tbString+"<tr><td>"+data["list"][i]["id"]+"</td><td>"+
                     data["list"][i]["username"]+"</td><td>"+data["list"][i]["mobilePhone"]+
                     "</td><td>"+data["list"][i]["weixinAcc"]+
-                    "</td><td>"+data["list"][i]["qqAcc"]+
-                    "</td><td>"+data["list"][i]["email"]+
+                    //"</td><td>"+data["list"][i]["qqAcc"]+
+                    //"</td><td>"+data["list"][i]["email"]+
                     "</td><td>"+data["list"][i]["nickname"]+
                     "</td><td>"+data["list"][i]["deptName"]+
                     "</td><td>"+data["list"][i]["jobTitle"]+
                     "</td><td>"+data["list"][i]["empId"]+
                     "</td><td>"+data["list"][i]["supervisorEmpId"]+
-                    "</td><td>"+data["list"][i]["isEnable"]+
+                    "</td><td>"+rolelist+
+                    "</td><td>"+isEnable+
                     "</td><td><div id='listBtn' class='btn-group'>"+edit_btn+delete_btn+"</div></td>";
             }
             $("tbody").html(tbString);
@@ -137,7 +144,7 @@ function listBtn(pageNum){
         }
         if($(this).text()=="编辑") {
             $(this).click(function() {
-                var empId = $(this).parent().parent().parent().children().eq(9);
+                var empId = $(this).parent().parent().parent().children().eq(7);
                 var id = $(this).parent().parent().parent().children().eq(0);
                 //window.open('/user/update.htm?empId=' + empId.text()+'&id='+id.text());
                 window.location.href='/user/update.htm?empId=' + empId.text()+'&id='+id.text();

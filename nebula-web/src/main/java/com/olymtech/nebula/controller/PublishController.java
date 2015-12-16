@@ -569,6 +569,7 @@ public class PublishController extends BaseController {
         if(eventId!=null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
             map.put("HostInfos", nebulaPublishHosts);
+            map.put("eventStatus",publishEventService.selectById(eventId).getPublishStatus());
         }
         return returnCallback("Success", map);
 
