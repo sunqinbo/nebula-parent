@@ -14,6 +14,9 @@
     nebula.publish.process.main();
     $(function(){
         $("#publishStatus").html(nebula.common.transform.publishStatus('$!{Event.publishStatus}'));
+        if(!${Event.isApproved}){
+            $("#detail").show()
+        }
     })
 </script>
 <div id="loading-status"
@@ -27,19 +30,25 @@
                 <div class="card card-plain">
                     <div class="header">
                         发布单详情
-                        <hr/>
+                        #if(${Event.isApproved})
+                            <button style="float: right" class="btn btn-xs" type="button" id="detail_btn">展开</button>
+                        #end
                     </div>
-                    <div class="content table-responsive table-full-width">
+                    <div style="text-align: center;">
+##                        <label style="font-size: large">标题：</label>
+                        <label style="font-size: large">$!{Event.publishSubject}</label>
+                    </div>
+                    <div id="detail" style="clear: both;display: none;" class="content table-responsive table-full-width">
                         <table class="table table-hover table-striped">
                             <tbody>
-                            <tr>
-                                <td colspan="4">
-                                    <div style="text-align: center">
-                                        <label>标题：</label>
-                                        <label>$!{Event.publishSubject}</label>
-                                    </div>
-                                </td>
-                            </tr>
+##                            <tr>
+##                                <td colspan="4">
+##                                    <div style="text-align: center">
+##                                        <label>标题：</label>
+##                                        <label>$!{Event.publishSubject}</label>
+##                                    </div>
+##                                </td>
+##                            </tr>
                             <tr>
                                 <td>
                                     <label>发布产品：</label>
@@ -109,6 +118,39 @@
                         </table>
                     </div>
                 </div>
+                #if(${Event.isApproved})
+                    <div class="card card-plain">
+                    <div class="header">
+                        发布模块和应用
+                    </div>
+                    <hr/>
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>发布模块</th>
+                                <th>发布模块Key</th>
+                                <th>应用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tbody id="moduleAndApps">
+                                #foreach($module in ${Modules})
+                                <tr>
+                                    <td>$!{module.publishModuleName}</td>
+                                    <td>$!{module.publishModuleKey}</td>
+                                    <td>
+                                        #foreach($app in ${module.publishApps})
+                                            $!{app.publishAppName};
+                                        #end
+                                    </td>
+                                </tr>
+                                #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                #end
             </div>
             #if(!${Event.isApproved})
                 <div style="text-align: center;" class="col-md-12">
@@ -251,37 +293,37 @@
                         </table>
                     </div>
                 </div>
-                <div class="card card-plain">
-                    <div class="header">
-                        发布模块和应用
-                    </div>
-                    <hr/>
-                    <div>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>发布模块</th>
-                                <th>发布模块Key</th>
-                                <th>应用</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tbody id="moduleAndApps">
-                                #foreach($module in ${Modules})
-                                <tr>
-                                    <td>$!{module.publishModuleName}</td>
-                                    <td>$!{module.publishModuleKey}</td>
-                                    <td>
-                                        #foreach($app in ${module.publishApps})
-                                        $!{app.publishAppName};
-                                    #end
-                                    </td>
-                                </tr>
-                                #end
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+##                <div class="card card-plain">
+##                    <div class="header">
+##                        发布模块和应用
+##                    </div>
+##                    <hr/>
+##                    <div>
+##                        <table class="table table-bordered">
+##                            <thead>
+##                            <tr>
+##                                <th>发布模块</th>
+##                                <th>发布模块Key</th>
+##                                <th>应用</th>
+##                            </tr>
+##                            </thead>
+##                            <tbody>
+##                            <tbody id="moduleAndApps">
+##                                #foreach($module in ${Modules})
+##                                <tr>
+##                                    <td>$!{module.publishModuleName}</td>
+##                                    <td>$!{module.publishModuleKey}</td>
+##                                    <td>
+##                                        #foreach($app in ${module.publishApps})
+##                                        $!{app.publishAppName};
+##                                    #end
+##                                    </td>
+##                                </tr>
+##                                #end
+##                            </tbody>
+##                        </table>
+##                    </div>
+##                </div>
             </div>
             #end
         </div>

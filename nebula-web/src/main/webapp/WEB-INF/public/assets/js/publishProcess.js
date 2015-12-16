@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    $("#detail_btn").click(function(){
+        if($("#detail_btn").text()=="展开") {
+            $("#detail_btn").text("收缩");
+        }
+        else{
+            $("#detail_btn").text("展开");
+        }
+        $("#detail").slideToggle("swing");
+    })
+
     //审批按钮
     $("#approval_btn").click(function(){
         approvalBtn();
