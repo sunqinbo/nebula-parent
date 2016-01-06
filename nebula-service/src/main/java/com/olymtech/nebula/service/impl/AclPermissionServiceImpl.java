@@ -59,6 +59,7 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
 
     @Override
     public void updateAclPermission(AclPermission permission) {
+
         aclPermissionDao.update(permission);
     }
 
@@ -71,7 +72,7 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
             znode.setName(aclPermission.getPermissionCname());
             znode.setId(aclPermission.getId());
             znode.setpId(aclPermission.getPid());
-            //若为编辑角色，角色已有权限，则打开已有权限的父节点，勾选子节点
+            //若为编辑角色@，角色已有权限，则打开已有权限的父节点，勾选子节点
             if(permissionList.size()>0) {
                 for (AclPermission aclPermissionhas : permissionList) {
                     if (aclPermission.getId() == aclPermissionhas.getId()) {

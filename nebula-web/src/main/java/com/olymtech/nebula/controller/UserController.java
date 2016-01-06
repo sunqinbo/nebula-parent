@@ -6,8 +6,9 @@ import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by WYQ on 2015/11/18.
@@ -30,6 +32,9 @@ public class UserController extends BaseController {
 
     @Resource
     private PasswordHelper passwordHelper;
+
+    @Resource
+    private CacheManager cacheManager;
 
     @RequiresPermissions("user:add")
     @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
@@ -48,13 +53,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback insertUser(NebulaUserInfo userInfo, @RequestParam(value = "roleIds[]", required = false) Integer[] roleIds) {
-        if(userInfo.getEmpId() == null){
+        if (userInfo.getEmpId() == null) {
             return returnCallback("Error", "新增用户工号为空");
         }
         NebulaUserInfo userInfoInDB = userService.selectByEmpId(userInfo.getEmpId());
 
-        if(userInfoInDB != null){
-            return returnCallback("Error", "新增用户失败：工号 "+userInfo.getEmpId()+" 已存在");
+        if (userInfoInDB != null) {
+            return returnCallback("Error", "新增用户失败：工号 " + userInfo.getEmpId() + " 已存在");
         }
 
         passwordHelper.encryptPassword(userInfo);
@@ -86,6 +91,28 @@ public class UserController extends BaseController {
         return returnCallback("Success", "更新用户密码成功");
     }
 
+    @RequiresPermissions("user:updateMyPassword")
+    @RequestMapping(value = "/update/myPassword", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Callback updateMyPassword(String oldPassword, String newPassword, String repeatPassword) {
+        NebulaUserInfo userInfo = getLoginUser();
+        Boolean result = passwordHelper.verifyAccount(userInfo.getUsername(), oldPassword);
+        if (result == true) {
+            returnCallback("PasswordRight", "密码输入正确");
+            if (newPassword.equals(repeatPassword)) {
+                userInfo.setPassword(newPassword);
+                passwordHelper.encryptPassword(userInfo);
+                Cache<String, AtomicInteger> passwordRetryCache = cacheManager.getCache("passwordRetryCache");
+                passwordRetryCache.remove(userInfo.getUsername());
+                userService.updateMyPassword(userInfo);
+                return returnCallback("Success", "更新管理员密码成功");
+            } else {
+                return returnCallback("Error", "两次输入密码不一致");
+            }
+        }
+        return returnCallback("Error", "密码不正确");
+    }
+
     @RequiresPermissions("user:page")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -108,4 +135,6 @@ public class UserController extends BaseController {
         model.addAttribute("id", id);
         return "user/createUser";
     }
+
+
 }
