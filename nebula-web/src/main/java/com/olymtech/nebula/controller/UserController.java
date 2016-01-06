@@ -108,4 +108,9 @@ public class UserController extends BaseController {
         model.addAttribute("id", id);
         return "user/createUser";
     }
+
+    @RequestMapping(value = "/update/myPassword.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public String updateMyPassword() {
+        return "user/updatePassword";
+    }
 }
