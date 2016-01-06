@@ -7,14 +7,16 @@
       http://www.springframework.org/schema/context
       http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:nebula.properties" />
+
     <!-- 扫描注解Bean -->
+    <context:annotation-config />
     <context:component-scan base-package="com.olymtech.nebula">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <bean class="com.olymtech.nebula.core.utils.SpringUtils"/>
 
-    <!-- 加载配置属性文件 -->
-    <context:property-placeholder ignore-unresolvable="true" location="classpath:nebula.properties" />
+    <bean class="com.olymtech.nebula.core.utils.SpringUtils"/>
 
 </beans>

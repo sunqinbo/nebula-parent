@@ -21,6 +21,10 @@
                     <property name="group" value="com.olymtech.nebula.dao" />
                     <property name="dataId" value="jdbc.properties" />
                 </bean>
+                <bean class="com.olymtech.util.diamond.DiamondConfigKey">
+                    <property name="group" value="com.olymtech.ops.common" />
+                    <property name="dataId" value="ops.properties" />
+                </bean>
             </list>
         </property>
     </bean>

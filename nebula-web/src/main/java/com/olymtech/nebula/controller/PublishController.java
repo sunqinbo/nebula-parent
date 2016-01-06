@@ -1,5 +1,7 @@
 package com.olymtech.nebula.controller;
 
+import com.aliyuncs.cdn.model.v20141111.DescribeRefreshTasksResponse;
+import com.aliyuncs.cdn.model.v20141111.RefreshObjectCachesResponse;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
@@ -12,6 +14,7 @@ import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
 import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
+import com.olymtech.nebula.service.starry.IStarryCdnApi;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -53,6 +56,8 @@ public class PublishController extends BaseController {
     INebulaPublishModuleService publishModuleService;
     @Resource
     IUserService        userService;
+    @Resource
+    private IStarryCdnApi starryCdnApi;
 
 
     @RequiresPermissions("publishevent:page")
@@ -659,4 +664,33 @@ public class PublishController extends BaseController {
         publishModules = publishModuleService.selectByEventId(eventId);
         return publishModules;
     }
+
+    /**
+     * 获取cdn刷新列表
+     */
+    @RequestMapping(value="/list/describeRefreshTasks",method={RequestMethod.POST})
+    @ResponseBody
+    public Object getDescribeRefreshTasks(){
+        DescribeRefreshTasksResponse describeRefreshTasksResponse = starryCdnApi.describeRefreshTasks("olymtech@aliyun.com", "cn-hangzhou");
+        if(describeRefreshTasksResponse != null){
+            return returnCallback("Success", describeRefreshTasksResponse);
+        }else{
+            return returnCallback("Error", "获取cdn刷新列表失败");
+        }
+    }
+
+    /**
+     * 获取cdn刷新列表
+     */
+    @RequestMapping(value="/add/describeRefreshTasks",method={RequestMethod.POST})
+    @ResponseBody
+    public Object describeRefreshTasks(String  objectPath,String  objectType){
+        RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.describeRefreshObject("olymtech@aliyun.com", "cn-hangzhou",objectPath,objectType);
+        if(refreshObjectCachesResponse != null){
+            return returnCallback("Success", refreshObjectCachesResponse);
+        }else{
+            return returnCallback("Error", "获取cdn刷新列表失败");
+        }
+    }
+
 }

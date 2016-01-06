@@ -8,6 +8,8 @@ import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by WYQ on 2015/11/18.
@@ -30,6 +33,9 @@ public class UserController extends BaseController {
 
     @Resource
     private PasswordHelper passwordHelper;
+
+    @Resource
+    private CacheManager cacheManager;
 
     @RequiresPermissions("user:add")
     @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
@@ -83,6 +89,10 @@ public class UserController extends BaseController {
     @ResponseBody
     public Callback updatePassword(Integer userId, String newPassword) {
         userService.updatePassword(userId, newPassword);
+        NebulaUserInfo nebulaUserInfo = userService.selectById(userId);;
+        //更新密码重试缓存
+        Cache<String, AtomicInteger> passwordRetryCache = cacheManager.getCache("passwordRetryCache");
+        passwordRetryCache.remove(nebulaUserInfo.getUsername());
         return returnCallback("Success", "更新用户密码成功");
     }
 
