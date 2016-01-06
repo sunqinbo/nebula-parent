@@ -5,8 +5,8 @@ $(function(){
             username:{required:true},
             mobilePhone:{required:true},
             weixinAcc:{required:true},
-            qqAcc:{required:true},
-            email:{required:true},
+            //qqAcc:{required:true},
+            //email:{required:true},
             nickname:{required:true},
             deptName:{required:true},
             jobTitle:{required:true},
@@ -19,8 +19,8 @@ $(function(){
         messages:{
             username:{required:"用户名不能为空"},
             mobilePhone:{required:"手机号码不能为空"},
-            weixinAcc:{required:"微信账号不能为空"},
-            qqAcc:{required:"qq账号不能为空"},
+            //weixinAcc:{required:"微信账号不能为空"},
+            //qqAcc:{required:"qq账号不能为空"},
             email:{required:"邮箱不能为空"},
             nickname:{required:"昵称不能为空"},
             deptName:{required:"部门名称不能为空"},
@@ -206,24 +206,26 @@ function btnClick(isCreate) {
         },
         datatype: "json",
         success: function (data) {
-            $.notify({
-                icon: '',
-                message: tips + "用户成功"
-
-            }, {
-                type: 'info',
-                timer: 1000
-            });
+            if(data.callbackMsg=="Success") {
+                var msg = tips + "用户成功";
+                nebula.common.alert.success(msg, 1000);
+            }
+            else{
+                var msg = data.responseContext;
+                nebula.common.alert.warning(msg, 1000);
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $.notify({
-                icon: '',
-                message: "很抱歉" + tips + "用户失败，原因" + errorThrown
-
-            }, {
-                type: 'info',
-                timer: 1000
-            });
+            var msg = "很抱歉" + tips + "用户失败，原因" + errorThrown;
+            nebula.common.alert.danger(msg, 1000);
+            //$.notify({
+            //    icon: '',
+            //    message: "很抱歉" + tips + "用户失败，原因" + errorThrown
+            //
+            //}, {
+            //    type: 'info',
+            //    timer: 1000
+            //});
         }
     })
 }

@@ -59,6 +59,9 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
 
     @Override
     public void updateAclPermission(AclPermission permission) {
+        if(permission.getPid()==null){
+            permission.setPid(0);
+        }
         aclPermissionDao.update(permission);
     }
 
