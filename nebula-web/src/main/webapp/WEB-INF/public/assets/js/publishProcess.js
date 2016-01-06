@@ -204,6 +204,7 @@ $(document).ready(function(){
         $("#btn4").removeClass("btn-info");
         $("#btn_ConfirmResult").attr('disabled', true);
         $("#btn_ConfirmResult").removeClass("btn-info");
+        $("#refreshCDN").hide();
         $("#restartTomcat_btn").hide();
         $("#restartPublish").hide();
         $("#cancelPublish").hide();
@@ -217,6 +218,7 @@ $(document).ready(function(){
         $("#btn4").attr('disabled', true);
         $("#btn4").removeClass("btn-info");
         $("#restartTomcat_btn").hide();
+        $("#refreshCDN").hide();
         $("#restartPublish").hide();
         $("#cancelPublish").hide();
         $("#step5").show();
@@ -399,6 +401,8 @@ function Initialization() {
                         $("#step" + (3)).hide();
                         $("#restartTomcat_btn").show();
                         $("#restartTomcat_btn").attr('disabled', false);
+                        $("#refreshCDN").show();
+                        $("#refreshCDN").attr('disabled', false);
                         return;
                     case 7:$("#restartTomcat_btn").attr('disabled', false);
                         $("#backPublish").attr('disabled', false);
@@ -438,6 +442,8 @@ function Initialization() {
                         $("#btn4").addClass("btn-info");
                         $("#step4").hide();
                         $("#step5").hide();
+                        $("#refreshCDN").show();
+                        $("#refreshCDN").attr('disabled', false);
                         return;
                     default :
                         if (actionGroup < 5) {
@@ -491,6 +497,7 @@ function Initialization() {
             }
             if(actionGroup>5){
                 $("#restartTomcat_btn").show();
+                $("#refreshCDN").show();
             }
             if(actionGroup==7) {
                 //$("#restartTomcat_btn").show();
@@ -548,10 +555,13 @@ function btnUnclick() {
     $("#btn2").attr('disabled', true);
     $("#btn3").attr('disabled', true);
     $("#btn4").attr('disabled', true);
+    $("#btn4").removeClass("btn-info");
     $("#btn_ConfirmResult").attr('disabled', true);
+    $("#btn_ConfirmResult").removeClass("btn-info");
     $("#restartTomcat_btn").attr('disabled',true);
     $("#backPublish").attr('disabled', true);
     $("#nextPublish").attr('disabled', true);
+    $("#refreshCDN").attr('disabled',true);
 }
 
 //下一阶段的发布事件的点击事件

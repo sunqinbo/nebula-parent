@@ -42,10 +42,13 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             欢迎 $user.username
-
+                            <b class="caret"></b>
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/user/update/myPassword.htm">修改密码</a></li>
+                        </ul>
                     </li>
                     <li>
                         <a href="/logout">

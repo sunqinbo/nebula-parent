@@ -59,7 +59,6 @@ public class AclPermissionServiceImpl implements IAclPermissionService {
 
     @Override
     public void updateAclPermission(AclPermission permission) {
-
         aclPermissionDao.update(permission);
     }
 

@@ -8,6 +8,7 @@
 <script type="text/javascript" src="/public/assets/processbar/js/ystep.js"></script>
 <script src="/public/assets/js/demo.js"></script>
 <script src="/public/assets/js/bootstrap-notify.js"></script>
+
 <script type="text/javascript" src="/public/assets/js/publishProcess.js"></script>
 
 <script>
@@ -178,6 +179,56 @@
                             #end
                             #if($shiro.hasPermission("publishevnt:publishFailEnd"))
                                 <button type="button" id="btn4" class="btn btn-default" onclick="nebula.publish.process.publishFailEnd()">我要回滚</button>
+                            #end
+                            #if($shiro.hasPermission("publishevnt:publishReal"))
+                                <button type="button" style="display: none" id="refreshCDN" data-toggle="modal" data-target="#mymodal" class="btn btn-danger" onclick="">刷新CDN</button>
+                                <div class="modal fade" id="mymodal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- 模态弹出窗内容 -->
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                <h4 style="color: #0089db" class="modal-title">刷新CDN</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div style="text-align: center;margin-bottom: 50px;">
+                                                    <p>请选择需要刷新的URL</p>
+                                                    <select>
+                                                        <option value="http://pstage.200jit.com/">http://pstage.200jit.com/</option>
+                                                        <option value="http://pptest.200jit.com/">http://pptest.200jit.com/</option>
+                                                        <option value="http://pmtest.200jit.com/">http://pmtest.200jit.com/</option>
+                                                        <option value="http://patest.200jit.com/">http://patest.200jit.com/</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+##                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                <button type="button" class="btn btn-primary">提交</button>
+                                                <button type="button" data-toggle="modal" data-target="#checkmodal" class="btn btn-primary">查看</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="checkmodal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- 模态弹出窗内容 -->
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                <h4 style="color: #0089db" class="modal-title">刷新CDN</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div style="text-align: center;margin-bottom: 50px;">
+                                                    表格内容
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+##                                                <button type="button" class="btn btn-primary">确认</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             #end
                             #if($shiro.hasPermission("publishevnt:publishReal"))
                                 <button type="button" style="display: none" id="restartTomcat_btn" class="btn btn-danger" onclick="nebula.publish.process.restartTomcat()">重启tomcat</button>

@@ -79,6 +79,7 @@ $(function(){
             datatype:"json",
             success: function (data) {
                 $("#username").val(data["username"]);
+                $("#username").attr('disabled',true);
                 $("#mobilePhone").val(data["mobilePhone"]);
                 $("#weixinAcc").val(data["weixinAcc"]);
                 $("#qqAcc").val(data["qqAcc"]);
