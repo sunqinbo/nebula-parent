@@ -91,7 +91,6 @@ public class UserController extends BaseController {
         return returnCallback("Success", "更新用户密码成功");
     }
 
-    @RequiresPermissions("user:updateMyPassword")
     @RequestMapping(value = "/update/myPassword", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Callback updateMyPassword(String oldPassword, String newPassword, String repeatPassword) {
@@ -105,7 +104,7 @@ public class UserController extends BaseController {
                 Cache<String, AtomicInteger> passwordRetryCache = cacheManager.getCache("passwordRetryCache");
                 passwordRetryCache.remove(userInfo.getUsername());
                 userService.updateMyPassword(userInfo);
-                return returnCallback("Success", "更新管理员密码成功");
+                return returnCallback("Success", "更新密码成功");
             } else {
                 return returnCallback("Error", "两次输入密码不一致");
             }

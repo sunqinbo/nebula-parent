@@ -3,7 +3,7 @@ $(function(){
         rules:{
             password:{required:true},
             newPassword:{required:true},
-            newRePassword:{
+            repeatPassword:{
                 required:true,
                 equalTo:"#newPassword",
             },
@@ -11,7 +11,7 @@ $(function(){
         messages:{
             password:{required:"密码不能为空"},
             newPassword:{required:"新密码不能为空"},
-            newRePassword:{required:"确认密码不能为空",
+            repeatPassword:{required:"确认密码不能为空",
                 equalTo: "两次输入的密码不一致",},
         }
     });
@@ -19,13 +19,13 @@ $(function(){
         if($("#passwordUpdateForm").valid()) {
             $.ajax({
                 type: "POST",
-                url: url,
+                url: "/user/update/myPassword",
                 data: $('#passwordUpdateForm').serialize(),
                 async: false,
                 success: function (data) {
                     $.notify({
                         icon: '',
-                        message: "修改密码成功"
+                        message: data.responseContext
 
                     }, {
                         type: 'info',
