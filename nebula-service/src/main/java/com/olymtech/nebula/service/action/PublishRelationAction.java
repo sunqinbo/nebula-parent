@@ -65,8 +65,10 @@ public class PublishRelationAction extends AbstractAction {
         String appNames = "";
         int appNameNum = appNameList.size();
         for (int i = 0; i < appNameNum - 1; i++) {
-            String appname = appNameList.get(i).replace(".war", "");
-            appNames += appname + ",";
+            if (appNameList.get(i).contains(".war")) {
+                String appname = appNameList.get(i).replace(".war", "");
+                appNames += appname + ",";
+            }
         }
         String appname = appNameList.get(appNameNum - 1).replace(".war", "");
         appNames += appname;
