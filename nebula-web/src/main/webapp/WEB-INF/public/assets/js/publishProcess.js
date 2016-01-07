@@ -76,9 +76,16 @@ $(document).ready(function(){
         })
     });
 
-    //$("#refreshCDN").click(function(){
-    //    $("#mymodal").modal('show');
-    //});
+    /** 解决弹窗的问题，先将modal移到body层 */
+    $('#mymodal').appendTo("body");
+    $('#checkmodal').appendTo("body");
+    $("#refreshCDN").click(function(){
+        $('#mymodal').modal('show');
+    });
+    $("#modalCheck_btn").click(function(){
+        $('#checkmodal').modal('show');
+    });
+
 
     //初始化隐藏所有进度条的DIV及设置按钮不可点
     $("#step1").hide();
