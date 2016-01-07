@@ -47,6 +47,39 @@ $(document).ready(function(){
         }
     });
 
+    $("#modalCheck_btn").click(function(){
+        $.ajax({
+            type:"POST",
+            url: "/publish/list/describeRefreshTasks",
+            dataType:"json",
+            success: function (data) {
+                var modal_tbString=""
+                for(var i= 0,modallen=data.responseContext.tasks.length;i<modallen;i++ ){
+                    var task=data.responseContext.tasks[i];
+                    modal_tbString+="<tr><td>"+task.taskId+"</td>" +
+                        "<td>"+task.objectPath+"</td>"+
+                        "<td>"+task.status+"</td>"+
+                        "<td>"+task.creationTime+"</td>"+
+                        "</tr>"
+                }
+                $("#modal_tb").html(modal_tbString);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.notify({
+                    icon: '',
+                    message: "请求CDN列表失败，原因" + errorThrown
+                }, {
+                    type: 'danger',
+                    timer: 1000
+                });
+            }
+        })
+    });
+
+    //$("#refreshCDN").click(function(){
+    //    $("#mymodal").modal('show');
+    //});
+
     //初始化隐藏所有进度条的DIV及设置按钮不可点
     $("#step1").hide();
     $("#step2").hide();
@@ -614,7 +647,7 @@ function approvalBtn(){
                 icon: '',
                 message: "很抱歉插入发布事件单失败，原因" + errorThrown
             }, {
-                type: 'info',
+                type: 'danger',
                 timer: 1000
             });
         }
