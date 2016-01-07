@@ -23,12 +23,16 @@ $(function(){
                 data: $('#passwordUpdateForm').serialize(),
                 async: false,
                 success: function (data) {
+                    var notifyType="success";
+                    if(data.callbackMsg=="Error"){
+                        notifyType="danger";
+                    }
                     $.notify({
                         icon: '',
                         message: data.responseContext
 
                     }, {
-                        type: 'info',
+                        type: notifyType,
                         timer: 1000
                     });
                 },
