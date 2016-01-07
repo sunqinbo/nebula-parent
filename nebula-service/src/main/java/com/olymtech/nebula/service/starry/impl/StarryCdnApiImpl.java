@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * Created by Gavin on 2016-01-06 18:02.
  */
 @Service
-public class StarryCdnApiimpl implements IStarryCdnApi {
+public class StarryCdnApiImpl implements IStarryCdnApi {
 
     private Logger logger   =   LoggerFactory.getLogger(this.getClass());
 
