@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.config.xml"})
 @TransactionConfiguration(defaultRollback = false)
-public class StarryCdnApiimplTest {
+public class StarryCdnApiImplTest {
 
     @Resource
     private IStarryCdnApi starryCdnApi;
