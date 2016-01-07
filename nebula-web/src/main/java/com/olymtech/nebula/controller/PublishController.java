@@ -681,10 +681,10 @@ public class PublishController extends BaseController {
     /**
      * 获取cdn刷新列表
      */
-    @RequestMapping(value="/add/describeRefreshTasks",method={RequestMethod.POST})
+    @RequestMapping(value="/add/refreshObjectCaches",method={RequestMethod.POST})
     @ResponseBody
-    public Object describeRefreshTasks(String  objectPath,String  objectType){
-        RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.describeRefreshObject("olymtech@aliyun.com", "cn-hangzhou",objectPath,objectType);
+    public Object refreshObjectCaches(String  objectPath,String  objectType){
+        RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.refreshObjectCaches("olymtech@aliyun.com", "cn-hangzhou", objectPath, objectType);
         if(refreshObjectCachesResponse != null){
             return returnCallback("Success", refreshObjectCachesResponse);
         }else{

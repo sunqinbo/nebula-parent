@@ -59,7 +59,7 @@ public class StarryCdnApiImpl implements IStarryCdnApi {
      * 刷新一个cdn域名
      * */
     @Override
-    public RefreshObjectCachesResponse describeRefreshObject(String aliyunAcount, String regionId, String objectPath, String objectType){
+    public RefreshObjectCachesResponse refreshObjectCaches(String aliyunAcount, String regionId, String objectPath, String objectType){
         String describe_refresh_object_api = starryApiUrl+"/cdn/describeRefreshObject.htm?";
         String url = describe_refresh_object_api+"account="+aliyunAcount+"&regionId="+regionId+"&objectPath="+objectPath+"&objectType="+objectType;
         try{
@@ -76,8 +76,8 @@ public class StarryCdnApiImpl implements IStarryCdnApi {
                 return null;
             }
             ObjectMapper mapper = new ObjectMapper();
-            RefreshObjectCachesResponse describeRefreshTasksResponse = mapper.readValue(jsonObjectData.toJSONString(),RefreshObjectCachesResponse.class);
-            return describeRefreshTasksResponse;
+            RefreshObjectCachesResponse refreshObjectCachesResponse = mapper.readValue(jsonObjectData.toJSONString(),RefreshObjectCachesResponse.class);
+            return refreshObjectCachesResponse;
         }catch (Exception e){
             logger.error("describeRefreshTasksResponse error:",e);
         }

@@ -13,5 +13,5 @@ import com.aliyuncs.cdn.model.v20141111.RefreshObjectCachesResponse;
 public interface IStarryCdnApi {
     DescribeRefreshTasksResponse describeRefreshTasks(String aliyunAcount, String regionId);
 
-    RefreshObjectCachesResponse describeRefreshObject(String aliyunAcount, String regionId, String objectPath, String objectType);
+    RefreshObjectCachesResponse refreshObjectCaches(String aliyunAcount, String regionId, String objectPath, String objectType);
 }
