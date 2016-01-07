@@ -38,4 +38,6 @@ public interface IUserService {
     public NebulaUserInfo selectByEmpId(Integer empId);
 
     NebulaUserInfo selectById(Integer id);
+
+    void updateMyPassword(NebulaUserInfo userInfo);
 }

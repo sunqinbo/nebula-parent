@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,7 +62,7 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevent:page")
     @RequestMapping(value = {"/list"}, method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object PublishList(DataTablePage dataTablePage,NebulaPublishEvent nebulaPublishEvent) throws Exception{
+    public Object PublishList(DataTablePage dataTablePage, NebulaPublishEvent nebulaPublishEvent) throws Exception {
         PageInfo pageInfo = publishEventService.getPublishEvent(dataTablePage, nebulaPublishEvent);
         return pageInfo;
     }
@@ -72,7 +71,7 @@ public class PublishController extends BaseController {
     public String publishEvent(Model model) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
         model.addAttribute("productTrees", productTrees);
-            return "event/publishEvent";
+        return "event/publishEvent";
     }
 
     @RequestMapping(value = "/productTreeList/pid", method = {RequestMethod.POST, RequestMethod.GET})
@@ -116,18 +115,18 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishapply:commit")
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody
-    public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent)  throws Exception{
+    public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) throws Exception {
         String publishSvn = nebulaPublishEvent.getPublishSvn();
         String pattern = "svn://svn.olymtech.com/warspace/";
         Pattern p = Pattern.compile(pattern);
         Matcher match = p.matcher(publishSvn);
-        if(!match.find()){
+        if (!match.find()) {
             return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
         }
         Integer empId = getLoginUser().getEmpId();
         nebulaPublishEvent.setSubmitEmpId(empId);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
-   
+
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
         return returnCallback("Success", id);
     }
@@ -182,7 +181,7 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:prePublishMinion")
     @RequestMapping(value = "/preMinionPublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public Callback prePublishMinion(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "id is null");
@@ -220,7 +219,7 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:publishReal")
     @RequestMapping(value = "/publishReal", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishReal(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public Callback publishReal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "id is null");
@@ -250,7 +249,7 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:publishContinue")
     @RequestMapping(value = "/publishContinue", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishContinue() throws Exception{
+    public Callback publishContinue() throws Exception {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -305,7 +304,7 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:publishSuccessEnd")
     @RequestMapping(value = "/publishSuccessEnd", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishSuccessEnd() throws Exception{
+    public Callback publishSuccessEnd() throws Exception {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -346,12 +345,12 @@ public class PublishController extends BaseController {
     }
 
     /**
-     *回滚
+     * 回滚
      */
     @RequiresPermissions("publishevnt:publishFailEnd")
     @RequestMapping(value = "/publishFailEnd", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback publishFailEnd() throws Exception{
+    public Callback publishFailEnd() throws Exception {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -414,11 +413,11 @@ public class PublishController extends BaseController {
 
     /**
      * 重启tomcat
-     * */
+     */
     @RequiresPermissions("publishevnt:publishReal")
     @RequestMapping(value = "/restartTomcat", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback restartTomcat(HttpServletRequest request){
+    public Callback restartTomcat(HttpServletRequest request) {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -444,11 +443,11 @@ public class PublishController extends BaseController {
 
     /**
      * 取消发布
-     * */
+     */
     @RequiresPermissions("publishevnt:publishReal")
     @RequestMapping(value = "/cancelPublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback cancelpublish(HttpServletRequest request){
+    public Callback cancelpublish(HttpServletRequest request) {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "参数id为空");
@@ -483,7 +482,7 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:updateEtcEnd")
     @RequestMapping(value = "/updateEtcEnd", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback updateEtcEnd(HttpServletRequest request) throws Exception{
+    public Callback updateEtcEnd(HttpServletRequest request) throws Exception {
         String eventId = request.getParameter("id");
         if (!StringUtils.isNotEmpty(eventId)) {
             return returnCallback("Error", "id参数为空");
@@ -494,14 +493,14 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object publishProcessGetStep(Integer eventId) throws Exception{
+    public Object publishProcessGetStep(Integer eventId) throws Exception {
         String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC"};
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
         String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
         String[] group5 = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
         String[] group6 = {"CLEAN_PUBLISH_DIR"};
-        String[] group7 = {"STOP_TOMCAT","START_TOMCAT"};
+        String[] group7 = {"STOP_TOMCAT", "START_TOMCAT"};
         List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
@@ -548,7 +547,7 @@ public class PublishController extends BaseController {
                 }
             }
             int lastGroup = 0;
-            if(last>2) {
+            if (last > 2) {
                 NebulaPublishSchedule nebulaPublishScheduleLast = nebulaPublishSchedules.get(last - 2);
                 switch (String.valueOf(nebulaPublishScheduleLast.getPublishActionGroup())) {
                     case "PRE_MASTER":
@@ -581,10 +580,10 @@ public class PublishController extends BaseController {
             map.put("errorMsg", nebulaPublishSchedule.getErrorMsg());
         }
         //获取机器信息
-        if(eventId!=null) {
+        if (eventId != null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
             map.put("HostInfos", nebulaPublishHosts);
-            map.put("eventStatus",publishEventService.selectById(eventId).getPublishStatus());
+            map.put("eventStatus", publishEventService.selectById(eventId).getPublishStatus());
         }
         return returnCallback("Success", map);
 
@@ -607,14 +606,14 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:addnextpublish")
     @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Object addnextpublish(Integer eventId,String nowPublish) throws Exception{
-        NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+    public Object addnextpublish(Integer eventId, String nowPublish) throws Exception {
+        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setPublishEnv(nowPublish);
         nebulaPublishEvent.setId(null);
         nebulaPublishEvent.setIsApproved(false);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
         nebulaPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
-        int id=publishEventService.createPublishEvent(nebulaPublishEvent);
+        int id = publishEventService.createPublishEvent(nebulaPublishEvent);
         return returnCallback("Success", id);
     }
 
@@ -624,8 +623,8 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevent:approval")
     @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
     @ResponseBody
-    public Object approvalPublish(Integer eventId) throws Exception{
-        NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+    public Object approvalPublish(Integer eventId) throws Exception {
+        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsApproved(true);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
         publishEventService.update(nebulaPublishEvent);
@@ -633,34 +632,34 @@ public class PublishController extends BaseController {
     }
 
     /**
-     *删除发布事件
+     * 删除发布事件
      */
     @RequiresPermissions("publishevnt:delete")
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     @ResponseBody
-    public Object deletePublish(Integer eventId) throws Exception{
-        NebulaPublishEvent nebulaPublishEvent= (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+    public Object deletePublish(Integer eventId) throws Exception {
+        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsDelete(true);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
     }
 
     /**
-     *查询发布事件
+     * 查询发布事件
      */
     @RequestMapping(value = "/get/noPublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getPublishStatus(NebulaPublishEvent nebulaPublishEvent) throws Exception{
+    public Object getPublishStatus(NebulaPublishEvent nebulaPublishEvent) throws Exception {
         return publishEventService.isPUBLISHING(nebulaPublishEvent);
     }
 
     /**
      * 获取模块信息
      */
-    @RequestMapping(value="/list/moduleAndApps",method={RequestMethod.POST})
+    @RequestMapping(value = "/list/moduleAndApps", method = {RequestMethod.POST})
     @ResponseBody
-    public  Object getmoduleAndApps(Integer eventId){
-        List<NebulaPublishModule> publishModules=new ArrayList<>();
+    public Object getmoduleAndApps(Integer eventId) {
+        List<NebulaPublishModule> publishModules = new ArrayList<>();
         publishModules = publishModuleService.selectByEventId(eventId);
         return publishModules;
     }

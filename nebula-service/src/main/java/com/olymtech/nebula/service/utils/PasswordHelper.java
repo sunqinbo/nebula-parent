@@ -1,5 +1,6 @@
 package com.olymtech.nebula.service.utils;
 
+import com.olymtech.nebula.dao.INebulaUserInfoDao;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -8,6 +9,8 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * <p>User: Zhang Kaitao
  * <p>Date: 14-1-28
@@ -15,6 +18,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PasswordHelper {
+
+    @Resource
+    private INebulaUserInfoDao iNebulaUserInfoDao;
 
     private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
 
@@ -46,5 +52,26 @@ public class PasswordHelper {
                 hashIterations).toHex();
 
         user.setPassword(newPassword);
+    }
+
+        /**
+     * 验证密码
+     * */
+    public Boolean verifyAccount(String userName, String password){
+        Boolean result = false;
+        NebulaUserInfo userInfo = iNebulaUserInfoDao.selectByUsername(userName);
+
+        String salt = userName + userInfo.getSecurityKey();
+        String submitPassword = new SimpleHash(
+                algorithmName,
+                password,
+                ByteSource.Util.bytes(salt),
+                hashIterations).toHex();
+
+        if(userInfo.getPassword().equals(submitPassword)){
+            result = true;
+        }
+
+        return result;
     }
 }

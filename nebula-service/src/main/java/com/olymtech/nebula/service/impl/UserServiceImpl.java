@@ -123,7 +123,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void updatePassword(Integer userId ,String newPassword){
+    public void updatePassword(Integer userId, String newPassword) {
         NebulaUserInfo nebulaUserInfo = nebulaUserInfoDao.selectById(userId);
         nebulaUserInfo.setPassword(newPassword);
         passwordHelper.encryptPassword(nebulaUserInfo);
@@ -137,10 +137,10 @@ public class UserServiceImpl implements IUserService {
     public PageInfo getPageInfoAclUser(DataTablePage dataTablePage) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
         List<NebulaUserInfo> users = nebulaUserInfoDao.selectAllPaging(new NebulaUserInfo());
-        for(int i=0,len=users.size();i<len;i++) {
-            List<AclUserRole> aclUserRoles=aclUserRoleDao.selectByEmpId(users.get(i).getEmpId());
-            List<AclRole> aclRoles=new ArrayList<>();
-            for(int j=0,acrlen=aclUserRoles.size();j<acrlen;j++){
+        for (int i = 0, len = users.size(); i < len; i++) {
+            List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(users.get(i).getEmpId());
+            List<AclRole> aclRoles = new ArrayList<>();
+            for (int j = 0, acrlen = aclUserRoles.size(); j < acrlen; j++) {
                 aclRoles.add(aclRoleDao.selectById(aclUserRoles.get(j).getRoleId()));
             }
             users.get(i).setAclRoles(aclRoles);
@@ -166,12 +166,17 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public NebulaUserInfo selectByEmpId(Integer empId){
+    public NebulaUserInfo selectByEmpId(Integer empId) {
         return nebulaUserInfoDao.selectByEmpId(empId);
     }
 
     @Override
     public NebulaUserInfo selectById(Integer id){
         return nebulaUserInfoDao.selectById(id);
+    }
+
+    @Override
+    public void updateMyPassword(NebulaUserInfo userInfo) {
+        nebulaUserInfoDao.updatePassword(userInfo);
     }
 }
