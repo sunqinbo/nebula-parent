@@ -60,12 +60,13 @@ public class PublishRelationAction extends AbstractAction {
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), null, "");
-        String publicWarDirPath = MasterDeployDir+"/"+event.getPublishProductKey()+"/publish_war/";
+        String publicWarDirPath = MasterDeployDir + "/" + event.getPublishProductKey() + "/publish_war/";
         List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
         String appNames = "";
+        String regex = ".*\\.war";
         int appNameNum = appNameList.size();
         for (int i = 0; i < appNameNum - 1; i++) {
-            if (appNameList.get(i).contains(".war")) {
+            if (appNameList.get(i).matches(regex)) {
                 String appname = appNameList.get(i).replace(".war", "");
                 appNames += appname + ",";
             }
@@ -74,18 +75,18 @@ public class PublishRelationAction extends AbstractAction {
         appNames += appname;
         try {
             List<NebulaPublishModule> modules = new ArrayList<>();
-            Map<String ,Object> resultMap = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames,event.getPublishEnv());
+            Map<String, Object> resultMap = analyzeArsenalApiService.getSimpleHostListByProductAndModule(event.getPublishProductName(), appNames, event.getPublishEnv());
             if (resultMap == null) {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "请求基础数据库异常");
                 return false;
             }
             String msg = resultMap.get("msg").toString();
-            List<ProductTree> moduleTrees =(List)resultMap.get("result");
+            List<ProductTree> moduleTrees = (List) resultMap.get("result");
             if (StringUtils.isNotEmpty(msg)) {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, msg);
                 return false;
             }
-            if (moduleTrees == null||moduleTrees.size() == 0) {
+            if (moduleTrees == null || moduleTrees.size() == 0) {
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "您提交的SVN地址无法正确解析主机及应用的信息(匹配工程名称出错)");
                 return false;
             }
@@ -129,7 +130,7 @@ public class PublishRelationAction extends AbstractAction {
             return true;
         } catch (Exception e) {
             publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "error message");
-            logger.error("PublishRelationAction error:",e);
+            logger.error("PublishRelationAction error:", e);
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.ANALYZE_PROJECT, event.getPublishActionGroup(), false, "error message");
         return false;
