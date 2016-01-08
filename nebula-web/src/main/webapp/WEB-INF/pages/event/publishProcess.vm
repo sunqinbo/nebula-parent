@@ -312,7 +312,7 @@
             <div class="modal-body">
                 <div style="text-align: center;margin-bottom: 50px;">
                     <p>请选择需要刷新的URL</p>
-                    <select>
+                    <select id="modalUrl_select">
                         <option value="http://pstage.200jit.com/">http://pstage.200jit.com/</option>
                         <option value="http://pptest.200jit.com/">http://pptest.200jit.com/</option>
                         <option value="http://pmtest.200jit.com/">http://pmtest.200jit.com/</option>
@@ -322,7 +322,7 @@
             </div>
             <div class="modal-footer">
             ##                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">提交</button>
+                <button type="button" id="modalSubmit_btn" class="btn btn-primary">提交</button>
                 <button type="button" id="modalCheck_btn" class="btn btn-primary">查看</button>
             </div>
         </div>

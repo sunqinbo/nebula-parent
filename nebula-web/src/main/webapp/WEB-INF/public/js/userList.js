@@ -36,8 +36,9 @@ function getLtb(pageNum){
                 }
                 rolelist=rolelist.substring(0, rolelist.length - 1);
                 tbString=tbString+"<tr><td>"+data["list"][i]["id"]+"</td><td>"+
-                    data["list"][i]["username"]+"</td><td>"+data["list"][i]["mobilePhone"]+
-                    "</td><td>"+data["list"][i]["weixinAcc"]+
+                    data["list"][i]["username"]+
+                    //"</td><td>"+data["list"][i]["mobilePhone"]+
+                    //"</td><td>"+data["list"][i]["weixinAcc"]+
                     //"</td><td>"+data["list"][i]["qqAcc"]+
                     //"</td><td>"+data["list"][i]["email"]+
                     "</td><td>"+data["list"][i]["nickname"]+
@@ -144,7 +145,7 @@ function listBtn(pageNum){
         }
         if($(this).text()=="编辑") {
             $(this).click(function() {
-                var empId = $(this).parent().parent().parent().children().eq(7);
+                var empId = $(this).parent().parent().parent().children().eq(5);
                 var id = $(this).parent().parent().parent().children().eq(0);
                 //window.open('/user/update.htm?empId=' + empId.text()+'&id='+id.text());
                 window.location.href='/user/update.htm?empId=' + empId.text()+'&id='+id.text();
