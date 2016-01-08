@@ -4,13 +4,11 @@
  */
 package com.olymtech.nebula.core.svn;
 
+import com.olymtech.nebula.common.utils.DateUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tmatesoft.svn.core.SVNCommitInfo;
-import org.tmatesoft.svn.core.SVNDepth;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.*;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
@@ -21,6 +19,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.*;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * Created by Gavin on 2015-10-21 16:05.
@@ -44,6 +43,7 @@ public class SvnUtils {
         FSRepositoryFactory.setup();
     }
 
+    /** 创建 SvnClientManager */
     public static SVNClientManager createSvnClientManager(String svnUrl, String username,
                                                           String password){
         initSvnLibrary();
@@ -71,8 +71,8 @@ public class SvnUtils {
 
     }
 
+    /**  svn checkout */
     public static Boolean checkout(SVNClientManager svnClientManager,String svnUrl,String svnLocalPath) {
-
 
         SVNURL repositoryURL = null;
         try {
@@ -104,6 +104,10 @@ public class SvnUtils {
         return false;
     }
 
+    /**
+     * 提交commit add /delete 文件、目录处理
+     *
+     * */
     public static SVNCommitInfo commit(final SVNClientManager svnClientManager,
                                        String svnLocalPath, boolean keepLocks, String commitMessage) {
         try {
@@ -113,7 +117,9 @@ public class SvnUtils {
                         + localPath.getAbsolutePath() + "' is not exists!");
                 return null;
             }
-
+            /** 递归添加文件、文件夹 */
+            checkVersiondDirectory(svnClientManager, localPath);
+            /** add/delete 文件、文件夹 */
             svnClientManager.getStatusClient().doStatus(localPath, SVNRevision.HEAD, SVNDepth.INFINITY, false, false, false, false, new ISVNStatusHandler() {
                 @Override
                 public void handleStatus(SVNStatus status) throws SVNException {
@@ -124,6 +130,7 @@ public class SvnUtils {
                     }
                 }
             }, null);
+            /** 提交 commit */
             return svnClientManager.getCommitClient().doCommit(new File[] { localPath }, false, "<commit> " + commitMessage, null, null, false, true, SVNDepth.INFINITY);
         } catch (SVNException e) {
             logger.error("svn commit error:", e);
@@ -131,6 +138,28 @@ public class SvnUtils {
         return null;
     }
 
+    /**
+     * 递归检查不在版本控制的文件，并add到svn
+     * @param clientManager
+     * @param wc
+     */
+    private static void checkVersiondDirectory(SVNClientManager clientManager,File wc){
+        if(!SVNWCUtil.isVersionedDirectory(wc)){
+            addEntry(clientManager, wc);
+        }
+        if(wc.isDirectory()){
+            for(File sub:wc.listFiles()){
+                if(sub.isDirectory() && sub.getName().equals(".svn")){
+                    continue;
+                }
+                checkVersiondDirectory(clientManager,sub);
+            }
+        }
+    }
+
+    /**
+     * 增加到 svn本地库
+     * */
     public static void addEntry(SVNClientManager svnClientManager, File wcPath) {
         try {
             svnClientManager.getWCClient().doAdd(new File[] { wcPath }, true,
@@ -140,6 +169,16 @@ public class SvnUtils {
         }
     }
 
+    /** 递归清理工作副本，删除未完成的工作副本锁定，并恢复未完成的操作 */
+    public static void wCClientDoCleanup(SVNClientManager svnClientManager, File localPath){
+        try{
+            svnClientManager.getWCClient().doCleanup(localPath);
+        }catch (Exception e){
+            logger.error("wCClientDoCleanup error", e);
+        }
+    }
+
+    /** string svn地址 转 SVNURL */
     public static SVNURL stringToSVNURL(String svnUrlString){
         SVNURL svnUrl = null;
         try {
@@ -150,40 +189,5 @@ public class SvnUtils {
         }
         return null;
     }
-
-
-//    public static void main(String[] args) throws Exception {
-//        String svnUrl = "svn://172.16.137.150/";
-//        String svnLoaclBase = "/Users/Gavin/svnlocal/";
-//        String svnLocalPath = svnLoaclBase + DateUtils.longDate(new Date());
-//        SVNClientManager svnClientManager = createSvnClientManager(svnUrl,"gavin","hellomonitor");
-//
-//        /** checkout */
-//        Boolean reuslt_checkout = checkout(svnClientManager, svnUrl, svnLocalPath);
-//        System.out.println(reuslt_checkout);
-//
-//        /** commit */
-//        String commitPath = svnLoaclBase+"20151027105751/";
-//        System.out.println(commitPath);
-//
-//        File orderDir = new File(commitPath);
-//        if (!orderDir.exists()) {
-//            logger.error("the destination directory '"
-//                    + orderDir.getAbsolutePath() + "' is not exists!");
-//        }
-//        SVNCommitInfo commitInfo = commit(svnClientManager,orderDir,false,"test add");
-//
-//        /**
-//         * r11 by 'gavin' at Tue Oct 27 12:17:05 CST 2015
-//         * r15 by 'gavin' at Tue Oct 27 14:53:50 CST 2015
-//         * EMPTY COMMIT
-//         */
-//        if(commitInfo.toString().equals("EMPTY COMMIT")){
-//            System.out.println(commitInfo+":nothing");
-//        }else{
-//            System.out.println(commitInfo);
-//        }
-//    }
-
 
 }
