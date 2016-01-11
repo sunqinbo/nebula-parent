@@ -88,7 +88,6 @@ $(document).ready(function(){
     });
 
     $("#modalSubmit_btn").click(function(){
-        $("#modalUrl_select").find("option:selected").text()
         $.ajax({
             type:"POST",
             url: "/publish/add/refreshObjectCaches",
@@ -496,6 +495,7 @@ function Initialization() {
                         $("#restartTomcat_btn").attr('disabled', false);
                         $("#refreshCDN").show();
                         $("#refreshCDN").attr('disabled', false);
+                        $("#refreshCDN").addClass("btn-danger");
                         return;
                     case 7:$("#restartTomcat_btn").attr('disabled', false);
                         $("#backPublish").attr('disabled', false);
@@ -537,6 +537,7 @@ function Initialization() {
                         $("#step5").hide();
                         $("#refreshCDN").show();
                         $("#refreshCDN").attr('disabled', false);
+                        $("#refreshCDN").addClass("btn-danger");
                         return;
                     default :
                         if (actionGroup < 5) {

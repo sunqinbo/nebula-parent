@@ -49,3 +49,5 @@
 <script src="/public/assets/datetime-plugin/WdatePicker.js"></script>
 <script src="/public/assets/datetime-plugin/calendar.js"></script>
 <script src="/public/assets/datetime-plugin/timepicki.js"></script>
+
+<script src="/public/js/sidebar.js"></script>
