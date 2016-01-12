@@ -497,7 +497,9 @@ function Initialization() {
                         $("#refreshCDN").attr('disabled', false);
                         $("#refreshCDN").addClass("btn-danger");
                         return;
-                    case 7:$("#restartTomcat_btn").attr('disabled', false);
+                    case 7:
+                        //$("#restartTomcat_btn").attr('disabled', false);
+                        $("#restartTomcat_btn").hide();
                         $("#backPublish").attr('disabled', false);
                         $("#nextPublish").attr('disabled', false);
                         return;
@@ -590,7 +592,9 @@ function Initialization() {
                 }
             }
             if(actionGroup>5){
-                $("#restartTomcat_btn").show();
+                if(actionGroup!=6) {
+                    $("#restartTomcat_btn").show();
+                }
                 $("#refreshCDN").show();
             }
             if(actionGroup==7) {
