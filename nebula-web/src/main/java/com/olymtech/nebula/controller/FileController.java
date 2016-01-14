@@ -112,6 +112,7 @@ public class FileController extends BaseController {
                 }
                 else {
                     Children.setChildren(false);
+//                    Children.setId(idString+"\\"+path+"F");
                     Children.setId(idString+"/"+path+"F");
                     Children.setIcon("jstree-file-icon");
                 }
@@ -143,6 +144,7 @@ public class FileController extends BaseController {
             jsTreeData.setState(cjsTreeDataState);
             if(childSrcmap.get(path)){
                 jsTreeData.setId(idString+"/"+path+"D");
+//                jsTreeData.setId(idString+"\\"+path+"D");
                 Map<String,Boolean> hasChild=fileAnalyzeService.getDirMapByDirPath(idString+"/"+path);
                 if(hasChild.size()>0){
                     jsTreeData.setChildren(true);
@@ -152,6 +154,7 @@ public class FileController extends BaseController {
             }
             else {
                 jsTreeData.setId(idString+"/"+path+"F");
+//                jsTreeData.setId(idString+"\\"+path+"F");
                 jsTreeData.setChildren(false);
                 jsTreeData.setIcon("jstree-file-icon");
             }
@@ -159,5 +162,18 @@ public class FileController extends BaseController {
         }
 
         return jsTreeDatas;
+    }
+
+    @RequestMapping(value="/newFile",method=RequestMethod.POST)
+    @ResponseBody
+    public Object newFile(String type,String fileName) throws IOException {
+        String tip="目录";
+        if("file".equals(type)){
+            tip="文件";
+        }
+        if(fileReadService.newDirOrFile(type,fileName)){
+            return returnCallback("Success",tip+"创建成功");
+        }
+        return returnCallback("Error",tip+"创建失败，"+tip+"已存在");
     }
 }

@@ -11,4 +11,6 @@ public interface IFileReadService {
     public List<String> ReadFile(String path) throws IOException;
 
     public void SaveFile(String path,String content) throws IOException;
+
+    public boolean newDirOrFile(String type, String fileName) throws IOException;
 }

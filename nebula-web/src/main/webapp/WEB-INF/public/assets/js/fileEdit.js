@@ -3,6 +3,53 @@ $(document).ready(function(){
     $("#btn_close").click(function(){
         window.close();
     });
+
+    /** 解决弹窗的问题，先将modal移到body层 */
+    $('#dirmodal').appendTo("body");
+    $('#filemodal').appendTo("body");
+    $("#newDir_btn").click(function(){
+        $('#dirmodal').modal('show');
+    });
+    $("#newFile_btn").click(function(){
+        $('#filemodal').modal('show');
+    });
+
+    //新增目录，新增文件操作
+    $("#dirSubmit_btn").click(function(){
+        newDirOrFile("dir");
+        //$.ajax({
+        //    type:"POST",
+        //    async:false,
+        //    url:"/etc_edit/newFile",
+        //    data:{
+        //        type:"dir",
+        //        fileName:$("#addDir_input").val()+"\\"+$("#dirName").val()
+        //    },
+        //    success: function (data) {
+        //        $('#dirmodal').modal('hide');
+        //        var type="success";
+        //        if(data.callbackMsg=="Error"){
+        //            type="danger"
+        //        }
+        //        $.notify({
+        //            icon: '',
+        //            message: data.responseContext
+        //
+        //        }, {
+        //            type: type,
+        //            timer: 1000
+        //        });
+        //        $("#tree-div").jstree(true).refresh_node("F:\\121D");
+        //    },
+        //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+        //        nebula.common.alert.danger("很抱歉，创建失败，原因"+ errorThrown, 1000);
+        //    }
+        //});
+    });
+    $("#fileSubmit_btn").click(function(){
+        newDirOrFile("file");
+    })
+
     //生成jstree
     $('#tree-div')
         .on("changed.jstree", function (e, data) {
@@ -19,8 +66,13 @@ $(document).ready(function(){
                 if(fileOrdir=="D") {
                     $("#textputer").empty();
                     $("#btnputer").empty();
+                    $("#addFile_div").show();
+                    $("#filetip_lb").text("将在目录"+path+"下创建:");
+                    $("#dirtip_lb").text("将在目录"+path+"下创建:");
+                    $("#addDir_input").val(path);
                     return;
                 }
+                $("#addFile_div").hide();
                 $.ajax({
                     type: "post",
                     url: "/etc_edit/filePath",
@@ -99,3 +151,39 @@ $(document).ready(function(){
             }
         });
 })
+
+function newDirOrFile(type){
+    var fileName=$("#addDir_input").val()+"\\"+$("#dirName").val();
+    if(type=="file"){
+        fileName=$("#addDir_input").val()+"\\"+$("#fileName").val();
+    }
+    $.ajax({
+        type:"POST",
+        async:false,
+        url:"/etc_edit/newFile",
+        data:{
+            type:type,
+            fileName:fileName
+        },
+        success: function (data) {
+            $('#dirmodal').modal('hide');
+            $('#filemodal').modal('hide');
+            var type="success";
+            if(data.callbackMsg=="Error"){
+                type="danger"
+            }
+            $.notify({
+                icon: '',
+                message: data.responseContext
+
+            }, {
+                type: type,
+                timer: 1000
+            });
+            $("#tree-div").jstree(true).refresh_node("F:\\121D");
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            nebula.common.alert.danger("很抱歉，创建失败，原因"+ errorThrown, 1000);
+        }
+    });
+}

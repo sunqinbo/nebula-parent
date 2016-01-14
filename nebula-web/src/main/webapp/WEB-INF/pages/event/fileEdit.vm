@@ -20,7 +20,7 @@
                 <div class="card">
                     <div  Style="min-height: 400px">
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <div class="box box-success">
                                     <h4 class="box-title">etc列表</h4>
                                     <input type="hidden" id="event-id" value="$!eventId">
@@ -29,6 +29,11 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="addFile_div" style="display: none;margin-top: 20px;">
+                                <button type="button" id="newDir_btn" class="btn btn-sm btn-info">新增目录</button>
+                                <button type="button" id="newFile_btn" class="btn btn-sm btn-info">新增文件</button>
+                                <input type="text" id="addDir_input" style="display: none;" value="" />
                             </div>
                         </div><!-- /.row -->
                     </div>
@@ -55,5 +60,50 @@
         </div>
     </div>
 </div>
+ <div class="modal fade" id="dirmodal">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <!-- 模态弹出窗内容 -->
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                 <h4 style="color: #0089db" class="modal-title">新增目录</h4>
+             </div>
+             <div class="modal-body">
+                 <div style="text-align: center;margin-bottom: 50px;">
+                     <label id="dirtip_lb" style="color: red"></label>
+                     <p>请输入新增的目录名</p>
+                     <input type="text" id="dirName" style="margin-left: 140px;width: 300px;" class="form-control" />
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" id="dirSubmit_btn" class="btn btn-primary">提交</button>
+                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <div class="modal fade" id="filemodal">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <!-- 模态弹出窗内容 -->
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                 <h4 style="color: #0089db" class="modal-title">新增文件</h4>
+             </div>
+             <div class="modal-body">
+                 <div style="text-align: center;margin-bottom: 50px;">
+                     <label id="filetip_lb" style="color: red"></label>
+                     <p>请输入新增的文件名</p>
+                     <input type="text" id="fileName" style="margin-left: 140px;width: 300px;" class="form-control" />
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" id="fileSubmit_btn" class="btn btn-primary">提交</button>
+                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+             </div>
+         </div>
+     </div>
+ </div>
 
 #parse("./head/footer.vm")
