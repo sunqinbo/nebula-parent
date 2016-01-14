@@ -92,6 +92,10 @@ public class UserController extends BaseController {
         //更新密码重试缓存
         Cache<String, AtomicInteger> passwordRetryCache = cacheManager.getCache("passwordRetryCache");
         passwordRetryCache.remove(nebulaUserInfo.getUsername());
+        Cache<String, AtomicInteger> authorizationCache = cacheManager.getCache("authorizationCache");
+        authorizationCache.remove(nebulaUserInfo.getUsername());
+        Cache<String, AtomicInteger> authenticationCache = cacheManager.getCache("authenticationCache");
+        authenticationCache.remove(nebulaUserInfo.getUsername());
         return returnCallback("Success", "更新用户密码成功");
     }
 

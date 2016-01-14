@@ -7,6 +7,7 @@ package com.olymtech.nebula.service.starry.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.cdn.model.v20141111.DescribeRefreshTasksResponse;
 import com.aliyuncs.cdn.model.v20141111.RefreshObjectCachesResponse;
+import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.common.utils.HttpUtils;
 import com.olymtech.nebula.service.starry.IStarryCdnApi;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -14,6 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Gavin on 2016-01-06 18:02.
@@ -48,11 +52,35 @@ public class StarryCdnApiImpl implements IStarryCdnApi {
             }
             ObjectMapper mapper = new ObjectMapper();
             DescribeRefreshTasksResponse describeRefreshTasksResponse = mapper.readValue(jsonObjectData.toJSONString(),DescribeRefreshTasksResponse.class);
+            describeRefreshTasksResponse = tasksToSmipleDate(describeRefreshTasksResponse);
             return describeRefreshTasksResponse;
         }catch (Exception e){
             logger.error("describeRefreshTasksResponse error:",e);
         }
         return null;
+    }
+
+    /** 转换时间格式 */
+    private DescribeRefreshTasksResponse tasksToSmipleDate(DescribeRefreshTasksResponse describeRefreshTasksResponse){
+
+        try{
+            if(describeRefreshTasksResponse == null){
+                return describeRefreshTasksResponse;
+            }
+            List<DescribeRefreshTasksResponse.CDNTask> tasks = describeRefreshTasksResponse.getTasks();
+
+            if(tasks == null){
+                return describeRefreshTasksResponse;
+            }
+            for(DescribeRefreshTasksResponse.CDNTask task:tasks){
+                Date creationDate = DateUtils.parseISO8601Simple(task.getCreationTime());
+                String creationTime =DateUtils.simpleFormat(creationDate);
+                task.setCreationTime(creationTime);
+            }
+        }catch (Exception e){
+            logger.error("tasksToSmipleDate error:", e);
+        }
+        return describeRefreshTasksResponse;
     }
 
     /**
