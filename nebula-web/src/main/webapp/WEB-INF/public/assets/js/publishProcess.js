@@ -654,8 +654,8 @@ function btnUnclick() {
     $("#restartTomcat_btn").attr('disabled',true);
     $("#backPublish").attr('disabled', true);
     $("#nextPublish").attr('disabled', true);
-    $("#refreshCDN").attr('disabled',true);
-    $("#refreshCDN").removeClass("btn-danger");
+    //$("#refreshCDN").attr('disabled',true);
+    //$("#refreshCDN").removeClass("btn-danger");
 }
 
 //下一阶段的发布事件的点击事件

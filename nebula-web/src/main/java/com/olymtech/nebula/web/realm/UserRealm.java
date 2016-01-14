@@ -45,7 +45,7 @@ public class UserRealm extends AuthorizingRealm {
         if(user == null) {
             throw new UnknownAccountException();//没找到帐号
         }
-        logger.debug(username+"正在登录"+user);
+        logger.info(username+"正在登录"+user);
         //if(Boolean.TRUE.equals(user.isLocked())) {
         //    throw new LockedAccountException(); //帐号锁定
         //}
