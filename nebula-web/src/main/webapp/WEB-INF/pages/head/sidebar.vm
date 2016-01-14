@@ -16,7 +16,7 @@
                 发布系统
             </a>
         </div>
-        <ul class="nav">
+        <ul id="sidebar_ul" class="nav">
             #if($shiro.hasPermission("publishapply:page"))
                 <li>
                     <a href="/publish/event.htm">
@@ -58,6 +58,9 @@
 
                     <p>发布工具</p>
                 </a>
+                <ul style="font-size: 10px;margin-left: 20px;list-style: none;display: none;">
+                    <li><a href="/tool/freshCDN.htm">刷新CDN</a></li>
+                </ul>
             </li>
             #if($shiro.hasPermission("user:page"))
                 <li id="sidebarUser">
