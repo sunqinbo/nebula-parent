@@ -374,13 +374,15 @@ function Initialization() {
             }
             $("#hostInfo").html(tbString);
 
-            //按钮显示控制
-            btnControl(data.responseContext.eventStatus);
-
             //进度条相关
             whichStep = data.responseContext.whichStep;
             actionGroup = data.responseContext.actionGroup;
             actionState = data.responseContext.actionState + "";
+
+            //按钮显示控制
+            if(actionGroup==6) {
+                btnControl(data.responseContext.eventStatus);
+            }
             var lastGroup=data.responseContext.lastGroup;
             btnUnclick();
             //动作不为编辑ETC 且正在执行，显示等待条
