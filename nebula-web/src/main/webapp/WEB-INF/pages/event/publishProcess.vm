@@ -112,7 +112,7 @@
                                 </td>
                                 <td colspan="2">
                                     <label>提交SVN地址：</label>
-                                    <label>$!{Event.publishSvn}</label>
+                                    <label style="text-transform: none;">$!{Event.publishSvn}</label>
                                 </td>
                             </tr>
                             </tbody>
