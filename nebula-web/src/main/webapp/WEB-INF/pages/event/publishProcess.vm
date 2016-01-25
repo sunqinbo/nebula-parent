@@ -64,11 +64,11 @@
                                 </td>
                                 <td>
                                     <label>发布模块：</label>
-                                    <label>$!{Event.publishProductKey}</label>
+                                    <label style="text-transform: none;">$!{Event.publishProductKey}</label>
                                 </td>
                                 <td>
                                     <label>发布环境：</label>
-                                    <label id="publishEnv">$!{Event.publishEnv}</label>
+                                    <label style="text-transform: none;" id="publishEnv">$!{Event.publishEnv}</label>
                                 </td>
                                 <td>
                                     <label>发布类型：</label>

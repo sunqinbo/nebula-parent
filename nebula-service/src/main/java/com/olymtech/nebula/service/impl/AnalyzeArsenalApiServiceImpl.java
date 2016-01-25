@@ -23,7 +23,7 @@ import java.util.Map;
 public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
-    @Value("${arsenal_server}")
+    @Value("${arsenal.api.url}")
     private String ARSENAL_SERVER;
 
     @Override
