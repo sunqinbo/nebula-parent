@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="nebula_publish_slb">
+    <resultMap id="RM-NebulaPublishSlb" type="com.olymtech.nebula.entity.NebulaPublishSlb">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="publish_event_id" property="publishEventId" jdbcType="INTEGER"/>
+        <result column="publish_module_id" property="publishModuleId" jdbcType="INTEGER"/>
+        <result column="load_balancer_id" property="loadBalancerId" jdbcType="VARCHAR"/>
+        <result column="load_balancer_name" property="loadBalancerName" jdbcType="VARCHAR"/>
+        <result column="load_balancer_address" property="loadBalancerAddress" jdbcType="VARCHAR"/>
+        <result column="load_balancer_status" property="loadBalancerStatus" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="NebulaPublishSlb-Base-Column-List">
+    id, publish_event_id, publish_module_id, load_balancer_id, load_balancer_name, load_balancer_address,
+    load_balancer_status
+  </sql>
+
+    <select id="Nebula-NebulaPublishSlbDao-Select-By-Id" parameterType="java.lang.Integer"
+            resultMap="RM-NebulaPublishSlb">
+        select
+        <include refid="NebulaPublishSlb-Base-Column-List"/>
+        from nebula_publish_slb
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="Nebula-NebulaPublishSlbDao-Select-Count" resultType="java.lang.Integer">
+    select count(id) from nebula_publish_slb
+  </select>
+    <select id="Nebula-NebulaPublishSlbDao-Select-Count-Where" parameterType="NebulaPublishSlb"
+            resultType="java.lang.Integer">
+        select count(id) from nebula_publish_slb
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishModuleId != null">
+                AND publish_module_id = #{publishModuleId}
+            </if>
+            <if test="loadBalancerId != null">
+                AND load_balancer_id = #{loadBalancerId}
+            </if>
+            <if test="loadBalancerName != null">
+                AND load_balancer_name = #{loadBalancerName}
+            </if>
+            <if test="loadBalancerAddress != null">
+                AND load_balancer_address = #{loadBalancerAddress}
+            </if>
+            <if test="loadBalancerStatus != null">
+                AND load_balancer_status = #{loadBalancerStatus}
+            </if>
+        </trim>
+    </select>
+    <select id="Nebula-NebulaPublishSlbDao-Select-All-Paging-Where" parameterType="NebulaPublishModule"
+            resultMap="RM-NebulaPublishSlb">
+        select
+        <include refid="NebulaPublishSlb-Base-Column-List"/>
+        from nebula_publish_slb
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="publishEventId != null">
+                publish_event_id = #{publishEventId}
+            </if>
+            <if test="publishModuleId != null">
+                AND publish_module_id = #{publishModuleId}
+            </if>
+            <if test="loadBalancerId != null">
+                AND load_balancer_id = #{loadBalancerId}
+            </if>
+            <if test="loadBalancerName != null">
+                AND load_balancer_name = #{loadBalancerName}
+            </if>
+            <if test="loadBalancerAddress != null">
+                AND load_balancer_address = #{loadBalancerAddress}
+            </if>
+            <if test="loadBalancerStatus != null">
+                AND load_balancer_status = #{loadBalancerStatus}
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
+    <delete id="Nebula-NebulaPublishSlbDao-Delete-By-Id" parameterType="java.lang.Integer">
+    delete from nebula_publish_slb
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="Nebula-NebulaPublishSlbDao-Insert" parameterType="NebulaPublishSlb">
+        insert into nebula_publish_slb (
+        id,
+        publish_event_id,
+        publish_module_id,
+        load_balancer_id,
+        load_balancer_name,
+        load_balancer_address,
+        load_balancer_status)
+        values (#{id,jdbcType=INTEGER},
+        #{publishEventId,jdbcType=INTEGER},
+        #{publishModuleId,jdbcType=INTEGER},
+        #{loadBalancerId,jdbcType=VARCHAR},
+        #{loadBalancerName,jdbcType=VARCHAR},
+        #{loadBalancerAddress,jdbcType=VARCHAR},
+        #{loadBalancerStatus,jdbcType=VARCHAR})
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <insert id="Nebula-NebulaPublishSlbDao-Insert-Selective" parameterType="NebulaPublishSlb">
+        insert into nebula_publish_slb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="publishEventId != null">
+                publish_event_id,
+            </if>
+            <if test="publishModuleId != null">
+                publish_module_id,
+            </if>
+            <if test="loadBalancerId != null">
+                load_balancer_id,
+            </if>
+            <if test="loadBalancerName != null">
+                load_balancer_name,
+            </if>
+            <if test="loadBalancerAddress != null">
+                load_balancer_address,
+            </if>
+            <if test="loadBalancerStatus != null">
+                load_balancer_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="publishEventId != null">
+                #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishModuleId != null">
+                #{publishModuleId,jdbcType=INTEGER},
+            </if>
+            <if test="loadBalancerId != null">
+                #{loadBalancerId,jdbcType=VARCHAR},
+            </if>
+            <if test="loadBalancerName != null">
+                #{loadBalancerName,jdbcType=VARCHAR},
+            </if>
+            <if test="loadBalancerAddress != null">
+                #{loadBalancerAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="loadBalancerStatus != null">
+                #{loadBalancerStatus,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="Nebula-NebulaPublishSlbDao-Update-By-Id-Selective" parameterType="NebulaPublishSlb">
+        update nebula_publish_slb
+        <set>
+            <if test="publishEventId != null" >
+                publish_event_id = #{publishEventId,jdbcType=INTEGER},
+            </if>
+            <if test="publishModuleId != null" >
+                publish_module_id = #{publishModuleId,jdbcType=INTEGER},
+            </if>
+            <if test="loadBalancerId != null" >
+                load_balancer_id = #{loadBalancerId,jdbcType=VARCHAR},
+            </if>
+            <if test="loadBalancerName != null" >
+                load_balancer_name = #{loadBalancerName,jdbcType=VARCHAR},
+            </if>
+            <if test="loadBalancerAddress != null" >
+                load_balancer_address = #{loadBalancerAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="loadBalancerStatus != null" >
+                load_balancer_status = #{loadBalancerStatus,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="Nebula-NebulaPublishSlbDao-Update-By-Id" parameterType="NebulaPublishSlb">
+    update nebula_publish_slb set
+    publish_event_id = #{publishEventId,jdbcType=INTEGER},
+    publish_module_id = #{publishModuleId,jdbcType=INTEGER},
+    load_balancer_id = #{loadBalancerId,jdbcType=VARCHAR},
+    load_balancer_name = #{loadBalancerName,jdbcType=VARCHAR},
+    load_balancer_address = #{loadBalancerAddress,jdbcType=VARCHAR},
+    load_balancer_status = #{loadBalancerStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
