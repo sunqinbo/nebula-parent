@@ -644,7 +644,7 @@ function btnControl(publishStatus){
             $("#step5").show();
             break;
         case "ROLLBACK":$("#restartTomcat_btn").show();
-            $("#processbar4").setStep(4);
+            $("#processbar4").setStep(5);
             $("#step4").show();
     }
 }

@@ -414,11 +414,11 @@
                 <version>${aliyun.sdk.cdn.version}</version>
             </dependency>
 
-            <!--<dependency>-->
-                <!--<groupId>org.elasticsearch</groupId>-->
-                <!--<artifactId>elasticsearch</artifactId>-->
-                <!--<version>${shield.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
             <!--<dependency>-->
                 <!--<groupId>org.elasticsearch.plugin</groupId>-->
                 <!--<artifactId>shield</artifactId>-->
@@ -471,7 +471,7 @@
 
         <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 
-        <shield.version>2.1.0</shield.version>
+        <elasticsearch.version>1.6.0</elasticsearch.version>
     </properties>
 
     <build>
