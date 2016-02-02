@@ -70,6 +70,7 @@ $(document).ready(function(){
                     $("#filetip_lb").text("将在目录"+path+"下创建:");
                     $("#dirtip_lb").text("将在目录"+path+"下创建:");
                     $("#addDir_input").val(path);
+                    $("#nodefresh_input").val(selectedObj.id);
                     return;
                 }
                 $("#addFile_div").hide();
@@ -151,7 +152,7 @@ $(document).ready(function(){
             }
         });
 })
-
+//创建目录，文件
 function newDirOrFile(type){
     var fileName=$("#addDir_input").val()+"\\"+$("#dirName").val();
     if(type=="file"){
@@ -180,7 +181,7 @@ function newDirOrFile(type){
                 type: type,
                 timer: 1000
             });
-            $("#tree-div").jstree(true).refresh_node("F:\\121D");
+            $("#tree-div").jstree(true).refresh_node( $("#nodefresh_input").val());
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             nebula.common.alert.danger("很抱歉，创建失败，原因"+ errorThrown, 1000);
