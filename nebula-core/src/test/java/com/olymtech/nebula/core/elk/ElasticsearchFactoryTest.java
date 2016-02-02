@@ -48,7 +48,7 @@ public class ElasticsearchFactoryTest {
             String id = hit.getId();
             String index = hit.getIndex();
 
-            System.out.println(message+":::::"+timestamp);
+            System.out.println(host+":::::"+message);
         }
 
     }

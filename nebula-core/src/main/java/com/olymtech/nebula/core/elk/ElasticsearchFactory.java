@@ -8,6 +8,7 @@ import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.common.utils.EsUtils;
 import com.olymtech.nebula.entity.ElkSearchData;
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -15,6 +16,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,9 @@ public class ElasticsearchFactory {
 
         //"logstash-2016.01*"
         SearchResponse searchResponse = client.prepareSearch(getElkIndex(elkSearchData))
-                .setPostFilter(boolFilter).setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize()).execute().actionGet();
+                .setPostFilter(boolFilter)
+                .setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize())
+                .addSort("@timestamp", SortOrder.DESC).execute().actionGet();
         return searchResponse;
     }
 
