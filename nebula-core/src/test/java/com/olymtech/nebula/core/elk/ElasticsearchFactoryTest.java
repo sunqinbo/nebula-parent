@@ -1,11 +1,16 @@
 package com.olymtech.nebula.core.elk;
 
+import com.olymtech.nebula.common.utils.DateUtils;
+import com.olymtech.nebula.common.utils.EsUtils;
+import com.olymtech.nebula.entity.ElkSearchData;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.search.SearchHit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -27,20 +32,40 @@ public class ElasticsearchFactoryTest {
     @Test
     public void testSearch() throws Exception {
         ElasticsearchFactory ef = new ElasticsearchFactory();
-        TransportClient client = ef.initClient();
-        SearchResponse searchResponse = ef.search(client,"stage_exam", "*");
+        String fromDate = "2016-02-02 00:34:36";
+        String toDate = "2016-02-02 23:34:36";
+
+        ElkSearchData elkSearchData = new ElkSearchData("stage_pm_web01", DateUtils.strToDate(fromDate),DateUtils.strToDate(toDate),1,10);
+        SearchResponse searchResponse = ef.search(elkSearchData);
         long total = searchResponse.getHits().getTotalHits();
         System.out.println(total);
         for(SearchHit hit:searchResponse.getHits()){
             String host = (String)hit.getSource().get("host");
             String message = (String)hit.getSource().get("message");
-            System.out.println(host+":::::"+message);
+            String file = (String)hit.getSource().get("file");
+            String timestamp = (String)hit.getSource().get("@timestamp");
+            String type = (String)hit.getSource().get("type");
+            String id = hit.getId();
+            String index = hit.getIndex();
+
+            System.out.println(message+":::::"+timestamp);
         }
 
     }
 
     @Test
     public void testCount() throws Exception {
+        String dateString = "2016-01-31 23:34:36";
+        Date date = DateUtils.strToDate(dateString);
+        System.out.println(date);
+
+        String specificDateString = EsUtils.specificDateToString(date);
+        System.out.println(specificDateString);
+        Date specificDate = EsUtils.stringToSpecificDate(specificDateString);
+        System.out.println(specificDate);
+
 
     }
+
+
 }

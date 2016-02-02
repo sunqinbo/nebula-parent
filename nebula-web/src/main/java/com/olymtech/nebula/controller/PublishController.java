@@ -3,6 +3,7 @@ package com.olymtech.nebula.controller;
 import com.aliyuncs.cdn.model.v20141111.DescribeRefreshTasksResponse;
 import com.aliyuncs.cdn.model.v20141111.RefreshObjectCachesResponse;
 import com.github.pagehelper.PageInfo;
+import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
@@ -57,6 +58,8 @@ public class PublishController extends BaseController {
     IUserService        userService;
     @Resource
     private IStarryCdnApi starryCdnApi;
+    @Resource
+    private IElkLogService elkLogService;
 
 
     @RequiresPermissions("publishevent:page")
@@ -690,6 +693,49 @@ public class PublishController extends BaseController {
         }else{
             return returnCallback("Error", "获取cdn刷新列表失败");
         }
+    }
+
+    /**
+     * 获取log count
+     */
+    @RequestMapping(value="/log/getPublishLogCount",method={RequestMethod.POST})
+    @ResponseBody
+    public Object getPublishLogCount(Integer eventId){
+        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        /** 存放错误数量map */
+        Map<String,Object> map = new HashMap<>();
+        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
+        for(NebulaPublishHost publishHost:nebulaPublishHosts){
+            map.put("host", publishHost);
+            Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
+            Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
+            ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(),
+                    "Error",fromDate,toDate,1,10);
+
+            Integer total = elkLogService.count(elkSearchData);
+            map.put("total", total);
+        }
+        return returnCallback("Success", map);
+    }
+
+    /**
+     * 获取log 详细信息
+     */
+    @RequestMapping(value="/log/getPublishLogCount",method={RequestMethod.POST})
+    @ResponseBody
+    public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest){
+        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        if(!StringUtils.isNotEmpty(elkSearchDataReuqest.getHost())){
+            return returnCallback("Error", "host参数为必选项");
+        }
+
+        Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
+        Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDate()),-8);
+
+        ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
+                elkSearchDataReuqest.getKeyWord(),fromDate,toDate,1,10);
+        PageInfo pageInfo = elkLogService.search(elkSearchData);
+        return returnCallback("Success", pageInfo);
     }
 
 }

@@ -2,7 +2,7 @@
  * Olymtech.com Inc.
  * Copyright (c) 2002-2015 All Rights Reserved.
  */
-package com.olymtech.nebula.core.elk;
+package com.olymtech.nebula.common.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,7 +13,7 @@ import java.util.GregorianCalendar;
  * Created by Gavin on 2016-01-28 16:48.
  */
 public class EsUtils {
-    private static SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'00:00:00.000'Z'" );
+    private static SimpleDateFormat sdf =   new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'" );
     private static SimpleDateFormat s =   new SimpleDateFormat("yyyy-MM-dd" );
     private static Calendar calendar = new GregorianCalendar();
 
@@ -22,9 +22,21 @@ public class EsUtils {
         return nowDate;
     }
 
-    public static String getSpecificDate(Date date){
+    public static String specificDateToString(Date date){
         String specificDate = sdf.format(date);
         return specificDate;
+    }
+
+    public static final Date stringToSpecificDate(String strDate) {
+        if (strDate == null) {
+            return null;
+        }
+        try {
+            return sdf.parse(strDate);
+
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public static String oneDayAgoFrom(){
