@@ -26,9 +26,10 @@ public class ElkLogServiceImpl implements IElkLogService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
 
+    ElasticsearchFactory ef = new ElasticsearchFactory();
+
     @Override
     public PageInfo search(ElkSearchData elkSearchData){
-        ElasticsearchFactory ef = new ElasticsearchFactory();
         SearchResponse searchResponse = ef.search(elkSearchData);
         long total = searchResponse.getHits().getTotalHits();
         elkSearchData.setTotal(total);
@@ -57,7 +58,7 @@ public class ElkLogServiceImpl implements IElkLogService {
 
     @Override
     public Integer count(ElkSearchData elkSearchData){
-        ElasticsearchFactory ef = new ElasticsearchFactory();
+
         SearchResponse searchResponse = ef.search(elkSearchData);
         long total = searchResponse.getHits().getTotalHits();
         int totalint = new Long(total).intValue();
