@@ -743,7 +743,7 @@ function endTimeControl(){
             host:$("#hostName_modal").val(),
             eventId:$("#eventId").val(),
             keyWord:$("#keyWord_modal").val(),
-            toDate:$("#logEndTime_modal").val()
+            toDateString:$("#logEndTime_modal").val()
         },
         async: false,
         success: function (data) {

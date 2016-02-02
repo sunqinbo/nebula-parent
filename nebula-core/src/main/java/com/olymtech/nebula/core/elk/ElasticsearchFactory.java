@@ -7,6 +7,7 @@ package com.olymtech.nebula.core.elk;
 import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.common.utils.EsUtils;
 import com.olymtech.nebula.entity.ElkSearchData;
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -40,7 +41,7 @@ public class ElasticsearchFactory {
 
     public SearchResponse search(ElkSearchData elkSearchData){
         FilterBuilder boolFilter = null;
-        if(elkSearchData.getKeyWord() == null){
+        if(!StringUtils.isNotEmpty(elkSearchData.getKeyWord())){
             boolFilter =  FilterBuilders.boolFilter()
                     .must(FilterBuilders.rangeFilter("@timestamp").from(elkSearchData.getFromDate()).to(elkSearchData.getToDate()).includeLower(true).includeUpper(false))
                     .must(FilterBuilders.termFilter("host", elkSearchData.getHost()));
