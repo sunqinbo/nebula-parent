@@ -749,7 +749,7 @@ function endTimeControl(){
         success: function (data) {
 
         },
-        error: function (request) {
+        error: function (errorThrown) {
             $.notify({
                 icon: '',
                 message: "获取日志失败，原因：" + errorThrown
