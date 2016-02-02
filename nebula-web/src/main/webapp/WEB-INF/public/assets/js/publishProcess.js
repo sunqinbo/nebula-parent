@@ -743,13 +743,13 @@ function endTimeControl(){
             host:$("#hostName_modal").val(),
             eventId:$("#eventId").val(),
             keyWord:$("#keyWord_modal").val(),
-            toDate:$("#logEndTime_modal").val()
+            toDateString:$("#logEndTime_modal").val()
         },
         async: false,
         success: function (data) {
 
         },
-        error: function (request) {
+        error: function (errorThrown) {
             $.notify({
                 icon: '',
                 message: "获取日志失败，原因：" + errorThrown
