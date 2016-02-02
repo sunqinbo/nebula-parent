@@ -98,7 +98,7 @@
                                 </td>
                                 <td>
                                     <label>发布时间：</label>
-                                    <label> $!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
+                                    <label id="publishDatetime"> $!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
                                 </td>
                             </tr>
                             <tr>
@@ -272,10 +272,10 @@
                                 <th>主机名</th>
                                 <th>主机ip</th>
                             ##                                <th>环境</th>
-                                <th>action</
-                                >
+                                <th>action</th>
                                 <th>是否成功</th>
                                 <th>更新信息</th>
+                                <th>错误数</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -350,6 +350,55 @@
                         <tbody id="modal_tb">
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            ##                                                <button type="button" class="btn btn-primary">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="logModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- 模态弹出窗内容 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 style="color: #0089db" class="modal-title">日志信息</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>机器名</label>
+                                <input type="text" disabled="disabled" id="hostName_modal" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>开始时间</label>
+                                <input type="text" id="publishDatetime_modal" class="form-control" disabled="disabled" )" >
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>结束时间</label>
+                                <input type="text" id="logEndTime_modal" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>过滤</label>
+                                <input id="keyWord_modal" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div style="text-align: center;margin-bottom: 50px;">
                 </div>
             </div>
             <div class="modal-footer">

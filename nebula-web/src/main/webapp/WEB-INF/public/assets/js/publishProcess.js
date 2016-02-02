@@ -131,6 +131,7 @@ $(document).ready(function(){
     /** 解决弹窗的问题，先将modal移到body层 */
     $('#mymodal').appendTo("body");
     $('#checkmodal').appendTo("body");
+    $("#logModal").appendTo("body");
     $("#refreshCDN").click(function(){
         $('#mymodal').modal('show');
     });
@@ -360,7 +361,7 @@ function Initialization() {
                 var actionResult = ""
                 var passPublishHostIp = "";
                 if (HostList[i]["passPublishHostName"] != null)
-                    passPublishHostName = HostList[i]["passPublishHostName"];
+                    passPublishHostName =""+ HostList[i]["passPublishHostName"];
                 if (HostList[i]["passPublishHostName"] != null)
                     passPublishHostIp = HostList[i]["passPublishHostIp"];
                 if (HostList[i]["actionName"] != null)
@@ -370,7 +371,9 @@ function Initialization() {
                 if (HostList[i]["actionResult"] != null)
                     actionResult = HostList[i]["actionResult"];
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
-                    actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult + "</td></tr>";
+                    actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult +
+                    "</td><td><a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+")' href='#'><span class='label label-danger'>"+
+                    HostList[i]["logNumber"]+"</span></a></td></tr>";
             }
             $("#hostInfo").html(tbString);
 
@@ -720,4 +723,58 @@ function approvalBtn(){
             });
         }
     })
+}
+
+//错误数点击事件
+function errorNumClick(hostName){
+    $("#hostName_modal").val(hostName);
+    $("#publishDatetime_modal").val($("#publishDatetime").text());
+    setInterval(endTimeControl(), 1000);
+    $("#logEndTime_modal").val( new Date().Format("yyyy-MM-dd hh:mm:ss"));
+    $('#logModal').modal('show');
+}
+
+function endTimeControl(){
+    $('#logEndTime_modal').val( new Date().Format('yyyy-MM-dd hh:mm:ss'));
+    $.ajax({
+        type: "POST",
+        url: "/publish/log/getPublishLogByHost",
+        data: {
+            host:$("#hostName_modal").val(),
+            eventId:$("#eventId").val(),
+            keyWord:$("#keyWord_modal").val(),
+            toDate:$("#logEndTime_modal").val()
+        },
+        async: false,
+        success: function (data) {
+
+        },
+        error: function (request) {
+            $.notify({
+                icon: '',
+                message: "获取日志失败，原因：" + errorThrown
+
+            }, {
+                type: 'danger',
+                timer: 1000
+            });
+        }
+    })
+}
+
+//日期格式化
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
 }

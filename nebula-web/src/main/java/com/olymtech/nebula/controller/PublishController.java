@@ -585,6 +585,9 @@ public class PublishController extends BaseController {
         //获取机器信息
         if (eventId != null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
+            for (NebulaPublishHost nebulaPublishHost:nebulaPublishHosts){
+                nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(eventId,nebulaPublishHost));
+            }
             map.put("HostInfos", nebulaPublishHosts);
             map.put("eventStatus", publishEventService.selectById(eventId).getPublishStatus());
         }
@@ -718,10 +721,18 @@ public class PublishController extends BaseController {
         return returnCallback("Success", map);
     }
 
+    public int getPublishLogHostLogCount(Integer eventId,NebulaPublishHost publishHost){
+        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
+        Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
+        ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),fromDate,toDate,1,10);
+        return elkLogService.count(elkSearchData);
+    }
+
     /**
      * 获取log 详细信息
      */
-    @RequestMapping(value="/log/getPublishLogCount",method={RequestMethod.POST})
+    @RequestMapping(value="/log/getPublishLogByHost",method={RequestMethod.POST})
     @ResponseBody
     public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest){
         NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);

@@ -21,6 +21,8 @@ public class NebulaPublishHost extends BaseDO {
 
     private String actionResult;
 
+    private Integer logNumber;
+
     public PublishAction getActionName() {
         return actionName;
     }
@@ -83,5 +85,13 @@ public class NebulaPublishHost extends BaseDO {
 
     public void setPassPublishHostIp(String passPublishHostIp) {
         this.passPublishHostIp = passPublishHostIp == null ? null : passPublishHostIp.trim();
+    }
+
+    public Integer getLogNumber() {
+        return logNumber;
+    }
+
+    public void setLogNumber(Integer logNumber) {
+        this.logNumber = logNumber;
     }
 }
