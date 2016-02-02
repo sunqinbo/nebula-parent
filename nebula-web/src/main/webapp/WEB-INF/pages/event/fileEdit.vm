@@ -34,6 +34,7 @@
                                 <button type="button" id="newDir_btn" class="btn btn-sm btn-info">新增目录</button>
                                 <button type="button" id="newFile_btn" class="btn btn-sm btn-info">新增文件</button>
                                 <input type="text" id="addDir_input" style="display: none;" value="" />
+                                <input type="text" id="nodefresh_input" style="display: none;" value="" />
                             </div>
                         </div><!-- /.row -->
                     </div>
