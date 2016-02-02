@@ -4,6 +4,9 @@
  */
 package com.olymtech.nebula.core.elk;
 
+import com.olymtech.nebula.common.utils.DateUtils;
+import com.olymtech.nebula.common.utils.EsUtils;
+import com.olymtech.nebula.entity.ElkSearchData;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -14,12 +17,16 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
+
 /**
  * Created by Gavin on 2016-01-28 15:45.
  */
 public class ElasticsearchFactory {
 
     private static Logger logger = LoggerFactory.getLogger(ElasticsearchFactory.class);
+
+    private TransportClient client = initClient();
 
     public TransportClient initClient(){
         Settings settings = ImmutableSettings.settingsBuilder()
@@ -31,22 +38,37 @@ public class ElasticsearchFactory {
         return client;
     }
 
-    public SearchResponse search(TransportClient client,String host,String keyWord){
-        FilterBuilder boolFilter =  FilterBuilders.boolFilter()
-                .must(FilterBuilders.rangeFilter("@timestamp").from(EsUtils.oneDayAgoFrom()).to(EsUtils.nowDate()).includeLower(true).includeUpper(false))
-                .must(FilterBuilders.termFilter("host", host));
-//                .must(FilterBuilders.termFilter("message", keyWord.toLowerCase()));
+    public SearchResponse search(ElkSearchData elkSearchData){
+        FilterBuilder boolFilter = null;
+        if(elkSearchData.getKeyWord() == null){
+            boolFilter =  FilterBuilders.boolFilter()
+                    .must(FilterBuilders.rangeFilter("@timestamp").from(elkSearchData.getFromDate()).to(elkSearchData.getToDate()).includeLower(true).includeUpper(false))
+                    .must(FilterBuilders.termFilter("host", elkSearchData.getHost()));
+        }else{
+            boolFilter =  FilterBuilders.boolFilter()
+                    .must(FilterBuilders.rangeFilter("@timestamp").from(elkSearchData.getFromDate()).to(elkSearchData.getToDate()).includeLower(true).includeUpper(false))
+                    .must(FilterBuilders.termFilter("host", elkSearchData.getHost()))
+                    .must(FilterBuilders.termFilter("message", elkSearchData.getKeyWord().toLowerCase()));
+        }
 
-        SearchResponse searchResponse = client.prepareSearch("logstash-2016.01*")
-                .setPostFilter(boolFilter).setFrom(1).setSize(10).execute().actionGet();
+        //"logstash-2016.01*"
+        SearchResponse searchResponse = client.prepareSearch(getElkIndex(elkSearchData))
+                .setPostFilter(boolFilter).setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize()).execute().actionGet();
         return searchResponse;
     }
 
-    public Long count(TransportClient client){
-        SearchResponse searchResponse = client.prepareSearch("logstash-2016.01.26")
-                .setFrom(1).setSize(10).execute().actionGet();
+    public Long count(ElkSearchData elkSearchData){
+        SearchResponse searchResponse = client.prepareSearch(getElkIndex(elkSearchData))
+                .setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize()).execute().actionGet();
         long totalHits = searchResponse.getHits().totalHits();
         return totalHits;
+    }
+
+    private String getElkIndex(ElkSearchData elkSearchData){
+        String indexPrefix = "logstash-";
+        Date fromDate = EsUtils.stringToSpecificDate(elkSearchData.getFromDate());
+        String indexDate = DateUtils.getElkSimpleIndex(fromDate);
+        return indexPrefix + indexDate;
     }
 
 

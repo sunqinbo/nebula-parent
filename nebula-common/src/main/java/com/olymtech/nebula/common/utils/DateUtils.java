@@ -62,6 +62,35 @@ public class DateUtils {
     /** 时间key格式*/
     public static final String SimpleKey="yyyyMMdd.HHmmss";
 
+    public static final String elkSimpleIndex = "yyyy.MM.dd";
+
+    /** 模糊 */
+    public static final String elkSimpleIndexFuzzy = "yyyy.MM*";
+
+    /**
+     * 获取elk index
+     * @param date
+     * @return
+     */
+    public static final String getElkSimpleIndex(Date date){
+        if (date == null) {
+            return "";
+        }
+        return getFormat(elkSimpleIndex).format(date);
+    }
+
+    /**
+     * 获取elk 模糊的index ，日期模糊
+     * @param date
+     * @return
+     */
+    public static final String getElkSimpleIndexFuzzyx(Date date){
+        if (date == null) {
+            return "";
+        }
+        return getFormat(elkSimpleIndexFuzzy).format(date);
+    }
+
     /**
      * 获取格式
      *
