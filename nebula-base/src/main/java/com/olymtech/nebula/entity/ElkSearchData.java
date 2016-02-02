@@ -43,6 +43,11 @@ public class ElkSearchData {
      */
     private String toDate;
 
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     * 为了接收前端参数
+     */
+    private String toDateString;
 
     public ElkSearchData(){
         super();
@@ -149,5 +154,13 @@ public class ElkSearchData {
 
     public void setPageFrom(Integer pageFrom) {
         this.pageFrom = pageFrom;
+    }
+
+    public String getToDateString() {
+        return toDateString;
+    }
+
+    public void setToDateString(String toDateString) {
+        this.toDateString = toDateString;
     }
 }

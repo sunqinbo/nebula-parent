@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class IndexController extends BaseController{
 
-	@RequestMapping(value="/",method=RequestMethod.GET)
-	public String helloMvc(){
+	@RequestMapping(value={"/", "index", "index.htm"},method=RequestMethod.GET)
+	public String index(){
 		NebulaUserInfo user = (NebulaUserInfo)request.getAttribute(Constants.CURRENT_USER);
 		return "event/publishList";
 	}

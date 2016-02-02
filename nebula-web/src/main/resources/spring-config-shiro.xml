@@ -106,7 +106,7 @@
         <!-- (默认 shiroLoginFailure) -->
         <property name="failureKeyAttribute" value="shiroLoginFailure"/>
         <!-- (默认是“/”) -->
-        <property name="successUrl" value="/"/>
+        <property name="successUrl" value="/index.htm"/>
     </bean>
     
     <bean id="kickoutSessionControlFilter" class="com.olymtech.nebula.web.filter.KickoutSessionControlFilter">

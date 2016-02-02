@@ -730,7 +730,7 @@ public class PublishController extends BaseController {
         }
 
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
-        Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDate()),-8);
+        Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()),-8);
 
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
                 elkSearchDataReuqest.getKeyWord(),fromDate,toDate,1,10);
