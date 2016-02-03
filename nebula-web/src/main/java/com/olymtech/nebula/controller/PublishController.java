@@ -782,7 +782,7 @@ public class PublishController extends BaseController {
         Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()),-8);
 
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
-                elkSearchDataReuqest.getKeyWord(),fromDate,toDate,1,10);
+                elkSearchDataReuqest.getKeyWord(),fromDate,toDate,elkSearchDataReuqest.getPageNum(),elkSearchDataReuqest.getPageSize());
         PageInfo pageInfo = elkLogService.search(elkSearchData);
         return returnCallback("Success", pageInfo);
     }
