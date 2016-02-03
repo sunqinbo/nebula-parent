@@ -9,11 +9,13 @@
         <result column="load_balancer_name" property="loadBalancerName" jdbcType="VARCHAR"/>
         <result column="load_balancer_address" property="loadBalancerAddress" jdbcType="VARCHAR"/>
         <result column="load_balancer_status" property="loadBalancerStatus" jdbcType="VARCHAR"/>
+        <result column="region_id" property="regionId" jdbcType="VARCHAR"/>
+        <result column="aliyun_account" property="aliyunAccount" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="NebulaPublishSlb-Base-Column-List">
     id, publish_event_id, publish_module_id, load_balancer_id, load_balancer_name, load_balancer_address,
-    load_balancer_status
-    </sql>
+    load_balancer_status,region_id,aliyun_account
+  </sql>
 
     <select id="Nebula-NebulaPublishSlbDao-Select-By-Publish-EventId" parameterType="java.lang.Integer"
             resultMap="RM-NebulaPublishSlb">
@@ -55,6 +57,12 @@
             <if test="loadBalancerStatus != null">
                 AND load_balancer_status = #{loadBalancerStatus}
             </if>
+            <if test="regionId != null">
+                AND region_id = #{regionId}
+            </if>
+            <if test="aliyunAccount != null">
+                AND aliyun_account = #{aliyunAccount}
+            </if>
         </trim>
     </select>
     <select id="Nebula-NebulaPublishSlbDao-Select-All-Paging-Where" parameterType="NebulaPublishModule"
@@ -81,6 +89,12 @@
             <if test="loadBalancerStatus != null">
                 AND load_balancer_status = #{loadBalancerStatus}
             </if>
+            <if test="regionId != null">
+                AND region_id = #{regionId}
+            </if>
+            <if test="aliyunAccount != null">
+                AND aliyun_account = #{aliyunAccount}
+            </if>
         </trim>
         group by id order by id desc
     </select>
@@ -96,14 +110,17 @@
         load_balancer_id,
         load_balancer_name,
         load_balancer_address,
-        load_balancer_status)
+        load_balancer_status,region_id,
+        aliyun_account)
         values (#{id,jdbcType=INTEGER},
         #{publishEventId,jdbcType=INTEGER},
         #{publishModuleId,jdbcType=INTEGER},
         #{loadBalancerId,jdbcType=VARCHAR},
         #{loadBalancerName,jdbcType=VARCHAR},
         #{loadBalancerAddress,jdbcType=VARCHAR},
-        #{loadBalancerStatus,jdbcType=VARCHAR})
+        #{loadBalancerStatus,jdbcType=VARCHAR},
+        #{regionId,jdbcType=VARCHAR},
+        #{aliyunAccount,jdbcType=VARCHAR})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -132,6 +149,12 @@
             <if test="loadBalancerStatus != null">
                 load_balancer_status,
             </if>
+            <if test="regionId != null">
+                region_id,
+            </if>
+            <if test="aliyunAccount != null">
+                aliyun_account,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -155,28 +178,40 @@
             <if test="loadBalancerStatus != null">
                 #{loadBalancerStatus,jdbcType=VARCHAR},
             </if>
+            <if test="regionId != null">
+                #{regionId,jdbcType=VARCHAR},
+            </if>
+            <if test="aliyunAccount != null">
+                #{aliyunAccount,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="Nebula-NebulaPublishSlbDao-Update-By-Id-Selective" parameterType="NebulaPublishSlb">
         update nebula_publish_slb
         <set>
-            <if test="publishEventId != null" >
+            <if test="publishEventId != null">
                 publish_event_id = #{publishEventId,jdbcType=INTEGER},
             </if>
-            <if test="publishModuleId != null" >
+            <if test="publishModuleId != null">
                 publish_module_id = #{publishModuleId,jdbcType=INTEGER},
             </if>
-            <if test="loadBalancerId != null" >
+            <if test="loadBalancerId != null">
                 load_balancer_id = #{loadBalancerId,jdbcType=VARCHAR},
             </if>
-            <if test="loadBalancerName != null" >
+            <if test="loadBalancerName != null">
                 load_balancer_name = #{loadBalancerName,jdbcType=VARCHAR},
             </if>
-            <if test="loadBalancerAddress != null" >
+            <if test="loadBalancerAddress != null">
                 load_balancer_address = #{loadBalancerAddress,jdbcType=VARCHAR},
             </if>
-            <if test="loadBalancerStatus != null" >
+            <if test="loadBalancerStatus != null">
                 load_balancer_status = #{loadBalancerStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="regionId != null">
+                region_id = #{regionId,jdbcType=VARCHAR},
+            </if>
+            <if test="aliyunAccount != null">
+                aliyun_account = #{aliyunAccount,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -188,7 +223,9 @@
     load_balancer_id = #{loadBalancerId,jdbcType=VARCHAR},
     load_balancer_name = #{loadBalancerName,jdbcType=VARCHAR},
     load_balancer_address = #{loadBalancerAddress,jdbcType=VARCHAR},
-    load_balancer_status = #{loadBalancerStatus,jdbcType=VARCHAR}
+    load_balancer_status = #{loadBalancerStatus,jdbcType=VARCHAR},
+    region_id = #{regionId,jdbcType=VARCHAR},
+    aliyun_account = #{aliyunAccount,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

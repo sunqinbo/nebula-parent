@@ -25,6 +25,16 @@ public class ProductTree extends BaseDO {
 
     private List<String> apps;
 
+    private List<SimpleSlb> slbs;
+
+    public List<SimpleSlb> getSlbs() {
+        return slbs;
+    }
+
+    public void setSlbs(List<SimpleSlb> slbs) {
+        this.slbs = slbs;
+    }
+
     public Integer getTreeLevel() {
         return treeLevel;
     }
