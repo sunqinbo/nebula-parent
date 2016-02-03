@@ -15,6 +15,26 @@ public class NebulaPublishSlb extends BaseDO {
 
     private String loadBalancerStatus;
 
+    private String regionId;
+
+    private String aliyunAccount;
+
+    public String getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public String getAliyunAccount() {
+        return aliyunAccount;
+    }
+
+    public void setAliyunAccount(String aliyunAccount) {
+        this.aliyunAccount = aliyunAccount;
+    }
+
     public Integer getId() {
         return id;
     }
