@@ -115,7 +115,8 @@ public class ElkSearchData {
     }
 
     public Integer getPages() {
-        pages = (int)total/pageSize;
+        //向上取整
+        pages = (int)Math.ceil(total/pageSize);
         return pages;
     }
 

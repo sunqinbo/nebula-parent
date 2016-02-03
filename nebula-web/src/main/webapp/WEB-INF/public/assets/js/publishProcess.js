@@ -259,7 +259,8 @@ $(document).ready(function(){
                     for(var i= 0,len=data.length;i<len;i++){
                         msg+=data[i]["id"]+",";
                     }
-                    msg="很抱歉，该产品正在发布中,发布id为:"+msg+"请稍后再试";
+                    msg="很抱歉，该产品已有发布中的事件，请先<a target='_blank' href='/publish/process.htm?id="+msg+">前往</a>结束该事件";
+                    //msg="很抱歉，该产品正在发布中,发布id为:"+msg+"请稍后再试";
                     nebula.common.alert.warning(msg,1000);
                     return;
                 }
@@ -729,13 +730,52 @@ function approvalBtn(){
 function errorNumClick(hostName){
     $("#hostName_modal").val(hostName);
     $("#publishDatetime_modal").val($("#publishDatetime").text());
-    setInterval(endTimeControl(), 1000);
     $("#logEndTime_modal").val( new Date().Format("yyyy-MM-dd hh:mm:ss"));
-    $('#logModal').modal('show');
+    $("#keyWord_modal").val("ERROR");
+    //设置开关为开启状态
+    $('#freshControl_switch').bootstrapSwitch('setState', true);
+    //模态框状态设置（开启）
+    $("#isclosed_modal").val("0");
+    //轮询事件
+    //setInterval("endTimeControl()", 2000);
+    //setTimeout(logFrenshControl,2000);
+    logFrenshControl(1);
+    //自动刷新按钮点击事件
+    $("#freshControl_switch").click(function () {
+        logFrenshControl(1);
+    });
+    //$("#keyWord_modal").change(logFrenshControl);
+    //终止时间变化事件
+    $('#logEndTime_modal').change(function(){
+        alert("没用");
+    });
+    //过滤框内容变更事件
+    $("#keyWord_modal").change(function(){
+        logFrenshControl(1)
+    })
+    //模态框关闭事件
+    $("#close_logModal_pan").click(function(){
+        $("#isclosed_modal").val("1");
+    })
+    $("#close_logModal_btn").click(function(){
+        $("#isclosed_modal").val("1");
+    });
+    //点击空白或ESC不能取消模态框
+    $('#logModal').modal({backdrop: 'static', keyboard: false});
+    //$('#logModal').modal('show');
 }
-
-function endTimeControl(){
-    $('#logEndTime_modal').val( new Date().Format('yyyy-MM-dd hh:mm:ss'));
+//自动刷新日志文件
+function logFrenshControl(pageNum){
+    if( $("#isclosed_modal").val()==1){
+        return;
+    }
+    if($('#freshControl_checkbox').prop("checked")){
+        $('#logEndTime_modal').val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
+        setTimeout(logFrenshControl,2000);
+    }
+    //else{
+    //    //clearTimeout(global_setTimeout);
+    //}
     $.ajax({
         type: "POST",
         url: "/publish/log/getPublishLogByHost",
@@ -743,11 +783,39 @@ function endTimeControl(){
             host:$("#hostName_modal").val(),
             eventId:$("#eventId").val(),
             keyWord:$("#keyWord_modal").val(),
-            toDateString:$("#logEndTime_modal").val()
+            toDateString:$("#logEndTime_modal").val(),
+            pageNum:pageNum,
+            pageSize:10,
         },
-        async: false,
+        //async: true,
         success: function (data) {
-
+            var tbLogString="";
+            for(var i= 0,len=data.responseContext["list"].length;i<len;i++){
+                var logInfo=data.responseContext["list"][i];
+                var elkUrl="http://elk.stage.900jit.com/#/doc/logstash-*/"+logInfo.index+"/tomcat?id="+logInfo.id+"&_g=()"
+                tbLogString+="<tr>"+
+                    "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>"+logInfo.message+"</div></td>"+
+                    "<td class='tdTopControl'><a href='"+elkUrl+"'target=_blank >详情</a></td>"
+                "</tr>"
+            }
+            $("#logInfoTb_modal").html(tbLogString);
+            $("#pagination_box").html("<ul id='pagination' class='pagination-sm'></ul>");
+            //停止自动刷新时
+            if(!$('#freshControl_checkbox').prop("checked")) {
+                var totalPage = data.responseContext["pages"];
+                $('#pagination').twbsPagination({
+                    totalPages: totalPage,
+                    visiblePages: 6,
+                    onPageClick: function (event, page) {
+                        $("#logInfoTb_modal").html("");
+                        logAjax(page);
+                    }
+                });
+                //$('#pagination').show();
+            }
+            //else{
+            //    $('#pagination').hide();
+            //}
         },
         error: function (errorThrown) {
             $.notify({
@@ -760,6 +828,63 @@ function endTimeControl(){
             });
         }
     })
+
+}
+
+//日志请求
+function logAjax(page){
+    $.ajax({
+        type: "POST",
+        url: "/publish/log/getPublishLogByHost",
+        data: {
+            host:$("#hostName_modal").val(),
+            eventId:$("#eventId").val(),
+            keyWord:$("#keyWord_modal").val(),
+            toDateString:$("#logEndTime_modal").val(),
+            pageNum:page,
+            pageSize:10,
+        },
+        //async: true,
+        success: function (data) {
+            var tbLogString="";
+            for(var i= 0,len=data.responseContext["list"].length;i<len;i++){
+                var logInfo=data.responseContext["list"][i];
+                var elkUrl="http://elk.stage.900jit.com/#/doc/logstash-*/"+logInfo.index+"/tomcat?id="+logInfo.id+"&_g=()"
+                tbLogString+="<tr>"+
+                    "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>"+logInfo.message+"</div></td>"+
+                    "<td><a href='"+elkUrl+"'target=_blank >详情</a></td>"
+                "</tr>"
+            }
+            $("#logInfoTb_modal").html(tbLogString);
+        },
+        error: function (errorThrown) {
+            $.notify({
+                icon: '',
+                message: "获取日志失败，原因：" + errorThrown
+
+            }, {
+                type: 'danger',
+                timer: 1000
+            });
+        }
+    })
+}
+
+//结束时间失焦事件
+function endTimeOnblur(){
+    $("#endTimecheck_modal").val($("#logEndTime_modal").val());
+}
+//结束时间获取焦点事件
+function endTimeOnfocus(){
+    if($("#endTimecheck_modal").val()==0){
+        return;
+    }
+    var oldTime = (new Date($("#endTimecheck_modal").val())).getTime();
+    var newTime = (new Date($("#logEndTime_modal").val())).getTime();
+    if(Math.abs((newTime-oldTime)/60000)>=1){
+        $('#freshControl_switch').bootstrapSwitch('setState', false);
+        logFrenshControl(1);
+    }
 }
 
 //日期格式化
