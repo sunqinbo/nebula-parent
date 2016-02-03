@@ -1,5 +1,8 @@
 package com.olymtech.nebula.entity;
 
+import com.aliyuncs.slb.model.v20140515.DescribeHealthStatusResponse;
+import com.aliyuncs.slb.model.v20140515.DescribeLoadBalancerAttributeResponse;
+
 public class NebulaPublishSlb extends BaseDO {
     private Integer id;
 
@@ -14,6 +17,10 @@ public class NebulaPublishSlb extends BaseDO {
     private String loadBalancerAddress;
 
     private String loadBalancerStatus;
+
+    private DescribeLoadBalancerAttributeResponse describeLoadBalancerAttributeResponse;
+
+    private DescribeHealthStatusResponse describeHealthStatusResponse;
 
     public Integer getId() {
         return id;
@@ -69,5 +76,21 @@ public class NebulaPublishSlb extends BaseDO {
 
     public void setLoadBalancerStatus(String loadBalancerStatus) {
         this.loadBalancerStatus = loadBalancerStatus == null ? null : loadBalancerStatus.trim();
+    }
+
+    public DescribeLoadBalancerAttributeResponse getDescribeLoadBalancerAttributeResponse() {
+        return describeLoadBalancerAttributeResponse;
+    }
+
+    public void setDescribeLoadBalancerAttributeResponse(DescribeLoadBalancerAttributeResponse describeLoadBalancerAttributeResponse) {
+        this.describeLoadBalancerAttributeResponse = describeLoadBalancerAttributeResponse;
+    }
+
+    public DescribeHealthStatusResponse getDescribeHealthStatusResponse() {
+        return describeHealthStatusResponse;
+    }
+
+    public void setDescribeHealthStatusResponse(DescribeHealthStatusResponse describeHealthStatusResponse) {
+        this.describeHealthStatusResponse = describeHealthStatusResponse;
     }
 }

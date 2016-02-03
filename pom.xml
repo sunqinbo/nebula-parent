@@ -304,6 +304,11 @@
                 <artifactId>aliyun-java-sdk-ecs</artifactId>
                 <version>${aliyun.sdk.ecs.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-slb</artifactId>
+                <version>${aliyun.sdk.slb.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
@@ -450,10 +455,11 @@
         <junit.version>4.11</junit.version>
         <c3p0.version>0.9.1.2</c3p0.version>
         <mail.version>1.4.0</mail.version>
-        <aliyun.sdk.ecs.version>2.0.0-rc2</aliyun.sdk.ecs.version>
         <aliyun.sdk.core.version>2.3.1</aliyun.sdk.core.version>
+        <aliyun.sdk.ecs.version>2.0.0-rc2</aliyun.sdk.ecs.version>
         <aliyun.sdk.sts.version>2.1.6</aliyun.sdk.sts.version>
         <aliyun.sdk.cdn.version>2.0.1</aliyun.sdk.cdn.version>
+        <aliyun.sdk.slb.version>2.0.0-RELEASE</aliyun.sdk.slb.version>
         <mybatis.version>3.2.2</mybatis.version>
         <mybatisspring.version>1.1.0</mybatisspring.version>
         <pagehelper.version>4.0.3</pagehelper.version>
