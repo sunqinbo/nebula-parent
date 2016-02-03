@@ -2,6 +2,8 @@ package com.olymtech.nebula.controller;
 
 import com.aliyuncs.cdn.model.v20141111.DescribeRefreshTasksResponse;
 import com.aliyuncs.cdn.model.v20141111.RefreshObjectCachesResponse;
+import com.aliyuncs.slb.model.v20140515.DescribeHealthStatusResponse;
+import com.aliyuncs.slb.model.v20140515.DescribeLoadBalancerAttributeResponse;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.core.action.Action;
@@ -16,6 +18,7 @@ import com.olymtech.nebula.entity.enums.PublishStatus;
 import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
 import com.olymtech.nebula.service.starry.IStarryCdnApi;
+import com.olymtech.nebula.service.starry.IStarrySlbApi;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -51,13 +54,17 @@ public class PublishController extends BaseController {
     @Resource
     IPublishBaseService publishBaseService;
     @Resource
-    HttpServletRequest request;
-    @Resource
     INebulaPublishModuleService publishModuleService;
+    @Resource
+    private IPublishSlbService publishSlbService;
+    @Resource
+    HttpServletRequest request;
     @Resource
     IUserService        userService;
     @Resource
     private IStarryCdnApi starryCdnApi;
+    @Resource
+    private IStarrySlbApi starrySlbApi;
     @Resource
     private IElkLogService elkLogService;
 
@@ -697,6 +704,37 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "获取cdn刷新列表失败");
         }
     }
+
+    /**
+     * 所有slb状态列表
+     * @param eventId 发布id
+     * @return
+     */
+    @RequestMapping(value="/list/describeLoadBalancerAttributes",method={RequestMethod.POST})
+    @ResponseBody
+    public Object getLoadBalancerAttribute(Integer eventId){
+        List<NebulaPublishSlb> publishSlbs = publishSlbService.selectByPublishEventId(eventId);
+        for(NebulaPublishSlb publishSlb:publishSlbs){
+            DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
+            publishSlb.setDescribeLoadBalancerAttributeResponse(loadBalancerAttributeResponse);
+        }
+        return returnCallback("Success", publishSlbs);
+    }
+
+    /**
+     * 获取一个slb的机器状态
+     * @param id  nebulaPublishSlb.id
+     * @return
+     */
+    @RequestMapping(value="/list/describeHealthStatusTasks",method={RequestMethod.POST})
+    @ResponseBody
+    public Object getDescribeHealthStatusTasks(Integer id){
+        NebulaPublishSlb publishSlb = publishSlbService.selectById(id);
+        DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
+        publishSlb.setDescribeHealthStatusResponse(describeHealthStatusResponse);
+        return returnCallback("Success",publishSlb);
+    }
+
 
     /**
      * 获取log count

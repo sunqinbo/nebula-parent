@@ -15,38 +15,43 @@ import java.util.List;
 public class PublishSlbServiceImpl implements IPublishSlbService {
 
     @Resource
-    private INebulaPublishSlbDao iNebulaPublishSlbDao;
+    private INebulaPublishSlbDao nebulaPublishSlbDao;
 
     @Override
     public Integer insertNebulaPublishSlb(NebulaPublishSlb nebulaPublishSlb) {
-        Integer id = iNebulaPublishSlbDao.insert(nebulaPublishSlb);
+        Integer id = nebulaPublishSlbDao.insert(nebulaPublishSlb);
         return id;
     }
 
     @Override
     public void deleteById(Integer id) {
         if (id != null) {
-            iNebulaPublishSlbDao.deleteById(id);
+            nebulaPublishSlbDao.deleteById(id);
         }
     }
 
     @Override
     public void updateByIdSeletive(NebulaPublishSlb nebulaPublishSlb) {
         if (nebulaPublishSlb.getId()!=null) {
-            iNebulaPublishSlbDao.updateByIdSelective(nebulaPublishSlb);
+            nebulaPublishSlbDao.updateByIdSelective(nebulaPublishSlb);
         }
     }
 
     @Override
     public NebulaPublishSlb selectById(Integer id) {
-        NebulaPublishSlb nebulaPublishSlb = iNebulaPublishSlbDao.selectById(id);
+        NebulaPublishSlb nebulaPublishSlb = nebulaPublishSlbDao.selectById(id);
         return nebulaPublishSlb;
     }
 
     @Override
     public List<NebulaPublishSlb> selectAllWithParameter(NebulaPublishSlb nebulaPublishSlb) {
-        List<NebulaPublishSlb> nebulaPublishSlbList = iNebulaPublishSlbDao.selectAllPaging(nebulaPublishSlb);
+        List<NebulaPublishSlb> nebulaPublishSlbList = nebulaPublishSlbDao.selectAllPaging(nebulaPublishSlb);
         return nebulaPublishSlbList;
+    }
+
+    @Override
+    public List<NebulaPublishSlb> selectByPublishEventId(Integer eventId){
+        return nebulaPublishSlbDao.selectByPublishEventId(eventId);
     }
 
 }

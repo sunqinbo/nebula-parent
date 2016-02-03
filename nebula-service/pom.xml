@@ -109,6 +109,10 @@
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-cdn</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-slb</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.olymtech.cc</groupId>

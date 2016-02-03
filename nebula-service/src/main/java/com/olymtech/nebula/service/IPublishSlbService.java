@@ -17,4 +17,6 @@ public interface IPublishSlbService {
     NebulaPublishSlb selectById(Integer id);
 
     List<NebulaPublishSlb> selectAllWithParameter(NebulaPublishSlb nebulaPublishSlb);
+
+    List<NebulaPublishSlb> selectByPublishEventId(Integer eventId);
 }

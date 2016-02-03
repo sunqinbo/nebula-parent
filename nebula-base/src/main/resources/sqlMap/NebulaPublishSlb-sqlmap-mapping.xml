@@ -17,6 +17,14 @@
     load_balancer_status,region_id,aliyun_account
   </sql>
 
+    <select id="Nebula-NebulaPublishSlbDao-Select-By-Publish-EventId" parameterType="java.lang.Integer"
+            resultMap="RM-NebulaPublishSlb">
+        select
+        <include refid="NebulaPublishSlb-Base-Column-List"/>
+        from nebula_publish_slb
+        where publish_event_id = #{publishEventId,jdbcType=INTEGER}
+    </select>
+
     <select id="Nebula-NebulaPublishSlbDao-Select-By-Id" parameterType="java.lang.Integer"
             resultMap="RM-NebulaPublishSlb">
         select
@@ -26,7 +34,7 @@
     </select>
     <select id="Nebula-NebulaPublishSlbDao-Select-Count" resultType="java.lang.Integer">
     select count(id) from nebula_publish_slb
-  </select>
+    </select>
     <select id="Nebula-NebulaPublishSlbDao-Select-Count-Where" parameterType="NebulaPublishSlb"
             resultType="java.lang.Integer">
         select count(id) from nebula_publish_slb

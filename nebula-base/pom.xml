@@ -86,6 +86,11 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-slb</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
