@@ -10,7 +10,6 @@ import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.core.utils.SpringUtils;
-import com.olymtech.nebula.dao.INebulaUserInfoDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
@@ -60,7 +59,7 @@ public class PublishController extends BaseController {
     @Resource
     HttpServletRequest request;
     @Resource
-    IUserService        userService;
+    IUserService userService;
     @Resource
     private IStarryCdnApi starryCdnApi;
     @Resource
@@ -80,7 +79,24 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/event.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishEvent(Model model) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
-        model.addAttribute("productTrees", productTrees);
+        List<ProductTree> productTreeList = new ArrayList<>();
+        NebulaUserInfo nebulaUserInfo = getLoginUser();
+        for (ProductTree productTree : productTrees) {
+            if (productTree.getNodeName().equals(getLoginUser().getBu())) {
+                ProductTree productTree1 = new ProductTree();
+                productTree1.setId(productTree.getId());
+                productTree1.setSlbs(productTree.getSlbs());
+                productTree1.setApps(productTree.getApps());
+                productTree1.setHosts(productTree.getHosts());
+                productTree1.setNodeCname(productTree.getNodeCname());
+                productTree1.setNodeName(productTree.getNodeName());
+                productTree1.setPid(productTree.getPid());
+                productTree1.setSrcSvn(productTree.getSrcSvn());
+                productTree1.setTreeLevel(productTree.getTreeLevel());
+                productTreeList.add(productTree1);
+            }
+        }
+        model.addAttribute("productTrees", productTreeList);
         return "event/publishEvent";
     }
 
@@ -107,10 +123,10 @@ public class PublishController extends BaseController {
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(id);
         Integer submitEmpId = nebulaPublishEvent.getSubmitEmpId();
         Integer publishEmpId = nebulaPublishEvent.getPublishEmpId();
-        if(submitEmpId != null){
+        if (submitEmpId != null) {
             nebulaPublishEvent.setSubmitUser(userService.selectByEmpId(submitEmpId));
         }
-        if(publishEmpId != null){
+        if (publishEmpId != null) {
             nebulaPublishEvent.setPublishUser(userService.selectByEmpId(publishEmpId));
         }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
@@ -592,8 +608,8 @@ public class PublishController extends BaseController {
         //获取机器信息
         if (eventId != null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-            for (NebulaPublishHost nebulaPublishHost:nebulaPublishHosts){
-                nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(eventId,nebulaPublishHost));
+            for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
+                nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(eventId, nebulaPublishHost));
             }
             map.put("HostInfos", nebulaPublishHosts);
             map.put("eventStatus", publishEventService.selectById(eventId).getPublishStatus());
@@ -680,13 +696,13 @@ public class PublishController extends BaseController {
     /**
      * 获取cdn刷新列表
      */
-    @RequestMapping(value="/list/describeRefreshTasks",method={RequestMethod.POST})
+    @RequestMapping(value = "/list/describeRefreshTasks", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getDescribeRefreshTasks(){
+    public Object getDescribeRefreshTasks() {
         DescribeRefreshTasksResponse describeRefreshTasksResponse = starryCdnApi.describeRefreshTasks("olymtech@aliyun.com", "cn-hangzhou");
-        if(describeRefreshTasksResponse != null){
+        if (describeRefreshTasksResponse != null) {
             return returnCallback("Success", describeRefreshTasksResponse);
-        }else{
+        } else {
             return returnCallback("Error", "获取cdn刷新列表失败");
         }
     }
@@ -694,27 +710,28 @@ public class PublishController extends BaseController {
     /**
      * 获取cdn刷新列表
      */
-    @RequestMapping(value="/add/refreshObjectCaches",method={RequestMethod.POST})
+    @RequestMapping(value = "/add/refreshObjectCaches", method = {RequestMethod.POST})
     @ResponseBody
-    public Object refreshObjectCaches(String  objectPath,String  objectType){
+    public Object refreshObjectCaches(String objectPath, String objectType) {
         RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.refreshObjectCaches("olymtech@aliyun.com", "cn-hangzhou", objectPath, objectType);
-        if(refreshObjectCachesResponse != null){
+        if (refreshObjectCachesResponse != null) {
             return returnCallback("Success", refreshObjectCachesResponse);
-        }else{
+        } else {
             return returnCallback("Error", "获取cdn刷新列表失败");
         }
     }
 
     /**
      * 所有slb状态列表
+     *
      * @param eventId 发布id
      * @return
      */
-    @RequestMapping(value="/list/describeLoadBalancerAttributes",method={RequestMethod.POST})
+    @RequestMapping(value = "/list/describeLoadBalancerAttributes", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getLoadBalancerAttribute(Integer eventId){
+    public Object getLoadBalancerAttribute(Integer eventId) {
         List<NebulaPublishSlb> publishSlbs = publishSlbService.selectByPublishEventId(eventId);
-        for(NebulaPublishSlb publishSlb:publishSlbs){
+        for (NebulaPublishSlb publishSlb : publishSlbs) {
             DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
             publishSlb.setDescribeLoadBalancerAttributeResponse(loadBalancerAttributeResponse);
         }
@@ -723,35 +740,36 @@ public class PublishController extends BaseController {
 
     /**
      * 获取一个slb的机器状态
-     * @param id  nebulaPublishSlb.id
+     *
+     * @param id nebulaPublishSlb.id
      * @return
      */
-    @RequestMapping(value="/list/describeHealthStatusTasks",method={RequestMethod.POST})
+    @RequestMapping(value = "/list/describeHealthStatusTasks", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getDescribeHealthStatusTasks(Integer id){
+    public Object getDescribeHealthStatusTasks(Integer id) {
         NebulaPublishSlb publishSlb = publishSlbService.selectById(id);
         DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
         publishSlb.setDescribeHealthStatusResponse(describeHealthStatusResponse);
-        return returnCallback("Success",publishSlb);
+        return returnCallback("Success", publishSlb);
     }
 
 
     /**
      * 获取log count
      */
-    @RequestMapping(value="/log/getPublishLogCount",method={RequestMethod.POST})
+    @RequestMapping(value = "/log/getPublishLogCount", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getPublishLogCount(Integer eventId){
+    public Object getPublishLogCount(Integer eventId) {
         NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         /** 存放错误数量map */
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-        for(NebulaPublishHost publishHost:nebulaPublishHosts){
+        for (NebulaPublishHost publishHost : nebulaPublishHosts) {
             map.put("host", publishHost);
-            Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
-            Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
+            Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
+            Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
             ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(),
-                    "Error",fromDate,toDate,1,10);
+                    "Error", fromDate, toDate, 1, 10);
 
             Integer total = elkLogService.count(elkSearchData);
             map.put("total", total);
@@ -759,32 +777,32 @@ public class PublishController extends BaseController {
         return returnCallback("Success", map);
     }
 
-    public int getPublishLogHostLogCount(Integer eventId,NebulaPublishHost publishHost){
+    public int getPublishLogHostLogCount(Integer eventId, NebulaPublishHost publishHost) {
         NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
-        Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
-        Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
-        ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),"ERROR",fromDate,toDate,1,10);
+        Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
+        Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
+        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), "ERROR", fromDate, toDate, 1, 10);
         return elkLogService.count(elkSearchData);
     }
 
     /**
      * 获取log 详细信息
      */
-    @RequestMapping(value="/log/getPublishLogByHost",method={RequestMethod.POST})
+    @RequestMapping(value = "/log/getPublishLogByHost", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest){
+    public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest) {
         NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
-        if(!StringUtils.isNotEmpty(elkSearchDataReuqest.getHost())){
+        if (!StringUtils.isNotEmpty(elkSearchDataReuqest.getHost())) {
             return returnCallback("Error", "host参数为必选项");
         }
 
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
-        Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()),-8);
-        if(elkSearchDataReuqest.getPageNum()==null){
+        Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()), -8);
+        if (elkSearchDataReuqest.getPageNum() == null) {
             elkSearchDataReuqest.setPageNum(1);
         }
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
-                elkSearchDataReuqest.getKeyWord(),fromDate,toDate,elkSearchDataReuqest.getPageNum(),elkSearchDataReuqest.getPageSize());
+                elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(), elkSearchDataReuqest.getPageSize());
         PageInfo pageInfo = elkLogService.search(elkSearchData);
         return returnCallback("Success", pageInfo);
     }
