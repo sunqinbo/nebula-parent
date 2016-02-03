@@ -794,7 +794,7 @@ function logFrenshControl(pageNum){
                 var elkUrl="http://elk.stage.900jit.com/#/doc/logstash-*/"+logInfo.index+"/tomcat?id="+logInfo.id+"&_g=()"
                 tbLogString+="<tr>"+
                     "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>"+logInfo.message+"</div></td>"+
-                    "<td><a href='"+elkUrl+"'target=_blank >详情</a></td>"
+                    "<td class='tdTopControl'><a href='"+elkUrl+"'target=_blank >详情</a></td>"
                 "</tr>"
             }
             $("#logInfoTb_modal").html(tbLogString);

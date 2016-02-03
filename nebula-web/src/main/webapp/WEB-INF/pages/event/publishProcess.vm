@@ -19,6 +19,9 @@
         word-wrap: break-word;
         white-space: pre-wrap;
     }
+    .tdTopControl{
+        vertical-align:top !important;
+    }
 </style>
 
 <script>
