@@ -4,6 +4,7 @@ import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.dao.INebulaPublishAppDao;
 import com.olymtech.nebula.dao.INebulaPublishHostDao;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
+import com.olymtech.nebula.dao.INebulaPublishSlbDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
@@ -49,6 +50,9 @@ public class PublishRelationAction extends AbstractAction {
 
     @Autowired
     private IPublishScheduleService publishScheduleService;
+
+    @Resource
+    private INebulaPublishSlbDao nebulaPublishSlbDao;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -121,8 +125,23 @@ public class PublishRelationAction extends AbstractAction {
                     nebulaPublishAppDaoImpl.insert(nebulaPublishApp);
                     apps.add(nebulaPublishApp);
                 }
+                List<NebulaPublishSlb> slbs = new ArrayList<>();
+                for (SimpleSlb slb : moduleTree.getSlbs()) {
+                    NebulaPublishSlb nebulaPublishSlb = new NebulaPublishSlb();
+                    nebulaPublishSlb.setPublishEventId(event.getId());
+                    nebulaPublishSlb.setPublishModuleId(nebulaPublishModule.getId());
+                    nebulaPublishSlb.setLoadBalancerId(slb.getLoadBalancerId());
+                    nebulaPublishSlb.setLoadBalancerName(slb.getLoadBalancerName());
+                    nebulaPublishSlb.setLoadBalancerAddress(slb.getLoadBalancerAddress());
+                    nebulaPublishSlb.setLoadBalancerStatus(slb.getLoadBalancerStatus());
+                    nebulaPublishSlb.setRegionId(slb.getRegionId());
+                    nebulaPublishSlb.setAliyunAccount(slb.getAliyunAccount());
+                    nebulaPublishSlbDao.insert(nebulaPublishSlb);
+                    slbs.add(nebulaPublishSlb);
+                }
                 nebulaPublishModule.setPublishHosts(hosts);
                 nebulaPublishModule.setPublishApps(apps);
+                nebulaPublishModule.setPublishSlbs(slbs);
                 modules.add(nebulaPublishModule);
             }
             event.setPublishModules(modules);

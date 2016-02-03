@@ -4,8 +4,6 @@ import com.aliyuncs.slb.model.v20140515.DescribeHealthStatusResponse;
 import com.aliyuncs.slb.model.v20140515.DescribeLoadBalancerAttributeResponse;
 
 public class NebulaPublishSlb extends BaseDO {
-    private Integer id;
-
     private Integer publishEventId;
 
     private Integer publishModuleId;
@@ -41,14 +39,6 @@ public class NebulaPublishSlb extends BaseDO {
     private DescribeLoadBalancerAttributeResponse describeLoadBalancerAttributeResponse;
 
     private DescribeHealthStatusResponse describeHealthStatusResponse;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getPublishEventId() {
         return publishEventId;

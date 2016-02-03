@@ -18,6 +18,16 @@ public class NebulaPublishModule extends BaseDO {
 
     private List<NebulaPublishApp>  publishApps;
 
+    private List<NebulaPublishSlb> publishSlbs;
+
+    public List<NebulaPublishSlb> getPublishSlbs() {
+        return publishSlbs;
+    }
+
+    public void setPublishSlbs(List<NebulaPublishSlb> publishSlbs) {
+        this.publishSlbs = publishSlbs;
+    }
+
     public List<NebulaPublishHost> getPublishHosts() {
         return publishHosts;
     }
