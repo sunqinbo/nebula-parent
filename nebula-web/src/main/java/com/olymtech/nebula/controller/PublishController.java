@@ -763,7 +763,7 @@ public class PublishController extends BaseController {
         NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
-        ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),fromDate,toDate,1,10);
+        ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),"ERROR",fromDate,toDate,1,10);
         return elkLogService.count(elkSearchData);
     }
 
@@ -780,7 +780,9 @@ public class PublishController extends BaseController {
 
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()),-8);
-
+        if(elkSearchDataReuqest.getPageNum()==null){
+            elkSearchDataReuqest.setPageNum(1);
+        }
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
                 elkSearchDataReuqest.getKeyWord(),fromDate,toDate,elkSearchDataReuqest.getPageNum(),elkSearchDataReuqest.getPageSize());
         PageInfo pageInfo = elkLogService.search(elkSearchData);

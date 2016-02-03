@@ -337,6 +337,16 @@ $(document).ready(function(){
         $("#step6").hide();
         $("#nextPublish").hide();
     });
+    //自动刷新按钮点击事件
+    $("#freshControl_switch").click(function () {
+        if($('#freshControl_checkbox').prop("checked")){
+            $('#freshControl_switch').bootstrapSwitch('setState', true);
+        }
+        else{
+            $('#freshControl_switch').bootstrapSwitch('setState', false);
+        }
+        logFrenshControl(1);
+    });
 
 })
 
@@ -740,15 +750,7 @@ function errorNumClick(hostName){
     //setInterval("endTimeControl()", 2000);
     //setTimeout(logFrenshControl,2000);
     logFrenshControl(1);
-    //自动刷新按钮点击事件
-    $("#freshControl_switch").click(function () {
-        logFrenshControl(1);
-    });
     //$("#keyWord_modal").change(logFrenshControl);
-    //终止时间变化事件
-    $('#logEndTime_modal').change(function(){
-        alert("没用");
-    });
     //过滤框内容变更事件
     $("#keyWord_modal").change(function(){
         logFrenshControl(1)
