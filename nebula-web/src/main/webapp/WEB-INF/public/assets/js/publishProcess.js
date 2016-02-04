@@ -774,7 +774,7 @@ function errorNumClick(hostName){
     //$('#logModal').modal('show');
 }
 //自动刷新日志文件
-function logFrenshControl(pageNum){
+function logFrenshControl(pageNum,currentPage){
     if( $("#isclosed_modal").val()==1){
         return;
     }
@@ -808,23 +808,30 @@ function logFrenshControl(pageNum){
                 "</tr>"
             }
             $("#logInfoTb_modal").html(tbLogString);
-            $("#pagination_box").html("<ul id='pagination' class='pagination-sm'></ul>");
+            $("#pagination_box").html("<div style='text-align: center' id='pageSort'></div>");
             //停止自动刷新时
             if(!$('#freshControl_checkbox').prop("checked")) {
                 var totalPage = data.responseContext["pages"];
-                $('#pagination').twbsPagination({
-                    totalPages: totalPage,
-                    visiblePages: 6,
-                    onPageClick: function (event, page) {
+                //$('#pagination').twbsPagination({
+                //    totalPages: totalPage,
+                //    visiblePages: 6,
+                //    onPageClick: function (event, page) {
+                //        $("#logInfoTb_modal").html("");
+                //        logAjax(page);
+                //    }
+                //});
+                $('#pageSort').pagination({
+                    pages: totalPage,
+                    styleClass: ['pagination-large'],
+                    showCtrl: true,
+                    displayPage: 6,
+                    currentPage:currentPage,
+                    onSelect: function (num) {
                         $("#logInfoTb_modal").html("");
-                        logAjax(page);
+                        logFrenshControl(num,num);  //分页点击
                     }
                 });
-                //$('#pagination').show();
             }
-            //else{
-            //    $('#pagination').hide();
-            //}
         },
         error: function (errorThrown) {
             $.notify({
@@ -841,43 +848,43 @@ function logFrenshControl(pageNum){
 }
 
 //日志请求
-function logAjax(page){
-    $.ajax({
-        type: "POST",
-        url: "/publish/log/getPublishLogByHost",
-        data: {
-            host:$("#hostName_modal").val(),
-            eventId:$("#eventId").val(),
-            keyWord:$("#keyWord_modal").val(),
-            toDateString:$("#logEndTime_modal").val(),
-            pageNum:page,
-            pageSize:10,
-        },
-        //async: true,
-        success: function (data) {
-            var tbLogString="";
-            for(var i= 0,len=data.responseContext["list"].length;i<len;i++){
-                var logInfo=data.responseContext["list"][i];
-                var elkUrl="http://elk.stage.900jit.com/#/doc/logstash-*/"+logInfo.index+"/tomcat?id="+logInfo.id+"&_g=()"
-                tbLogString+="<tr>"+
-                    "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>"+logInfo.message+"</div></td>"+
-                    "<td><a href='"+elkUrl+"'target=_blank >详情</a></td>"
-                "</tr>"
-            }
-            $("#logInfoTb_modal").html(tbLogString);
-        },
-        error: function (errorThrown) {
-            $.notify({
-                icon: '',
-                message: "获取日志失败，原因：" + errorThrown
-
-            }, {
-                type: 'danger',
-                timer: 1000
-            });
-        }
-    })
-}
+//function logAjax(page){
+//    $.ajax({
+//        type: "POST",
+//        url: "/publish/log/getPublishLogByHost",
+//        data: {
+//            host:$("#hostName_modal").val(),
+//            eventId:$("#eventId").val(),
+//            keyWord:$("#keyWord_modal").val(),
+//            toDateString:$("#logEndTime_modal").val(),
+//            pageNum:page,
+//            pageSize:10,
+//        },
+//        //async: true,
+//        success: function (data) {
+//            var tbLogString="";
+//            for(var i= 0,len=data.responseContext["list"].length;i<len;i++){
+//                var logInfo=data.responseContext["list"][i];
+//                var elkUrl="http://elk.stage.900jit.com/#/doc/logstash-*/"+logInfo.index+"/tomcat?id="+logInfo.id+"&_g=()"
+//                tbLogString+="<tr>"+
+//                    "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>"+logInfo.message+"</div></td>"+
+//                    "<td><a href='"+elkUrl+"'target=_blank >详情</a></td>"
+//                "</tr>"
+//            }
+//            $("#logInfoTb_modal").html(tbLogString);
+//        },
+//        error: function (errorThrown) {
+//            $.notify({
+//                icon: '',
+//                message: "获取日志失败，原因：" + errorThrown
+//
+//            }, {
+//                type: 'danger',
+//                timer: 1000
+//            });
+//        }
+//    })
+//}
 
 //结束时间失焦事件
 function endTimeOnblur(){

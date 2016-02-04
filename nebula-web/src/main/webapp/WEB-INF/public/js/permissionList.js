@@ -48,7 +48,16 @@ function getjtb(pageNum){
             $("tbody").html(tbString);
             listBtn(pageNum);
             totalPage=data["pages"];
-            pageSort(totalPage,pageNum);
+            $('#pageSort').pagination({
+                pages: totalPage,
+                styleClass: ['pagination-large'],
+                showCtrl: true,
+                displayPage: 6,
+                onSelect: function (num) {
+                    getjtb(num);  //分页点击
+                }
+            });
+            //pageSort(totalPage,pageNum);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
@@ -64,41 +73,41 @@ function getjtb(pageNum){
 }
 
 //分页的div控制
-function pageSort(totalPage,pageNum){
-    if(totalPage>0) {
-        var pageSortString="<ul class='pagination'> <li><a href='#'>上一页</a></li>";
-        for (var i = 1; i <= totalPage; i++) {
-            pageSortString=pageSortString+"<li><a href='#'>"+i+"</a></li>";
-        }
-        pageSortString=pageSortString+" <li><a href='#'>下一页</a></li> </ul>";
-    }
-    $("#pageSort").html(pageSortString);
-    $(".pagination>li").each(function(){
-        if(pageNum+""==$(this).text())
-            $(this).addClass("active");
-        var sortNum=pageNum;
-        $(this).click(function(){
-            if($(this).text()=="上一页")
-            {
-                if(sortNum==1){
-                    return;
-                }
-                sortNum=sortNum-1;
-            }
-            else if($(this).text()=='下一页')
-            {
-                if(sortNum==totalPage){
-                    return;
-                }
-                sortNum=sortNum-1+2;
-            }
-            else{
-                sortNum=$(this).text();
-            }
-            getjtb(sortNum);
-        });
-    });
-}
+//function pageSort(totalPage,pageNum){
+//    if(totalPage>0) {
+//        var pageSortString="<ul class='pagination'> <li><a href='#'>上一页</a></li>";
+//        for (var i = 1; i <= totalPage; i++) {
+//            pageSortString=pageSortString+"<li><a href='#'>"+i+"</a></li>";
+//        }
+//        pageSortString=pageSortString+" <li><a href='#'>下一页</a></li> </ul>";
+//    }
+//    $("#pageSort").html(pageSortString);
+//    $(".pagination>li").each(function(){
+//        if(pageNum+""==$(this).text())
+//            $(this).addClass("active");
+//        var sortNum=pageNum;
+//        $(this).click(function(){
+//            if($(this).text()=="上一页")
+//            {
+//                if(sortNum==1){
+//                    return;
+//                }
+//                sortNum=sortNum-1;
+//            }
+//            else if($(this).text()=='下一页')
+//            {
+//                if(sortNum==totalPage){
+//                    return;
+//                }
+//                sortNum=sortNum-1+2;
+//            }
+//            else{
+//                sortNum=$(this).text();
+//            }
+//            getjtb(sortNum);
+//        });
+//    });
+//}
 
 //删除，编辑按钮事件
 function listBtn(pageNum){
