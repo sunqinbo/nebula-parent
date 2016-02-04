@@ -89,22 +89,12 @@ public class PublishController extends BaseController {
                 flag = true;
             }
         }
-        if (flag == true) {
+        if (flag) {
             model.addAttribute("productTrees", productTrees);
         } else {
             for (ProductTree productTree : productTrees) {
                 if (productTree.getNodeName().equals(getLoginUser().getBu())) {
-                    ProductTree productTree1 = new ProductTree();
-                    productTree1.setId(productTree.getId());
-                    productTree1.setSlbs(productTree.getSlbs());
-                    productTree1.setApps(productTree.getApps());
-                    productTree1.setHosts(productTree.getHosts());
-                    productTree1.setNodeCname(productTree.getNodeCname());
-                    productTree1.setNodeName(productTree.getNodeName());
-                    productTree1.setPid(productTree.getPid());
-                    productTree1.setSrcSvn(productTree.getSrcSvn());
-                    productTree1.setTreeLevel(productTree.getTreeLevel());
-                    productTreeList.add(productTree1);
+                    productTreeList.add(productTree);
                 }
             }
             model.addAttribute("productTrees", productTreeList);

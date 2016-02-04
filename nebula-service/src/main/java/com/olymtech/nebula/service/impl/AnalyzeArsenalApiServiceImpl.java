@@ -108,6 +108,7 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
                 productTree.setSrcSvn(instanceJsonObject.getString("srcSvn"));
                 productTree.setTreeLevel(Integer.parseInt(instanceJsonObject.getString("treeLevel")));
                 productTree.setPid(Integer.parseInt(instanceJsonObject.getString("pid")));
+                productTree.setPublishSvn(instanceJsonObject.getString("publishSvn"));
                 productTrees.add(productTree);
             }
         } catch (Exception e) {
