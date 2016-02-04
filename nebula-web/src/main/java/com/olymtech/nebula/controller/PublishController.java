@@ -80,23 +80,35 @@ public class PublishController extends BaseController {
     public String publishEvent(Model model) throws Exception {
         List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
         List<ProductTree> productTreeList = new ArrayList<>();
-        NebulaUserInfo nebulaUserInfo = getLoginUser();
-        for (ProductTree productTree : productTrees) {
-            if (productTree.getNodeName().equals(getLoginUser().getBu())) {
-                ProductTree productTree1 = new ProductTree();
-                productTree1.setId(productTree.getId());
-                productTree1.setSlbs(productTree.getSlbs());
-                productTree1.setApps(productTree.getApps());
-                productTree1.setHosts(productTree.getHosts());
-                productTree1.setNodeCname(productTree.getNodeCname());
-                productTree1.setNodeName(productTree.getNodeName());
-                productTree1.setPid(productTree.getPid());
-                productTree1.setSrcSvn(productTree.getSrcSvn());
-                productTree1.setTreeLevel(productTree.getTreeLevel());
-                productTreeList.add(productTree1);
+        NebulaUserInfo user = getLoginUser();
+        NebulaUserInfo userInfoWithRoles = userService.getAclUserWithRolesByEmpId(user.getEmpId());
+        List<AclRole> aclRoleList = userInfoWithRoles.getAclRoles();
+        Boolean flag = false;
+        for (AclRole aclRole : aclRoleList) {
+            if (aclRole.getRoleName().equals("root") || aclRole.getRoleName().equals("admin")) {
+                flag = true;
             }
         }
-        model.addAttribute("productTrees", productTreeList);
+        if (flag == true) {
+            model.addAttribute("productTrees", productTrees);
+        } else {
+            for (ProductTree productTree : productTrees) {
+                if (productTree.getNodeName().equals(getLoginUser().getBu())) {
+                    ProductTree productTree1 = new ProductTree();
+                    productTree1.setId(productTree.getId());
+                    productTree1.setSlbs(productTree.getSlbs());
+                    productTree1.setApps(productTree.getApps());
+                    productTree1.setHosts(productTree.getHosts());
+                    productTree1.setNodeCname(productTree.getNodeCname());
+                    productTree1.setNodeName(productTree.getNodeName());
+                    productTree1.setPid(productTree.getPid());
+                    productTree1.setSrcSvn(productTree.getSrcSvn());
+                    productTree1.setTreeLevel(productTree.getTreeLevel());
+                    productTreeList.add(productTree1);
+                }
+            }
+            model.addAttribute("productTrees", productTreeList);
+        }
         return "event/publishEvent";
     }
 

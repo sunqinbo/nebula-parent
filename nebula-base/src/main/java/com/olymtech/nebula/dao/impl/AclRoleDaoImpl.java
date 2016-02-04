@@ -20,4 +20,5 @@ public class AclRoleDaoImpl extends BaseDaoImpl<AclRole,Integer> implements IAcl
     public List<AclRole> selectByIds(List<Integer> ids) {
         return getSqlSession().selectList(CLASS_NAME + "-Select-By-Ids", ids);
     }
+
 }
