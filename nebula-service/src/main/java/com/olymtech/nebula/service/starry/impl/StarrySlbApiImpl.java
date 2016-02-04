@@ -31,7 +31,7 @@ public class StarrySlbApiImpl implements IStarrySlbApi {
     @Override
     public DescribeLoadBalancerAttributeResponse describeLoadBalancerAttribute(NebulaPublishSlb publishSlb){
         String describe_loadbalancer_attribute_api = starryApiUrl+"/slb/describeLoadBalancerAttribute.htm?";
-        String url = describe_loadbalancer_attribute_api+"account="+""+"&regionId="+""+"&loadBalancerId="+publishSlb.getLoadBalancerId();
+        String url = describe_loadbalancer_attribute_api+"account="+publishSlb.getAliyunAccount()+"&regionId="+publishSlb.getRegionId()+"&loadBalancerId="+publishSlb.getLoadBalancerId();
         try{
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url, "post");
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
@@ -57,7 +57,7 @@ public class StarrySlbApiImpl implements IStarrySlbApi {
     @Override
     public DescribeHealthStatusResponse describeHealthStatusTasks(NebulaPublishSlb publishSlb){
         String describe_healthstatus_tasks_api = starryApiUrl+"/slb/describeHealthStatusTasks.htm?";
-        String url = describe_healthstatus_tasks_api+"account="+""+"&regionId="+""+"&loadBalancerId="+publishSlb.getLoadBalancerId();
+        String url = describe_healthstatus_tasks_api+"account="+publishSlb.getAliyunAccount()+"&regionId="+publishSlb.getRegionId()+"&loadBalancerId="+publishSlb.getLoadBalancerId();
         try{
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url, "post");
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);

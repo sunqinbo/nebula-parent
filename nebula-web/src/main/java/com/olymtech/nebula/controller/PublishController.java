@@ -592,11 +592,15 @@ public class PublishController extends BaseController {
         //获取机器信息
         if (eventId != null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-            for (NebulaPublishHost nebulaPublishHost:nebulaPublishHosts){
-                nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(eventId,nebulaPublishHost));
+            NebulaPublishEvent nebulaPublishEvent=publishEventService.selectById(eventId);
+            if(PublishStatus.PUBLISHED==nebulaPublishEvent.getPublishStatus()||PublishStatus.ROLLBACK==nebulaPublishEvent.getPublishStatus()||PublishStatus.CANCEL==nebulaPublishEvent.getPublishStatus()){}
+            else {
+                for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
+                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost));
+                }
             }
             map.put("HostInfos", nebulaPublishHosts);
-            map.put("eventStatus", publishEventService.selectById(eventId).getPublishStatus());
+            map.put("eventStatus", nebulaPublishEvent.getPublishStatus());
         }
         return returnCallback("Success", map);
 
@@ -717,6 +721,8 @@ public class PublishController extends BaseController {
         for(NebulaPublishSlb publishSlb:publishSlbs){
             DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
             publishSlb.setDescribeLoadBalancerAttributeResponse(loadBalancerAttributeResponse);
+            DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
+            publishSlb.setDescribeHealthStatusResponse(describeHealthStatusResponse);
         }
         return returnCallback("Success", publishSlbs);
     }
@@ -739,28 +745,28 @@ public class PublishController extends BaseController {
     /**
      * 获取log count
      */
-    @RequestMapping(value="/log/getPublishLogCount",method={RequestMethod.POST})
-    @ResponseBody
-    public Object getPublishLogCount(Integer eventId){
-        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
-        /** 存放错误数量map */
-        Map<String,Object> map = new HashMap<>();
-        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-        for(NebulaPublishHost publishHost:nebulaPublishHosts){
-            map.put("host", publishHost);
-            Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
-            Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
-            ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(),
-                    "Error",fromDate,toDate,1,10);
+//    @RequestMapping(value="/log/getPublishLogCount",method={RequestMethod.POST})
+//    @ResponseBody
+//    public Object getPublishLogCount(Integer eventId){
+//        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+//        /** 存放错误数量map */
+//        Map<String,Object> map = new HashMap<>();
+//        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
+//        for(NebulaPublishHost publishHost:nebulaPublishHosts){
+//            map.put("host", publishHost);
+//            Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
+//            Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
+//            ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(),
+//                    "Error",fromDate,toDate,1,10);
+//
+//            Integer total = elkLogService.count(elkSearchData);
+//            map.put("total", total);
+//        }
+//        return returnCallback("Success", map);
+//    }
 
-            Integer total = elkLogService.count(elkSearchData);
-            map.put("total", total);
-        }
-        return returnCallback("Success", map);
-    }
-
-    public int getPublishLogHostLogCount(Integer eventId,NebulaPublishHost publishHost){
-        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent,NebulaPublishHost publishHost){
+//        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
         ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),"ERROR",fromDate,toDate,1,10);
