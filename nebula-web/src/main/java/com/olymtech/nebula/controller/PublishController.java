@@ -787,6 +787,10 @@ public class PublishController extends BaseController {
 
     public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent,NebulaPublishHost publishHost){
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+
+        if(publishEvent.getPublishDatetime() == null){
+            return 0;
+        }
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
         ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),"ERROR",fromDate,toDate,1,10);
