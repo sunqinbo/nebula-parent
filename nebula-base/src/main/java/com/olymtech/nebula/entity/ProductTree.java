@@ -17,6 +17,8 @@ public class ProductTree extends BaseDO {
 
     private String srcSvn;
 
+    private String publishSvn;
+
     private Integer pid;
 
     private Integer treeLevel;
@@ -33,6 +35,14 @@ public class ProductTree extends BaseDO {
 
     public void setSlbs(List<SimpleSlb> slbs) {
         this.slbs = slbs;
+    }
+
+    public String getPublishSvn() {
+        return publishSvn;
+    }
+
+    public void setPublishSvn(String publishSvn) {
+        this.publishSvn = publishSvn;
     }
 
     public Integer getTreeLevel() {

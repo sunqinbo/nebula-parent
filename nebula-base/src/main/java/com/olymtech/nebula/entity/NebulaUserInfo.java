@@ -30,7 +30,17 @@ public class NebulaUserInfo extends BaseDO{
 
     private String securityKey;
 
+    private String bu;
+
     private List<AclRole> aclRoles;
+
+    public String getBu() {
+        return bu;
+    }
+
+    public void setBu(String bu) {
+        this.bu = bu;
+    }
 
     public List<AclRole> getAclRoles() {
         return aclRoles;
