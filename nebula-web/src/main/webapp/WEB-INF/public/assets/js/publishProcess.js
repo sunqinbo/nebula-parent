@@ -236,6 +236,8 @@ $(document).ready(function(){
     //页面初次加载进度条控制
     Initialization();
     setInterval("Initialization()", 5000);
+    getSlbInfo();
+    setInterval("getSlbInfo()", 30000);
     //按钮点击事件
     $("#btn1").click(function () {
         $("#loading-status").show();
@@ -371,6 +373,12 @@ function Initialization() {
                 var isSuccessAction = ""
                 var actionResult = ""
                 var passPublishHostIp = "";
+                var logNumShow="";
+                if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
+                {
+                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+")' href='#'><span class='label label-danger'>"+
+                    HostList[i]["logNumber"]+"</span></a>";
+                }
                 if (HostList[i]["passPublishHostName"] != null)
                     passPublishHostName =""+ HostList[i]["passPublishHostName"];
                 if (HostList[i]["passPublishHostName"] != null)
@@ -383,8 +391,7 @@ function Initialization() {
                     actionResult = HostList[i]["actionResult"];
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
                     actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult +
-                    "</td><td><a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+")' href='#'><span class='label label-danger'>"+
-                    HostList[i]["logNumber"]+"</span></a></td></tr>";
+                    "</td><td>"+logNumShow+"</td></tr>";
             }
             $("#hostInfo").html(tbString);
 
@@ -887,6 +894,60 @@ function endTimeOnfocus(){
         $('#freshControl_switch').bootstrapSwitch('setState', false);
         logFrenshControl(1);
     }
+}
+
+//获取slb信息
+function getSlbInfo(){
+    $.ajax({
+        type:"POST",
+        url:"/publish//list/describeLoadBalancerAttributes",
+        data:{eventId:$("#eventId").val()},
+        success: function (data) {
+            var slbTbString="";
+            for(var i= 0,len=data.responseContext.length;i<len;i++){
+                var slbInfo=data.responseContext[i].describeLoadBalancerAttributeResponse;
+                var slbHostInfo=data.responseContext[i].describeHealthStatusResponse.backendServers;
+                var hostInfoString="";
+                var loadBalancerStatus="";
+                for(var j= 0,leng=slbHostInfo.length;j<leng;j++){
+                    var serverHealthStatus="";
+                    switch (slbHostInfo[j].serverHealthStatus){
+                        case "normal":serverHealthStatus+="<span class='label label-success'>"+slbHostInfo[j].serverHealthStatus+"</span>";break;
+                        case "abnormal":serverHealthStatus+="<span class='label label-danger'>"+slbHostInfo[j].serverHealthStatus+"</span>";break;
+                        default:serverHealthStatus+="<span class='label label-default'>"+slbHostInfo[j].serverHealthStatus+"</span>";
+                    }
+                    if(j!=0){
+                        hostInfoString+="<br/>";
+                    }
+                    hostInfoString+=slbHostInfo[j].serverId+"&nbsp;&nbsp;: &nbsp;&nbsp;"+serverHealthStatus;
+                }
+                //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
+                switch (slbInfo.loadBalancerStatus){
+                    case "inactive":loadBalancerStatus+="<span class='label label-danger'>"+slbInfo.loadBalancerStatus+"</span>";break;
+                    case "active":loadBalancerStatus+="<span class='label label-success'>"+slbInfo.loadBalancerStatus+"</span>";break;
+                    default:loadBalancerStatus+="<span class='label label-default'>"+slbInfo.loadBalancerStatus+"</span>";
+                }
+                slbTbString+="<tr>"+
+                    "<td>"+slbInfo.loadBalancerName+"</td>"+
+                    "<td>"+slbInfo.address+"</td>"+
+                    "<td>"+slbInfo.loadBalancerId+"</td>"+
+                    "<td>"+loadBalancerStatus+"</td>"+
+                    "<td>"+hostInfoString+"</td>";
+                "</tr>"
+            }
+            $("#slbInfo_tb").html(slbTbString);
+        },
+        error: function (errorThrown) {
+            $.notify({
+                icon: '',
+                message: "获取SLB信息失败，原因：" + errorThrown
+
+            }, {
+                type: 'danger',
+                timer: 1000
+            });
+        }
+    })
 }
 
 //日期格式化

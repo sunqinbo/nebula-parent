@@ -336,6 +336,28 @@
                             </table>
                         </div>
                     </div>
+
+                    <div class="card card-plain">
+                        <div class="header">
+                            SLB信息
+                        </div>
+                        <hr/>
+                        <div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>SLB名称</th>
+                                    <th>SLB_ip</th>
+                                    <th>SLB_id</th>
+                                    <th>SLB状态</th>
+                                    <th>机器状态</th>
+                                </tr>
+                                </thead>
+                                <tbody id="slbInfo_tb">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             #end
         </div>
