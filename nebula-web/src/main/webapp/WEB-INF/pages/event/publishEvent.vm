@@ -1,4 +1,3 @@
-
 #parse("./head/header.vm")
 #parse("./head/sidebar.vm")
 #parse("./head/navbar.vm")
@@ -14,24 +13,25 @@
                     <div class="content">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">发布名称</label>
+                                <label class="col-sm-2 control-label">发布名称</label>
                                 <div class="col-sm-10">
                                     <input id="publish-subject" type="text" class="form-control" placeholder="请输入发布名称">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">发布事件事业部</label>
+                                <label class="col-sm-2 control-label">发布事件事业部</label>
                                 <div class="col-sm-10">
                                     <select id="select-bu" class="form-control">
                                         <option value="">请选择</option>
                                         #foreach($productTree in $productTrees)
-                                            <option value-hidden="$productTree.nodeName" value="$productTree.id">$productTree.nodeCname</option>
+                                            <option value-hidden="$productTree.nodeName"
+                                                    value="$productTree.id">$productTree.nodeCname</option>
                                         #end
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">发布产品</label>
+                                <label class="col-sm-2 control-label">发布产品</label>
                                 <div class="col-sm-10">
                                     <select id="select-product" class="form-control">
                                         <option value="">请选择</option>
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">发布环境</label>
+                                <label class="col-sm-2 control-label">发布环境</label>
                                 <div class="col-sm-10">
                                     <select id="select-publich-env" class="form-control">
                                         <option value="">请选择</option>
@@ -48,16 +48,28 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-offset-2">
+                                <span id="publish-svn-tip" style="color: red;"></span>
+                            </div>
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">发布svn地址</label>
+                                <label class="col-sm-2 control-label">发布svn地址</label>
                                 <div class="col-sm-10">
-                                    <input id="publich-svn" type="text" class="form-control" placeholder="请输入svn地址">
+                                    <div class="col-sm-8" style="padding: 0 !important;">
+                                        <input id="publish-svn" disabled="disabled" type="text" class="form-control"
+                                               placeholder="svn地址">
+                                    </div>
+                                    <div class="col-sm-4" style="padding-right: 0 !important;">
+                                        <input id="publich-svn" type="text" class="form-control col-sm-5"
+                                               placeholder="请输入svn地址">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
+                                <div class="col-sm-12" style="text-align: center">
                                     #if($shiro.hasPermission("publishapply:commit"))
-                                        <button id="publish-event-submit" class="btn btn-default" onclick="nebula.publish.event.createPublishEvent()">提交</button>
+                                        <button id="publish-event-submit" class="btn btn-default"
+                                                onclick="nebula.publish.event.createPublishEvent()">提交
+                                        </button>
                                     #end
                                 </div>
                             </div>
@@ -69,6 +81,47 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="eventTipModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 模态弹出窗内容 -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 style="color: #0089db" class="modal-title">提交事件单信息</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center;margin-bottom: 50px;">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">发布名称:</label>
+                            <lable id="publishSubject_lb" style="float: left" class="control-label"></lable>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">发布事件事业部:</label>
+                            <lable id="publishBuCname_lb" style="float: left" class="control-label"></lable>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">发布产品:</label>
+                            <lable id="publishProductCname_lb" style="float: left" class="control-label"></lable>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">发布环境:</label>
+                            <lable id="publishEnv_lb" style="float: left" class="control-label"></lable>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">发布svn地址:</label>
+                            <lable id="publishSvn_lb" style="float: left;color: red;font-size: large" class="control-label"></lable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="submitConfirm_btn" class="btn btn-primary">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 #parse("./head/footer.vm")

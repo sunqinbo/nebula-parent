@@ -374,11 +374,6 @@ function Initialization() {
                 var actionResult = ""
                 var passPublishHostIp = "";
                 var logNumShow="";
-                if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
-                {
-                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+")' href='#'><span class='label label-danger'>"+
-                    HostList[i]["logNumber"]+"</span></a>";
-                }
                 if (HostList[i]["passPublishHostName"] != null)
                     passPublishHostName =""+ HostList[i]["passPublishHostName"];
                 if (HostList[i]["passPublishHostName"] != null)
@@ -389,6 +384,11 @@ function Initialization() {
                     isSuccessAction = HostList[i]["isSuccessAction"];
                 if (HostList[i]["actionResult"] != null)
                     actionResult = HostList[i]["actionResult"];
+                if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
+                {
+                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+")' href='#'><span class='label label-danger'>"+
+                        HostList[i]["logNumber"]+"</span></a>";
+                }
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
                     actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult +
                     "</td><td>"+logNumShow+"</td></tr>";
@@ -900,7 +900,7 @@ function endTimeOnfocus(){
 function getSlbInfo(){
     $.ajax({
         type:"POST",
-        url:"/publish//list/describeLoadBalancerAttributes",
+        url:"/publish/list/describeLoadBalancerAttributes",
         data:{eventId:$("#eventId").val()},
         success: function (data) {
             var slbTbString="";
