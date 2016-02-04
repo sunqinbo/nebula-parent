@@ -79,6 +79,9 @@
             <if test="username != null">
                 username = #{username}
             </if>
+            <if test="nickname != null">
+                nickname LIKE '%${nickname}%'
+            </if>
             <if test="email != null">
                 AND email = #{email}
             </if>

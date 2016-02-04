@@ -15,7 +15,7 @@
                     <div class="content" style="text-align: center;">
                         <form class="form-inline">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="请输入查询内容">
+                                <input type="text" id="nickname_query" class="form-control" placeholder="请输入查询内容">
                                 <button type="button" id="query_btn" class="btn btn-primary">查询</button>
                                 #if($shiro.hasPermission("user:add"))
                                     <button type="button" id="create_btn" class="btn btn-primary">新增</button>
@@ -38,7 +38,7 @@
 ##                <th>微信账号</th>
 ##                <th>qq账号</th>
 ##                <th>邮箱</th>
-                <th>昵称</th>
+                <th>真实姓名</th>
                 <th>部门名称</th>
                 <th>职位</th>
                 <th>工号</th>

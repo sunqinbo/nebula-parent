@@ -808,7 +808,6 @@ function logFrenshControl(pageNum,currentPage){
                 "</tr>"
             }
             $("#logInfoTb_modal").html(tbLogString);
-            $("#pagination_box").html("<div style='text-align: center' id='pageSort'></div>");
             //停止自动刷新时
             if(!$('#freshControl_checkbox').prop("checked")) {
                 var totalPage = data.responseContext["pages"];
@@ -820,17 +819,21 @@ function logFrenshControl(pageNum,currentPage){
                 //        logAjax(page);
                 //    }
                 //});
-                $('#pageSort').pagination({
-                    pages: totalPage,
-                    styleClass: ['pagination-large'],
-                    showCtrl: true,
-                    displayPage: 6,
-                    currentPage:currentPage,
-                    onSelect: function (num) {
-                        $("#logInfoTb_modal").html("");
-                        logFrenshControl(num,num);  //分页点击
-                    }
-                });
+                (function() {
+                    $('#pageSort').pagination({
+                        pages: totalPage,
+                        styleClass: ['pagination-large'],
+                        showCtrl: true,
+                        displayPage: 6,
+                        currentPage:currentPage,
+                        onSelect: function (num) {
+                            $("#logInfoTb_modal").html("");
+                            logFrenshControl(num,num);  //分页点击
+                        }
+                    });
+                    $('#pageSort').pagination('updatePages',totalPage);
+                })();
+
             }
         },
         error: function (errorThrown) {

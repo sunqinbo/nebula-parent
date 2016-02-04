@@ -39,15 +39,18 @@ function getLtb(pageNum){
             listBtn(pageNum);
             totalPage=data["pages"];
             //pageSort(totalPage,pageNum);
-            $('#pageSort').pagination({
-                pages: totalPage,
-                styleClass: ['pagination-large'],
-                showCtrl: true,
-                displayPage: 6,
-                onSelect: function (num) {
-                    getLtb(num);  //分页点击
-                }
-            });
+            (function() {
+                $('#pageSort').pagination({
+                    pages: totalPage,
+                    styleClass: ['pagination-large'],
+                    showCtrl: true,
+                    displayPage: 6,
+                    onSelect: function (num) {
+                        getLtb(num);  //分页点击
+                    }
+                });
+                $('#pageSort').pagination('updatePages',totalPage);
+            })();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({

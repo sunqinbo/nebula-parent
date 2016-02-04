@@ -48,15 +48,18 @@ function getjtb(pageNum){
             $("tbody").html(tbString);
             listBtn(pageNum);
             totalPage=data["pages"];
-            $('#pageSort').pagination({
-                pages: totalPage,
-                styleClass: ['pagination-large'],
-                showCtrl: true,
-                displayPage: 6,
-                onSelect: function (num) {
-                    getjtb(num);  //分页点击
-                }
-            });
+            (function() {
+                $('#pageSort').pagination({
+                    pages: totalPage,
+                    styleClass: ['pagination-large'],
+                    showCtrl: true,
+                    displayPage: 6,
+                    onSelect: function (num) {
+                        getjtb(num);  //分页点击
+                    }
+                });
+                $('#pageSort').pagination('updatePages',totalPage);
+            })();
             //pageSort(totalPage,pageNum);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

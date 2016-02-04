@@ -128,8 +128,8 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:page")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object selectAllPagingUser(DataTablePage dataTablePage) {
-        PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage);
+    public Object selectAllPagingUser(DataTablePage dataTablePage, NebulaUserInfo nebulaUserInfo) {
+        PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage,nebulaUserInfo);
         return pageInfo;
     }
 

@@ -81,15 +81,18 @@ function gettb(pageNum){
                     "</td><td></td><td><div id='listBtn' class='btn-group'>"+detailString+"</div></td>";
             }
             totalPage=data["pages"];
-            $('#pageSort').pagination({
-                pages: totalPage,
-                styleClass: ['pagination-large'],
-                showCtrl: true,
-                displayPage: 6,
-                onSelect: function (num) {
-                    gettb(num);  //分页点击
-                }
-            });
+            (function() {
+                $('#pageSort').pagination({
+                    pages: totalPage,
+                    styleClass: ['pagination-large'],
+                    showCtrl: true,
+                    displayPage: 6,
+                    onSelect: function (num) {
+                        gettb(num);  //分页点击
+                    }
+                });
+                $('#pageSort').pagination('updatePages',totalPage);
+            })();
             //if(totalPage>0) {
             //    var pageSortString="<ul class='pagination'> <li><a href='#'>上一页</a></li>";
             //    for (var i = 1; i <= totalPage; i++) {
