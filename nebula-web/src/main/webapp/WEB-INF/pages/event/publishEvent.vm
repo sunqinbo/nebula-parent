@@ -111,7 +111,9 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">发布svn地址:</label>
-                            <lable id="publishSvn_lb" style="float: left;color: red;font-size: large" class="control-label"></lable>
+                            <lable  class="control-label">
+                                <div class="col-sm-offset-1 col-sm-10" id="publishSvn_lb" style="float: left;color: red;font-size:large;text-align:left;word-break:break-all" ></div>
+                            </lable>
                         </div>
                     </div>
                 </div>

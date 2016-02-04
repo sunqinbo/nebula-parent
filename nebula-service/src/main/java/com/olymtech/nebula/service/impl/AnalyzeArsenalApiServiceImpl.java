@@ -27,6 +27,18 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
     @Value("${arsenal.api.url}")
     private String ARSENAL_SERVER;
 //    private String ARSENAL_SERVER="http://localhost:8090/arsenal-web";
+    private List<ProductTree> buProductTreeList = null;
+
+    /**
+     * bu list 获取一次
+     */
+    @Override
+    public List<ProductTree> getBuProductTreeList(){
+        if(buProductTreeList==null){
+            buProductTreeList = getProductTreeListByPid(2);
+        }
+        return buProductTreeList;
+    }
 
     @Override
     public List<ProductTree> getProductTreeListByPid(Integer pid) {

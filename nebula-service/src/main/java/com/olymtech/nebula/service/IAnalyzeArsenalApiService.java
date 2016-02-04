@@ -9,6 +9,8 @@ import java.util.Map;
  * Created by liwenji on 2015/11/2.
  */
 public interface IAnalyzeArsenalApiService {
+    List<ProductTree> getBuProductTreeList();
+
     /**
      *根据父id获取产品树结点
      * @param pid 父id

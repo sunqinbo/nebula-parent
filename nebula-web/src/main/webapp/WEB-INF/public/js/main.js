@@ -157,7 +157,7 @@ nebula.publish.event.main = function(){
         $("#select-product").change(function(){
             var publishSvn= $("#select-product").find("option:selected").attr("value-publishSvn");
             if(publishSvn=="null"||publishSvn==""){
-                $("#publish-svn-tip").text("请先配置基础信息库源SVN地址");
+                $("#publish-svn-tip").text("请先配置基础信息库发布SVN地址");
                 $("#publish-svn").val("");
             }
             else {

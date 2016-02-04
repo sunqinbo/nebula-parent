@@ -9,6 +9,7 @@ $(function(){
             //email:{required:true},
             nickname:{required:true},
             deptName:{required:true},
+            bu:{required:true},
             jobTitle:{required:true},
             empId:{required:true},
             supervisorEmpId:{required:true},
@@ -24,6 +25,7 @@ $(function(){
             email:{required:"邮箱不能为空"},
             nickname:{required:"昵称不能为空"},
             deptName:{required:"部门名称不能为空"},
+            bu:{required:"事业部不能为空"},
             jobTitle:{required:"职位不能为空"},
             empId:{required:"工号不能为空"},
             supervisorEmpId:{required:"主管工号不能为空"},
@@ -86,6 +88,7 @@ $(function(){
                 $("#email").val(data["email"]);
                 $("#nickname").val(data["nickname"]);
                 $("#deptName").val(data["deptName"]);
+                $("#bu").val(data["bu"]);
                 $("#jobTitle").val(data["jobTitle"]);
                 $("#empId").val(data["empId"]);
                 $("#empId").attr('disabled',true);
@@ -168,6 +171,7 @@ function btnClick(isCreate) {
     var email = $("#email").val();
     var nickname = $("#nickname").val();
     var deptName = $("#deptName").val();
+    var bu = $("#bu").val();
     var jobTitle = $("#jobTitle").val();
     var empId = $("#empId").val();
     var supervisorEmpId = $("#supervisorEmpId").val();
@@ -200,6 +204,7 @@ function btnClick(isCreate) {
             "email": email,
             "nickname": nickname,
             "deptName": deptName,
+            "bu": bu,
             "jobTitle": jobTitle,
             "empId": empId,
             "supervisorEmpId": supervisorEmpId,

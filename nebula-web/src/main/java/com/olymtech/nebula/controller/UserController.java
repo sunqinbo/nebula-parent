@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -35,6 +37,9 @@ public class UserController extends BaseController {
 
     @Resource
     private CacheManager cacheManager;
+
+    @Resource
+    private IAnalyzeArsenalApiService analyzeArsenalApiService;
 
     @RequiresPermissions("user:add")
     @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
@@ -137,6 +142,8 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:update")
     @RequestMapping(value = "/update.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String editUser(Model model, Integer empId, Integer id) {
+        List<ProductTree> productTrees = analyzeArsenalApiService.getBuProductTreeList();
+        model.addAttribute("productTrees", productTrees);
         model.addAttribute("edit", true);
         model.addAttribute("empId", empId);
         model.addAttribute("id", id);
