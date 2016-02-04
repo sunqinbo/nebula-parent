@@ -5,11 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.dao.IAclPermissionDao;
 import com.olymtech.nebula.dao.IAclRoleDao;
 import com.olymtech.nebula.dao.IAclRolePermissionDao;
-import com.olymtech.nebula.entity.AclPermission;
-import com.olymtech.nebula.entity.AclRole;
-import com.olymtech.nebula.entity.AclRolePermission;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.Select2Data;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IAclRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,10 +88,10 @@ public class AclRoleServiceImpl implements IAclRoleService {
 
     @Override
     public List<Select2Data> getAllRoles() {
-        List<Select2Data> select2Datas =new ArrayList<>();
-        List<AclRole> aclRoles=aclRoleDao.selectAllPaging(new AclRole());
-        for(AclRole aclRole:aclRoles){
-            Select2Data select2Data=new Select2Data();
+        List<Select2Data> select2Datas = new ArrayList<>();
+        List<AclRole> aclRoles = aclRoleDao.selectAllPaging(new AclRole());
+        for (AclRole aclRole : aclRoles) {
+            Select2Data select2Data = new Select2Data();
             select2Data.setId(aclRole.getId());
             select2Data.setText(aclRole.getRoleCname());
             select2Datas.add(select2Data);
@@ -105,13 +101,13 @@ public class AclRoleServiceImpl implements IAclRoleService {
 
     @Override
     public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles) {
-        List<AclRole> aclRoleList=aclRoleDao.selectAllPaging(new AclRole());
-        List<Select2Data> select2Datas=new ArrayList<>();
-        for(AclRole aclRole:aclRoleList){
-            Select2Data select2Data=new Select2Data();
+        List<AclRole> aclRoleList = aclRoleDao.selectAllPaging(new AclRole());
+        List<Select2Data> select2Datas = new ArrayList<>();
+        for (AclRole aclRole : aclRoleList) {
+            Select2Data select2Data = new Select2Data();
             select2Data.setId(aclRole.getId());
             select2Data.setText(aclRole.getRoleCname());
-            if(aclRoles!=null) {
+            if (aclRoles != null) {
                 for (AclRole aclRoleHas : aclRoles) {
                     if (aclRole.getId() == aclRoleHas.getId()) {
                         select2Data.setSelected(true);
@@ -122,4 +118,6 @@ public class AclRoleServiceImpl implements IAclRoleService {
         }
         return select2Datas;
     }
+
+
 }
