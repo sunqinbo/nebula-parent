@@ -10,6 +10,7 @@ import com.olymtech.nebula.entity.ElkLogData;
 import com.olymtech.nebula.entity.ElkSearchData;
 import com.olymtech.nebula.service.IElkLogService;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.NoNodeAvailableException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,38 +31,52 @@ public class ElkLogServiceImpl implements IElkLogService {
 
     @Override
     public PageInfo search(ElkSearchData elkSearchData){
-        SearchResponse searchResponse = ef.search(elkSearchData);
-        long total = searchResponse.getHits().getTotalHits();
-        elkSearchData.setTotal(total);
-
-        List<ElkLogData> elkLogDatas = new ArrayList<>();
-        for(SearchHit hit:searchResponse.getHits()){
-            String host = (String)hit.getSource().get("host");
-            String message = (String)hit.getSource().get("message");
-            String file = (String)hit.getSource().get("file");
-            String timestamp = (String)hit.getSource().get("@timestamp");
-            String type = (String)hit.getSource().get("type");
-            String id = hit.getId();
-            String index = hit.getIndex();
-            ElkLogData elkLogData = new ElkLogData(message,timestamp,file,host,type,index,id);
-            elkLogDatas.add(elkLogData);
-        }
-
         PageInfo pageInfo = new PageInfo();
-        pageInfo.setList(elkLogDatas);
-        pageInfo.setTotal(total);
-        pageInfo.setPageNum(elkSearchData.getPageNum());
-        pageInfo.setPageSize(elkSearchData.getPageSize());
-        pageInfo.setPages(elkSearchData.getPages());
+
+        try{
+            SearchResponse searchResponse = ef.search(elkSearchData);
+            long total = searchResponse.getHits().getTotalHits();
+            elkSearchData.setTotal(total);
+
+            List<ElkLogData> elkLogDatas = new ArrayList<>();
+            for(SearchHit hit:searchResponse.getHits()){
+                String host = (String)hit.getSource().get("host");
+                String message = (String)hit.getSource().get("message");
+                String file = (String)hit.getSource().get("file");
+                String timestamp = (String)hit.getSource().get("@timestamp");
+                String type = (String)hit.getSource().get("type");
+                String id = hit.getId();
+                String index = hit.getIndex();
+                ElkLogData elkLogData = new ElkLogData(message,timestamp,file,host,type,index,id);
+                elkLogDatas.add(elkLogData);
+            }
+
+
+            pageInfo.setList(elkLogDatas);
+            pageInfo.setTotal(total);
+            pageInfo.setPageNum(elkSearchData.getPageNum());
+            pageInfo.setPageSize(elkSearchData.getPageSize());
+            pageInfo.setPages(elkSearchData.getPages());
+        }catch (NoNodeAvailableException e){
+            logger.error("None of the configured nodes are available: []:",elkSearchData.getHost());
+        }catch (Exception e){
+            logger.error("search error:",e);
+        }
         return pageInfo;
     }
 
     @Override
     public Integer count(ElkSearchData elkSearchData){
-
-        SearchResponse searchResponse = ef.search(elkSearchData);
-        long total = searchResponse.getHits().getTotalHits();
-        int totalint = new Long(total).intValue();
+        int totalint = -1;
+        try{
+            SearchResponse searchResponse = ef.search(elkSearchData);
+            long total = searchResponse.getHits().getTotalHits();
+            totalint = new Long(total).intValue();
+        }catch (NoNodeAvailableException e){
+            logger.error("None of the configured nodes are available: []:",elkSearchData.getHost());
+        }catch (Exception e){
+            logger.error("count error:",e);
+        }
         return totalint;
     }
 
