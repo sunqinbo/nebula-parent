@@ -2,22 +2,24 @@ package com.olymtech.nebula.core.elk;
 
 import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.common.utils.EsUtils;
+import com.olymtech.nebula.core.elk.core.ElKClientFactory;
 import com.olymtech.nebula.entity.ElkSearchData;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.search.SearchHit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Gavin on 2016-01-28 16:56.
  */
-public class ElasticsearchFactoryTest {
+public class ElKClientFactoryTest {
+
+    @Autowired
+    private IElKClientService elKClientService;
 
     @Before
     public void setUp() throws Exception {
@@ -31,12 +33,11 @@ public class ElasticsearchFactoryTest {
 
     @Test
     public void testSearch() throws Exception {
-        ElasticsearchFactory ef = new ElasticsearchFactory();
         String fromDate = "2016-02-02 00:34:36";
         String toDate = "2016-02-02 23:34:36";
 
         ElkSearchData elkSearchData = new ElkSearchData("stage_pm_web01", DateUtils.strToDate(fromDate),DateUtils.strToDate(toDate),1,10);
-        SearchResponse searchResponse = ef.search(elkSearchData);
+        SearchResponse searchResponse = elKClientService.search(elkSearchData);
         long total = searchResponse.getHits().getTotalHits();
         System.out.println(total);
         for(SearchHit hit:searchResponse.getHits()){

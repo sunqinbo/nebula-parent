@@ -43,6 +43,12 @@ public class DateUtils {
 
     public static final String dtLongSimple = "yyyyMMddHHmm";
 
+    public static final String year = "yyyy";
+
+    public static final String month = "MM";
+
+    public static final String day = "dd";
+
     /** 时分秒 */
     public static final String hmsFormat = "HH:mm:ss";
 
@@ -64,8 +70,47 @@ public class DateUtils {
 
     public static final String elkSimpleIndex = "yyyy.MM.dd";
 
-    /** 模糊 */
-    public static final String elkSimpleIndexFuzzy = "yyyy.MM*";
+    /** 模糊day */
+    public static final String elkSimpleIndexFuzzyDay = "yyyy.MM*";
+
+    /** 模糊month */
+    public static final String elkSimpleIndexFuzzyMonth = "yyyy*";
+
+    /**
+     * 获取年
+     * @param date
+     * @return
+     */
+    public static final String getYear(Date date){
+        if (date == null) {
+            return "";
+        }
+        return getFormat(year).format(date);
+    }
+
+    /**
+     * 获取月
+     * @param date
+     * @return
+     */
+    public static final String getMonth(Date date){
+        if (date == null) {
+            return "";
+        }
+        return getFormat(month).format(date);
+    }
+
+    /**
+     * 获取日
+     * @param date
+     * @return
+     */
+    public static final String getDay(Date date){
+        if (date == null) {
+            return "";
+        }
+        return getFormat(day).format(date);
+    }
 
     /**
      * 获取elk index
@@ -80,15 +125,27 @@ public class DateUtils {
     }
 
     /**
-     * 获取elk 模糊的index ，日期模糊
+     * 获取elk 模糊day的index ，日期模糊
      * @param date
      * @return
      */
-    public static final String getElkSimpleIndexFuzzyx(Date date){
+    public static final String getElkSimpleIndexFuzzyDay(Date date){
         if (date == null) {
             return "";
         }
-        return getFormat(elkSimpleIndexFuzzy).format(date);
+        return getFormat(elkSimpleIndexFuzzyDay).format(date);
+    }
+
+    /**
+     * 获取elk 模糊month的index ，日期模糊
+     * @param date
+     * @return
+     */
+    public static final String getElkSimpleIndexFuzzyMonth(Date date){
+        if (date == null) {
+            return "";
+        }
+        return getFormat(elkSimpleIndexFuzzyMonth).format(date);
     }
 
     /**

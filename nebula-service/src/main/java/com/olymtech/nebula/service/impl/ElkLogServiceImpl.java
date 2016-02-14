@@ -5,7 +5,8 @@
 package com.olymtech.nebula.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.core.elk.ElasticsearchFactory;
+import com.olymtech.nebula.core.elk.IElKClientService;
+import com.olymtech.nebula.core.elk.core.ElKClientFactory;
 import com.olymtech.nebula.entity.ElkLogData;
 import com.olymtech.nebula.entity.ElkSearchData;
 import com.olymtech.nebula.service.IElkLogService;
@@ -14,6 +15,8 @@ import org.elasticsearch.client.transport.NoNodeAvailableException;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,14 +30,15 @@ public class ElkLogServiceImpl implements IElkLogService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
 
-    ElasticsearchFactory ef = new ElasticsearchFactory();
+    @Autowired
+    private IElKClientService elKClientService;
 
     @Override
     public PageInfo search(ElkSearchData elkSearchData){
         PageInfo pageInfo = new PageInfo();
 
         try{
-            SearchResponse searchResponse = ef.search(elkSearchData);
+            SearchResponse searchResponse = elKClientService.search(elkSearchData);
             long total = searchResponse.getHits().getTotalHits();
             elkSearchData.setTotal(total);
 
@@ -69,7 +73,7 @@ public class ElkLogServiceImpl implements IElkLogService {
     public Integer count(ElkSearchData elkSearchData){
         int totalint = -1;
         try{
-            SearchResponse searchResponse = ef.search(elkSearchData);
+            SearchResponse searchResponse = elKClientService.search(elkSearchData);
             long total = searchResponse.getHits().getTotalHits();
             totalint = new Long(total).intValue();
         }catch (NoNodeAvailableException e){

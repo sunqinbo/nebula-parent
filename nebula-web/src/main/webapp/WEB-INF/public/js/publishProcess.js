@@ -339,18 +339,22 @@ $(document).ready(function(){
         $("#step6").hide();
         $("#nextPublish").hide();
     });
+
+    $("#freshControl_switch").find("label").css("width","0px");
+
     //自动刷新按钮点击事件
     $("#freshControl_switch").click(function () {
         if($('#freshControl_checkbox').prop("checked")){
             $('#freshControl_switch').bootstrapSwitch('setState', true);
-        }
-        else{
+            $("#pageSort").hide();
+        } else{
             $('#freshControl_switch').bootstrapSwitch('setState', false);
+            $("#pageSort").show();
         }
         logFrenshControl(1);
     });
 
-})
+});
 
 //页面加载控制进度条
 function Initialization() {
