@@ -8,6 +8,7 @@ import com.olymtech.nebula.entity.ProductTree;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -129,6 +130,10 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object selectAllPagingUser(DataTablePage dataTablePage, NebulaUserInfo nebulaUserInfo) {
+        /** like username nickname 两个字段 */
+        if(StringUtils.isNotEmpty(nebulaUserInfo.getNickname())){
+            nebulaUserInfo.setUsername(nebulaUserInfo.getNickname());
+        }
         PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage,nebulaUserInfo);
         return pageInfo;
     }

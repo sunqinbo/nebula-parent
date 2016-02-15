@@ -88,6 +88,24 @@
         </trim>
         group by id order by id desc
     </select>
+    <select id="Nebula-NebulaUserInfoDao-Select-All-Paging-Where-Like" parameterType="NebulaUserInfo"
+            resultMap="RM-NebulaUserInfo">
+        select
+        <include refid="NebulaUserInfo-Base-Column-List"/>
+        from nebula_user_info
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="username != null">
+                username LIKE '%${username}%'
+            </if>
+            <if test="nickname != null">
+                OR nickname LIKE '%${nickname}%'
+            </if>
+            <if test="email != null">
+                OR email LIKE '%${email}%'
+            </if>
+        </trim>
+        group by id order by id desc
+    </select>
     <delete id="Nebula-NebulaUserInfoDao-Delete-By-Id" parameterType="java.lang.Integer">
         delete from nebula_user_info
         where id = #{id,jdbcType=INTEGER}

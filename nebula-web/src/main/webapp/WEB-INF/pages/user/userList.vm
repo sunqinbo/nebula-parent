@@ -13,7 +13,7 @@
             <div style="width: 100%">
                 <div class="card">
                     <div class="content" style="text-align: center;">
-                        <form class="form-inline">
+                        <div class="form-inline">
                             <div class="form-group">
                                 <input type="text" id="nickname_query" class="form-control" placeholder="请输入查询内容">
                                 <button type="button" id="query_btn" class="btn btn-primary">查询</button>
@@ -21,7 +21,7 @@
                                     <button type="button" id="create_btn" class="btn btn-primary">新增</button>
                                 #end
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,6 +39,7 @@
 ##                <th>qq账号</th>
 ##                <th>邮箱</th>
                 <th>真实姓名</th>
+                <th>事业部</th>
                 <th>部门名称</th>
                 <th>职位</th>
                 <th>工号</th>

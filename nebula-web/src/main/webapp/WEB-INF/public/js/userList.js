@@ -6,7 +6,14 @@ $(function(){
     $("#query_btn").click(function () {
         getLtb(1);
     });
-})
+
+    $('#nickname_query').bind('keypress',function(event){
+        if(event.keyCode == "13") {
+            getLtb(1);
+        }
+    });
+
+});
 
 //页面加载显示列表
 function getLtb(pageNum){
@@ -46,6 +53,7 @@ function getLtb(pageNum){
                     //"</td><td>"+data["list"][i]["qqAcc"]+
                     //"</td><td>"+data["list"][i]["email"]+
                     "</td><td>"+data["list"][i]["nickname"]+
+                    "</td><td>"+data["list"][i]["bu"]+
                     "</td><td>"+data["list"][i]["deptName"]+
                     "</td><td>"+data["list"][i]["jobTitle"]+
                     "</td><td>"+data["list"][i]["empId"]+
