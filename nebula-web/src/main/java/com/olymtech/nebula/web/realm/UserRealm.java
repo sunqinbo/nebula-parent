@@ -42,13 +42,13 @@ public class UserRealm extends AuthorizingRealm {
         String username = (String)token.getPrincipal();
         NebulaUserInfo user = userService.findByUsername(username);
 
-        if(user == null) {
+        if (user == null) {
             throw new UnknownAccountException();//没找到帐号
         }
         logger.info(username+"正在登录"+user);
-        //if(Boolean.TRUE.equals(user.isLocked())) {
-        //    throw new LockedAccountException(); //帐号锁定
-        //}
+        if(user.getIsEnable()==0) {
+            throw new LockedAccountException(); //帐号锁定(未启用)
+        }
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getUsername(),
