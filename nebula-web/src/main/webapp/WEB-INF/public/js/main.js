@@ -133,6 +133,7 @@ nebula.publish.event = {};
 nebula.publish.event.main = function(){
     $(document).ready(function(){
         $("#navbar-header-name").html("发布申请");
+        $("#eventTipModal").appendTo("body");
 
         $("#select-bu").change(function(){
             var pid = $("#select-bu").val();
@@ -146,18 +147,61 @@ nebula.publish.event.main = function(){
                         var productTrees = jsonData.responseContext;
                         for(var i=0;i<productTrees.length;i++){
                             var productTree = productTrees[i];
-                            $("#select-product").append("<option value-svn='"+productTree.srcSvn+"' value-hidden='"+productTree.nodeName+"' value='"+productTree.id+"'>"+productTree.nodeCname+"</option>");
+                            $("#select-product").append("<option value-publishSvn='"+productTree.publishSvn+"' value-svn='"+productTree.srcSvn+"' value-hidden='"+productTree.nodeName+"' value='"+productTree.id+"'>"+productTree.nodeCname+"</option>");
                         }
                     }
                 }
             });
         });
 
+        $("#select-product").change(function(){
+            var publishSvn= $("#select-product").find("option:selected").attr("value-publishSvn");
+            if(publishSvn=="null"||publishSvn==""){
+                $("#publish-svn-tip").text("请先配置基础信息库发布SVN地址");
+                $("#publish-svn").val("");
+            }
+            else {
+                $("#publish-svn-tip").text("");
+                $("#publish-svn").val(publishSvn);
+            }
+        });
 
+        $("#submitConfirm_btn").click(function(){
+            nebula.publish.event.submitPublishEvent();
+        });
     });
 };
-
+//事件确认
 nebula.publish.event.createPublishEvent = function(){
+    if($("#publish-svn-tip").text()!=""){
+        return;
+    }
+    var publishSubject = $("#publish-subject").val();
+    //var publishBuName = $("#select-bu").find("option:selected").attr("value-hidden");
+    var publishBuCname = $("#select-bu").find("option:selected").text();
+    //var publishProductName = $("#select-product").find("option:selected").attr("value-hidden");
+    var publishProductCname = $("#select-product").find("option:selected").text();
+    //var productSrcSvn = $("#select-product").find("option:selected").attr("value-svn");
+    var publishEnv = $("#select-publich-env").val();
+    var publishSvn = $("#publich-svn").val();
+    if(isNaN(publishSvn)){
+        nebula.common.alert.danger("SVN地址必须为数字",1000);
+        return false;
+    }
+    publishSvn=$("#select-product").find("option:selected").attr("value-publishSvn")+publishSvn;
+    if(publishSubject==""||publishBuCname=="请选择"||publishProductCname=="请选择"||publishEnv==""||publishSvn==""){
+        nebula.common.alert.danger("请确认选择的所有字段",1000);
+        return false;
+    }
+    $("#publishSubject_lb").text(publishSubject)
+    $("#publishBuCname_lb").text(publishBuCname)
+    $("#publishProductCname_lb").text(publishProductCname)
+    $("#publishEnv_lb").text($("#select-publich-env").find("option:selected").text())
+    $("#publishSvn_lb").text(publishSvn)
+    $('#eventTipModal').modal('show');
+};
+//事件提交
+nebula.publish.event.submitPublishEvent = function(){
     var publishSubject = $("#publish-subject").val();
     var publishBuName = $("#select-bu").find("option:selected").attr("value-hidden");
     var publishBuCname = $("#select-bu").find("option:selected").text();
@@ -165,12 +209,7 @@ nebula.publish.event.createPublishEvent = function(){
     var publishProductCname = $("#select-product").find("option:selected").text();
     var productSrcSvn = $("#select-product").find("option:selected").attr("value-svn");
     var publishEnv = $("#select-publich-env").val();
-    var publishSvn = $("#publich-svn").val();
-
-    if(publishSubject==""||publishBuCname=="请选择"||publishProductCname=="请选择"||publishEnv==""||publishSvn==""){
-        nebula.common.alert.danger("请确认选择的所有字段",1000);
-        return false;
-    }
+    var publishSvn = $("#select-product").find("option:selected").attr("value-publishSvn")+$("#publich-svn").val();
     $.ajax({
         url:"/publish/add",
         type:"post",
@@ -194,7 +233,7 @@ nebula.publish.event.createPublishEvent = function(){
             }
         }
     });
-};
+}
 
 nebula.publish.process={};
 

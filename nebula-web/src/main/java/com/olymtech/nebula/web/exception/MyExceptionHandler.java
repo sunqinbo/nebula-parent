@@ -8,6 +8,8 @@ import com.olymtech.nebula.entity.Callback;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,7 +26,7 @@ import java.util.Map;
  */
 public class MyExceptionHandler implements HandlerExceptionResolver {
 
-    protected Log log = LogFactory.getLog(this.getClass());
+    protected Logger logger           = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
@@ -32,8 +34,7 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod method = (HandlerMethod) handler;
-            log.error(ex.getMessage());
-            log.error(ex.getStackTrace());
+            logger.error("resolveException error:",ex);
 
             if (method.getMethod().getReturnType().getTypeName().equals("java.lang.String")){
                 model.put("ex", ex);

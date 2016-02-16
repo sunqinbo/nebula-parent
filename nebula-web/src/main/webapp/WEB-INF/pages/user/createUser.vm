@@ -74,6 +74,19 @@
                             </div>
 
                             <div class="form-group" style="margin-left: 25%">
+                                <label for="deptName" class="col-sm-2 control-label">事业部</label>
+                                <div class="col-sm-10" style="width: 300px;">
+                                    <select id="bu" class="form-control">
+                                        <option value="">请选择</option>
+                                        #foreach($productTree in $productTrees)
+                                            <option value-hidden="$productTree.nodeName"
+                                                    value="$productTree.nodeName">$productTree.nodeCname</option>
+                                        #end
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-left: 25%">
                                 <label for="jobTitle" class="col-sm-2 control-label">职位</label>
                                 <div class="col-sm-10" style="width: 300px;">
                                     <input id="jobTitle" name="jobTitle" type="text" class="form-control" placeholder="请输入用户职位"/>

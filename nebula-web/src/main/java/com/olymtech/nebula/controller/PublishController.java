@@ -78,7 +78,7 @@ public class PublishController extends BaseController {
 
     @RequestMapping(value = "/event.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishEvent(Model model) throws Exception {
-        List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
+        List<ProductTree> productTrees = analyzeArsenalApiService.getBuProductTreeList();
         List<ProductTree> productTreeList = new ArrayList<>();
         NebulaUserInfo user = getLoginUser();
         NebulaUserInfo userInfoWithRoles = userService.getAclUserWithRolesByEmpId(user.getEmpId());

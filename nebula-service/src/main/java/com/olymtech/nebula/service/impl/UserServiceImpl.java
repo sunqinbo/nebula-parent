@@ -136,9 +136,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public PageInfo getPageInfoAclUser(DataTablePage dataTablePage) {
+    public PageInfo getPageInfoAclUser(DataTablePage dataTablePage, NebulaUserInfo nebulaUserInfo) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
-        List<NebulaUserInfo> users = nebulaUserInfoDao.selectAllPaging(new NebulaUserInfo());
+        List<NebulaUserInfo> users = nebulaUserInfoDao.selectAllPagingLike(nebulaUserInfo);
         for (int i = 0, len = users.size(); i < len; i++) {
             List<AclUserRole> aclUserRoles = aclUserRoleDao.selectByEmpId(users.get(i).getEmpId());
             List<AclRole> aclRoles = new ArrayList<>();

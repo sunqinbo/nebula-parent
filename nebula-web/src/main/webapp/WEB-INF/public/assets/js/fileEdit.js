@@ -154,9 +154,11 @@ $(document).ready(function(){
 })
 //创建目录，文件
 function newDirOrFile(type){
-    var fileName=$("#addDir_input").val()+"\\"+$("#dirName").val();
+    //var fileName=$("#addDir_input").val()+"\\"+$("#dirName").val();
+    var fileName=$("#addDir_input").val()+"/"+$("#dirName").val();
     if(type=="file"){
-        fileName=$("#addDir_input").val()+"\\"+$("#fileName").val();
+        //fileName=$("#addDir_input").val()+"\\"+$("#fileName").val();
+        fileName=$("#addDir_input").val()+"/"+$("#fileName").val();
     }
     $.ajax({
         type:"POST",

@@ -139,6 +139,7 @@
                 /login = authc
                 /logout=logout
                 /public/**=anon
+                /favicon.ico=anon
                 /** = user,kickout,sysUser
             </value>
         </property>

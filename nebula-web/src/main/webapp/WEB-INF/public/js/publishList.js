@@ -81,41 +81,53 @@ function gettb(pageNum){
                     "</td><td></td><td><div id='listBtn' class='btn-group'>"+detailString+"</div></td>";
             }
             totalPage=data["pages"];
-            if(totalPage>0) {
-                var pageSortString="<ul class='pagination'> <li><a href='#'>上一页</a></li>";
-                for (var i = 1; i <= totalPage; i++) {
-                    pageSortString=pageSortString+"<li><a href='#'>"+i+"</a></li>";
-                }
-                pageSortString=pageSortString+" <li><a href='#'>下一页</a></li> </ul>";
-            }
+            (function() {
+                $('#pageSort').pagination({
+                    pages: totalPage,
+                    styleClass: ['pagination-large'],
+                    showCtrl: true,
+                    displayPage: 6,
+                    onSelect: function (num) {
+                        gettb(num);  //分页点击
+                    }
+                });
+                $('#pageSort').pagination('updatePages',totalPage);
+            })();
+            //if(totalPage>0) {
+            //    var pageSortString="<ul class='pagination'> <li><a href='#'>上一页</a></li>";
+            //    for (var i = 1; i <= totalPage; i++) {
+            //        pageSortString=pageSortString+"<li><a href='#'>"+i+"</a></li>";
+            //    }
+            //    pageSortString=pageSortString+" <li><a href='#'>下一页</a></li> </ul>";
+            //}
             $("tbody").html(tbString);
             listBtn(pageNum);
-            $("#pageSort").html(pageSortString);
-            var sortNum=pageNum;
-            $(".pagination>li").each(function(){
-                if(pageNum+""==$(this).text())
-                    $(this).addClass("active");
-                $(this).click(function(){
-                    if($(this).text()=="上一页")
-                    {
-                        if(sortNum==1){
-                            return;
-                        }
-                        sortNum=sortNum-1;
-                    }
-                    else if($(this).text()=='下一页')
-                    {
-                        if(sortNum==data["pages"]){
-                            return;
-                        }
-                        sortNum=sortNum-1+2;
-                    }
-                    else{
-                        sortNum=$(this).text();
-                    }
-                    gettb(sortNum);
-                });
-            });
+            //$("#pageSort").html(pageSortString);
+            //var sortNum=pageNum;
+            //$(".pagination>li").each(function(){
+            //    if(pageNum+""==$(this).text())
+            //        $(this).addClass("active");
+            //    $(this).click(function(){
+            //        if($(this).text()=="上一页")
+            //        {
+            //            if(sortNum==1){
+            //                return;
+            //            }
+            //            sortNum=sortNum-1;
+            //        }
+            //        else if($(this).text()=='下一页')
+            //        {
+            //            if(sortNum==data["pages"]){
+            //                return;
+            //            }
+            //            sortNum=sortNum-1+2;
+            //        }
+            //        else{
+            //            sortNum=$(this).text();
+            //        }
+            //        gettb(sortNum);
+            //    });
+            //});
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({

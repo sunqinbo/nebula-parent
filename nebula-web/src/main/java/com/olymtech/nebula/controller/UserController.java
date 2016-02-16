@@ -4,8 +4,11 @@ import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -35,6 +38,9 @@ public class UserController extends BaseController {
 
     @Resource
     private CacheManager cacheManager;
+
+    @Resource
+    private IAnalyzeArsenalApiService analyzeArsenalApiService;
 
     @RequiresPermissions("user:add")
     @RequestMapping(value = "/add.htm", method = {RequestMethod.POST, RequestMethod.GET})
@@ -123,8 +129,12 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:page")
     @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object selectAllPagingUser(DataTablePage dataTablePage) {
-        PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage);
+    public Object selectAllPagingUser(DataTablePage dataTablePage, NebulaUserInfo nebulaUserInfo) {
+        /** like username nickname 两个字段 */
+        if(StringUtils.isNotEmpty(nebulaUserInfo.getNickname())){
+            nebulaUserInfo.setUsername(nebulaUserInfo.getNickname());
+        }
+        PageInfo pageInfo = userService.getPageInfoAclUser(dataTablePage,nebulaUserInfo);
         return pageInfo;
     }
 
@@ -137,6 +147,8 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:update")
     @RequestMapping(value = "/update.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String editUser(Model model, Integer empId, Integer id) {
+        List<ProductTree> productTrees = analyzeArsenalApiService.getBuProductTreeList();
+        model.addAttribute("productTrees", productTrees);
         model.addAttribute("edit", true);
         model.addAttribute("empId", empId);
         model.addAttribute("id", id);

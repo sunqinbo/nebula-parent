@@ -6,41 +6,32 @@ package com.olymtech.nebula.core.elk;
 
 import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.common.utils.EsUtils;
+import com.olymtech.nebula.core.elk.core.ElKClientFactory;
 import com.olymtech.nebula.entity.ElkSearchData;
 import org.apache.commons.lang.StringUtils;
-import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 /**
- * Created by Gavin on 2016-01-28 15:45.
+ * Created by Gavin on 2016-02-14 14:48.
  */
-public class ElasticsearchFactory {
+@Service
+public class ElKClientServiceImpl implements IElKClientService {
 
-    private static Logger logger = LoggerFactory.getLogger(ElasticsearchFactory.class);
+    private static Logger logger = LoggerFactory.getLogger(ElKClientServiceImpl.class);
 
-    private TransportClient client = initClient();
+    @Value("${elk.server.ip}")
+    private String elkServer;
 
-    public TransportClient initClient(){
-        Settings settings = ImmutableSettings.settingsBuilder()
-                .put("cluster.name", "StageElkCluster")
-                .build();
-
-        TransportClient client = new TransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress("121.40.51.107", 9300));
-        return client;
-    }
-
+    @Override
     public SearchResponse search(ElkSearchData elkSearchData){
         FilterBuilder boolFilter = null;
         if(!StringUtils.isNotEmpty(elkSearchData.getKeyWord())){
@@ -55,15 +46,17 @@ public class ElasticsearchFactory {
         }
 
         //"logstash-2016.01*"
-        SearchResponse searchResponse = client.prepareSearch(getElkIndex(elkSearchData))
+
+        SearchResponse searchResponse = ElKClientFactory.getClient(elkServer).prepareSearch(getElkIndex(elkSearchData))
                 .setPostFilter(boolFilter)
                 .setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize())
                 .addSort("@timestamp", SortOrder.DESC).execute().actionGet();
         return searchResponse;
     }
 
+    @Override
     public Long count(ElkSearchData elkSearchData){
-        SearchResponse searchResponse = client.prepareSearch(getElkIndex(elkSearchData))
+        SearchResponse searchResponse = ElKClientFactory.getClient(elkServer).prepareSearch(getElkIndex(elkSearchData))
                 .setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize()).execute().actionGet();
         long totalHits = searchResponse.getHits().totalHits();
         return totalHits;
@@ -72,9 +65,29 @@ public class ElasticsearchFactory {
     private String getElkIndex(ElkSearchData elkSearchData){
         String indexPrefix = "logstash-";
         Date fromDate = EsUtils.stringToSpecificDate(elkSearchData.getFromDate());
-        String indexDate = DateUtils.getElkSimpleIndex(fromDate);
-        return indexPrefix + indexDate;
-    }
+        Date toDate = EsUtils.stringToSpecificDate(elkSearchData.getToDate());
 
+//        String fromDateYear = DateUtils.getYear(fromDate);
+        String fromDateMonth = DateUtils.getMonth(fromDate);
+        String fromDateDay = DateUtils.getDay(fromDate);
+
+//        String toDateYear = DateUtils.getYear(toDate);
+        String toDateMonth = DateUtils.getMonth(toDate);
+        String toDateDay = DateUtils.getDay(toDate);
+
+        if(fromDateMonth.equals(toDateMonth) && fromDateDay.equals(toDateDay) ){
+            String indexDate = DateUtils.getElkSimpleIndex(fromDate);
+            return indexPrefix + indexDate;
+        }else if(fromDateMonth.equals(toDateMonth) && !fromDateDay.equals(toDateDay)){
+            String indexDate = DateUtils.getElkSimpleIndexFuzzyDay(fromDate);
+            return indexPrefix + indexDate;
+        }else if(!fromDateMonth.equals(toDateMonth)){
+            String indexDate = DateUtils.getElkSimpleIndexFuzzyMonth(fromDate);
+            return indexPrefix + indexDate;
+        }else{
+            String indexDate = "*";
+            return indexPrefix + indexDate;
+        }
+    }
 
 }
