@@ -240,7 +240,8 @@
                             #else
                                 <button type="button" id="checkNext_btn" onclick="checkNextPublish($Event.pid)" class="btn btn-info">查看下一发布阶段</button>
                             #end
-                            #if($!Event.publishEnv!="test")
+##                            #if($!Event.publishEnv!="test")
+                            #if($!LastEventId!=-1)
                                 <button type="button" id="checkLast_btn" onclick="checkLastPublish()" class="btn btn-info">查看上一发布阶段</button>
                             #end
                         </div>

@@ -134,6 +134,7 @@ public class PublishController extends BaseController {
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
         model.addAttribute("Modules", publishModules);
         model.addAttribute("Event", nebulaPublishEvent);
+        model.addAttribute("LastEventId", publishEventService.getLastPublishId(id));
         return "event/publishProcess";
     }
 
