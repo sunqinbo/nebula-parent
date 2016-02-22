@@ -62,5 +62,10 @@ public class GetPublishSvnAction extends AbstractAction {
 
     }
 
+    @Override
+    public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        return true;
+    }
+
 }
 

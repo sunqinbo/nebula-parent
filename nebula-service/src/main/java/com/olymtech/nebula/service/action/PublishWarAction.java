@@ -117,4 +117,9 @@ public class PublishWarAction extends AbstractAction {
 
     }
 
+    @Override
+    public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        return true;
+    }
+
 }
