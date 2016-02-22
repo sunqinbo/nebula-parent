@@ -36,4 +36,9 @@ public class Action1 extends AbstractAction {
     public void doFailure(NebulaPublishEvent event) {
         System.out.println("回滚创建文件夹");
     }
+
+    @Override
+    public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        return true;
+    }
 }
