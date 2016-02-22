@@ -58,7 +58,7 @@
 
                     <p>发布工具</p>
                 </a>
-                <ul style="font-size: 10px;margin-left: 20px;list-style: none;display: none;">
+                <ul style="font-size: 10px;margin-left: 20px;list-style: none;display: none;padding-left:15% !important;">
                     <li><a href="/tool/freshCDN.htm">刷新CDN</a></li>
                 </ul>
             </li>
