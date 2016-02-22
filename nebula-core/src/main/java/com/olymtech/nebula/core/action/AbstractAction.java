@@ -56,4 +56,8 @@ public abstract class AbstractAction implements Action {
 
     @Override
     public abstract void doFailure(NebulaPublishEvent event) throws Exception;
+
+    @Override
+    public abstract boolean doCheck(NebulaPublishEvent event) throws Exception;
+
 }

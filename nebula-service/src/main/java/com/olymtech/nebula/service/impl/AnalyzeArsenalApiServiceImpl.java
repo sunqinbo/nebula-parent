@@ -169,6 +169,7 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
                     JSONObject jsonObject = (JSONObject) jsonSlbs.get(j);
                     SimpleSlb simpleSlb = new SimpleSlb();
                     simpleSlb.setId(jsonObject.getInteger("id"));
+                    simpleSlb.setLoadBalancerId(jsonObject.getString("loadBalancerId"));
                     simpleSlb.setLoadBalancerAddress(jsonObject.getString("address"));
                     simpleSlb.setLoadBalancerName(jsonObject.getString("loadBalancerName"));
                     simpleSlb.setLoadBalancerStatus(jsonObject.getString("loadBalancerStatus"));
