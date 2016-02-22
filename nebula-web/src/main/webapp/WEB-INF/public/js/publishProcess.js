@@ -339,6 +339,15 @@ $(document).ready(function(){
         $("#step6").hide();
         $("#nextPublish").hide();
     });
+    //进入下一阶段的发布
+    $("#nextPublish").click(function () {
+        if ($("#publishEnv").html() == "test") {
+            nextPublish("stage");
+        }
+        if ($("#publishEnv").html() == "stage") {
+            nextPublish("product");
+        }
+    });
 
     $("#freshControl_switch").find("label").css("width","0px");
 
@@ -659,12 +668,13 @@ function btnControl(publishStatus){
             $("#restartTomcat_btn").show();
             if ($("#publishEnv").html() == "test") {
                 btn_text = "准生产";
+                $("#nextPublish").text("进入" + btn_text).show();
             }
             if ($("#publishEnv").html() == "stage") {
                 btn_text = "生产";
+                $("#nextPublish").text("进入" + btn_text).show();
             }
             $("#backPublish").show();
-            $("#nextPublish").text("进入" + btn_text).show();
             $("#processbar5").setStep(3);
             $("#step5").show();
             break;
@@ -920,7 +930,10 @@ function getSlbInfo(){
             var slbTbString="";
             for(var i= 0,len=data.responseContext.length;i<len;i++){
                 var slbInfo=data.responseContext[i].describeLoadBalancerAttributeResponse;
-                var slbHostInfo=data.responseContext[i].describeHealthStatusResponse.backendServers;
+                var slbHostInfo="";
+                if(data.responseContext[i].describeHealthStatusResponse!=null){
+                    slbHostInfo=data.responseContext[i].describeHealthStatusResponse.backendServers;
+                }
                 var hostInfoString="";
                 var loadBalancerStatus="";
                 for(var j= 0,leng=slbHostInfo.length;j<leng;j++){

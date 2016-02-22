@@ -4,7 +4,6 @@ import com.olymtech.nebula.common.utils.CustomDateSerializer;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -39,6 +38,8 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Integer publishEmpId;
 
+    private Integer pid;
+
     private NebulaUserInfo publishUser;
 
     private Boolean isSuccessPublish;
@@ -56,6 +57,14 @@ public class NebulaPublishEvent extends BaseDO {
     private String endTime;
 
     private List<NebulaPublishModule> publishModules;
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
 
     public NebulaUserInfo getSubmitUser() {
         return submitUser;
