@@ -160,6 +160,9 @@
             <if test="isSuccessPublish != null">
                 AND is_success_publish = #{isSuccessPublish}
             </if>
+            <if test="pid != null">
+                AND pid = #{pid}
+            </if>
         </trim>
         group by id order by id desc
     </select>

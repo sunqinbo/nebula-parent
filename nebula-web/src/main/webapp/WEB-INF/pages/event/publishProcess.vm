@@ -227,14 +227,21 @@
                                         onclick="nebula.publish.process.cancelPublish()">取消发布
                                 </button>
                             #end
-                            #if($shiro.hasPermission("publishevnt:publishReal"))
-                                <button type="button" style="display: none" id="backPublish" class="btn btn-danger"
-                                        onclick="nebula.publish.process.publishFailEnd()">版本回退
-                                </button>
+                            #if(!$Event.pid)
+                                #if($shiro.hasPermission("publishevnt:publishReal"))
+                                    <button type="button" style="display: none" id="backPublish" class="btn btn-danger"
+                                            onclick="nebula.publish.process.publishFailEnd()">版本回退
+                                    </button>
+                                #end
+                                #if($shiro.hasPermission("publishevnt:addnextpublish"))
+                                    <button type="button" style="display: none" id="nextPublish"
+                                            class="btn btn-info"></button>
+                                #end
+                            #else
+                                <button type="button" id="checkNext_btn" onclick="checkNextPublish($Event.pid)" class="btn btn-info">查看下一发布阶段</button>
                             #end
-                            #if($shiro.hasPermission("publishevnt:addnextpublish"))
-                                <button type="button" style="display: none" id="nextPublish"
-                                        class="btn btn-info"></button>
+                            #if($!Event.publishEnv!="test")
+                                <button type="button" id="checkLast_btn" onclick="checkLastPublish()" class="btn btn-info">查看上一发布阶段</button>
                             #end
                         </div>
                     </div>

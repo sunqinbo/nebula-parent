@@ -649,6 +649,11 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
         nebulaPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
+        NebulaPublishEvent nebulaPublishEventReal=new NebulaPublishEvent();
+        nebulaPublishEventReal.setId(eventId);
+        nebulaPublishEvent.setIsApproved(true);
+        nebulaPublishEventReal.setPid(id);
+        publishEventService.updateByIdSelective(nebulaPublishEventReal);
         return returnCallback("Success", id);
     }
 
@@ -817,6 +822,16 @@ public class PublishController extends BaseController {
                 elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(), elkSearchDataReuqest.getPageSize());
         PageInfo pageInfo = elkLogService.search(elkSearchData);
         return returnCallback("Success", pageInfo);
+    }
+
+    /**
+     * 获取发布事件上一阶段的id
+     */
+    @RequestMapping(value = "getLastPublishId",method = {RequestMethod.POST})
+    @ResponseBody
+    public Object getLastPublishId(Integer eventId){
+        int lastEventId=publishEventService.getLastPublishId(eventId);
+        return returnCallback("Success", lastEventId);
     }
 
 }
