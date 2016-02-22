@@ -24,18 +24,18 @@ public class PublishScheduleServiceImpl implements IPublishScheduleService {
     INebulaPublishScheduleDao nebulaPublishScheduleDao;
 
     @Override
-    public Integer logScheduleByAction(Integer eventId, PublishAction publishAction,PublishActionGroup publishActionGroup, Boolean isSuccessAction,String errorMsg){
-        NebulaPublishSchedule scheduleSearch = new NebulaPublishSchedule(eventId,publishAction,publishActionGroup);
-        NebulaPublishSchedule nebulaPublishSchedule = new NebulaPublishSchedule(eventId,publishAction,publishActionGroup,isSuccessAction,errorMsg);
+    public Integer logScheduleByAction(Integer eventId, PublishAction publishAction, PublishActionGroup publishActionGroup, Boolean isSuccessAction, String errorMsg) {
+        NebulaPublishSchedule scheduleSearch = new NebulaPublishSchedule(eventId, publishAction, publishActionGroup);
+        NebulaPublishSchedule nebulaPublishSchedule = new NebulaPublishSchedule(eventId, publishAction, publishActionGroup, isSuccessAction, errorMsg);
         List<NebulaPublishSchedule> schedulesInDB = nebulaPublishScheduleDao.selectAllPaging(scheduleSearch);
         Integer reusltId = null;
-        if(schedulesInDB == null){
+        if (schedulesInDB == null) {
             return reusltId;
         }
-        if(schedulesInDB.size() == 0){
+        if (schedulesInDB.size() == 0) {
             reusltId = nebulaPublishScheduleDao.insert(nebulaPublishSchedule);
         }
-        if(schedulesInDB.size() == 1){
+        if (schedulesInDB.size() == 1) {
             NebulaPublishSchedule scheduleInDB = schedulesInDB.get(0);
             nebulaPublishSchedule.setId(scheduleInDB.getId());
             nebulaPublishScheduleDao.update(nebulaPublishSchedule);
@@ -45,15 +45,15 @@ public class PublishScheduleServiceImpl implements IPublishScheduleService {
     }
 
     @Override
-    public List<NebulaPublishSchedule> selectByEventId(Integer eventId){
+    public List<NebulaPublishSchedule> selectByEventId(Integer eventId) {
         return nebulaPublishScheduleDao.selectByEventId(eventId);
     }
 
     @Override
-    public void deleteByEventIdWithOutCreateAction(Integer eventId){
+    public void deleteByEventIdWithOutCreateAction(Integer eventId) {
         List<NebulaPublishSchedule> nebulaPublishSchedules = nebulaPublishScheduleDao.selectByEventId(eventId);
-        for(NebulaPublishSchedule nebulaPublishSchedule:nebulaPublishSchedules){
-            if(nebulaPublishSchedule.getPublishAction() != PublishAction.CREATE_PUBLISH_EVENT){
+        for (NebulaPublishSchedule nebulaPublishSchedule : nebulaPublishSchedules) {
+            if (nebulaPublishSchedule.getPublishAction() != PublishAction.CREATE_PUBLISH_EVENT) {
                 nebulaPublishScheduleDao.deleteById(nebulaPublishSchedule.getId());
             }
         }
