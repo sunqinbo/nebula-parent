@@ -62,6 +62,8 @@ public interface ISaltStackService {
      */
     public <T> ResultInfoSet mkDir(final List<String> targets, List<String> pathList, boolean parents) throws SaltStackException;
 
+    <T> ResultInfoSet checkFilesMd5ByDir(List<String> targets, String dir, String suffix) throws SaltStackException;
+
     /**
      * 创建文件夹
      *

@@ -153,31 +153,36 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
 
                 JSONArray jsonHosts = instanceJsonObject.getJSONArray("hosts");
                 List<SimpleHost> hosts = new ArrayList<>();
-                for (int j = 0; j < jsonHosts.size(); j++) {
-                    JSONObject jsonObject = (JSONObject) jsonHosts.get(j);
-                    SimpleHost simpleHost = new SimpleHost();
-                    simpleHost.setHostName(jsonObject.getString("instanceName"));
-                    JSONObject ipJson = jsonObject.getJSONObject("innerIpAddress");
-                    simpleHost.setHostIp(ipJson.getString("ipAddress"));
-                    hosts.add(simpleHost);
+                if(jsonHosts != null){
+                    for (int j = 0; j < jsonHosts.size(); j++) {
+                        JSONObject jsonObject = (JSONObject) jsonHosts.get(j);
+                        SimpleHost simpleHost = new SimpleHost();
+                        simpleHost.setHostName(jsonObject.getString("instanceName"));
+                        JSONObject ipJson = jsonObject.getJSONObject("innerIpAddress");
+                        simpleHost.setHostIp(ipJson.getString("ipAddress"));
+                        hosts.add(simpleHost);
+                    }
                 }
                 productTree.setHosts(hosts);
 
                 JSONArray jsonSlbs = instanceJsonObject.getJSONArray("slbs");
                 List<SimpleSlb> simpleSlbs = new ArrayList<>();
-                for (int j = 0; j < jsonSlbs.size(); j++) {
-                    JSONObject jsonObject = (JSONObject) jsonSlbs.get(j);
-                    SimpleSlb simpleSlb = new SimpleSlb();
-                    simpleSlb.setId(jsonObject.getInteger("id"));
-                    simpleSlb.setLoadBalancerId(jsonObject.getString("loadBalancerId"));
-                    simpleSlb.setLoadBalancerAddress(jsonObject.getString("address"));
-                    simpleSlb.setLoadBalancerName(jsonObject.getString("loadBalancerName"));
-                    simpleSlb.setLoadBalancerStatus(jsonObject.getString("loadBalancerStatus"));
-                    simpleSlb.setRegionId(jsonObject.getString("regionId"));
-                    simpleSlb.setAliyunAccount(jsonObject.getString("aliyunAccountMail"));
-                    simpleSlbs.add(simpleSlb);
+                if(jsonSlbs != null){
+                    for (int j = 0; j < jsonSlbs.size(); j++) {
+                        JSONObject jsonObject = (JSONObject) jsonSlbs.get(j);
+                        SimpleSlb simpleSlb = new SimpleSlb();
+                        simpleSlb.setId(jsonObject.getInteger("id"));
+                        simpleSlb.setLoadBalancerId(jsonObject.getString("loadBalancerId"));
+                        simpleSlb.setLoadBalancerAddress(jsonObject.getString("address"));
+                        simpleSlb.setLoadBalancerName(jsonObject.getString("loadBalancerName"));
+                        simpleSlb.setLoadBalancerStatus(jsonObject.getString("loadBalancerStatus"));
+                        simpleSlb.setRegionId(jsonObject.getString("regionId"));
+                        simpleSlb.setAliyunAccount(jsonObject.getString("aliyunAccountMail"));
+                        simpleSlbs.add(simpleSlb);
+                    }
                 }
                 productTree.setSlbs(simpleSlbs);
+
 
                 productTrees.add(productTree);
             }

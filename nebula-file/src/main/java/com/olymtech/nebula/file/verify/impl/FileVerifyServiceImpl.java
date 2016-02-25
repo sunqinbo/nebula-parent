@@ -2,11 +2,15 @@ package com.olymtech.nebula.file.verify.impl;
 
 
 
+import com.olymtech.nebula.common.utils.DataConvert;
 import com.olymtech.nebula.file.verify.IFileVerifyService;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -23,8 +27,13 @@ import java.util.Map;
 /*
 *获取文件md5值
 */
-
+@Service
 public class FileVerifyServiceImpl implements IFileVerifyService {
+
+    private final Logger logger = LoggerFactory.getLogger(FileVerifyServiceImpl.class);
+
+    @Value("${script_check_files_md5}")
+    private static String scriptCheckFilesMd5;
 
     /**
      * 根据文件路径计算文件的MD5
@@ -115,6 +124,37 @@ public class FileVerifyServiceImpl implements IFileVerifyService {
                 reverseRecursionMapByDirPath(newFile,fileList);
             }
         }
+    }
+
+    /** 调用脚本，获取目录文件md5 */
+    @Override
+    public Map<String,String> checkFilesMd5ByDir(String dir,String suffix){
+        Map<String,String> map = new HashMap<>();
+        try {
+
+            String command = "";
+            if (StringUtils.isNotEmpty(suffix)) {
+                command = scriptCheckFilesMd5 + " -d " + dir + " -s " +suffix;
+            } else {
+                command = scriptCheckFilesMd5 + " -d " + dir;
+            }
+
+            Process ps = Runtime.getRuntime().exec(command);
+            ps.waitFor();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
+            StringBuffer sb = new StringBuffer();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            String result = sb.toString();
+            map = DataConvert.fileJsonStringToList(result);
+
+        } catch (Exception e) {
+            logger.error("checkFilesMd5ByDir error:",e);
+        }
+        return map;
     }
 
     /**

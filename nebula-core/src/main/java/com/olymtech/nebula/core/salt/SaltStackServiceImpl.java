@@ -9,8 +9,10 @@ import com.olymtech.nebula.core.salt.core.SaltTarget;
 import com.suse.saltstack.netapi.datatypes.ScheduledJob;
 import com.suse.saltstack.netapi.exception.SaltStackException;
 import com.suse.saltstack.netapi.results.ResultInfoSet;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
     public static final String CommandCpFile = "cp.get_file";
     public static final String CommandCpDir = "cp.get_dir";
     public static final String CommandCmdRun = "cmd.run";
+
+    @Value("${script_check_files_md5}")
+    private String scriptCheckFilesMd5;
 
 
     @Override
@@ -111,6 +116,24 @@ public class SaltStackServiceImpl implements ISaltStackService {
         }
 
         logger.info("当前执行的命令:" + paths.toString());
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
+
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
+        return jobResult;
+    }
+
+    @Override
+    public <T> ResultInfoSet checkFilesMd5ByDir(List<String> targets,String dir,String suffix) throws SaltStackException{
+        List<Object> args = new ArrayList<>();
+        String command = "";
+        if (StringUtils.isNotEmpty(suffix)) {
+            command = scriptCheckFilesMd5 + " -d " + dir + " -s " +suffix;
+        } else {
+            command = scriptCheckFilesMd5 + " -d " + dir;
+        }
+        args.add(command);
+
+        logger.info("当前执行的命令:" + command);
         ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
 
         ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());

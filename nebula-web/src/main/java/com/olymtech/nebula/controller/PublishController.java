@@ -176,7 +176,7 @@ public class PublishController extends BaseController {
     }
 
     /**
-     * 启动预发布
+     * 发布准备
      */
     @RequiresPermissions("publishevnt:prePublishMaster")
     @RequestMapping(value = "/preMasterPublish", method = {RequestMethod.POST})
@@ -207,6 +207,9 @@ public class PublishController extends BaseController {
         return returnCallback("Success", "发布准备执行完成");
     }
 
+    /**
+     * 启动预发布
+     */
     @RequiresPermissions("publishevnt:prePublishMinion")
     @RequestMapping(value = "/preMinionPublish", method = {RequestMethod.POST})
     @ResponseBody
