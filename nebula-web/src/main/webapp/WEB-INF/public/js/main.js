@@ -376,5 +376,22 @@ nebula.publish.process.cancelPublish = function () {
     });
 };
 
+nebula.tools = {};
+
+nebula.tools.qrCode = {};
+
+nebula.tools.qrCode.generateQRCodesByOtpauthUrl= function (otpauthUrl,divId) {
+    var qrcodeDiv = new QRCode(otpauthUrl, divId);
+    if (!otpauthUrl.value) {
+        console.log("otpauthUrl is null");
+        otpauthUrl.focus();
+        return;
+    }
+    qrcodeDiv.makeCode(otpauthUrl.value);
+};
+
+nebula.tools.qrCode.generateQRCodesGetUrl = function(label,user,key) {
+    return "otpauth://totp/" + label + ":" + user + "?secret=" + key + "&issuer=" + label;
+};
 
 
