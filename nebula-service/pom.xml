@@ -119,6 +119,11 @@
             <artifactId>util</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.warrenstrange</groupId>
+            <artifactId>googleauth</artifactId>
+        </dependency>
+
     </dependencies>
 
 

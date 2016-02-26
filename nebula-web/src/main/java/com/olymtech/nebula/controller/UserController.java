@@ -1,10 +1,8 @@
 package com.olymtech.nebula.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.entity.Callback;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.NebulaUserInfo;
-import com.olymtech.nebula.entity.ProductTree;
+import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IAnalyzeArsenalApiService;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
@@ -158,6 +156,64 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/update/myPassword.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String updateMyPassword() {
         return "user/updatePassword";
+    }
+
+    @RequestMapping(value = "/add/credentials", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object createCredentialsForUser(String username, String password){
+
+        NebulaUserInfo userInfo = userService.findByUsername(username);
+        if(userInfo == null){
+            return returnCallback("Error", "账号不存在");
+        }
+
+        if(!StringUtils.isNotEmpty(password)){
+            return returnCallback("Error", "密码不能为空");
+        }
+
+        Boolean result = passwordHelper.verifyAccount(userInfo.getUsername(), password);
+        if(!result){
+            /** session重试次数，5次限制，需要增加 */
+            //TODO
+            return returnCallback("Error", "密码错误");
+        }
+
+        /** userInfo.gIsVerify = true : 已通过验证，不能再生成二维码 */
+        //TODO
+
+        GoogleAuth googleAuth = GoogleAuthFactory.createCredentialsForUser(username);
+
+        if(googleAuth != null){
+            return returnCallback("Success", googleAuth);
+        }else{
+            return returnCallback("Error", "创建二维码失败");
+        }
+    }
+
+    @RequestMapping(value = "/update/gCodesVerifyAndBinding", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object gCodesVerifyAndBinding(String username, String codeFirstString, String codeSecondString){
+
+        if(StringUtils.isEmpty(codeFirstString) || StringUtils.isEmpty(codeSecondString)){
+            return returnCallback("Error", "动态验证码不能为空。");
+        }
+
+        int codeFirst = Integer.parseInt(codeFirstString);
+        int codeSecond = Integer.parseInt(codeSecondString);
+
+        Boolean codeFirstVerify = GoogleAuthFactory.authoriseUser(username, codeFirst);
+        Boolean codeSecondVerify = GoogleAuthFactory.authoriseUser(username, codeSecond);
+
+        /** 验证码check */
+        if(!codeFirstVerify || !codeSecondVerify){
+            return returnCallback("Error", "动态验证，验证错误。");
+        }
+
+        /** 绑定 gIsVerify 设置true */
+        NebulaUserInfo userInfo = userService.findByUsername(username);
+        //TODO
+        return returnCallback("Success", "动态验证，验证错误。");
+
     }
 
 
