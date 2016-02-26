@@ -76,14 +76,26 @@ public class Dispatcher implements Observer {
                 Action action = actions.get(i);
                 action.setObserver(this);
                 boolean result = false;
+                boolean resultCheck = false;
                 try {
                     logger.info(action.getActionName() + "开始执行..." + "在链中的id为" + i);
                     result = action.doAction(event);
+
+                    /** action 执行失败 */
                     if (!result) {
                         logger.info(action.getActionName() + "执行失败");
                         triggerFailure(event);
                         return;
                     }
+
+                    /** action 执行成功，但是执行check失败 */
+                    resultCheck = action.doCheck(event);
+                    if (!resultCheck){
+                        logger.info(action.getActionName() + "执行Check失败");
+                        triggerFailure(event);
+                        return;
+                    }
+
                     logger.info(action.getActionName() + "执行成功");
                 } catch (Exception e) {
                     throw e;

@@ -54,6 +54,11 @@ public class CleanPublishDirAction extends AbstractAction {
 
     }
 
+    @Override
+    public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        return true;
+    }
+
     private Boolean deleteDir(File dir){
         if(dir.isDirectory()){
             String[] child = dir.list();

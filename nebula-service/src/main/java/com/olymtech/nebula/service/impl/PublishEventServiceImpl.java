@@ -132,5 +132,21 @@ public class PublishEventServiceImpl implements IPublishEventService {
         return nebulaPublishEvents;
     }
 
+    @Override
+    public int getLastPublishId(Integer eventId) {
+        NebulaPublishEvent nebulaPublishEvent=new NebulaPublishEvent();
+        nebulaPublishEvent.setPid(eventId);
+        if(nebulaPublishEventDao.selectAllPaging(nebulaPublishEvent).size()>0) {
+            return nebulaPublishEventDao.selectAllPaging(nebulaPublishEvent).get(0).getId();
+        }
+        else
+            return -1;
+    }
+
+    @Override
+    public void updateByIdSelective(NebulaPublishEvent nebulaPublishEventReal) {
+        nebulaPublishEventDao.updateByIdSelective(nebulaPublishEventReal);
+    }
+
 
 }

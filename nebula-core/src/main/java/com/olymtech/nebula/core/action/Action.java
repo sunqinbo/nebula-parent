@@ -18,7 +18,16 @@ public interface Action {
      * @return
      * @throws Exception
      */
-    public boolean doAction(NebulaPublishEvent event) throws Exception ;
+    public boolean doAction(NebulaPublishEvent event) throws Exception;
+
+
+    /**
+     * 发布动作执行后的检测
+     * @param event
+     * @return
+     * @throws Exception
+     */
+    public boolean doCheck(NebulaPublishEvent event) throws Exception;
 
     /**
      * 发布动作失败后执行动作

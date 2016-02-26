@@ -97,4 +97,9 @@ public class StopTomcatAction extends AbstractAction {
     public void doFailure(NebulaPublishEvent event) {
 
     }
+
+    @Override
+    public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        return true;
+    }
 }

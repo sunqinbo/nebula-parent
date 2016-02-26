@@ -27,4 +27,9 @@ public class Action3 extends AbstractAction {
     public void doFailure(NebulaPublishEvent event) {
         System.out.println("回滚salt动作");
     }
+
+    @Override
+    public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        return true;
+    }
 }

@@ -47,6 +47,9 @@ $(document).ready(function(){
         }
     });
 
+    //发布事件阶段跳转按钮文字控制
+    checkPublishBtnSet();
+
     $("#modalCheck_btn").click(function(){
         $.ajax({
             type:"POST",
@@ -339,15 +342,15 @@ $(document).ready(function(){
         $("#step6").hide();
         $("#nextPublish").hide();
     });
-    //进入下一阶段的发布
-    $("#nextPublish").click(function () {
-        if ($("#publishEnv").html() == "test") {
-            nextPublish("stage");
-        }
-        if ($("#publishEnv").html() == "stage") {
-            nextPublish("product");
-        }
-    });
+    //进入下一阶段的发布（禁用）
+    //$("#nextPublish").click(function () {
+    //    if ($("#publishEnv").html() == "test") {
+    //        nextPublish("stage");
+    //    }
+    //    if ($("#publishEnv").html() == "stage") {
+    //        nextPublish("product");
+    //    }
+    //});
 
     $("#freshControl_switch").find("label").css("width","0px");
 
@@ -975,6 +978,36 @@ function getSlbInfo(){
             });
         }
     })
+}
+
+//查看下一发布阶段
+function checkNextPublish(eventId){
+    location.href = "/publish/process.htm?id=" + eventId;
+}
+
+//查看上一发布阶段
+function checkLastPublish(){
+    $.ajax({
+        type:"POST",
+        url:"/publish/getLastPublishId",
+        data:{
+            eventId:$("#eventId").val()
+        },
+        success:function(data){
+            location.href = "/publish/process.htm?id=" + data.responseContext;
+        },
+        error:function(errorThrown){
+            nebula.common.alert.danger("获取事件Id失败，原因："+errorThrown, 1000);
+        }
+    });
+}
+
+function checkPublishBtnSet(){
+    switch ($("#publishEnv").text()){
+        case "test":$("#checkNext_btn").text("查看准生产环境");break;
+        case "stage":$("#checkNext_btn").text("查看生产环境");$("#checkLast_btn").text("查看测试环境");break;
+        default:$("#checkLast_btn").text("查看准生产环境");
+    }
 }
 
 //日期格式化
