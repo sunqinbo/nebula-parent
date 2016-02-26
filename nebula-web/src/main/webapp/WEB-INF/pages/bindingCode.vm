@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Nebula</title>
+
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/public/assets/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/public/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/public/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/public/plugins/iCheck/square/blue.css">
+
+    <!-- jQuery 2.1.4 -->
+    <script src="/public/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="/public/assets/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="/public/plugins/iCheck/icheck.min.js"></script>
+
+##    <script>
+##        $(function () {
+##            $('input').iCheck({
+##                checkboxClass: 'icheckbox_square-blue',
+##                radioClass: 'iradio_square-blue',
+##                increaseArea: '20%' // optional
+##            });
+##        });
+##    </script>
+<style>
+    .headerTip{
+        width: 100%;
+        height: 60px;
+        background-color: #AE64E0;
+    }
+    .tipSize{
+        margin-bottom: 10px !important;
+        padding: 8px !important;
+    }
+    .boxControl{
+        float: left;
+        margin-left:5%;
+        margin-top:0px;
+    }
+</style>
+</head>
+<body class="hold-transition login-page" style="background-color: #EEEEEE !important;">
+<div class="headerTip">
+    <div class="login-logo">
+        <b>发布系统Nebula</b>
+    </div><!-- /.login-logo -->
+</div>
+
+<div style="width: 90%;margin:2% auto;">
+##    <label class="alert alert-warning">请您安装谷歌验证器：链接</label> <br/>
+##    <label class="alert alert-warning">点击生成动态验证码</label> <br/>
+##    <label class="alert alert-warning">扫描二维码</label> <br/>
+##    <label class="alert alert-warning">输入动态验证码并点击绑定</label> <br/>
+##    <div class="alert alert-warning">
+##        <button type="button" aria-hidden="true" class="close">×</button>
+##        <span>请您安装谷歌验证器：链接</span>
+##    </div>
+    <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <span data-notify="icon" class="pe-7s-bell"></span>
+        <span data-notify="message">请您安装谷歌验证器：链接</span>
+    </div>
+    <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <span data-notify="icon" class="pe-7s-bell"></span>
+        <span data-notify="message">点击生成动态验证码</span>
+    </div>
+    <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <span data-notify="icon" class="pe-7s-bell"></span>
+        <span data-notify="message">扫描二维码</span>
+    </div>
+    <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <span data-notify="icon" class="pe-7s-bell"></span>
+        <span data-notify="message">输入动态验证码并点击绑定</span>
+    </div>
+##<div class="headerTip">
+##    <label class="alert alert-warning" style="margin: 2% 2%">提示：
+##    <br/>
+##    1.请您安装谷歌验证器：链接
+##    <br/>
+##    2.点击生成动态验证码
+##    <br/>
+##    3.扫描二维码
+##    <br/>
+##    4.输入动态验证码并点击绑定
+##    </label>
+##</div>
+</div>
+<div class="login-box boxControl">
+    <div class="login-box-body">
+        <p class="login-box-msg"></p>
+        <form action="" method="post" >
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" required autofocus name="username" placeholder="用户名">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" required name="password" placeholder="密码">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback" style="color: red">
+                #if($error)
+                    $error
+                #end
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">生成二维码</button>
+                </div><!-- /.col -->
+            </div>
+        </form>
+
+
+##        <a href="#">忘记密码</a><br>
+##        <a href="register.html" class="text-center">注册一个新的用户</a>
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+
+<div class="login-box boxControl">
+    <div class="login-box-body" style="text-align: center">
+        <h6>请扫描下面的二维码</h6>
+        <div style="margin:0 auto;height: 200px;width: 200px; background-color: #0a6aa1"></div>
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+
+<div class="login-box boxControl">
+    <div class="login-box-body">
+        <p class="login-box-msg"></p>
+        <form action="" method="post" >
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" required autofocus name="username" placeholder="用户名">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" required name="password" placeholder="密码">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback" style="color: red">
+                #if($error)
+                    $error
+                #end
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">绑定</button>
+                </div><!-- /.col -->
+            </div>
+        </form>
+
+
+    ##        <a href="#">忘记密码</a><br>
+    ##        <a href="register.html" class="text-center">注册一个新的用户</a>
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+</body>
+</html>

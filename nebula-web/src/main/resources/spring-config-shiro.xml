@@ -140,6 +140,7 @@
                 /logout=logout
                 /public/**=anon
                 /favicon.ico=anon
+                /bindingCode/**=anon
                 /** = user,kickout,sysUser
             </value>
         </property>
