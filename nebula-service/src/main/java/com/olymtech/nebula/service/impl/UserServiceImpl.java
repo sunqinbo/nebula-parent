@@ -183,7 +183,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void updateGIsVerify(NebulaUserInfo nebulaUserInfo) {
+    public void updateByIdSelective(NebulaUserInfo nebulaUserInfo) {
         nebulaUserInfoDao.updateByIdSelective(nebulaUserInfo);
     }
 }

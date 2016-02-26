@@ -41,5 +41,5 @@ public interface IUserService {
 
     void updateMyPassword(NebulaUserInfo userInfo);
 
-    void updateGIsVerify(NebulaUserInfo nebulaUserInfo);
+    void updateByIdSelective(NebulaUserInfo nebulaUserInfo);
 }

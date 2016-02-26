@@ -36,9 +36,13 @@ public class GoogleAuthFactory {
                 googleAuthenticator.createCredentials(userName);
         final String secret = key.getKey();
         final List<Integer> scratchCodes = key.getScratchCodes();
-        String otpAuthURL = GoogleAuthenticatorQRGenerator.getOtpAuthURL("Nebula", "ops@olymtech.com", key);
 
-        GoogleAuth googleAuth = new GoogleAuth(userName,secret,otpAuthURL,scratchCodes);
+        String label = "Nebula";
+        String bu = "ops@olymtech.com";
+
+        String otpAuthURL = GoogleAuthenticatorQRGenerator.getOtpAuthURL(label, bu, key);
+
+        GoogleAuth googleAuth = new GoogleAuth(userName,secret,otpAuthURL,scratchCodes,label,bu);
 
         System.out.println("Please register (otpauth uri): " + otpAuthURL);
         System.out.println("Secret key is " + secret);

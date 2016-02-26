@@ -32,13 +32,13 @@ public class NebulaUserInfo extends BaseDO{
 
     private String bu;
 
-    private String gIsVerify;
+    private Boolean gIsVerify;
 
-    public String getgIsVerify() {
+    public Boolean getgIsVerify() {
         return gIsVerify;
     }
 
-    public void setgIsVerify(String gIsVerify) {
+    public void setgIsVerify(Boolean gIsVerify) {
         this.gIsVerify = gIsVerify;
     }
 

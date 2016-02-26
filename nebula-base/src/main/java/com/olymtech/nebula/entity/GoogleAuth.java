@@ -19,6 +19,10 @@ public class GoogleAuth {
 
     private List<Integer> scratchCodes;
 
+    private String label;
+
+    private String bu;
+
     public GoogleAuth(){
 
     }
@@ -26,11 +30,15 @@ public class GoogleAuth {
     public GoogleAuth(String username,
                       String secret,
                       String otpAuthURL,
-                      List<Integer> scratchCodes){
+                      List<Integer> scratchCodes,
+                      String label,
+                      String bu){
         this.username = username;
         this.secret = secret;
         this.otpAuthURL = otpAuthURL;
         this.scratchCodes = scratchCodes;
+        this.label = label;
+        this.bu = bu;
     }
 
     public String getUsername() {

@@ -7,6 +7,7 @@ package com.olymtech.nebula.web.realm;
 
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
+import com.olymtech.nebula.web.exception.GoogleAuthAccountException;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -48,6 +49,11 @@ public class UserRealm extends AuthorizingRealm {
         logger.info(username+"正在登录"+user);
         if(user.getIsEnable()==0) {
             throw new LockedAccountException(); //帐号锁定(未启用)
+        }
+
+        /** 没有绑定google二次验证 */
+        if(!user.getgIsVerify()){
+            throw new GoogleAuthAccountException();
         }
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(

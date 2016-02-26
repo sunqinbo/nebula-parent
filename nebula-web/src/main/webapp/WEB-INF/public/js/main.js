@@ -390,8 +390,8 @@ nebula.tools.qrCode.generateQRCodesByOtpauthUrl= function (otpauthUrl,divId) {
     qrcodeDiv.makeCode(otpauthUrl.value);
 };
 
-nebula.tools.qrCode.generateQRCodesGetUrl = function(label,user,key) {
-    return "otpauth://totp/" + label + ":" + user + "?secret=" + key + "&issuer=" + label;
+nebula.tools.qrCode.generateQRCodesGetUrl = function(label,bu,key) {
+    return "otpauth://totp/" + label + ":" + bu + "?secret=" + key + "&issuer=" + label;
 };
 
 
