@@ -32,6 +32,16 @@ public class NebulaUserInfo extends BaseDO{
 
     private String bu;
 
+    private String gIsVerify;
+
+    public String getgIsVerify() {
+        return gIsVerify;
+    }
+
+    public void setgIsVerify(String gIsVerify) {
+        this.gIsVerify = gIsVerify;
+    }
+
     private List<AclRole> aclRoles;
 
     public String getBu() {
