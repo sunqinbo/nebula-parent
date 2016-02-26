@@ -14,6 +14,7 @@
         <result column="emp_id" property="empId" jdbcType="INTEGER"/>
         <result column="supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER"/>
         <result column="is_enable" property="isEnable" jdbcType="INTEGER"/>
+        <result column="g_is_verify" property="gIsVerify" jdbcType="INTEGER"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="security_key" property="securityKey" jdbcType="VARCHAR"/>
         <result column="bu" property="bu" jdbcType="VARCHAR"/>
@@ -31,6 +32,7 @@
         emp_id,
         supervisor_emp_id,
         is_enable,
+        g_is_verify,
         password,
         security_key,
         bu
@@ -124,6 +126,7 @@
         emp_id,
         supervisor_emp_id,
         is_enable,
+        g_is_verify,
         password,
         security_key,
         bu)
@@ -139,6 +142,7 @@
         #{empId,jdbcType=INTEGER},
         #{supervisorEmpId,jdbcType=INTEGER},
         #{isEnable,jdbcType=INTEGER},
+        #{gIsVerify,jdbcType=INTEGER},
         #{password,jdbcType=VARCHAR},
         #{securityKey,jdbcType=VARCHAR},
         #{bu,jdbcType=VARCHAR})
@@ -184,6 +188,9 @@
             </if>
             <if test="isEnable != null">
                 is_enable,
+            </if>
+            <if test="gIsVerify != null">
+                g_is_verify,
             </if>
             <if test="password != null">
                 password,
@@ -232,6 +239,9 @@
             <if test="isEnable != null">
                 #{isEnable,jdbcType=INTEGER},
             </if>
+            <if test="gIsVerify != null">
+                #{gIsVerify,jdbcType=INTEGER},
+            </if>
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
             </if>
@@ -279,6 +289,9 @@
             <if test="isEnable != null">
                 is_enable = #{isEnable,jdbcType=INTEGER},
             </if>
+            <if test="gIsVerify != null">
+                g_is_verify = #{gIsVerify,jdbcType=INTEGER},
+            </if>
             <if test="password != null">
                 password = #{password,jdbcType=VARCHAR},
             </if>
@@ -304,6 +317,7 @@
         emp_id = #{empId,jdbcType=INTEGER},
         supervisor_emp_id = #{supervisorEmpId,jdbcType=INTEGER},
         is_enable = #{isEnable,jdbcType=INTEGER},
+        g_is_verify = #{gIsVerify,jdbcType=INTEGER},
         bu = #{bu,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
