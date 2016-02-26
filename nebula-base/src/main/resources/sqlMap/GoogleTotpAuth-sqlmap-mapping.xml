@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="google_totp_auth" >
+  <resultMap id="RM-GoogleTotpAuth" type="com.olymtech.nebula.entity.GoogleTotpAuth" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="emp_id" property="empId" jdbcType="INTEGER" />
+    <result column="g_secret" property="gSecret" jdbcType="VARCHAR" />
+    <result column="g_opt_auth_url" property="gOptAuthUrl" jdbcType="VARCHAR" />
+    <result column="g_scratch_codes" property="gScratchCodes" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="GoogleTotpAuth_Base_Column_List" >
+    id, emp_id, g_secret, g_opt_auth_url, g_scratch_codes
+  </sql>
+  <select id="Nebula-GoogleTotpAuth-Select-By-Id" resultMap="RM-GoogleTotpAuth" parameterType="java.lang.Integer" >
+    select 
+    <include refid="GoogleTotpAuth_Base_Column_List" />
+    from google_totp_auth
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="Nebula-GoogleTotpAuth-Select-By-Emp-Id" resultMap="RM-GoogleTotpAuth" parameterType="java.lang.Integer" >
+    select
+    <include refid="GoogleTotpAuth_Base_Column_List" />
+    from google_totp_auth
+    where emp_id = #{empId,jdbcType=INTEGER}
+  </select>
+  <delete id="Nebula-GoogleTotpAuth-Delete-By-Id" parameterType="java.lang.Integer" >
+    delete from google_totp_auth
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="Nebula-GoogleTotpAuth-Insert" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+    insert into google_totp_auth (id, emp_id, g_secret, 
+      g_opt_auth_url, g_scratch_codes)
+    values (#{id,jdbcType=INTEGER}, #{empId,jdbcType=INTEGER}, #{gSecret,jdbcType=VARCHAR}, 
+      #{gOptAuthUrl,jdbcType=VARCHAR}, #{gScratchCodes,jdbcType=VARCHAR})
+  </insert>
+  <insert id="Nebula-GoogleTotpAuth-Insert-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+    insert into google_totp_auth
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="empId != null" >
+        emp_id,
+      </if>
+      <if test="gSecret != null" >
+        g_secret,
+      </if>
+      <if test="gOptAuthUrl != null" >
+        g_opt_auth_url,
+      </if>
+      <if test="gScratchCodes != null" >
+        g_scratch_codes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="empId != null" >
+        #{empId,jdbcType=INTEGER},
+      </if>
+      <if test="gSecret != null" >
+        #{gSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="gOptAuthUrl != null" >
+        #{gOptAuthUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="gScratchCodes != null" >
+        #{gScratchCodes,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="Nebula-GoogleTotpAuth-Update-By-Id-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+    update google_totp_auth
+    <set >
+      <if test="empId != null" >
+        emp_id = #{empId,jdbcType=INTEGER},
+      </if>
+      <if test="gSecret != null" >
+        g_secret = #{gSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="gOptAuthUrl != null" >
+        g_opt_auth_url = #{gOptAuthUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="gScratchCodes != null" >
+        g_scratch_codes = #{gScratchCodes,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="Nebula-GoogleTotpAuth-Update-By-Id" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+    update google_totp_auth
+    set emp_id = #{empId,jdbcType=INTEGER},
+      g_secret = #{gSecret,jdbcType=VARCHAR},
+      g_opt_auth_url = #{gOptAuthUrl,jdbcType=VARCHAR},
+      g_scratch_codes = #{gScratchCodes,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

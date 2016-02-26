@@ -19,5 +19,7 @@ public interface INebulaUserInfoDao extends IBaseDao<NebulaUserInfo,Integer> {
 
     public void updatePassword(NebulaUserInfo user);
 
-    List<NebulaUserInfo> selectAllPagingLike(NebulaUserInfo userInfo);
+    public List<NebulaUserInfo> selectAllPagingLike(NebulaUserInfo userInfo);
+
 }
+

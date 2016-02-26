@@ -37,4 +37,5 @@ public class NebulaUserInfoDaoImpl extends BaseDaoImpl<NebulaUserInfo,Integer> i
     public List<NebulaUserInfo> selectAllPagingLike(NebulaUserInfo userInfo) {
         return getSqlSession().selectList(CLASS_NAME + "-Select-All-Paging-Where-Like", userInfo);
     }
+
 }

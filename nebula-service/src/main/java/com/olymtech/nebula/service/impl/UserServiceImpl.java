@@ -181,4 +181,9 @@ public class UserServiceImpl implements IUserService {
     public void updateMyPassword(NebulaUserInfo userInfo) {
         nebulaUserInfoDao.updatePassword(userInfo);
     }
+
+    @Override
+    public void updateGIsVerify(NebulaUserInfo nebulaUserInfo) {
+        nebulaUserInfoDao.updateByIdSelective(nebulaUserInfo);
+    }
 }

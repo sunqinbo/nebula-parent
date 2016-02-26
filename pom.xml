@@ -233,6 +233,12 @@
                 <version>${httpclient.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+            </dependency>
+
             <!-- mysql -->
             <dependency>
                 <groupId>mysql</groupId>
@@ -430,6 +436,11 @@
                 <!--<version>${shield.version}</version>-->
             <!--</dependency>-->
 
+            <dependency>
+                <groupId>com.warrenstrange</groupId>
+                <artifactId>googleauth</artifactId>
+                <version>${googleauth.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -444,6 +455,7 @@
         <ibatis.version>2.3.4.726</ibatis.version>
         <olym.cc.util.version>1.0.12-RELEASE</olym.cc.util.version>
         <httpclient.version>3.1</httpclient.version>
+        <commons.codec.version>1.9</commons.codec.version>
         <log4j.version>1.2.16</log4j.version>
         <fastjson.version>1.1.41</fastjson.version>
         <jackson.version>2.6.3</jackson.version>
@@ -478,6 +490,7 @@
         <hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 
         <elasticsearch.version>1.6.0</elasticsearch.version>
+        <googleauth.version>0.5.0</googleauth.version>
     </properties>
 
     <build>
