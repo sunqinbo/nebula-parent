@@ -60,4 +60,9 @@ public class LoginController extends BaseController {
         throw new NullPointerException("xxxx");
     }
 
+    @RequestMapping(value = "/bindingCode/dynamic.htm")
+    public String bindingCode(){
+        return "bindingCode";
+    }
+
 }
