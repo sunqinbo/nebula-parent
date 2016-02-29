@@ -42,9 +42,9 @@ $(function(){
                     return;
                 }
                 nebula.common.alert.success(data.responseContext, 1000);
-                var googleAuth=data.responseContext;
-                var url=nebula.tools.qrCode.generateQRCodesGetUrl(googleAuth.label,googleAuth.bu,googleAuth.secret);
-                nebula.tools.qrCode.generateQRCodesByOtpauthUrl(url,"qrcode");
+                setTimeout(function () {
+                    window.location.href='/login';
+                }, 1000);
             },
             error: function (errorThrown) {
                 nebula.common.alert.danger("很抱歉绑定动态验证码失败，原因"+ errorThrown, 1000);
