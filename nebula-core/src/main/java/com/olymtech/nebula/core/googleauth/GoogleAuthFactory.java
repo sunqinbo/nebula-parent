@@ -44,16 +44,16 @@ public class GoogleAuthFactory {
 
         GoogleAuth googleAuth = new GoogleAuth(userName,secret,otpAuthURL,scratchCodes,label,bu);
 
-        System.out.println("Please register (otpauth uri): " + otpAuthURL);
-        System.out.println("Secret key is " + secret);
-
-        for (Integer i : scratchCodes) {
-            if (!validateScratchCode(i)) {
-                throw new IllegalArgumentException("An invalid code has been " +
-                        "generated: this is an application bug.");
-            }
-            System.out.println("Scratch code: " + i);
-        }
+//        System.out.println("Please register (otpauth uri): " + otpAuthURL);
+//        System.out.println("Secret key is " + secret);
+//
+//        for (Integer i : scratchCodes) {
+//            if (!validateScratchCode(i)) {
+//                throw new IllegalArgumentException("An invalid code has been " +
+//                        "generated: this is an application bug.");
+//            }
+//            System.out.println("Scratch code: " + i);
+//        }
         return googleAuth;
     }
 
@@ -66,7 +66,7 @@ public class GoogleAuthFactory {
         GoogleAuthenticator ga = new GoogleAuthenticator(gacb.build());
         Boolean isCodeValid = ga.authorizeUser(userName, validationCode);
 
-        System.out.println("Check VALIDATION_CODE = " + isCodeValid);
+//        System.out.println("Check VALIDATION_CODE = " + isCodeValid);
 
         return isCodeValid;
     }

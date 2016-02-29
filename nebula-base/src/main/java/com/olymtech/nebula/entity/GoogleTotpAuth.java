@@ -11,6 +11,20 @@ public class GoogleTotpAuth extends BaseDO {
 
     private String gScratchCodes;
 
+    public GoogleTotpAuth(){
+
+    }
+
+    public GoogleTotpAuth(Integer empId,
+                          String gSecret,
+                          String gOptAuthUrl,
+                          String gScratchCodes){
+        this.empId = empId;
+        this.gSecret = gSecret;
+        this.gOptAuthUrl = gOptAuthUrl;
+        this.gScratchCodes = gScratchCodes;
+    }
+
     public Integer getId() {
         return id;
     }

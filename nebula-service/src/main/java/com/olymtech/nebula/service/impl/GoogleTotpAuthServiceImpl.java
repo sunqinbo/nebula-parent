@@ -19,9 +19,24 @@ public class GoogleTotpAuthServiceImpl implements IGoogleTotpAuthService {
     @Resource
     private IGoogleTotpAuthDao googleTotpAuthDao;
 
+    /**
+     * 无数据insert，有数据update
+     * @param googleTotpAuth
+     * @return
+     */
     @Override
     public int insertGoogleTotpAuth(GoogleTotpAuth googleTotpAuth) {
-        return googleTotpAuthDao.insert(googleTotpAuth);
+        GoogleTotpAuth googleTotpAuthInDB = googleTotpAuthDao.selectByEmpId(googleTotpAuth.getEmpId());
+
+        if(googleTotpAuthInDB == null){
+            return googleTotpAuthDao.insert(googleTotpAuth);
+        }else {
+            googleTotpAuthInDB.setgSecret(googleTotpAuth.getgSecret());
+            googleTotpAuthInDB.setgOptAuthUrl(googleTotpAuth.getgOptAuthUrl());
+            googleTotpAuthInDB.setgScratchCodes(googleTotpAuth.getgScratchCodes());
+            googleTotpAuthDao.update(googleTotpAuthInDB);
+            return googleTotpAuthInDB.getId();
+        }
     }
 
     @Override

@@ -4,8 +4,13 @@
  */
 package com.olymtech.nebula.service.googleauth;
 
+import com.olymtech.nebula.core.googleauth.MyGoogleAuthenticatorQRGenerator;
+import com.olymtech.nebula.entity.GoogleTotpAuth;
+import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.service.IGoogleTotpAuthService;
 import com.olymtech.nebula.service.IUserService;
 import com.warrenstrange.googleauth.ICredentialRepository;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,6 +29,9 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private IGoogleTotpAuthService googleTotpAuthService;
+
 
     /**
      * 验证code，获取key
@@ -33,15 +41,16 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
      */
     @Override
     public String getSecretKey(String userName) {
-        String key = "YJOQQPWFHXZAMM2A";
+//        String key = "YJOQQPWFHXZAMM2A";
 
-        System.out.println(
-                String.format(
-                        "getSecretKey invoked with user name %s returning %s.",
-                        userName,
-                        key));
-
-        return key;
+//        System.out.println(
+//                String.format(
+//                        "getSecretKey invoked with user name %s returning %s.",
+//                        userName,
+//                        key));
+        NebulaUserInfo userInfo = userService.findByUsername(userName);
+        GoogleTotpAuth googleTotpAuth = googleTotpAuthService.selectByEmpId(userInfo.getEmpId());
+        return googleTotpAuth.getgSecret();
     }
 
     /**
@@ -58,7 +67,15 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
                                     int validationCode,
                                     List<Integer> scratchCodes) {
 
-        System.out.println("saveUserCredentials invoked with user name " + userName);
+//        System.out.println("saveUserCredentials invoked with user name " + userName);
+        NebulaUserInfo userInfo = userService.findByUsername(userName);
 
+        String label = "Nebula";
+        String bu = "ops@olymtech.com";
+        String otpAuthURL = MyGoogleAuthenticatorQRGenerator.getOtpAuthURL(label, bu, secretKey);
+
+        String scratchCodesString = StringUtils.join(scratchCodes.toArray(), ",");
+        GoogleTotpAuth googleTotpAuth = new GoogleTotpAuth(userInfo.getEmpId(), secretKey, otpAuthURL,scratchCodesString);
+        googleTotpAuthService.insertGoogleTotpAuth(googleTotpAuth);
     }
 }
