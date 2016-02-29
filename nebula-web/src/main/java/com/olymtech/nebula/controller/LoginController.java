@@ -105,8 +105,6 @@ public class LoginController extends BaseController {
 
         GoogleAuth googleAuth = GoogleAuthFactory.createCredentialsForUser(username);
 
-
-
         if(googleAuth != null){
             return returnCallback("Success", googleAuth);
         }else{

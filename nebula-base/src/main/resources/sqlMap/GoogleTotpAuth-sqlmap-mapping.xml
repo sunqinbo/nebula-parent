@@ -11,29 +11,29 @@
   <sql id="GoogleTotpAuth_Base_Column_List" >
     id, emp_id, g_secret, g_opt_auth_url, g_scratch_codes
   </sql>
-  <select id="Nebula-GoogleTotpAuth-Select-By-Id" resultMap="RM-GoogleTotpAuth" parameterType="java.lang.Integer" >
+  <select id="Nebula-GoogleTotpAuthDao-Select-By-Id" resultMap="RM-GoogleTotpAuth" parameterType="java.lang.Integer" >
     select 
     <include refid="GoogleTotpAuth_Base_Column_List" />
     from google_totp_auth
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="Nebula-GoogleTotpAuth-Select-By-Emp-Id" resultMap="RM-GoogleTotpAuth" parameterType="java.lang.Integer" >
+  <select id="Nebula-GoogleTotpAuthDao-Select-By-Emp-Id" resultMap="RM-GoogleTotpAuth" parameterType="java.lang.Integer" >
     select
     <include refid="GoogleTotpAuth_Base_Column_List" />
     from google_totp_auth
     where emp_id = #{empId,jdbcType=INTEGER}
   </select>
-  <delete id="Nebula-GoogleTotpAuth-Delete-By-Id" parameterType="java.lang.Integer" >
+  <delete id="Nebula-GoogleTotpAuthDao-Delete-By-Id" parameterType="java.lang.Integer" >
     delete from google_totp_auth
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="Nebula-GoogleTotpAuth-Insert" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+  <insert id="Nebula-GoogleTotpAuthDao-Insert" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
     insert into google_totp_auth (id, emp_id, g_secret, 
       g_opt_auth_url, g_scratch_codes)
     values (#{id,jdbcType=INTEGER}, #{empId,jdbcType=INTEGER}, #{gSecret,jdbcType=VARCHAR}, 
       #{gOptAuthUrl,jdbcType=VARCHAR}, #{gScratchCodes,jdbcType=VARCHAR})
   </insert>
-  <insert id="Nebula-GoogleTotpAuth-Insert-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+  <insert id="Nebula-GoogleTotpAuthDao-Insert-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
     insert into google_totp_auth
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -70,7 +70,7 @@
       </if>
     </trim>
   </insert>
-  <update id="Nebula-GoogleTotpAuth-Update-By-Id-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+  <update id="Nebula-GoogleTotpAuthDao-Update-By-Id-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
     update google_totp_auth
     <set >
       <if test="empId != null" >
@@ -88,7 +88,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="Nebula-GoogleTotpAuth-Update-By-Id" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
+  <update id="Nebula-GoogleTotpAuthDao-Update-By-Id" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
     update google_totp_auth
     set emp_id = #{empId,jdbcType=INTEGER},
       g_secret = #{gSecret,jdbcType=VARCHAR},
