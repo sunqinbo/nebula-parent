@@ -95,6 +95,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public int insertNebulaUserInfo(NebulaUserInfo nebulaUserInfo, Integer[] roleIds) {
+        nebulaUserInfo.setgIsVerify(false);
         Integer id = nebulaUserInfoDao.insert(nebulaUserInfo);
         for (Integer roleId : roleIds) {
             AclUserRole aclUserRole = new AclUserRole();

@@ -72,4 +72,20 @@ public class GoogleAuth {
     public void setScratchCodes(List<Integer> scratchCodes) {
         this.scratchCodes = scratchCodes;
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getBu() {
+        return bu;
+    }
+
+    public void setBu(String bu) {
+        this.bu = bu;
+    }
 }

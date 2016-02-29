@@ -78,7 +78,7 @@ public class LoginController extends BaseController {
         return "bindingCode";
     }
 
-    @RequestMapping(value = "/add/credentials", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/bindingCode/credentials", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object createCredentialsForUser(String username, String password){
 
@@ -114,7 +114,7 @@ public class LoginController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/update/gCodesVerifyAndBinding", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/bindingCode/gCodesVerifyAndBinding", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object gCodesVerifyAndBinding(String username, String codeFirstString, String codeSecondString){
 
