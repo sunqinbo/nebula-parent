@@ -13,6 +13,7 @@ import com.warrenstrange.googleauth.ICredentialRepository;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,10 +27,10 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource
+    @Autowired
     private IUserService userService;
 
-    @Resource
+    @Autowired
     private IGoogleTotpAuthService googleTotpAuthService;
 
 
