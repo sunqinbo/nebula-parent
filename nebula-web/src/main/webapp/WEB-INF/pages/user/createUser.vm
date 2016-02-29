@@ -137,6 +137,10 @@
                                     #end
                                 </div>
                             </div>
+                            #if($shiro.hasPermission("user:unbundling"))
+                                <div id="unbundling_div"  class="form-group" style="margin-left: 25%">
+                                </div>
+                            #end
 
                             <div class="form-group" style="margin-left: 25%">
                                 <div class="col-sm-offset-2 col-sm-10">

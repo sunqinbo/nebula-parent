@@ -4,140 +4,120 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Nebula</title>
+    <!-- Bootstrap core CSS     -->
+    <link href="/public/assets/css/bootstrap.min.css" rel="stylesheet" xmlns="http://java.sun.com/jsf/html"/>
 
-    <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/public/assets/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="/public/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/public/css/AdminLTE.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/public/plugins/iCheck/square/blue.css">
+    <!-- Animation library for notifications   -->
+    <link href="/public/assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="/public/assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="/public/assets/css/demo.css" rel="stylesheet" />
+
+
+    <!--     Fonts and icons     -->
+    <link href="/public/assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/public/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+##    <!-- Bootstrap 3.3.5 -->
+##    <link rel="stylesheet" href="/public/assets/css/bootstrap.min.css">
+##    <!-- Font Awesome -->
+##    <link rel="stylesheet" href="/public/assets/css/font-awesome.min.css">
+##    <!-- Ionicons -->
+##    <link rel="stylesheet" href="/public/css/ionicons.min.css">
+##    <!-- iCheck -->
+##    <link rel="stylesheet" href="/public/plugins/iCheck/square/blue.css">
 
     <!-- jQuery 2.1.4 -->
     <script src="/public/plugins/jQuery/jQuery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.5 -->
     <script src="/public/assets/js/bootstrap.min.js"></script>
-    <!-- iCheck -->
-    <script src="/public/plugins/iCheck/icheck.min.js"></script>
-
-##    <script>
-##        $(function () {
-##            $('input').iCheck({
-##                checkboxClass: 'icheckbox_square-blue',
-##                radioClass: 'iradio_square-blue',
-##                increaseArea: '20%' // optional
-##            });
-##        });
-##    </script>
 <style>
     .headerTip{
         width: 100%;
         height: 60px;
         background-color: #AE64E0;
+        line-height: 60px;
     }
-    .tipSize{
-        margin-bottom: 10px !important;
-        padding: 8px !important;
-    }
-    .boxControl{
-        float: left;
-        margin-left:5%;
-        margin-top:0px;
-    }
+    /*.tipSize{*/
+        /*margin-bottom: 10px !important;*/
+        /*padding: 8px !important;*/
+    /*}*/
 </style>
     <script src="/public/js/qrcode.min.js"></script>
-    <link href="/public/assets/css/animate.min.css" rel="stylesheet"/>
     <script src="/public/assets/js/bootstrap-notify.js"></script>
     <script src="/public/js/main.js"></script>
     <script src="/public/js/bindingCode.js"></script>
 </head>
-<body class="hold-transition login-page" style="background-color: #EEEEEE !important;">
-<div class="headerTip">
-    <div class="login-logo">
-        <b>发布系统Nebula</b>
-    </div><!-- /.login-logo -->
-</div>
+<body  style="background-color: #EEEEEE !important;">
+##<div class="headerTip">
+##    <div style="text-align: center;">
+##        <b style="font-size: 2em">发布系统Nebula</b>
+##    </div><!-- /.login-logo -->
+##</div>
 
-<div style="width: 90%;;margin:2% auto;">
-##    <label class="alert alert-warning">请您安装谷歌验证器：链接</label> <br/>
-##    <label class="alert alert-warning">点击生成动态验证码</label> <br/>
-##    <label class="alert alert-warning">扫描二维码</label> <br/>
-##    <label class="alert alert-warning">输入动态验证码并点击绑定</label> <br/>
-##    <div class="alert alert-warning">
-##        <button type="button" aria-hidden="true" class="close">×</button>
-##        <span>请您安装谷歌验证器：链接</span>
-##    </div>
-    <h3>启动虚拟MFA设备：</h3>
+<div style="width: 90%;margin:2% auto;">
+    <h4> <b style="font-size: 1.5em">发布系统Nebula：</b><span>启动虚拟MFA设备<span/></h4>
     <hr style="border-top:1px solid #185598;"/>
-    <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
-        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close">×</button>
-        <span data-notify="icon" class="pe-7s-bell"></span>
+    <div class=" alert alert-warning alert-with-icon" data-notify="container">
+        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
+        <span data-notify="icon" class="pe-7s-bell" style="left: 6%;top: inherit;margin-top: 0;"></span>
         <span data-notify="message">请您安装谷歌验证器，查看<a style="color: #0a6aa1" target="_blank" href="https://help.aliyun.com/document_detail/ram/ram-user-guide/mfa-install/install_mfa_software.html">Google Authenticator安装指导</a></span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
-        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close">×</button>
-        <span data-notify="icon" class="pe-7s-bell"></span>
+        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
+        <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
         <span data-notify="message">点击生成动态验证码</span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
-        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close">×</button>
-        <span data-notify="icon" class="pe-7s-bell"></span>
+        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
+        <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
         <span data-notify="message">扫描二维码</span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
-        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close">×</button>
-        <span data-notify="icon" class="pe-7s-bell"></span>
+        <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
+        <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
         <span data-notify="message">输入动态验证码并点击绑定</span>
     </div>
 </div>
-<div class="login-box boxControl">
+<div class="col-md-offset-1 col-md-3">
     <h4>步骤一：</h4>
-    <div class="login-box-body">
-        <p class="login-box-msg"></p>
+<div class="card">
+    <div class="content">
+##        <p class="login-box-msg"></p>
         <form action="" method="post" >
-            <div class="form-group has-feedback">
+            <div class="form-group">
                 <input type="text" class="form-control" required autofocus id="username" placeholder="用户名">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
-            <div class="form-group has-feedback">
+            <div class="form-group">
                 <input type="password" class="form-control" required id="password" placeholder="密码">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
-##            <div class="form-group has-feedback" style="color: red">
-##                #if($error)
-##                    $error
-##                #end
-##            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <button type="button" id="generateCode_btn" class="btn btn-primary btn-block btn-flat">生成二维码</button>
+                <div class="form-group">
+                    <button type="button" id="generateCode_btn" class="btn btn-info">生成二维码</button>
                 </div><!-- /.col -->
-            </div>
         </form>
-
-
-##        <a href="#">忘记密码</a><br>
-##        <a href="register.html" class="text-center">注册一个新的用户</a>
-
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
+</div>
 
-<div class="login-box boxControl">
+<div class="col-md-3" style="margin-left: 5.0%">
     <h4>步骤二：</h4>
-    <div class="login-box-body" style="text-align: center">
+    <div class="card">
+    <div class="content"  style="text-align: center">
         <h6>请扫描下面的二维码</h6>
         <div id="qrcode" style="margin:0 auto;width: 256px;" title=""><canvas width="256" height="256" style="display: none;"></canvas><img src="" style="display: block;"></div>
-    ##        <div style="margin:0 auto;height: 200px;width: 200px; background-color: #0a6aa1"></div>
     </div><!-- /.login-box-body -->
+            </div>
 </div><!-- /.login-box -->
 
-<div class="login-box boxControl">
+<div class="col-md-3"  style="margin-left: 5.0%">
     <h4>步骤三：</h4>
-    <div class="login-box-body">
-        <p class="login-box-msg"></p>
+    <div class="card">
+        <div class="content">
         <form class="form-horizontal" >
             <div class="form-group has-feedback" style="text-align: center">
                 <span style=" color: red">*</span><input type="text" class="form-control" style="display: inline;width: 92%;box-shadow:0.7px 0.6px 1px 0px  #b5bbc8 inset"  required id="codeFirstString" placeholder="第一个6位动态验证码">
@@ -151,11 +131,7 @@
                 </div><!-- /.col -->
             </div>
         </form>
-
-
-    ##        <a href="#">忘记密码</a><br>
-    ##        <a href="register.html" class="text-center">注册一个新的用户</a>
-
+        </div>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 </body>
