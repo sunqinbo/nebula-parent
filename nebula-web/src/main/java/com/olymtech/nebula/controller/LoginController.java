@@ -36,8 +36,12 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/login")
     public String showLoginForm(HttpServletRequest req, Model model) {
-        String exceptionClassName = req.getAttribute("shiroLoginFailure").toString();
+
+        String exceptionClassName = null;
         String error = null;
+        if(req.getAttribute("shiroLoginFailure") != null){
+            exceptionClassName = req.getAttribute("shiroLoginFailure").toString();
+        }
 
         /**
          * 这里会返回信息
@@ -150,19 +154,8 @@ public class LoginController extends BaseController {
         NebulaUserInfo userInfo = userService.findByUsername(username);
         userInfo.setgIsVerify(true);
         userService.updateByIdSelective(userInfo);
-        return returnCallback("Success", "动态验证，验证错误。");
+        return returnCallback("Success", "动态验证，验证成功。");
 
     }
 
-    @RequestMapping(value = "/unBindingCode", method = {RequestMethod.POST, RequestMethod.GET})
-    @ResponseBody
-    public Object unBingdingCode(Integer empId) {
-        if (empId != null) {
-            NebulaUserInfo nebulaUserInfo = userService.selectByEmpId(empId);
-            nebulaUserInfo.setgIsVerify(false);
-            userService.updateByIdSelective(nebulaUserInfo);
-            return returnCallback("Success", "账号解绑成功。");
-        }
-        return returnCallback("Error", "账号解绑失败,请重试。");
-    }
 }
