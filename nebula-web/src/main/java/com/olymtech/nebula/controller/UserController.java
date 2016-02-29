@@ -160,4 +160,22 @@ public class UserController extends BaseController {
         return "user/updatePassword";
     }
 
+    /**
+     * 动态验证码解除绑定
+     * @param empId
+     * @return
+     */
+    @RequiresPermissions("user:unbundling")
+    @RequestMapping(value = "/unBindingCode", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object unBingdingCode(Integer empId) {
+        if (empId != null) {
+            NebulaUserInfo nebulaUserInfo = userService.selectByEmpId(empId);
+            nebulaUserInfo.setgIsVerify(false);
+            userService.updateByIdSelective(nebulaUserInfo);
+            return returnCallback("Success", "账号解绑成功。");
+        }
+        return returnCallback("Error", "账号解绑失败,请重试。");
+    }
+
 }
