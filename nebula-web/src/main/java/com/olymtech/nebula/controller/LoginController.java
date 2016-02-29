@@ -1,10 +1,13 @@
 package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
+import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.GoogleAuth;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IUserService;
+import com.olymtech.nebula.service.action.GetPublishSvnAction;
+import com.olymtech.nebula.service.googleauth.CredentialRepositoryImpl;
 import com.olymtech.nebula.service.utils.PasswordHelper;
 import com.olymtech.nebula.web.exception.GoogleAuthAccountException;
 import org.apache.commons.lang.StringUtils;
@@ -81,6 +84,8 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/bindingCode/credentials", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object createCredentialsForUser(String username, String password){
+
+//        SpringUtils.getBean(CredentialRepositoryImpl.class);
 
         NebulaUserInfo userInfo = userService.findByUsername(username);
         if(userInfo == null){

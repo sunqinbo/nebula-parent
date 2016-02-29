@@ -5,10 +5,14 @@
 package com.olymtech.nebula.service.googleauth;
 
 import com.olymtech.nebula.core.googleauth.MyGoogleAuthenticatorQRGenerator;
+import com.olymtech.nebula.core.utils.SpringUtils;
+import com.olymtech.nebula.dao.impl.NebulaUserInfoDaoImpl;
 import com.olymtech.nebula.entity.GoogleTotpAuth;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.service.IGoogleTotpAuthService;
 import com.olymtech.nebula.service.IUserService;
+import com.olymtech.nebula.service.impl.GoogleTotpAuthServiceImpl;
+import com.olymtech.nebula.service.impl.UserServiceImpl;
 import com.warrenstrange.googleauth.ICredentialRepository;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -27,12 +31,9 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private IUserService userService;
+    private IUserService userService = SpringUtils.getBean(UserServiceImpl.class);
 
-    @Autowired
-    private IGoogleTotpAuthService googleTotpAuthService;
-
+    private IGoogleTotpAuthService googleTotpAuthService = SpringUtils.getBean(GoogleTotpAuthServiceImpl.class);
 
     /**
      * 验证code，获取key
@@ -79,4 +80,5 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
         GoogleTotpAuth googleTotpAuth = new GoogleTotpAuth(userInfo.getEmpId(), secretKey, otpAuthURL,scratchCodesString);
         googleTotpAuthService.insertGoogleTotpAuth(googleTotpAuth);
     }
+
 }
