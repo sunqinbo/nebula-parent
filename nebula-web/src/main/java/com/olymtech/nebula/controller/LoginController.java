@@ -1,14 +1,11 @@
 package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
-import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.GoogleAuth;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.entity.enums.LoginCodeError;
 import com.olymtech.nebula.service.IUserService;
-import com.olymtech.nebula.service.action.GetPublishSvnAction;
-import com.olymtech.nebula.service.googleauth.CredentialRepositoryImpl;
 import com.olymtech.nebula.service.utils.PasswordHelper;
 import com.olymtech.nebula.web.exception.GoogleAuthAccountException;
 import org.apache.commons.lang.StringUtils;
@@ -90,51 +87,51 @@ public class LoginController extends BaseController {
     }
 
     @RequestMapping(value = "/bindingCode/dynamic.htm")
-    public String bindingCode(){
+    public String bindingCode() {
         return "bindingCode";
     }
 
     @RequestMapping(value = "/bindingCode/credentials", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object createCredentialsForUser(String username, String password){
+    public Object createCredentialsForUser(String username, String password) {
 
 //        SpringUtils.getBean(CredentialRepositoryImpl.class);
 
         NebulaUserInfo userInfo = userService.findByUsername(username);
-        if(userInfo == null){
+        if (userInfo == null) {
             return returnCallback("Error", "账号不存在");
         }
 
-        if(!StringUtils.isNotEmpty(password)){
+        if (!StringUtils.isNotEmpty(password)) {
             return returnCallback("Error", "密码不能为空");
         }
 
         Boolean result = passwordHelper.verifyAccount(userInfo.getUsername(), password);
-        if(!result){
+        if (!result) {
             /** session重试次数，5次限制，需要增加 */
             //TODO
             return returnCallback("Error", "密码错误");
         }
 
         /** userInfo.gIsVerify = true : 已通过验证，不能再生成二维码 */
-        if(userInfo.getgIsVerify()){
+        if (userInfo.getgIsVerify()) {
             return returnCallback("Error", "您已经绑定身份验证器。");
         }
 
         GoogleAuth googleAuth = GoogleAuthFactory.createCredentialsForUser(username);
 
-        if(googleAuth != null){
+        if (googleAuth != null) {
             return returnCallback("Success", googleAuth);
-        }else{
+        } else {
             return returnCallback("Error", "创建二维码失败");
         }
     }
 
     @RequestMapping(value = "/bindingCode/gCodesVerifyAndBinding", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
-    public Object gCodesVerifyAndBinding(String username, String codeFirstString, String codeSecondString){
+    public Object gCodesVerifyAndBinding(String username, String codeFirstString, String codeSecondString) {
 
-        if(StringUtils.isEmpty(codeFirstString) || StringUtils.isEmpty(codeSecondString)){
+        if (StringUtils.isEmpty(codeFirstString) || StringUtils.isEmpty(codeSecondString)) {
             return returnCallback("Error", "动态验证码不能为空。");
         }
 
@@ -145,7 +142,7 @@ public class LoginController extends BaseController {
         Boolean codeSecondVerify = GoogleAuthFactory.authoriseUser(username, codeSecond);
 
         /** 验证码check */
-        if(!codeFirstVerify || !codeSecondVerify){
+        if (!codeFirstVerify || !codeSecondVerify) {
             return returnCallback("Error", "动态验证，验证错误。");
         }
 
@@ -157,4 +154,15 @@ public class LoginController extends BaseController {
 
     }
 
+    @RequestMapping(value = "/unBindingCode", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public Object unBingdingCode(Integer empId) {
+        if (empId != null) {
+            NebulaUserInfo nebulaUserInfo = userService.selectByEmpId(empId);
+            nebulaUserInfo.setgIsVerify(false);
+            userService.updateByIdSelective(nebulaUserInfo);
+            return returnCallback("Success", "账号解绑成功。");
+        }
+        return returnCallback("Error", "账号解绑失败,请重试。");
+    }
 }
