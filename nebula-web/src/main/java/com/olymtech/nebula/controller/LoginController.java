@@ -4,6 +4,7 @@ import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
 import com.olymtech.nebula.entity.Callback;
 import com.olymtech.nebula.entity.GoogleAuth;
 import com.olymtech.nebula.entity.NebulaUserInfo;
+import com.olymtech.nebula.entity.enums.LoginCodeError;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.utils.PasswordHelper;
 import com.olymtech.nebula.web.exception.GoogleAuthAccountException;
@@ -35,23 +36,35 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/login")
     public String showLoginForm(HttpServletRequest req, Model model) {
-        String exceptionClassName = (String) req.getAttribute("shiroLoginFailure");
+        String exceptionClassName = req.getAttribute("shiroLoginFailure").toString();
         String error = null;
-        if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
-            error = "该用户不存在";
-        } else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
-            error = "该用户未启用";
-        } else if (IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
-            error = "用户名/密码错误";
-        } else if (AuthenticationException.class.getName().equals(exceptionClassName)) {
-            error = "用户名/密码错误";
-        } else if (GoogleAuthAccountException.class.getName().equals(exceptionClassName)) {
-            error = "动态验证设备未绑定，请绑定动态验证码";
-        } else if (ExcessiveAttemptsException.class.getName().equals(exceptionClassName)) {
-            error = "密码尝试次数过多，锁定5分钟，请稍后尝试";
-        } else if (exceptionClassName != null) {
-            error = "其他错误：" + exceptionClassName;
+
+        /**
+         * 这里会返回信息
+         * Exception 类名称 一般由原生shiro产生
+         * LoginCodeError 枚举 一般由 com.olymtech.nebula.web.filter.TotpCodeValidateFilter 产生
+         */
+        try{
+            LoginCodeError loginCodeError = LoginCodeError.valueOf(exceptionClassName);
+            error = loginCodeError.getDescription();
+        }catch (Exception e){
+            if (UnknownAccountException.class.getName().equals(exceptionClassName)) {
+                error = LoginCodeError.LOGIN_UNKNOWN_ACCOUNT.getDescription();
+            } else if (LockedAccountException.class.getName().equals(exceptionClassName)) {
+                error = LoginCodeError.LOGIN_USER_UNENABLE.getDescription();
+            } else if (IncorrectCredentialsException.class.getName().equals(exceptionClassName)) {
+                error = LoginCodeError.LOGIN_USER_PASSWORD_ERROR.getDescription();
+            } else if (AuthenticationException.class.getName().equals(exceptionClassName)) {
+                error = LoginCodeError.LOGIN_USER_PASSWORD_ERROR.getDescription();
+            } else if (GoogleAuthAccountException.class.getName().equals(exceptionClassName)) {
+                error = LoginCodeError.TOTP_UNBINDING.getDescription();
+            } else if (ExcessiveAttemptsException.class.getName().equals(exceptionClassName)) {
+                error = LoginCodeError.LOGIN_RETRY_LIMIT.getDescription();
+            } else if (exceptionClassName != null) {
+                error = "其他错误：" + exceptionClassName;
+            }
         }
+
         model.addAttribute("error", error);
         return "login";
     }
