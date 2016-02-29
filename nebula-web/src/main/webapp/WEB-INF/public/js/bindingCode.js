@@ -9,6 +9,9 @@ $(function(){
             },
             url:"/bindingCode/credentials",
             success: function (data) {
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
+                }
                 if(data.callbackMsg=="Error") {
                     nebula.common.alert.danger(data.responseContext, 1000);
                     return;
