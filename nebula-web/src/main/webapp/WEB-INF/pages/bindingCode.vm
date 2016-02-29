@@ -70,12 +70,12 @@
 ##        <button type="button" aria-hidden="true" class="close">×</button>
 ##        <span>请您安装谷歌验证器：链接</span>
 ##    </div>
-    <h3>操作提示：</h3>
-    <hr style="border-top:2px dotted #185598;"/>
+    <h3>启动虚拟MFA设备：</h3>
+    <hr style="border-top:1px solid #185598;"/>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close">×</button>
         <span data-notify="icon" class="pe-7s-bell"></span>
-        <span data-notify="message">请您安装谷歌验证器：链接</span>
+        <span data-notify="message">请您安装谷歌验证器，查看<a style="color: #0a6aa1" target="_blank" href="https://help.aliyun.com/document_detail/ram/ram-user-guide/mfa-install/install_mfa_software.html">Google Authenticator安装指导</a></span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close">×</button>
@@ -94,6 +94,7 @@
     </div>
 </div>
 <div class="login-box boxControl">
+    <h4>步骤一：</h4>
     <div class="login-box-body">
         <p class="login-box-msg"></p>
         <form action="" method="post" >
@@ -125,33 +126,28 @@
 </div><!-- /.login-box -->
 
 <div class="login-box boxControl">
+    <h4>步骤二：</h4>
     <div class="login-box-body" style="text-align: center">
         <h6>请扫描下面的二维码</h6>
-        <div id="qrcode" title=""><canvas width="256" height="256" style="display: none;"></canvas><img src="" style="display: block;"></div>
+        <div id="qrcode" style="margin:0 auto;width: 256px;" title=""><canvas width="256" height="256" style="display: none;"></canvas><img src="" style="display: block;"></div>
     ##        <div style="margin:0 auto;height: 200px;width: 200px; background-color: #0a6aa1"></div>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
 <div class="login-box boxControl">
+    <h4>步骤三：</h4>
     <div class="login-box-body">
         <p class="login-box-msg"></p>
-        <form action="" method="post" >
-            <div class="form-group has-feedback">
-                <input type="text" class="form-control" required autofocus name="username" placeholder="用户名">
-                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        <form class="form-horizontal" >
+            <div class="form-group has-feedback" style="text-align: center">
+                <span style=" color: red">*</span><input type="text" class="form-control" style="display: inline;width: 92%;box-shadow:0.5px 0.5px 1px 0px  #b5bbc8 inset"  required autofocus name="username" placeholder="第一个6位动态验证码">
             </div>
-            <div class="form-group has-feedback">
-                <input type="password" class="form-control" required name="password" placeholder="密码">
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback" style="color: red">
-                #if($error)
-                    $error
-                #end
+            <div class="form-group has-feedback" style="text-align: center">
+                <span style="color: red">*</span><input type="password" class="form-control" style="display: inline;width: 92%;box-shadow:0.5px 0.5px 1px 0px  #b5bbc8 inset" required name="password" placeholder="第二个6位动态验证码">
             </div>
             <div class="row">
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">绑定</button>
+                    <button type="button" id="binding_btn" class="btn btn-primary btn-block btn-flat">绑定</button>
                 </div><!-- /.col -->
             </div>
         </form>

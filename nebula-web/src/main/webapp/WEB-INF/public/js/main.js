@@ -381,13 +381,14 @@ nebula.tools = {};
 nebula.tools.qrCode = {};
 
 nebula.tools.qrCode.generateQRCodesByOtpauthUrl= function (otpauthUrl,divId) {
-    var qrcodeDiv = new QRCode(otpauthUrl, divId);
-    if (!otpauthUrl.value) {
+    var qrcodeDiv = new QRCode( divId);
+    if (!otpauthUrl) {
         console.log("otpauthUrl is null");
         otpauthUrl.focus();
         return;
     }
-    qrcodeDiv.makeCode(otpauthUrl.value);
+    qrcodeDiv.makeCode(otpauthUrl);
+    //qrcodeDiv.makeCode(otpauthUrl.value);
 };
 
 nebula.tools.qrCode.generateQRCodesGetUrl = function(label,bu,key) {
