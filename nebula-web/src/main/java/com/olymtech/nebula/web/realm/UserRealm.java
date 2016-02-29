@@ -51,11 +51,6 @@ public class UserRealm extends AuthorizingRealm {
             throw new LockedAccountException(); //帐号锁定(未启用)
         }
 
-        /** 没有绑定google二次验证 */
-        if(!user.getgIsVerify()){
-            throw new GoogleAuthAccountException();
-        }
-
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getUsername(),
                 user.getPassword(),
