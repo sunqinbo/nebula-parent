@@ -138,7 +138,7 @@ $(function(){
                 data:{
                     empId: $("#empId").val(),
                 },
-                url:"/unBindingCode",
+                url:"/user/unBindingCode",
                 success: function (data) {
                     if(data.callbackMsg=="Error") {
                         nebula.common.alert.danger(data.responseContext, 1000);
