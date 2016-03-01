@@ -278,22 +278,8 @@ public class PublishController extends BaseController {
             try {
                 Integer totpCodeInt = Integer.parseInt(totpCode);
                 Boolean isCodeValid = GoogleAuthFactory.authoriseUser(userInfo.getUsername(), totpCodeInt);
-                if (isCodeValid == true) {
-                    nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PUBLISH_REAL);
-                    //创建任务队列
-                    ActionChain chain = new ActionChain();
-                    chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
-                    chain.addAction(SpringUtils.getBean(ChangeLnAction.class));
-                    chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
-
-                    try {
-                        Dispatcher dispatcher = new Dispatcher(chain, request, response);
-                        dispatcher.doDispatch(nebulaPublishEvent);
-                    } catch (Exception e) {
-                        logger.error("publishReal error:", e);
-                        return returnCallback("Error", "预发布出现错误");
-                    }
-                    return returnCallback("Success", "预发布完成");
+                if (isCodeValid == false) {
+                    return returnCallback("Error", "验证码错误");
                 }
             } catch (NumberFormatException e) {
                 return returnCallback("Error", "验证码错误");
@@ -715,14 +701,7 @@ public class PublishController extends BaseController {
         /*如果是生产发布,判断登录人的角色是否是部门主管的角色*/
         if (publishEnv.equals("product")) {
             Boolean userRoleIsExamine = userService.userRoleIsNeedRole(user, "examine");
-            if (userRoleIsExamine == true) {
-                nebulaPublishEvent.setIsApproved(true);
-                nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
-                nebulaPublishEvent.setApproveEmpId(user.getEmpId());
-                nebulaPublishEvent.setApproveDatetime(new Date());
-                publishEventService.update(nebulaPublishEvent);
-                return returnCallback("Success", "");
-            } else {
+            if (userRoleIsExamine == false) {
                 return returnCallback("Error", "审批人必须是部门主管才能审批!");
             }
         }
