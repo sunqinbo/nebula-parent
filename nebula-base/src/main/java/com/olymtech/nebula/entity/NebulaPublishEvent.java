@@ -56,7 +56,51 @@ public class NebulaPublishEvent extends BaseDO {
 
     private String endTime;
 
+    private Integer approveEmpId;
+
+    private Date approveDatetime;
+
     private List<NebulaPublishModule> publishModules;
+
+    public Date getApproveDatetime() {
+        return approveDatetime;
+    }
+
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
+    public Boolean getSuccessPublish() {
+        return isSuccessPublish;
+    }
+
+    public void setSuccessPublish(Boolean successPublish) {
+        isSuccessPublish = successPublish;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
+    }
+
+    public Boolean getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(Boolean approved) {
+        isApproved = approved;
+    }
+
+    public Integer getApproveEmpId() {
+        return approveEmpId;
+    }
+
+    public void setApproveEmpId(Integer approveEmpId) {
+        this.approveEmpId = approveEmpId;
+    }
 
     public Integer getPid() {
         return pid;

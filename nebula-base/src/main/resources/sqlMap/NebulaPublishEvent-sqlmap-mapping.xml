@@ -14,9 +14,11 @@
         <result column="publish_product_key" property="publishProductKey" jdbcType="VARCHAR" />
         <result column="publish_datetime" property="publishDatetime" jdbcType="TIMESTAMP" />
         <result column="submit_datetime" property="submitDatetime" jdbcType="TIMESTAMP" />
+        <result column="approve_datetime" property="approveDatetime" jdbcType="TIMESTAMP" />
         <result column="submit_emp_id" property="submitEmpId" jdbcType="INTEGER" />
         <result column="pid" property="pid" jdbcType="INTEGER" />
         <result column="publish_emp_id" property="publishEmpId" jdbcType="INTEGER" />
+        <result column="approve_emp_id" property="approveEmpId" jdbcType="INTEGER" />
         <result column="is_success_publish" property="isSuccessPublish" jdbcType="INTEGER" />
         <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
         <result column="publish_status" property="publishStatus" />
@@ -68,9 +70,11 @@
         publish_product_key,
         publish_datetime,
         submit_datetime,
+        approve_datetime,
         submit_emp_id,
         pid,
         publish_emp_id,
+        approve_emp_id,
         is_success_publish,
         is_delete,
         publish_status,
@@ -89,9 +93,11 @@
         publish_product_key,
         publish_datetime,
         submit_datetime,
+        approve_datetime,
         submit_emp_id,
         pid,
         publish_emp_id,
+        approve_emp_id,
         is_success_publish,
         is_delete,
         publish_status,
@@ -240,9 +246,11 @@
         publish_product_key,
         publish_datetime,
         submit_datetime,
+        approve_datetime,
         submit_emp_id,
         pid,
         publish_emp_id,
+        approve_emp_id,
         is_success_publish,
         is_delete,
         publish_status,
@@ -259,9 +267,11 @@
         #{publishProductKey,jdbcType=VARCHAR},
         #{publishDatetime,jdbcType=TIMESTAMP},
         #{submitDatetime,jdbcType=TIMESTAMP},
+        #{approveDatetime,jdbcType=TIMESTAMP},
         #{submitEmpId,jdbcType=INTEGER},
         #{pid,jdbcType=INTEGER},
         #{publishEmpId,jdbcType=INTEGER},
+        #{approveEmpId,jdbcType=INTEGER},
         #{isSuccessPublish,jdbcType=INTEGER},
         #{isDelete,jdbcType=INTEGER},
         #{publishStatus,jdbcType=VARCHAR},
@@ -309,6 +319,9 @@
             <if test="submitDatetime != null" >
                 submit_datetime,
             </if>
+            <if test="approveDatetime != null" >
+                approve_datetime,
+            </if>
             <if test="submitEmpId != null" >
                 submit_emp_id,
             </if>
@@ -317,6 +330,9 @@
             </if>
             <if test="publishEmpId != null" >
                 publish_emp_id,
+            </if>
+            <if test="approveEmpId != null" >
+                approve_emp_id,
             </if>
             <if test="isSuccessPublish != null" >
                 is_success_publish,
@@ -368,6 +384,9 @@
             <if test="submitDatetime != null" >
                 #{submitDatetime,jdbcType=TIMESTAMP},
             </if>
+            <if test="approveDatetime != null" >
+                #{approveDatetime,jdbcType=TIMESTAMP},
+            </if>
             <if test="submitEmpId != null" >
                 #{submitEmpId,jdbcType=INTEGER},
             </if>
@@ -375,6 +394,9 @@
                 #{pid,jdbcType=INTEGER},
             </if>
             <if test="publishEmpId != null" >
+                #{publishEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="approveEmpId != null" >
                 #{publishEmpId,jdbcType=INTEGER},
             </if>
             <if test="isSuccessPublish != null" >
@@ -427,6 +449,9 @@
             <if test="submitDatetime != null" >
                 submit_datetime = #{submitDatetime,jdbcType=TIMESTAMP},
             </if>
+            <if test="approveDatetime != null" >
+                approve_datetime = #{approveDatetime,jdbcType=TIMESTAMP},
+            </if>
             <if test="submitEmpId != null" >
                 submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
             </if>
@@ -435,6 +460,9 @@
             </if>
             <if test="publishEmpId != null" >
                 publish_emp_id = #{publishEmpId,jdbcType=INTEGER},
+            </if>
+            <if test="approveEmpId != null" >
+                approve_emp_id = #{approveEmpId,jdbcType=INTEGER},
             </if>
             <if test="isSuccessPublish != null" >
                 is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
@@ -464,9 +492,11 @@
         publish_product_key = #{publishProductKey,jdbcType=VARCHAR},
         publish_datetime = #{publishDatetime,jdbcType=TIMESTAMP},
         submit_datetime = #{submitDatetime,jdbcType=TIMESTAMP},
+        approve_datetime = #{approveDatetime,jdbcType=TIMESTAMP},
         submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
         pid = #{pid,jdbcType=INTEGER},
         publish_emp_id = #{publishEmpId,jdbcType=INTEGER},
+        approve_emp_id = #{approveEmpId,jdbcType=INTEGER},
         is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
         is_delete = #{isDelete,jdbcType=INTEGER},
         publish_status = #{publishStatus,jdbcType=VARCHAR},

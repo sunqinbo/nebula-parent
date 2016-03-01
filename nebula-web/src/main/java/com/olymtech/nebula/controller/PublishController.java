@@ -671,6 +671,9 @@ public class PublishController extends BaseController {
         NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsApproved(true);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+        NebulaUserInfo user = getLoginUser();
+        nebulaPublishEvent.setApproveEmpId(user.getEmpId());
+        nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
     }
