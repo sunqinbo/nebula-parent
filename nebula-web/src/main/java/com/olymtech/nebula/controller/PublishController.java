@@ -118,6 +118,14 @@ public class PublishController extends BaseController {
     }
 
     @RequiresPermissions("publishevent:page")
+    @RequestMapping(value = "/approveList.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public String publishApproveList(Model model) throws Exception {
+        List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
+        model.addAttribute("productTrees", productTrees);
+        return "event/publishApproveList";
+    }
+
+    @RequiresPermissions("publishevent:page")
     @RequestMapping(value = "/process.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishProcess(HttpServletRequest request, Model model) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
