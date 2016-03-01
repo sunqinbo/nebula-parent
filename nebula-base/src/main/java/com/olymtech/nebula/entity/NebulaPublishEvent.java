@@ -58,6 +58,16 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Integer approveEmpId;
 
+    private NebulaUserInfo approveUser;
+
+    public NebulaUserInfo getApproveUser() {
+        return approveUser;
+    }
+
+    public void setApproveUser(NebulaUserInfo approveUser) {
+        this.approveUser = approveUser;
+    }
+
     private Date approveDatetime;
 
     private List<NebulaPublishModule> publishModules;

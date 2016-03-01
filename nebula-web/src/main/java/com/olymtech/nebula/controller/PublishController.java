@@ -133,11 +133,15 @@ public class PublishController extends BaseController {
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(id);
         Integer submitEmpId = nebulaPublishEvent.getSubmitEmpId();
         Integer publishEmpId = nebulaPublishEvent.getPublishEmpId();
+        Integer approveEmpId = nebulaPublishEvent.getApproveEmpId();
         if (submitEmpId != null) {
             nebulaPublishEvent.setSubmitUser(userService.selectByEmpId(submitEmpId));
         }
         if (publishEmpId != null) {
             nebulaPublishEvent.setPublishUser(userService.selectByEmpId(publishEmpId));
+        }
+        if (approveEmpId != null) {
+            nebulaPublishEvent.setApproveUser(userService.selectByEmpId(approveEmpId));
         }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
         model.addAttribute("Modules", publishModules);
