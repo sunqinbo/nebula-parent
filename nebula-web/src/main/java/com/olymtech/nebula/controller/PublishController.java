@@ -9,6 +9,7 @@ import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
+import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
 import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
@@ -265,11 +266,39 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Callback publishReal(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String idString = request.getParameter("id");
+        String totpCode = request.getParameter("totpCode");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "id is null");
         }
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+        /*如果是生产发布,需要做验证*/
+        if (nebulaPublishEvent.getPublishEnv().equals("product")) {
+            NebulaUserInfo userInfo = getLoginUser();
+            try {
+                Integer totpCodeInt = Integer.parseInt(totpCode);
+                Boolean isCodeValid = GoogleAuthFactory.authoriseUser(userInfo.getUsername(), totpCodeInt);
+                if (isCodeValid == true) {
+                    nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PUBLISH_REAL);
+                    //创建任务队列
+                    ActionChain chain = new ActionChain();
+                    chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
+                    chain.addAction(SpringUtils.getBean(ChangeLnAction.class));
+                    chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+
+                    try {
+                        Dispatcher dispatcher = new Dispatcher(chain, request, response);
+                        dispatcher.doDispatch(nebulaPublishEvent);
+                    } catch (Exception e) {
+                        logger.error("publishReal error:", e);
+                        return returnCallback("Error", "预发布出现错误");
+                    }
+                    return returnCallback("Success", "预发布完成");
+                }
+            } catch (NumberFormatException e) {
+                return returnCallback("Error", "验证码错误");
+            }
+        }
         nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PUBLISH_REAL);
         //创建任务队列
         ActionChain chain = new ActionChain();
@@ -681,9 +710,24 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Object approvalPublish(Integer eventId) throws Exception {
         NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaUserInfo user = getLoginUser();
+        String publishEnv = nebulaPublishEvent.getPublishEnv();
+        /*如果是生产发布,判断登录人的角色是否是部门主管的角色*/
+        if (publishEnv.equals("product")) {
+            Boolean userRoleIsExamine = userService.userRoleIsNeedRole(user, "examine");
+            if (userRoleIsExamine == true) {
+                nebulaPublishEvent.setIsApproved(true);
+                nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+                nebulaPublishEvent.setApproveEmpId(user.getEmpId());
+                nebulaPublishEvent.setApproveDatetime(new Date());
+                publishEventService.update(nebulaPublishEvent);
+                return returnCallback("Success", "");
+            } else {
+                return returnCallback("Error", "审批人必须是部门主管才能审批!");
+            }
+        }
         nebulaPublishEvent.setIsApproved(true);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
-        NebulaUserInfo user = getLoginUser();
         nebulaPublishEvent.setApproveEmpId(user.getEmpId());
         nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
@@ -851,6 +895,26 @@ public class PublishController extends BaseController {
     public Object getLastPublishId(Integer eventId){
         int lastEventId=publishEventService.getLastPublishId(eventId);
         return returnCallback("Success", lastEventId);
+    }
+
+    /**
+     * 判断验证码是否正确
+     */
+    @RequestMapping(value = "isTotpCodeValid", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object isTotpCodeValid(String code) {
+        try {
+            Integer codeInt = Integer.parseInt(code);
+            NebulaUserInfo user = getLoginUser();
+            Boolean isCodeValid = GoogleAuthFactory.authoriseUser(user.getUsername(), codeInt);
+            if (isCodeValid == true) {
+                return returnCallback("Success", "验证码正确有效.");
+            } else {
+                return returnCallback("Error", "验证码错误.");
+            }
+        } catch (NumberFormatException e) {
+            return returnCallback("Error", "验证码错误.");
+        }
     }
 
 }

@@ -42,4 +42,7 @@ public interface IUserService {
     void updateMyPassword(NebulaUserInfo userInfo);
 
     void updateByIdSelective(NebulaUserInfo nebulaUserInfo);
+
+    /*判断登录人角色是否是所需角色*/
+    Boolean userRoleIsNeedRole(NebulaUserInfo user, String roleName);
 }
