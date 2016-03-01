@@ -890,7 +890,7 @@ public class PublishController extends BaseController {
     /**
      * 获取发布事件上一阶段的id
      */
-    @RequestMapping(value = "getLastPublishId",method = {RequestMethod.POST})
+    @RequestMapping(value = "/getLastPublishId",method = {RequestMethod.POST})
     @ResponseBody
     public Object getLastPublishId(Integer eventId){
         int lastEventId=publishEventService.getLastPublishId(eventId);
@@ -900,7 +900,7 @@ public class PublishController extends BaseController {
     /**
      * 判断验证码是否正确
      */
-    @RequestMapping(value = "isTotpCodeValid", method = {RequestMethod.POST})
+    @RequestMapping(value = "/isTotpCodeValid", method = {RequestMethod.POST})
     @ResponseBody
     public Object isTotpCodeValid(String code) {
         try {
