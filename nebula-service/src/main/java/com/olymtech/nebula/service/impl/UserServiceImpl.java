@@ -6,15 +6,13 @@ package com.olymtech.nebula.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.service.utils.PasswordHelper;
 import com.olymtech.nebula.dao.IAclRoleDao;
 import com.olymtech.nebula.dao.IAclRolePermissionDao;
 import com.olymtech.nebula.dao.IAclUserRoleDao;
 import com.olymtech.nebula.dao.INebulaUserInfoDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IUserService;
-//import org.apache.shiro.cache.Cache;
-//import org.apache.shiro.cache.CacheManager;
+import com.olymtech.nebula.service.utils.PasswordHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+//import org.apache.shiro.cache.Cache;
+//import org.apache.shiro.cache.CacheManager;
 //import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -186,5 +187,17 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void updateByIdSelective(NebulaUserInfo nebulaUserInfo) {
         nebulaUserInfoDao.updateByIdSelective(nebulaUserInfo);
+    }
+
+    /*判断登录人角色是否是所需角色*/
+    @Override
+    public Boolean userRoleIsNeedRole(NebulaUserInfo user, String roleName) {
+        List<AclUserRole> userRoles = aclUserRoleDao.selectByEmpId(user.getEmpId());
+        for (AclUserRole aclUserRole : userRoles) {
+            if (aclUserRole.getAclRole().getRoleName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
