@@ -100,6 +100,9 @@ $(function(){
                 }
                 else
                     $("#unenableRadio").attr("checked", true);
+                if(data["gIsVerify"]){
+                    $("#unbundling_div").append(" <label for='password' class='col-sm-2 control-label'>动态验证码</label> <div class='col-sm-10' style='width: 300px;'> <button type='button' id='unbundling_btn' class='btn btn-warning'>解绑</button> </div>")
+                }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $.notify({
@@ -127,6 +130,31 @@ $(function(){
             btnClick(false);
         }
     });
+    $("#unbundling_btn").click(function () {
+        var ms = confirm("确认解绑么？");
+        if (ms == true) {
+            $.ajax({
+                type:"POST",
+                data:{
+                    empId: $("#empId").val(),
+                },
+                url:"/user/unBindingCode",
+                success: function (data) {
+                    if(data.callbackMsg=="Error") {
+                        nebula.common.alert.danger(data.responseContext, 1000);
+                        return;
+                    }
+                    nebula.common.alert.success(data.responseContext, 1000);
+                    setTimeout(function () {
+                        window.location.href='/user/list.htm';
+                    }, 1000);
+                },
+                error: function (errorThrown) {
+                    nebula.common.alert.danger("很抱歉解除动态验证码绑定失败，原因"+ errorThrown, 1000);
+                }
+            });
+        }
+    })
 })
 
 //角色信息显示select2

@@ -17,6 +17,10 @@ $(function(){
                     return;
                 }
                 nebula.common.alert.success("二维码生成成功", 1000);
+                $("#username").attr('disabled', true);
+                $("#password").attr('disabled', true);
+                $("#generateCode_btn").hide();
+                $("#binding_btn").show();
                 var googleAuth=data.responseContext;
                 var url=nebula.tools.qrCode.generateQRCodesGetUrl(googleAuth.label,googleAuth.bu,googleAuth.secret);
                 nebula.tools.qrCode.generateQRCodesByOtpauthUrl(url,"qrcode");
@@ -37,14 +41,17 @@ $(function(){
             },
             url:"/bindingCode/gCodesVerifyAndBinding",
             success: function (data) {
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
+                }
                 if(data.callbackMsg=="Error") {
                     nebula.common.alert.danger(data.responseContext, 1000);
                     return;
                 }
                 nebula.common.alert.success(data.responseContext, 1000);
-                var googleAuth=data.responseContext;
-                var url=nebula.tools.qrCode.generateQRCodesGetUrl(googleAuth.label,googleAuth.bu,googleAuth.secret);
-                nebula.tools.qrCode.generateQRCodesByOtpauthUrl(url,"qrcode");
+                setTimeout(function () {
+                    window.location.href='/login';
+                }, 1000);
             },
             error: function (errorThrown) {
                 nebula.common.alert.danger("很抱歉绑定动态验证码失败，原因"+ errorThrown, 1000);

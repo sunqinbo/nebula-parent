@@ -50,6 +50,10 @@ function getLtb(pageNum){
                 if(data["list"][i]["isEnable"]==1){
                     usernameColor="<td style='color: green'>";
                 }
+                var gIsVerify="否";
+                if(data["list"][i]["gIsVerify"]){
+                    gIsVerify="是";
+                }
                 tbString=tbString+"<tr><td hidden>"+data["list"][i]["id"]+"</td>" +
                     "<td>"+data["list"][i]["empId"]+
                     usernameColor+ data["list"][i]["username"]+
@@ -64,6 +68,7 @@ function getLtb(pageNum){
                     //"</td><td>"+data["list"][i]["empId"]+
                     "</td><td>"+data["list"][i]["supervisorEmpId"]+
                     "</td><td>"+rolelist+
+                    "</td><td>"+gIsVerify+
                     //"</td><td>"+isEnable+
                     "</td><td><div id='listBtn' class='btn-group'>"+edit_btn+delete_btn+"</div></td>";
             }

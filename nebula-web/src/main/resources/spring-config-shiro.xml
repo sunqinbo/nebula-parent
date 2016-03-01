@@ -98,7 +98,7 @@
     </bean>
 
     <!-- 基于Form表单的身份验证过滤器 -->
-    <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+    <bean id="formAuthenticationFilter" class="com.olymtech.nebula.web.filter.CustomFormAuthenticationFilter">
         <property name="usernameParam" value="username"/>
         <property name="passwordParam" value="password"/>
         <property name="rememberMeParam" value="rememberMe"/>
@@ -108,7 +108,16 @@
         <!-- (默认是“/”) -->
         <property name="successUrl" value="/index.htm"/>
     </bean>
-    
+
+    <!-- totp 验证码过滤器 -->
+    <bean id="totpCodeValidateFilter"
+          class="com.olymtech.nebula.web.filter.TotpCodeValidateFilter">
+        <property name="totpCodeEnable" value="true"/>
+        <property name="totpCodeParam" value="totpCode"/>
+        <property name="usernameParam" value="username"/>
+        <property name="failureKeyAttribute" value="shiroLoginFailure"/>
+    </bean>
+
     <bean id="kickoutSessionControlFilter" class="com.olymtech.nebula.web.filter.KickoutSessionControlFilter">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="sessionManager" ref="sessionManager"/>
@@ -131,12 +140,13 @@
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
                 <entry key="sysUser" value-ref="sysUserFilter"/>
                 <entry key="kickout" value-ref="kickoutSessionControlFilter"/>
+                <entry key="totpCodeValidate" value-ref="totpCodeValidateFilter"/>
                 <!-- <entry key="ssl" value-ref="sslFilter"/> -->
             </util:map>
         </property>
         <property name="filterChainDefinitions">
             <value>
-                /login = authc
+                /login = totpCodeValidate,authc
                 /logout=logout
                 /public/**=anon
                 /favicon.ico=anon

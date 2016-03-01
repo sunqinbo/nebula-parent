@@ -1,7 +1,6 @@
 package com.olymtech.nebula.entity;
 
 public class GoogleTotpAuth extends BaseDO {
-    private Integer id;
 
     private Integer empId;
 
@@ -23,14 +22,6 @@ public class GoogleTotpAuth extends BaseDO {
         this.gSecret = gSecret;
         this.gOptAuthUrl = gOptAuthUrl;
         this.gScratchCodes = gScratchCodes;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getEmpId() {
