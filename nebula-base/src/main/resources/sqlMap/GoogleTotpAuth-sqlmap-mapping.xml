@@ -32,6 +32,9 @@
       g_opt_auth_url, g_scratch_codes)
     values (#{id,jdbcType=INTEGER}, #{empId,jdbcType=INTEGER}, #{gSecret,jdbcType=VARCHAR}, 
       #{gOptAuthUrl,jdbcType=VARCHAR}, #{gScratchCodes,jdbcType=VARCHAR})
+    <selectKey resultType="java.lang.Integer" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
   </insert>
   <insert id="Nebula-GoogleTotpAuthDao-Insert-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
     insert into google_totp_auth
@@ -69,6 +72,9 @@
         #{gScratchCodes,jdbcType=VARCHAR},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Integer" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
   </insert>
   <update id="Nebula-GoogleTotpAuthDao-Update-By-Id-Selective" parameterType="com.olymtech.nebula.entity.GoogleTotpAuth" >
     update google_totp_auth
