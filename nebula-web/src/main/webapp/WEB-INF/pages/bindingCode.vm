@@ -64,22 +64,22 @@
     <div class=" alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
         <span data-notify="icon" class="pe-7s-bell" style="left: 6%;top: inherit;margin-top: 0;"></span>
-        <span data-notify="message">请您安装谷歌验证器，查看<a style="color: #0a6aa1" target="_blank" href="https://help.aliyun.com/document_detail/ram/ram-user-guide/mfa-install/install_mfa_software.html">Google Authenticator安装指导</a></span>
+        <span data-notify="message">1.您必须先在智能设备上安装一个MFA应用程序(如:Google Authenticator)，才可继续进行操作。查看&nbsp;<a style="color: #0a6aa1" target="_blank" href="https://help.aliyun.com/document_detail/ram/ram-user-guide/mfa-install/install_mfa_software.html">Google Authenticator安装指导</a>。</span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
         <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
-        <span data-notify="message">点击生成动态验证码</span>
+        <span data-notify="message">2.输入您的账号和密码，点击“生成二维码”。</span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
         <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
-        <span data-notify="message">扫描二维码</span>
+        <span data-notify="message">3.使用Google Authenticator扫描二维码，将动态密码绑定到您的手机。</span>
     </div>
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
         <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
-        <span data-notify="message">输入动态验证码并点击绑定</span>
+        <span data-notify="message">4.动态验证码每30s刷新一次，请您输入两个动态验证码，点击“绑定”。（注：输入第一个动态验证码后，请您等待动态验证码更新，更新后输入第二个验证码）</span>
     </div>
 </div>
 <div class="col-md-offset-1 col-md-3">
