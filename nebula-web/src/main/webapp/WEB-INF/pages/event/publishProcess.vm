@@ -158,8 +158,8 @@
                                 </tr>
                                     <tr>
                                         <td>审批</td>
-                                        <td>$!{Event.submitUser.nickname}</td>
-                                        <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</td>
+                                        <td>$!{Event.approveUser.nickname}</td>
+                                        <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.approveDatetime)</td>
                                     </tr>
                                     <tr>
                                         <td>发布</td>
