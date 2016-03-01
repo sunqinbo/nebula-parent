@@ -54,6 +54,16 @@ public class CredentialRepositoryImplTest {
         scratchCodes.add(345);
         String scratchCodesString = StringUtils.join(scratchCodes.toArray(), ",");
         System.out.println(scratchCodesString);
+
+        String a = "tRuE";
+        Boolean b = Boolean.valueOf(a);
+        if(b){
+            System.out.println("true...");
+        }else{
+            System.out.println("false...");
+        }
+
+
     }
 
 }

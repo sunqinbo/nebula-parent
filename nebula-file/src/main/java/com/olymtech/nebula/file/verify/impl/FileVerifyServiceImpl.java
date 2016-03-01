@@ -149,7 +149,7 @@ public class FileVerifyServiceImpl implements IFileVerifyService {
                 sb.append(line).append("\n");
             }
             String result = sb.toString();
-            map = DataConvert.fileJsonStringToList(result);
+            map = DataConvert.jsonStringToList(result);
 
         } catch (Exception e) {
             logger.error("checkFilesMd5ByDir error:",e);

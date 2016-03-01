@@ -163,7 +163,7 @@ public class PublishWarAction extends AbstractAction {
             Map<String,Map<String,String>> masterFileMap = new HashMap<>();
             for (Map.Entry<String, Object> entry : masterResults.entrySet()) {
                 String jsonString = entry.getValue().toString();
-                Map<String,String> everyHost = DataConvert.fileJsonStringToList(jsonString);
+                Map<String,String> everyHost = DataConvert.jsonStringToList(jsonString);
                 everyHost = DataConvert.fileMapWithoutModuleKey(everyHost,masterDir);
 
                 if (everyHost.size() == 0) {
@@ -176,7 +176,7 @@ public class PublishWarAction extends AbstractAction {
             if (masterFileMap.size() != targets.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
-                        PublishAction.COPY_PUBLISH_OLD_WAR,
+                        PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
                         "校验文件时，获取'master目录'数据异常。成功数：" + masterFileMap.size() + ",  目标成功数:" + targets.size());
@@ -189,17 +189,17 @@ public class PublishWarAction extends AbstractAction {
             for (Map.Entry<String, Object> entry : minionResults.entrySet()) {
                 NebulaPublishHost nebulaPublishHost = publishHosts.get(i++);
                 nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
-                nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_WAR);
+                nebulaPublishHost.setActionName(PublishAction.PUBLISH_NEW_WAR);
                 String jsonString = entry.getValue().toString();
-                Map<String,String> everyHost = DataConvert.fileJsonStringToList(jsonString);
+                Map<String,String> everyHost = DataConvert.jsonStringToList(jsonString);
                 everyHost = DataConvert.fileMapWithoutModuleKey(everyHost,minionDir);
 
                 if (everyHost.size() == 0) {
-                    nebulaPublishHost.setActionResult("校验文件时，解析脚本数据失败。脚本返回数据："+jsonString);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验minion文件时，解析脚本数据失败。脚本返回数据："+jsonString);
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
-                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验minion文件，解析脚本数据成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     minionFileMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);
@@ -209,7 +209,7 @@ public class PublishWarAction extends AbstractAction {
             if (minionFileMap.size() != targets.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
-                        PublishAction.COPY_PUBLISH_OLD_WAR,
+                        PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
                         "校验文件时，获取'minion目录'数据异常。成功数：" + minionFileMap.size() + ",  目标成功数:" + targets.size());
@@ -228,7 +228,7 @@ public class PublishWarAction extends AbstractAction {
                     if( !masterMd5.equals(minionMd5) ){
                         publishScheduleService.logScheduleByAction(
                                 event.getId(),
-                                PublishAction.COPY_PUBLISH_OLD_WAR,
+                                PublishAction.PUBLISH_NEW_WAR,
                                 event.getPublishActionGroup(),
                                 false,
                                 "校验文件时，文件拷贝'"+filename+"'md5异常。主机ip：" + ip + " master文件md5：" + masterMd5 + ",  minion文件md5:" + minionMd5);

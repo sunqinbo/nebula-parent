@@ -64,6 +64,8 @@ public interface ISaltStackService {
 
     <T> ResultInfoSet checkFilesMd5ByDir(List<String> targets, String dir, String suffix) throws SaltStackException;
 
+    <T> ResultInfoSet checkTomcat(List<String> targets) throws SaltStackException;
+
     /**
      * 创建文件夹
      *
