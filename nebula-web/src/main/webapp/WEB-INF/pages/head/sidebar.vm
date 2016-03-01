@@ -26,15 +26,15 @@
                     </a>
                 </li>
             #end
-            #if($shiro.hasPermission("publishevent:page"))
-                <li>
-                    <a href="/publish/list.htm">
-                        <i class="pe-7s-user"></i>
-
-                        <p>我的发布</p>
-                    </a>
-                </li>
-            #end
+##            #if($shiro.hasPermission("publishevent:page"))
+##                <li>
+##                    <a href="/publish/list.htm">
+##                        <i class="pe-7s-user"></i>
+##
+##                        <p>我的发布</p>
+##                    </a>
+##                </li>
+##            #end
             #if($shiro.hasPermission("publishevent:page"))
                 <li>
                     <a href="/publish/list.htm">
@@ -44,14 +44,23 @@
                     </a>
                 </li>
             #end
+            #if($shiro.hasPermission("publishevent:page"))
+                <li>
+                    <a href="/publish/approveList.htm">
+                        <i class="pe-7s-hammer"></i>
 
-            <li>
-                <a href="#">
-                    <i class="pe-7s-config"></i>
+                        <p>审批事件</p>
+                    </a>
+                </li>
+            #end
 
-                    <p>发布配置</p>
-                </a>
-            </li>
+##            <li>
+##                <a href="#">
+##                    <i class="pe-7s-config"></i>
+##
+##                    <p>发布配置</p>
+##                </a>
+##            </li>
             <li>
                 <a href="#">
                     <i class="pe-7s-tools"></i>
@@ -67,7 +76,7 @@
                     <a href="/user/list.htm">
                         <i class="pe-7s-users"></i>
 
-                        <p>用户</p>
+                        <p>用户管理</p>
                     </a>
                 </li>
             #end
@@ -76,7 +85,7 @@
                     <a href="/role/list.htm">
                         <i class="pe-7s-id"></i>
 
-                        <p>角色</p>
+                        <p>角色管理</p>
                     </a>
                 </li>
             #end
@@ -86,7 +95,7 @@
                     <a href="/permission/list.htm">
                         <i class="pe-7s-network"></i>
 
-                        <p>权限</p>
+                        <p>权限管理</p>
                     </a>
                 </li>
             #end

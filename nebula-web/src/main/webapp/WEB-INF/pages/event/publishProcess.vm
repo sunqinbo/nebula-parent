@@ -107,36 +107,68 @@
                             ##    <label>发布分批：</label>
                             ##    <label>是/否</label>
                             ##  </td>
-                                <td>
-                                    <label>发布人：</label>
-                                    <label>$!{Event.publishUser.nickname}</label>
-                                </td>
+##                                <td>
+##                                    <label>发布人：</label>
+##                                    <label>$!{Event.publishUser.nickname}</label>
+##                                </td>
                                 <td>
                                     <label>发布进度：</label>
                                     <label></label>
-                                </td>
-                                <td>
-                                    <label>发布时间：</label>
-                                    <label id="publishDatetime"> $!date.format(
-                                        'yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label>提交人：</label>
-                                    <label>$!{Event.submitUser.nickname}</label>
-                                </td>
-                                <td>
-                                    <label>提交时间：</label>
-                                    <label>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</label>
                                 </td>
                                 <td colspan="2">
                                     <label>提交SVN地址：</label>
                                     <label style="text-transform: none;">$!{Event.publishSvn}</label>
                                 </td>
+##                                <td>
+##                                    <label>发布时间：</label>
+##                                    <label id="publishDatetime"> $!date.format(
+##                                        'yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
+##                                </td>
                             </tr>
+##                            <tr>
+##                                <td>
+##                                    <label>提交人：</label>
+##                                    <label>$!{Event.submitUser.nickname}</label>
+##                                </td>
+##                                <td>
+##                                    <label>提交时间：</label>
+##                                    <label>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</label>
+##                                </td>
+##                                <td colspan="2">
+##                                    <label>提交SVN地址：</label>
+##                                    <label style="text-transform: none;">$!{Event.publishSvn}</label>
+##                                </td>
+##                            </tr>
                             </tbody>
                         </table>
+                        <div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>操作</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                </tr>
+                                </thead>
+                                <tbody id="moduleAndApps">
+                                <tr>
+                                    <td>提交</td>
+                                    <td>$!{Event.submitUser.nickname}</td>
+                                    <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</td>
+                                </tr>
+                                    <tr>
+                                        <td>审批</td>
+                                        <td>$!{Event.submitUser.nickname}</td>
+                                        <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>发布</td>
+                                        <td>$!{Event.publishUser.nickname}</td>
+                                        <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 #if(${Event.isApproved})

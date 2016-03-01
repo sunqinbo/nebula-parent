@@ -118,6 +118,14 @@ public class PublishController extends BaseController {
     }
 
     @RequiresPermissions("publishevent:page")
+    @RequestMapping(value = "/approveList.htm", method = {RequestMethod.POST, RequestMethod.GET})
+    public String publishApproveList(Model model) throws Exception {
+        List<ProductTree> productTrees = analyzeArsenalApiService.getProductTreeListByPid(2);
+        model.addAttribute("productTrees", productTrees);
+        return "event/publishApproveList";
+    }
+
+    @RequiresPermissions("publishevent:page")
     @RequestMapping(value = "/process.htm", method = {RequestMethod.POST, RequestMethod.GET})
     public String publishProcess(HttpServletRequest request, Model model) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));//发布事件的ID；
@@ -125,11 +133,15 @@ public class PublishController extends BaseController {
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(id);
         Integer submitEmpId = nebulaPublishEvent.getSubmitEmpId();
         Integer publishEmpId = nebulaPublishEvent.getPublishEmpId();
+        Integer approveEmpId = nebulaPublishEvent.getApproveEmpId();
         if (submitEmpId != null) {
             nebulaPublishEvent.setSubmitUser(userService.selectByEmpId(submitEmpId));
         }
         if (publishEmpId != null) {
             nebulaPublishEvent.setPublishUser(userService.selectByEmpId(publishEmpId));
+        }
+        if (approveEmpId != null) {
+            nebulaPublishEvent.setApproveUser(userService.selectByEmpId(approveEmpId));
         }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
         model.addAttribute("Modules", publishModules);
@@ -671,6 +683,9 @@ public class PublishController extends BaseController {
         NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsApproved(true);
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+        NebulaUserInfo user = getLoginUser();
+        nebulaPublishEvent.setApproveEmpId(user.getEmpId());
+        nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
     }
