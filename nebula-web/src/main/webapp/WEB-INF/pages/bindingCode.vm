@@ -79,7 +79,7 @@
     <div class="tipSize alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>
         <span data-notify="icon" class="pe-7s-bell"  style="left: 6%;top: inherit;margin-top: 0;"></span>
-        <span data-notify="message">4.动态验证码每30s刷新一次，请您输入两个动态验证码，点击“绑定”。（注：输入第一个动态验证码后，请您等待动态验证码更新，更新后输入第二个验证码）</span>
+        <span data-notify="message">4.动态验证码每30s刷新一次，请您输入连续的两个动态验证码，点击“绑定”。（注：输入第一个动态验证码后，请您等待动态验证码更新，更新后输入第二个验证码）</span>
     </div>
 </div>
 <div class="col-md-offset-1 col-md-3">

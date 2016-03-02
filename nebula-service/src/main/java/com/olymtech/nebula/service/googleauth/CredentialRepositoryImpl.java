@@ -73,7 +73,7 @@ public class CredentialRepositoryImpl implements ICredentialRepository {
         NebulaUserInfo userInfo = userService.findByUsername(userName);
 
         String label = "Nebula";
-        String bu = "ops@olymtech.com";
+        String bu = userName+"@olymtech.com";
         String otpAuthURL = MyGoogleAuthenticatorQRGenerator.getOtpAuthURL(label, bu, secretKey);
 
         String scratchCodesString = StringUtils.join(scratchCodes.toArray(), ",");
