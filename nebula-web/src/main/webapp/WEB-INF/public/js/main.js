@@ -277,7 +277,7 @@ nebula.publish.process.publishReal = function(){
     $.ajax({
         url:"/publish/publishReal",
         type:"post",
-        data:{"id":id},
+        data:{"id":id,"totpCode": $("#code_momdal").val()},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 nebula.common.alert.info("正式发布完成",2000);

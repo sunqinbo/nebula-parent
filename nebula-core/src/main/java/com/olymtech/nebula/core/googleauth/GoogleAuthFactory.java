@@ -38,7 +38,7 @@ public class GoogleAuthFactory {
         final List<Integer> scratchCodes = key.getScratchCodes();
 
         String label = "Nebula";
-        String bu = "ops@olymtech.com";
+        String bu = userName+"@olymtech.com";
 
         String otpAuthURL = GoogleAuthenticatorQRGenerator.getOtpAuthURL(label, bu, key);
 
