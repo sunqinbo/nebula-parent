@@ -641,9 +641,9 @@ public class PublishController extends BaseController {
         //获取机器信息
         if (eventId != null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
-            NebulaPublishEvent nebulaPublishEvent=publishEventService.selectById(eventId);
-            if(PublishStatus.PUBLISHED==nebulaPublishEvent.getPublishStatus()||PublishStatus.ROLLBACK==nebulaPublishEvent.getPublishStatus()||PublishStatus.CANCEL==nebulaPublishEvent.getPublishStatus()){}
-            else {
+            NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
+            if (PublishStatus.PUBLISHED == nebulaPublishEvent.getPublishStatus() || PublishStatus.ROLLBACK == nebulaPublishEvent.getPublishStatus() || PublishStatus.CANCEL == nebulaPublishEvent.getPublishStatus()) {
+            } else {
                 for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
                     nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost));
                 }
@@ -680,7 +680,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
         nebulaPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
-        NebulaPublishEvent nebulaPublishEventReal=new NebulaPublishEvent();
+        NebulaPublishEvent nebulaPublishEventReal = new NebulaPublishEvent();
         nebulaPublishEventReal.setId(eventId);
         nebulaPublishEvent.setIsApproved(true);
         nebulaPublishEventReal.setPid(id);
@@ -831,16 +831,15 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success", map);
 //    }
-
-    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent,NebulaPublishHost publishHost){
+    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost) {
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
-        if(publishEvent.getPublishDatetime() == null){
+        if (publishEvent.getPublishDatetime() == null) {
             return 0;
         }
-        Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(),-8);
-        Date toDate = DateUtils.getDateByGivenHour(new Date(),-8);
-        ElkSearchData elkSearchData=new ElkSearchData(publishHost.getPassPublishHostName(),"ERROR",fromDate,toDate,1,10);
+        Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
+        Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
+        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), "ERROR", fromDate, toDate, 1, 10);
         return elkLogService.count(elkSearchData);
     }
 
@@ -869,10 +868,10 @@ public class PublishController extends BaseController {
     /**
      * 获取发布事件上一阶段的id
      */
-    @RequestMapping(value = "/getLastPublishId",method = {RequestMethod.POST})
+    @RequestMapping(value = "/getLastPublishId", method = {RequestMethod.POST})
     @ResponseBody
-    public Object getLastPublishId(Integer eventId){
-        int lastEventId=publishEventService.getLastPublishId(eventId);
+    public Object getLastPublishId(Integer eventId) {
+        int lastEventId = publishEventService.getLastPublishId(eventId);
         return returnCallback("Success", lastEventId);
     }
 
