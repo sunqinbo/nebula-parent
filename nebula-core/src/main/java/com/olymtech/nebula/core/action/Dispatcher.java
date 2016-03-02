@@ -63,9 +63,9 @@ public class Dispatcher implements Observer {
      */
     public void doDispatch(NebulaPublishEvent event) throws Exception {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
-        if (publishModules == null || publishModules.size() == 0) {
-            throw new SaltNullTargesException("publishModules is null");
-        }
+//        if (publishModules == null || publishModules.size() == 0) {
+//            throw new SaltNullTargesException("publishModules is null");
+//        }
         for (NebulaPublishModule publishModule : publishModules) {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             if (publishHosts == null || 0 == publishHosts.size()) {
