@@ -292,7 +292,7 @@ $(document).ready(function(){
         });
     });
     $("#btn3").click(function () {
-        if($("#publishEnv").text=='stage') {
+        if($("#publishEnv").text=='product') {
             $('#codeModal').modal('show');
         }
         else {
