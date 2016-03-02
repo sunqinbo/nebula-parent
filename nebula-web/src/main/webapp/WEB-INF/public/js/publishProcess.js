@@ -292,13 +292,18 @@ $(document).ready(function(){
         });
     });
     $("#btn3").click(function () {
-        $('#codeModal').modal('show');
-        //$("#loading-status").show();
-        //$("#btn3").attr('disabled', true);
-        //$("#btn3").removeClass("btn-info");
-        //$("#step3").show();
-        //$("#restartPublish").hide();
-        //nebula.publish.process.publishReal()
+        if($("#publishEnv").text='stage') {
+            $('#codeModal').modal('show');
+        }
+        else {
+            $("#loading-status").show();
+            $("#btn3").attr('disabled', true);
+            $("#btn3").removeClass("btn-info");
+            $("#step3").show();
+            $("#cancelPublish").hide();
+            $("#restartPublish").hide();
+            nebula.publish.process.publishReal();
+        }
     });
     $("#btn4").click(function () {
         $("#loading-status").show();
