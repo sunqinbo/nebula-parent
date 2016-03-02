@@ -973,7 +973,7 @@ function getSlbInfo(){
                     hostInfoString+=slbHostInfo[j].serverId+"&nbsp;&nbsp;: &nbsp;&nbsp;"+serverHealthStatus;
                 }
                 //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
-                if(slbInfo.loadBalancerStatus=!null) {
+                if(slbInfo=!null) {
                     switch (slbInfo.loadBalancerStatus) {
                         case "inactive":
                             loadBalancerStatus += "<span class='label label-danger'>" + slbInfo.loadBalancerStatus + "</span>";
