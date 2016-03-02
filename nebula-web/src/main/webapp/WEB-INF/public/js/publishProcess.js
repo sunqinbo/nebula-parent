@@ -135,6 +135,7 @@ $(document).ready(function(){
     $('#mymodal').appendTo("body");
     $('#checkmodal').appendTo("body");
     $("#logModal").appendTo("body");
+    $("#codeModal").appendTo("body");
     $("#refreshCDN").click(function(){
         $('#mymodal').modal('show');
     });
@@ -291,11 +292,13 @@ $(document).ready(function(){
         });
     });
     $("#btn3").click(function () {
-        $("#loading-status").show();
-        $("#btn3").attr('disabled', true);
-        $("#btn3").removeClass("btn-info");
-        $("#step3").show();
-        $("#restartPublish").hide();
+        $('#codeModal').modal('show');
+        //$("#loading-status").show();
+        //$("#btn3").attr('disabled', true);
+        //$("#btn3").removeClass("btn-info");
+        //$("#step3").show();
+        //$("#restartPublish").hide();
+        //nebula.publish.process.publishReal()
     });
     $("#btn4").click(function () {
         $("#loading-status").show();
@@ -343,14 +346,14 @@ $(document).ready(function(){
         $("#nextPublish").hide();
     });
     //进入下一阶段的发布（禁用）
-    //$("#nextPublish").click(function () {
-    //    if ($("#publishEnv").html() == "test") {
-    //        nextPublish("stage");
-    //    }
-    //    if ($("#publishEnv").html() == "stage") {
-    //        nextPublish("product");
-    //    }
-    //});
+    $("#nextPublish").click(function () {
+        if ($("#publishEnv").html() == "test") {
+            nextPublish("stage");
+        }
+        if ($("#publishEnv").html() == "stage") {
+            nextPublish("product");
+        }
+    });
 
     $("#freshControl_switch").find("label").css("width","0px");
 
@@ -364,6 +367,11 @@ $(document).ready(function(){
             $("#pageSort").show();
         }
         logFrenshControl(1);
+    });
+
+    //动态验证码验证
+    $("#code_btn_modal").click(function () {
+        verificationCodeBtn();
     });
 
 });
@@ -740,13 +748,21 @@ function approvalBtn(){
         url: "/publish/update/approval",
         datatype: "json",
         success: function (data) {
-            $.notify({
-                icon: '',
-                message: "审批完成"
-            }, {
-                type: 'info',
-                timer: 1000
-            });
+            if(!data.callbackMsg){
+                data=JSON.parse(data);
+            }
+            if(data.callbackMsg=="Error") {
+                nebula.common.alert.danger(data.responseContext, 1000);
+                return;
+            }
+            nebula.common.alert.success(data.responseContext, 1000);
+            //$.notify({
+            //    icon: '',
+            //    message: "审批完成"
+            //}, {
+            //    type: 'info',
+            //    timer: 1000
+            //});
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
@@ -1001,13 +1017,53 @@ function checkLastPublish(){
         }
     });
 }
-
+//查看发布阶段按钮名称控制
 function checkPublishBtnSet(){
     switch ($("#publishEnv").text()){
         case "test":$("#checkNext_btn").text("查看准生产环境");break;
         case "stage":$("#checkNext_btn").text("查看生产环境");$("#checkLast_btn").text("查看测试环境");break;
         default:$("#checkLast_btn").text("查看准生产环境");
     }
+}
+
+//验证动态验证码
+function verificationCodeBtn(){
+    $.ajax({
+        async: false,
+        type: "post",
+        data: {
+            "code": $("#code_momdal").val()
+        },
+        url: "/publish/isTotpCodeValid",
+        datatype: "json",
+        success: function (data) {
+            if(!data.callbackMsg){
+                data=JSON.parse(data);
+            }
+            if(data.callbackMsg=="Error") {
+                nebula.common.alert.danger(data.responseContext, 1000);
+                return;
+            }
+            nebula.common.alert.success(data.responseContext, 1000);
+            $('#codeModal').modal('hide');
+            $("#loading-status").show();
+            $("#btn3").attr('disabled', true);
+            $("#btn3").removeClass("btn-info");
+            $("#cancelPublish").hide();
+            $("#step3").show();
+            $("#restartPublish").hide();
+            nebula.publish.process.publishReal()
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            $.notify({
+                icon: '',
+                message: "很抱歉动态验证码验证失败，原因" + errorThrown
+            }, {
+                type: 'danger',
+                timer: 1000
+            });
+        }
+    })
 }
 
 //日期格式化
