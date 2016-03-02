@@ -953,7 +953,7 @@ function getSlbInfo(){
         success: function (data) {
             var slbTbString="";
             for(var i= 0,len=data.responseContext.length;i<len;i++){
-                var slbInfo=data.responseContext[i].describeLoadBalancerAttributeResponse;
+                var slbInfo=data.responseContext[i];
                 var slbHostInfo="";
                 if(data.responseContext[i].describeHealthStatusResponse!=null){
                     slbHostInfo=data.responseContext[i].describeHealthStatusResponse.backendServers;
@@ -973,21 +973,14 @@ function getSlbInfo(){
                     hostInfoString+=slbHostInfo[j].serverId+"&nbsp;&nbsp;: &nbsp;&nbsp;"+serverHealthStatus;
                 }
                 //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
-                if(slbInfo.loadBalancerStatus=!null) {
-                    switch (slbInfo.loadBalancerStatus) {
-                        case "inactive":
-                            loadBalancerStatus += "<span class='label label-danger'>" + slbInfo.loadBalancerStatus + "</span>";
-                            break;
-                        case "active":
-                            loadBalancerStatus += "<span class='label label-success'>" + slbInfo.loadBalancerStatus + "</span>";
-                            break;
-                        default:
-                            loadBalancerStatus += "<span class='label label-default'>" + slbInfo.loadBalancerStatus + "</span>";
-                    }
+                switch (slbInfo.loadBalancerStatus){
+                    case "inactive":loadBalancerStatus+="<span class='label label-danger'>"+slbInfo.loadBalancerStatus+"</span>";break;
+                    case "active":loadBalancerStatus+="<span class='label label-success'>"+slbInfo.loadBalancerStatus+"</span>";break;
+                    default:loadBalancerStatus+="<span class='label label-default'>"+slbInfo.loadBalancerStatus+"</span>";
                 }
                 slbTbString+="<tr>"+
                     "<td>"+slbInfo.loadBalancerName+"</td>"+
-                    "<td>"+slbInfo.address+"</td>"+
+                    "<td>"+slbInfo.loadBalancerAddress+"</td>"+
                     "<td>"+slbInfo.loadBalancerId+"</td>"+
                     "<td>"+loadBalancerStatus+"</td>"+
                     "<td>"+hostInfoString+"</td>";
