@@ -90,7 +90,7 @@ public class Dispatcher implements Observer {
 
                     /** action 执行成功，但是执行check失败 */
                     resultCheck = action.doCheck(event);
-                    if (!resultCheck){
+                    if (!resultCheck) {
                         logger.info(action.getActionName() + "执行Check失败");
                         triggerFailure(event);
                         return;
