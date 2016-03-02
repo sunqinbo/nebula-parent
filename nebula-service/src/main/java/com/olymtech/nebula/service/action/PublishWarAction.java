@@ -143,7 +143,6 @@ public class PublishWarAction extends AbstractAction {
             String masterDir = MasterDeployDir + event.getPublishProductKey() + "/publish_war";
             String minionDir = BaseWarDir + publishModule.getPublishModuleKey();
 
-
 //            Map<String,String> masterHost = fileVerifyService.checkFilesMd5ByDir(masterDir,".war");
 
             /** 这里其实是一个 */

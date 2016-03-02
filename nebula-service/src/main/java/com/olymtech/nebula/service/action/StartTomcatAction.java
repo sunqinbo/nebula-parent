@@ -100,6 +100,7 @@ public class StartTomcatAction extends AbstractAction {
 
     @Override
     public boolean doCheck(NebulaPublishEvent event) throws Exception {
+        Thread.sleep(3000);
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
@@ -131,7 +132,7 @@ public class StartTomcatAction extends AbstractAction {
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程端口，脚本数据解析成功。");
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程端口，脚本数据解析成功。"+jsonString);
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     minionMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);
