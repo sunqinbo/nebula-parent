@@ -69,6 +69,7 @@ public class UserController extends BaseController {
         }
 
         passwordHelper.encryptPassword(userInfo);
+        userInfo.setgIsVerify(false);
         userService.insertNebulaUserInfo(userInfo, roleIds);
         return returnCallback("Success", "插入用户成功");
     }

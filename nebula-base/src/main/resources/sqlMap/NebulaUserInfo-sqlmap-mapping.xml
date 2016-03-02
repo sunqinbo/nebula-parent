@@ -317,7 +317,6 @@
         emp_id = #{empId,jdbcType=INTEGER},
         supervisor_emp_id = #{supervisorEmpId,jdbcType=INTEGER},
         is_enable = #{isEnable,jdbcType=INTEGER},
-        g_is_verify = #{gIsVerify,jdbcType=INTEGER},
         bu = #{bu,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>

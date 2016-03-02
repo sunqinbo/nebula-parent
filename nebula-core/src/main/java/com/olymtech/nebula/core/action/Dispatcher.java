@@ -63,6 +63,9 @@ public class Dispatcher implements Observer {
      */
     public void doDispatch(NebulaPublishEvent event) throws Exception {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
+        if (publishModules == null || publishModules.size() == 0) {
+            throw new SaltNullTargesException("publishModules is null");
+        }
         for (NebulaPublishModule publishModule : publishModules) {
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             if (publishHosts == null || 0 == publishHosts.size()) {
@@ -90,7 +93,7 @@ public class Dispatcher implements Observer {
 
                     /** action 执行成功，但是执行check失败 */
                     resultCheck = action.doCheck(event);
-                    if (!resultCheck){
+                    if (!resultCheck) {
                         logger.info(action.getActionName() + "执行Check失败");
                         triggerFailure(event);
                         return;
