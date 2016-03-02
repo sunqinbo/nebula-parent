@@ -165,7 +165,7 @@
                                 <tr>
                                     <td>发布</td>
                                     <td>$!{Event.publishUser.nickname}</td>
-                                    <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</td>
+                                    <td id="publishDatetime">$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</td>
                                 </tr>
                                 </tbody>
                             </table>
