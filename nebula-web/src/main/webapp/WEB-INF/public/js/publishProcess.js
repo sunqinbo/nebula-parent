@@ -973,10 +973,17 @@ function getSlbInfo(){
                     hostInfoString+=slbHostInfo[j].serverId+"&nbsp;&nbsp;: &nbsp;&nbsp;"+serverHealthStatus;
                 }
                 //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
-                switch (slbInfo.loadBalancerStatus){
-                    case "inactive":loadBalancerStatus+="<span class='label label-danger'>"+slbInfo.loadBalancerStatus+"</span>";break;
-                    case "active":loadBalancerStatus+="<span class='label label-success'>"+slbInfo.loadBalancerStatus+"</span>";break;
-                    default:loadBalancerStatus+="<span class='label label-default'>"+slbInfo.loadBalancerStatus+"</span>";
+                if(slbInfo.loadBalancerStatus=!null) {
+                    switch (slbInfo.loadBalancerStatus) {
+                        case "inactive":
+                            loadBalancerStatus += "<span class='label label-danger'>" + slbInfo.loadBalancerStatus + "</span>";
+                            break;
+                        case "active":
+                            loadBalancerStatus += "<span class='label label-success'>" + slbInfo.loadBalancerStatus + "</span>";
+                            break;
+                        default:
+                            loadBalancerStatus += "<span class='label label-default'>" + slbInfo.loadBalancerStatus + "</span>";
+                    }
                 }
                 slbTbString+="<tr>"+
                     "<td>"+slbInfo.loadBalancerName+"</td>"+
