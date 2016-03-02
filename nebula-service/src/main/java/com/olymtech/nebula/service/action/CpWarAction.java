@@ -152,15 +152,15 @@ public class CpWarAction extends AbstractAction {
                 nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
                 nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_WAR);
                 String jsonString = entry.getValue().toString();
-                Map<String,String> everyHost = DataConvert.fileJsonStringToList(jsonString);
+                Map<String,String> everyHost = DataConvert.jsonStringToList(jsonString);
                 everyHost = DataConvert.fileMapWithoutModuleKey(everyHost,newDir);
 
                 if (everyHost.size() == 0) {
-                    nebulaPublishHost.setActionResult("校验文件时，解析脚本数据失败。脚本返回数据："+jsonString);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验new文件时，解析脚本数据失败。脚本返回数据："+jsonString);
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
-                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验new文件，解析脚本数据成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     newFileMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);
@@ -185,15 +185,15 @@ public class CpWarAction extends AbstractAction {
                 nebulaPublishHost.setActionGroup(PublishActionGroup.PRE_MINION);
                 nebulaPublishHost.setActionName(PublishAction.COPY_PUBLISH_OLD_WAR);
                 String jsonString = entry.getValue().toString();
-                Map<String,String> everyHost = DataConvert.fileJsonStringToList(jsonString);
+                Map<String,String> everyHost = DataConvert.jsonStringToList(jsonString);
                 everyHost = DataConvert.fileMapWithoutModuleKey(everyHost,oldDir);
 
                 if (everyHost.size() == 0) {
-                    nebulaPublishHost.setActionResult("校验文件时，解析脚本数据失败。脚本返回数据："+jsonString);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验old文件时，解析脚本数据失败。脚本返回数据："+jsonString);
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
-                    nebulaPublishHost.setActionResult("success");
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验old文件，解析脚本数据成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     oldFileMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);

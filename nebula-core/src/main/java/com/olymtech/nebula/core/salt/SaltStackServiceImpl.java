@@ -36,6 +36,9 @@ public class SaltStackServiceImpl implements ISaltStackService {
     @Value("${script_check_files_md5}")
     private String scriptCheckFilesMd5;
 
+    @Value("${script_check_tomcat}")
+    private String scriptCheckTomcat;
+
 
     @Override
     public <T> ResultInfoSet cpFileRemote(List<String> targets, String from, String to) throws SaltStackException {
@@ -131,6 +134,19 @@ public class SaltStackServiceImpl implements ISaltStackService {
         } else {
             command = scriptCheckFilesMd5 + " -d " + dir;
         }
+        args.add(command);
+
+        logger.info("当前执行的命令:" + command);
+        ScheduledJob job = SaltClientFactory.getSaltClient().startCommand(new SaltTarget(targets), CommandCmdRun, args, null);
+
+        ResultInfoSet jobResult = SaltClientFactory.getResult(job.getJid(),targets.size());
+        return jobResult;
+    }
+
+    @Override
+    public <T> ResultInfoSet checkTomcat(List<String> targets) throws SaltStackException{
+        List<Object> args = new ArrayList<>();
+        String command = scriptCheckTomcat;
         args.add(command);
 
         logger.info("当前执行的命令:" + command);

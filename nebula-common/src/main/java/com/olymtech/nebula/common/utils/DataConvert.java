@@ -36,17 +36,18 @@ public class DataConvert {
          "/Users/Gavin/workpython/nebula_script.bak/stop_tomcat.py": "6b3cfd69535f6b562def08db915e9f30"
        }
      *
+     * {"Port8080": false, "JavaCount": 0, "Ip": "172.16.137.130"}
      *
      * @param fileJsonString
      * @return
      */
-    public static Map<String,String> fileJsonStringToList(String fileJsonString){
+    public static Map<String,String> jsonStringToList(String fileJsonString){
         Map<String,String> maps = new HashMap<>();
         try{
             JSONObject jsonObject = JSONObject.parseObject(fileJsonString);
             for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-                System.out.println(entry.getKey() + ":" + entry.getValue());
-                maps.put(entry.getKey(),(String)entry.getValue());
+//                System.out.println(entry.getKey() + ":" + entry.getValue());
+                maps.put(entry.getKey(),String.valueOf(entry.getValue()));
             }
         }catch (Exception e){
             logger.error("fileJsonStringToList error:"+fileJsonString);
@@ -72,5 +73,6 @@ public class DataConvert {
         }
         return resultMap;
     }
+
 
 }

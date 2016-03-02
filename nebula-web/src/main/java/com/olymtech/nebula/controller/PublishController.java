@@ -278,10 +278,10 @@ public class PublishController extends BaseController {
             try {
                 Integer totpCodeInt = Integer.parseInt(totpCode);
                 Boolean isCodeValid = GoogleAuthFactory.authoriseUser(userInfo.getUsername(), totpCodeInt);
-                if (isCodeValid == false) {
+                if (!isCodeValid) {
                     return returnCallback("Error", "验证码错误");
                 }
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 return returnCallback("Error", "验证码错误");
             }
         }
@@ -886,12 +886,12 @@ public class PublishController extends BaseController {
             Integer codeInt = Integer.parseInt(code);
             NebulaUserInfo user = getLoginUser();
             Boolean isCodeValid = GoogleAuthFactory.authoriseUser(user.getUsername(), codeInt);
-            if (isCodeValid == true) {
+            if (isCodeValid) {
                 return returnCallback("Success", "验证码正确有效.");
             } else {
                 return returnCallback("Error", "验证码错误.");
             }
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             return returnCallback("Error", "验证码错误.");
         }
     }
