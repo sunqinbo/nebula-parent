@@ -251,7 +251,7 @@ nebula.publish.process.preMasterPublish = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                nebula.common.alert.info("准备发布完成",2000);
+                nebula.common.alert.info("准备发布执行完成",2000);
             }
         }
     });
@@ -265,7 +265,7 @@ nebula.publish.process.preMinionPublish = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                nebula.common.alert.info("预发布完成",2000);
+                nebula.common.alert.info("预发布执行完成",2000);
             }
         }
     });
@@ -280,7 +280,7 @@ nebula.publish.process.publishReal = function(){
         data:{"id":id,"totpCode": $("#code_momdal").val()},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                nebula.common.alert.info("正式发布完成",2000);
+                nebula.common.alert.info("正式发布执行完成",2000);
             }
         }
     });
@@ -294,7 +294,7 @@ nebula.publish.process.publishContinue = function(){
         data:{"id":id},
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
-                nebula.common.alert.info("继续发布完成",2000);
+                nebula.common.alert.info("继续发布执行完成",2000);
             }
         }
     });
@@ -309,7 +309,7 @@ nebula.publish.process.publishSuccessEnd = function(){
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                nebula.common.alert.info("确认发布完成",2000);
+                nebula.common.alert.info("确认发布执行完成",2000);
             }
         }
     });
@@ -324,7 +324,7 @@ nebula.publish.process.publishFailEnd = function(){
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                nebula.common.alert.info("回滚完成",2000);
+                nebula.common.alert.info("回滚执行完成",2000);
             }
         }
     });
@@ -340,7 +340,7 @@ nebula.publish.process.retryPublishRollback = function(){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
                 window.location.href="/publishProcess.htm?id="+id;
-                nebula.common.alert.info("正式发布完成",2000);
+                nebula.common.alert.info("正式发布执行完成",2000);
             }
         }
     });
@@ -355,7 +355,7 @@ nebula.publish.process.restartTomcat = function(){
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                nebula.common.alert.info("重启tomcat完成",2000);
+                nebula.common.alert.info("重启tomcat执行完成",2000);
             }
         }
     });
@@ -370,7 +370,7 @@ nebula.publish.process.cancelPublish = function () {
         success:function(jsonData){
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                nebula.common.alert.info("取消发布完成",2000);
+                nebula.common.alert.info("取消发布执行完成",2000);
             }
         }
     });
