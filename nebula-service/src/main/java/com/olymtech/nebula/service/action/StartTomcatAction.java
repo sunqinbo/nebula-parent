@@ -83,7 +83,7 @@ public class StartTomcatAction extends AbstractAction {
                         PublishAction.START_TOMCAT,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targets.size()
+                        "实际成功启动tomcat主机数：" + successCount + ", 目标启动tomcat主机数:" + targets.size()
                 );
                 return false;
             }
@@ -128,11 +128,11 @@ public class StartTomcatAction extends AbstractAction {
                 Map<String,String> everyHost = DataConvert.jsonStringToList(jsonString);
 
                 if (everyHost.size() == 0) {
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程端口时，解析脚本数据失败。脚本返回数据："+jsonString);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>获得进程校验数据并解析失败。返回数据："+jsonString);
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程端口，脚本数据解析成功。"+jsonString);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>获得进程校验数据并解析成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     minionMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);
@@ -145,7 +145,7 @@ public class StartTomcatAction extends AbstractAction {
                         PublishAction.START_TOMCAT,
                         event.getPublishActionGroup(),
                         false,
-                        "校验进程端口时，获取数据异常。成功数：" + minionMap.size() + ",  目标成功数:" + targets.size());
+                        "校验进程时，获取数据异常。实际成功数：" + minionMap.size() + ",  目标成功数:" + targets.size());
                 return false;
             }
 
@@ -174,13 +174,13 @@ public class StartTomcatAction extends AbstractAction {
                 /**
                  * java进程不等于1，8080端口没有开，判断为异常
                  */
-                if(javaCountCheck != 1 || !portCheck){
+                if(javaCountCheck != 1){
                     String portStatus = portCheck?"开启":"关闭";
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程端口时错误，java进程个数："+javaCountCheck+" ,8080端口状态："+portStatus);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程时错误，java进程个数："+javaCountCheck+" ,8080端口状态："+portStatus);
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }else{
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程端口成功。");
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     successCount++;
@@ -193,7 +193,7 @@ public class StartTomcatAction extends AbstractAction {
                         PublishAction.START_TOMCAT,
                         event.getPublishActionGroup(),
                         false,
-                        "校验进程端口时，校验数据异常。成功数：" + successCount + ",  目标成功数:" + targets.size());
+                        "校验进程时，校验数据异常。成功数：" + successCount + ",  目标成功数:" + targets.size());
                 return false;
             }
 

@@ -21,4 +21,6 @@ public interface IFileAnalyzeService {
     public Map<String,Boolean> getDirMapByDirPath(String dirPath);
 
     public Boolean copyFile(String srcFile, String destFile);
+
+    Boolean rmFile(String key, String filename);
 }
