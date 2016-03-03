@@ -176,7 +176,7 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
                         simpleSlb.setLoadBalancerAddress(jsonObject.getString("address"));
                         simpleSlb.setLoadBalancerName(jsonObject.getString("loadBalancerName"));
                         simpleSlb.setLoadBalancerStatus(jsonObject.getString("loadBalancerStatus"));
-                        simpleSlb.setRegionId(jsonObject.getString("regionId"));
+                        simpleSlb.setRegionId(jsonObject.getString("regionIdSimple"));
                         simpleSlb.setAliyunAccount(jsonObject.getString("aliyunAccountMail"));
                         simpleSlbs.add(simpleSlb);
                     }

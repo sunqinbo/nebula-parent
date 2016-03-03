@@ -97,7 +97,7 @@ public class CreateDirAciton extends AbstractAction {
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), true, "all models and sub targes success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CREATE_PUBLISH_DIR, event.getPublishActionGroup(), true, "All models and sub targes 'execute' success");
         return true;
     }
 

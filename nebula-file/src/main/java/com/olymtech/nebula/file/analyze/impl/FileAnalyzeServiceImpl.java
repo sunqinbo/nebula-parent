@@ -3,6 +3,7 @@ package com.olymtech.nebula.file.analyze.impl;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
 
     private Logger logger       = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${master_deploy_dir}")
+    private String masterDeployDir;
 
     @Override
     public List<String> getFileListByDirPath(String dirPath) {
@@ -125,4 +129,23 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
 //            System.out.println(list2.get(i));
 //        Map<String,Boolean> fileList=getDirMapByDirPath(dirPath);
 //    }
+
+    @Override
+    public Boolean rmFile(String key, String filename){
+        Boolean result = false;
+        try {
+            String  filePath = masterDeployDir+key+"/"+filename;
+            File file = new File(filePath);
+            if(file.isFile() && file.exists()){
+                file.delete();
+                return true;
+            }else{
+                logger.error("rmFile "+filename+" failed: not is file, file not exists.");
+            }
+        }catch (Exception e){
+            logger.error("rmFile "+filename+" error:",e);
+        }
+        return result;
+    }
+
 }

@@ -91,13 +91,13 @@ public class ChangeLnAction extends AbstractAction {
                         PublishAction.CHANGE_LN,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targets count:" + targets.size()
+                        "实际成功'更改链接'主机数:" + successCount + ",  目标'更改链接'主机数:" + targets.size()
                 );
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), true, "all models and sub targets success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), true, "All models and sub targes 'execute' success");
         return true;
     }
 

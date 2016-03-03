@@ -116,7 +116,7 @@ public class PublishWarAction extends AbstractAction {
                         PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + AppSuccessCount + ",  targes count:" + targets.size()
+                        "实际分发war包成功主机数:" + AppSuccessCount + ",  目标分发war包主机数:" + targets.size()
                 );
                 return false;
             }
@@ -142,7 +142,6 @@ public class PublishWarAction extends AbstractAction {
 
             String masterDir = MasterDeployDir + event.getPublishProductKey() + "/publish_war";
             String minionDir = BaseWarDir + publishModule.getPublishModuleKey();
-
 
 //            Map<String,String> masterHost = fileVerifyService.checkFilesMd5ByDir(masterDir,".war");
 
@@ -173,13 +172,13 @@ public class PublishWarAction extends AbstractAction {
                 }
             }
 
-            if (masterFileMap.size() != targets.size()) {
+            if (masterFileMap.size() != targetsMaster.size()) {
                 publishScheduleService.logScheduleByAction(
                         event.getId(),
                         PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
-                        "校验文件时，获取'master目录'数据异常。成功数：" + masterFileMap.size() + ",  目标成功数:" + targets.size());
+                        "获取master war包md5数据异常。");
                 return false;
             }
 
@@ -195,11 +194,11 @@ public class PublishWarAction extends AbstractAction {
                 everyHost = DataConvert.fileMapWithoutModuleKey(everyHost,minionDir);
 
                 if (everyHost.size() == 0) {
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验minion文件时，解析脚本数据失败。脚本返回数据："+jsonString);
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>获取分发war包完整性校验数据并解析失败。返回数据："+jsonString);
                     nebulaPublishHost.setIsSuccessAction(false);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
-                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验minion文件，解析脚本数据成功。");
+                    nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>获取分发war包完整性校验数据并解析成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     minionFileMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);
@@ -212,7 +211,7 @@ public class PublishWarAction extends AbstractAction {
                         PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
-                        "校验文件时，获取'minion目录'数据异常。成功数：" + minionFileMap.size() + ",  目标成功数:" + targets.size());
+                        "分发war包完整性校验时，获取数据异常。实际成功数：" + minionFileMap.size() + ",  目标成功数:" + targets.size());
                 return false;
             }
 
@@ -231,7 +230,7 @@ public class PublishWarAction extends AbstractAction {
                                 PublishAction.PUBLISH_NEW_WAR,
                                 event.getPublishActionGroup(),
                                 false,
-                                "校验文件时，文件拷贝'"+filename+"'md5异常。主机ip：" + ip + " master文件md5：" + masterMd5 + ",  minion文件md5:" + minionMd5);
+                                "分发war包完整性校验数据不一致，文件名：'"+filename+"' 被发布机ip：" + ip + " 被发布机文件md5:" + minionMd5 + ", master文件md5：" + masterMd5);
                         return false;
                     }
                 }
