@@ -59,7 +59,7 @@
 ##</div>
 
 <div style="width: 90%;margin:2% auto;">
-    <h4> <b style="font-size: 1.5em">发布系统Nebula：</b><span>启动虚拟MFA设备<span/></h4>
+    <h4> <b style="font-size: 1.5em">发布系统Nebula：</b><span>启动虚拟MFA设备<span/> <a style="float: right" href="/login">返回登录</a></h4>
     <hr style="border-top:1px solid #185598;"/>
     <div class=" alert alert-warning alert-with-icon" data-notify="container">
         <button type="button" onclick="$(this).parent().hide()" aria-hidden="true" class="close" style="position: inherit;margin-top: 0;">×</button>

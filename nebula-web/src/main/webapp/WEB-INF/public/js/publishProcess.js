@@ -357,6 +357,33 @@ $(document).ready(function(){
         verificationCodeBtn();
     });
 
+    //删除非.war文件
+    $("#deleteNoWar_btn").click(function(){
+        $.ajax({
+            async: false,
+            data: {
+                eventId: $("#eventId").val()
+            },
+            type: "post",
+            url: "/publish/deleteErrorFiles",
+            datetype: "json",
+            success: function (data) {
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
+                }
+                if(data.callbackMsg=="Error") {
+                    nebula.common.alert.danger(data.responseContext, 1000);
+                    return;
+                }
+                $("#deleteNoWar_btn").hide();
+                nebula.common.alert.success(data.responseContext, 1000);
+            },
+            error: function (errorThrown) {
+                nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown,1000);
+            }
+        });
+    });
+
 });
 
 //页面加载控制进度条
