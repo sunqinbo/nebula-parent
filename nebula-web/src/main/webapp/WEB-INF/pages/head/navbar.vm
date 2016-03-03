@@ -51,6 +51,11 @@
                         </ul>
                     </li>
                     <li>
+                        <a target="_blank" href="http://192.168.2.185:8090/pages/viewpage.action?pageId=5308824">
+                            帮助
+                        </a>
+                    </li>
+                    <li>
                         <a href="/logout">
                             退出
                         </a>

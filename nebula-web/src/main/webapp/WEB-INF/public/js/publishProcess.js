@@ -501,6 +501,9 @@ function Initialization() {
                 //var false_btn = "<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
                 //$("#false_btn").html(false_btn);
                 $("#false_btn").show();
+                if(data.responseContext.errorType==1){
+                    $("#deleteNoWar_btn").show();
+                }
                 $("#errorMsgDiv").html(data.responseContext.errorMsg);
                 $("#errorMsgDiv").show();
             }

@@ -92,7 +92,7 @@ public class CreateDirAciton extends AbstractAction {
                         PublishAction.CREATE_PUBLISH_DIR,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targets.size()
+                        "执行拷贝war异常。成功数:" + successCount + ",  targes count:" + targets.size()
                 );
                 return false;
             }
