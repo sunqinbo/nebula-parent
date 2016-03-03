@@ -23,6 +23,8 @@ public class NebulaPublishHost extends BaseDO {
 
     private Integer logNumber;
 
+    private Integer excNumber;
+
     public PublishAction getActionName() {
         return actionName;
     }
@@ -93,5 +95,13 @@ public class NebulaPublishHost extends BaseDO {
 
     public void setLogNumber(Integer logNumber) {
         this.logNumber = logNumber;
+    }
+
+    public Integer getExcNumber() {
+        return excNumber;
+    }
+
+    public void setExcNumber(Integer excNumber) {
+        this.excNumber = excNumber;
     }
 }

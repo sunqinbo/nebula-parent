@@ -105,14 +105,7 @@ $(function(){
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "很抱歉载入角色信息失败，原因"+ errorThrown
-
-                },{
-                    type: 'info',
-                    timer: 1000
-                });
+                nebula.common.alert.danger("很抱歉载入角色信息失败，原因"+ errorThrown, 1000);
             }
         });
         $("#submit").hide();
@@ -175,13 +168,7 @@ function showSelect2(){
             })
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $.notify({
-                icon: '',
-                message: "很抱歉载入角色失败，原因"+ errorThrown
-            },{
-                type: 'info',
-                timer: 1000
-            });
+            nebula.common.alert.danger("很抱歉载入角色失败，原因"+ errorThrown, 1000);
         }
     });
 }
@@ -252,14 +239,6 @@ function btnClick(isCreate) {
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             var msg = "很抱歉" + tips + "用户失败，原因" + errorThrown;
             nebula.common.alert.danger(msg, 1000);
-            //$.notify({
-            //    icon: '',
-            //    message: "很抱歉" + tips + "用户失败，原因" + errorThrown
-            //
-            //}, {
-            //    type: 'info',
-            //    timer: 1000
-            //});
         }
     })
 }

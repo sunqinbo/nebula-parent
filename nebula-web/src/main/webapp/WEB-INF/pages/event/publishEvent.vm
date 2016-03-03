@@ -43,7 +43,9 @@
                                 <div class="col-sm-10">
                                     <select id="select-publich-env" class="form-control">
                                         <option value="">请选择</option>
-                                        <option value="test">测试</option>
+                                        <option value="test1">测试1</option>
+                                        <option value="test2">测试2</option>
+                                        <option value="test3">测试3</option>
                                         <option value="stage">准生产</option>
                                     </select>
                                 </div>
