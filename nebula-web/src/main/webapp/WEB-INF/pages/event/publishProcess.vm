@@ -343,6 +343,8 @@
                             <Button type='button' class='btn btn-info'
                                     onclick='nebula.publish.process.publishContinue()'>重试
                             </Button>
+                            <Button style="display: none" id="deleteNoWar_btn" type='button' class='btn btn-danger'>删除
+                            </Button>
                         #end
                     </div>
                     <div id="errorMsgDiv"

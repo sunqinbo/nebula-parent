@@ -344,7 +344,7 @@ public class PublishController extends BaseController {
                 }
             }
 
-            if (chain != null) {
+            if (chain.getActions().size() != 0) {
                 Dispatcher dispatcher = new Dispatcher(chain, request, response);
                 dispatcher.doDispatch(nebulaPublishEvent);
                 return returnCallback("Success", "继续发布完成");
@@ -637,6 +637,7 @@ public class PublishController extends BaseController {
             map.put("whichStep", whichStep);
             map.put("actionState", actionState);
             map.put("errorMsg", nebulaPublishSchedule.getErrorMsg());
+            map.put("errorType", nebulaPublishSchedule.getErrorType());
         }
         //获取机器信息
         if (eventId != null) {
