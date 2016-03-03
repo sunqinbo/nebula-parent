@@ -7,6 +7,7 @@
         <result column="publish_action" property="publishAction" />
         <result column="publish_action_group" property="publishActionGroup" />
         <result column="is_success_action" property="isSuccessAction" jdbcType="INTEGER" />
+        <result column="error_type" property="errorType" jdbcType="INTEGER" />
     </resultMap>
     <resultMap id="RM-NebulaPublishSchedule-Long" type="com.olymtech.nebula.entity.NebulaPublishSchedule" extends="RM-NebulaPublishSchedule" >
         <result column="error_msg" property="errorMsg" jdbcType="LONGVARCHAR" />
@@ -16,7 +17,8 @@
         publish_event_id,
         publish_action,
         publish_action_group,
-        is_success_action
+        is_success_action,
+        error_type
     </sql>
     <sql id="NebulaPublishSchedule-Long-Column-List" >
         error_msg
@@ -83,12 +85,14 @@
         publish_action,
         publish_action_group,
         is_success_action,
-        error_msg)
+        error_msg,
+        error_type)
         values (#{id,jdbcType=INTEGER},
         #{publishEventId,jdbcType=INTEGER},
         #{publishAction,jdbcType=VARCHAR},
         #{publishActionGroup,jdbcType=VARCHAR},
         #{isSuccessAction,jdbcType=INTEGER},
+        #{errorType,jdbcType=INTEGER},
         #{errorMsg,jdbcType=LONGVARCHAR})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
@@ -112,6 +116,9 @@
             <if test="isSuccessAction != null" >
                 is_success_action,
             </if>
+            <if test="errorType != null" >
+                error_type,
+            </if>
             <if test="errorMsg != null" >
                 error_msg,
             </if>
@@ -131,6 +138,9 @@
             </if>
             <if test="isSuccessAction != null" >
                 #{isSuccessAction,jdbcType=INTEGER},
+            </if>
+            <if test="errorType != null" >
+                #{errorType,jdbcType=INTEGER},
             </if>
             <if test="errorMsg != null" >
                 #{errorMsg,jdbcType=LONGVARCHAR},
@@ -152,6 +162,9 @@
             <if test="isSuccessAction != null" >
                 is_success_action = #{isSuccessAction,jdbcType=INTEGER},
             </if>
+            <if test="errorType != null" >
+                error_type = #{errorType,jdbcType=INTEGER},
+            </if>
             <if test="errorMsg != null" >
                 error_msg = #{errorMsg,jdbcType=LONGVARCHAR},
             </if>
@@ -164,6 +177,7 @@
         publish_action = #{publishAction,jdbcType=VARCHAR},
         publish_action_group = #{publishActionGroup,jdbcType=VARCHAR},
         is_success_action = #{isSuccessAction,jdbcType=INTEGER},
+        error_type = #{errorType,jdbcType=INTEGER},
         error_msg = #{errorMsg,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>

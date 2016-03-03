@@ -9,8 +9,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Gavin on 2016-02-25 17:14.
  */
@@ -63,7 +61,28 @@ public class CredentialRepositoryImplTest {
             System.out.println("false...");
         }
 
+    }
 
+    @Test
+    public void testWar() throws Exception {
+        List<String> appNameList = new ArrayList<>();
+        appNameList.add("jdflsdio&&66.war");
+        appNameList.add("12qwreetwar.txt");
+        appNameList.add("yuyuyuy5454.war$");
+        appNameList.add("yuyuyuy5454.war$");
+        appNameList.add("yuyuyuy5454.tar");
+        appNameList.add("yuyuyuy5454.wazp.war");
+        appNameList.add("yuyuyuy5454.war.exel");
+        String appNames = "";
+        String regex = ".*\\.war$";
+        List<String> appNameListWithoutWar = new ArrayList<>();
+        for (int i = 0; i < appNameList.size() ; i++) {
+            if (appNameList.get(i).matches(regex)) {
+                String appname = appNameList.get(i).replace(".war", "");
+                appNameListWithoutWar.add(appname);
+            }
+        }
+        appNames = StringUtils.join(appNameListWithoutWar.toArray(), ",");
     }
 
 }
