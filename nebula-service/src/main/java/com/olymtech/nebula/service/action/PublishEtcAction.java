@@ -97,7 +97,7 @@ public class PublishEtcAction extends AbstractAction {
             }
         }
 
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, event.getPublishActionGroup(), true, "all models and sub targes success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_ETC, event.getPublishActionGroup(), true, "All models and sub targes 'execute' success");
         return true;
     }
 

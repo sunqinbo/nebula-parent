@@ -102,12 +102,12 @@ public class CpEtcAction extends AbstractAction {
                         PublishAction.COPY_PUBLISH_OLD_ETC,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targets.size()
+                        "执行'拷贝etc目录'异常。实际成功'拷贝etc目录'主机数:" + successCount + ", 目标'拷贝etc目录'主机数:" + targets.size()
                 );
                 return false;
             }
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC, event.getPublishActionGroup(), true, "");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.COPY_PUBLISH_OLD_ETC, event.getPublishActionGroup(), true, "All models and sub targes 'execute' success");
         return true;
     }
 

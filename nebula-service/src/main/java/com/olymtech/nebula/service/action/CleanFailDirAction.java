@@ -89,13 +89,13 @@ public class CleanFailDirAction extends AbstractAction {
                         PublishAction.CLEAN_FAIL_DIR,
                         event.getPublishActionGroup(),
                         false,
-                        "success count:" + successCount + ",  targes count:" + targets.size()
+                        "实际成功'清理失败目录'主机数:" + successCount + ", 目标'清理失败目录'主机数:" + targets.size()
                 );
                 return false;
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_FAIL_DIR, event.getPublishActionGroup(), true, "all models and sub targes success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_FAIL_DIR, event.getPublishActionGroup(), true, "All models and sub targes 'execute' success");
         return true;
     }
 
