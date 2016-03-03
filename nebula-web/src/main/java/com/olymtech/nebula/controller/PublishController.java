@@ -711,13 +711,13 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
     @ResponseBody
     public Object approvalPublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
         NebulaUserInfo user = getLoginUser();
         String publishEnv = nebulaPublishEvent.getPublishEnv();
         /*如果是生产发布,判断登录人的角色是否是部门主管的角色*/
         if (publishEnv.equals("product")) {
             Boolean userRoleIsExamine = userService.userRoleIsNeedRole(user, "examine");
-            if (userRoleIsExamine == false) {
+            if (!userRoleIsExamine) {
                 return returnCallback("Error", "审批人必须是部门主管才能审批!");
             }
         }
@@ -736,7 +736,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     @ResponseBody
     public Object deletePublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsDelete(true);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");

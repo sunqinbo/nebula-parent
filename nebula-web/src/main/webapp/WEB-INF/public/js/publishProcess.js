@@ -13,7 +13,6 @@ $(document).ready(function(){
     //审批按钮
     $("#approval_btn").click(function(){
         approvalBtn();
-        window.location.reload();
         //$("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 
@@ -768,8 +767,10 @@ function approvalBtn(){
             if(data.callbackMsg=="Error") {
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
+            }else{
+                nebula.common.alert.success(data.responseContext, 1000);
+                window.location.reload();
             }
-            nebula.common.alert.success(data.responseContext, 1000);
             //$.notify({
             //    icon: '',
             //    message: "审批完成"
