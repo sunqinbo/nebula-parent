@@ -263,7 +263,7 @@ $(document).ready(function(){
                 if(data.length>0){
                     var msg=""
                     for(var i= 0,len=data.length;i<len;i++){
-                        msg+=data[i]["id"]+",";
+                        msg+=data[i]["id"];
                     }
                     msg="很抱歉，该产品已有发布中的事件，请先"+"<a target='_blank' href='/publish/process.htm?id="+msg+"'>前往</a>结束该事件";
                     //msg="很抱歉，该产品正在发布中,发布id为:"+msg+"请稍后再试";
