@@ -918,10 +918,7 @@ public class PublishController extends BaseController {
         List<String> errorNameList = new ArrayList<>();
         Integer removedNum = 0;
         for (int i = 0; i < appNameList.size(); i++) {
-            if (appNameList.get(i).matches(regex)) {
-                String appname = appNameList.get(i).replace(".war", "");
-                appNameListWithoutWar.add(appname);
-            } else {
+            if (!appNameList.get(i).matches(regex)) {
                 errorNameList.add(appNameList.get(i));
                 Boolean removed = fileAnalyzeService.rmFile(event.getPublishProductKey(), appNameList.get(i));
                 if (removed == true) {
