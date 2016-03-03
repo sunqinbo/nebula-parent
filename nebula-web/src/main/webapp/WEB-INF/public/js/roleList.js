@@ -53,14 +53,7 @@ function getLtb(pageNum){
             })();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $.notify({
-                icon: '',
-                message: "很抱歉，获取列表失败，原因"+ errorThrown
-
-            },{
-                type: 'info',
-                timer: 1000
-            });
+            nebula.common.alert.danger("很抱歉，获取列表失败，原因"+ errorThrown, 1000);
         }
     })
 }
@@ -117,24 +110,12 @@ function listBtn(pageNum){
                         datatype: "json",
                         success: function (data) {
                             getLtb(pageNum);
-                            $.notify({
-                                icon: '',
-                                message: "删除角色成功"
-
-                            }, {
-                                type: 'info',
-                                timer: 1000
-                            });
+                            if(data.callbackMsg=="Success") {
+                                nebula.common.alert.success("删除角色成功", 1000);
+                            }
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            $.notify({
-                                icon: '',
-                                message: "很抱歉，删除角色失败，原因" + errorThrown
-
-                            }, {
-                                type: 'info',
-                                timer: 1000
-                            });
+                            nebula.common.alert.danger("很抱歉，删除角色失败，原因" + errorThrown, 1000);
                         }
                     });
                 }

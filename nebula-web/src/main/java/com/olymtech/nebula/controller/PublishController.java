@@ -646,7 +646,8 @@ public class PublishController extends BaseController {
             if (PublishStatus.PUBLISHED == nebulaPublishEvent.getPublishStatus() || PublishStatus.ROLLBACK == nebulaPublishEvent.getPublishStatus() || PublishStatus.CANCEL == nebulaPublishEvent.getPublishStatus()) {
             } else {
                 for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost));
+                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"ERROR"));
+                    nebulaPublishHost.setExcNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"EXCEPTION"));
                 }
             }
             map.put("HostInfos", nebulaPublishHosts);
@@ -832,7 +833,7 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success", map);
 //    }
-    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost) {
+    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost,String logType) {
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
         if (publishEvent.getPublishDatetime() == null) {
@@ -840,7 +841,7 @@ public class PublishController extends BaseController {
         }
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
-        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), "ERROR", fromDate, toDate, 1, 10);
+        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
         return elkLogService.count(elkSearchData);
     }
 

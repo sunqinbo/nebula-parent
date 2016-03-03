@@ -26,20 +26,23 @@ $(document).ready(function(){
         var ms = confirm("确认完成编辑么（确定后将无法再编辑）？");
         if (ms == true) {
             $.ajax({
-                url: "/publish/updateEtcEnd.htm",
+                url: "/publish/updateEtcEnd",
                 type: "post",
                 data: {"id": $("#eventId").val()},
                 success: function (jsonData) {
-                    if (jsonData.callbackMsg.match(/Success/)) {
-                        $.notify({
-                            icon: '',
-                            message: "保存成功"
-
-                        }, {
-                            type: 'info',
-                            timer: 1000
-                        });
+                    if(!data.callbackMsg){
+                        data=JSON.parse(data);
                     }
+                    if(data.callbackMsg=="Error") {
+                        nebula.common.alert.danger(data.responseContext, 1000);
+                        return;
+                    }
+                    if (jsonData.callbackMsg.match(/Success/)) {
+                        nebula.common.alert.success(data.responseContext, 1000);
+                    }
+                },
+                error: function (errorThrown) {
+                    nebula.common.alert.danger( "完成编辑失败，原因" + errorThrown, 1000);
                 }
             });
             $("#etc_btns").hide();
@@ -56,6 +59,9 @@ $(document).ready(function(){
             url: "/publish/list/describeRefreshTasks",
             dataType:"json",
             success: function (data) {
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
+                }
                 if(data.callbackMsg=="Success") {
                     var modal_tbString = ""
                     for (var i = 0, modallen = data.responseContext.tasks.length; i < modallen; i++) {
@@ -69,23 +75,11 @@ $(document).ready(function(){
                     $("#modal_tb").html(modal_tbString);
                 }
                 else{
-                    $.notify({
-                        icon: '',
-                        message: data.responseContext
-                    }, {
-                        type: 'danger',
-                        timer: 1000
-                    });
+                    nebula.common.alert.danger(data.responseContext, 1000);
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "请求CDN列表失败，原因" + errorThrown
-                }, {
-                    type: 'danger',
-                    timer: 1000
-                });
+                nebula.common.alert.danger("请求CDN列表失败，原因" + errorThrown, 1000);
             }
         })
     });
@@ -100,24 +94,14 @@ $(document).ready(function(){
             },
             dataType:"json",
             success: function (data) {
-                if(data.callbackMsg=="Error"){
-                    $.notify({
-                        icon: '',
-                        message: data.responseContext
-                    }, {
-                        type: 'danger',
-                        timer: 1000
-                    });
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
                 }
-                else {
-                    $.notify({
-                        icon: '',
-                        message: "刷新CDN成功"
-                    }, {
-                        type: 'info',
-                        timer: 1000
-                    });
+                if(data.callbackMsg=="Error") {
+                    nebula.common.alert.danger(data.responseContext, 1000);
+                    return;
                 }
+                nebula.common.alert.success("刷新CDN成功", 1000);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $.notify({
@@ -280,14 +264,7 @@ $(document).ready(function(){
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "很抱歉，获取发布事件信息失败，原因" + errorThrown
-
-                }, {
-                    type: 'info',
-                    timer: 1000
-                });
+                nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown,1000);
                 return;
             }
         });
@@ -416,8 +393,9 @@ function Initialization() {
                     actionResult = HostList[i]["actionResult"];
                 if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
                 {
-                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+")' href='#'><span class='label label-danger'>"+
-                        HostList[i]["logNumber"]+"</span></a>";
+                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"ERROR"+"&quot;"+")' href='#'><span class='label label-danger'>error"+
+                        HostList[i]["logNumber"]+"</span></a><br/><br/>"+"<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"EXCEPTION"+"&quot;"+")' href='#'><span class='label label-danger'>exc"+
+                        HostList[i]["excNumber"]+"</span></a>";
                 }
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
                     actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult +
@@ -786,11 +764,12 @@ function approvalBtn(){
 }
 
 //错误数点击事件
-function errorNumClick(hostName){
+function errorNumClick(hostName,type){
     $("#hostName_modal").val(hostName);
     $("#publishDatetime_modal").val($("#publishDatetime").text());
     $("#logEndTime_modal").val( new Date().Format("yyyy-MM-dd hh:mm:ss"));
-    $("#keyWord_modal").val("ERROR");
+    //$("#keyWord_modal").val("ERROR");
+    $("#keyWord_modal").val(type);
     //设置开关为开启状态
     $('#freshControl_switch').bootstrapSwitch('setState', true);
     //模态框状态设置（开启）
@@ -840,6 +819,13 @@ function logFrenshControl(pageNum,currentPage){
         },
         //async: true,
         success: function (data) {
+            if(!data.callbackMsg){
+                data=JSON.parse(data);
+            }
+            if(data.callbackMsg=="Error") {
+                nebula.common.alert.danger(data.responseContext, 1000);
+                return;
+            }
             var tbLogString="";
             for(var i= 0,len=data.responseContext["list"].length;i<len;i++){
                 var logInfo=data.responseContext["list"][i];

@@ -5,6 +5,13 @@ $(function(){
             url: "/publish/list/describeRefreshTasks",
             dataType:"json",
             success: function (data) {
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
+                }
+                if(data.callbackMsg=="Error") {
+                    nebula.common.alert.danger(data.responseContext, 1000);
+                    return;
+                }
                 if(data.callbackMsg=="Success") {
                     var modal_tbString = ""
                     for (var i = 0, modallen = data.responseContext.tasks.length; i < modallen; i++) {
@@ -17,24 +24,9 @@ $(function(){
                     }
                     $("#modal_tb").html(modal_tbString);
                 }
-                else{
-                    $.notify({
-                        icon: '',
-                        message: data.responseContext
-                    }, {
-                        type: 'danger',
-                        timer: 1000
-                    });
-                }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "请求CDN列表失败，原因" + errorThrown
-                }, {
-                    type: 'danger',
-                    timer: 1000
-                });
+                nebula.common.alert.danger("请求CDN列表失败，原因" + errorThrown, 1000);
             }
         })
     });
@@ -52,33 +44,17 @@ $(function(){
             },
             dataType:"json",
             success: function (data) {
-                if(data.callbackMsg=="Error"){
-                    $.notify({
-                        icon: '',
-                        message: data.responseContext
-                    }, {
-                        type: 'danger',
-                        timer: 1000
-                    });
+                if(!data.callbackMsg){
+                    data=JSON.parse(data);
                 }
-                else {
-                    $.notify({
-                        icon: '',
-                        message: "刷新CDN成功"
-                    }, {
-                        type: 'info',
-                        timer: 1000
-                    });
+                if(data.callbackMsg=="Error") {
+                    nebula.common.alert.danger(data.responseContext, 1000);
+                    return;
                 }
+                nebula.common.alert.success("刷新CDN成功", 1000);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "刷新CDN失败，原因" + errorThrown
-                }, {
-                    type: 'danger',
-                    timer: 1000
-                });
+                nebula.common.alert.danger("刷新CDN失败，原因" + errorThrown, 1000);
             }
         })
     });
