@@ -420,8 +420,8 @@ function Initialization() {
                     actionResult = HostList[i]["actionResult"];
                 if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
                 {
-                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"ERROR"+"&quot;"+")' href='#'><span class='label label-danger'>error"+
-                        HostList[i]["logNumber"]+"</span></a><br/><br/>"+"<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"EXCEPTION"+"&quot;"+")' href='#'><span class='label label-danger'>exc"+
+                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"ERROR"+"&quot;"+")' href='#'><span class='label label-danger'>error:"+
+                        HostList[i]["logNumber"]+"</span></a><br/><br/>"+"<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"EXCEPTION"+"&quot;"+")' href='#'><span class='label label-danger'>exc:"+
                         HostList[i]["excNumber"]+"</span></a>";
                 }
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
