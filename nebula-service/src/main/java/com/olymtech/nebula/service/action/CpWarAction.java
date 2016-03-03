@@ -223,7 +223,7 @@ public class CpWarAction extends AbstractAction {
                             PublishAction.COPY_PUBLISH_OLD_WAR,
                             event.getPublishActionGroup(),
                             false,
-                            "校验文件时，文件拷贝个数异常。主机ip：" + ip + " 新目录文件个数：" + newEveryHost.size() + ",  旧目录文件个数:" + oldEveryHost.size());
+                            "校验文件拷贝个数异常：个数不一致。主机ip：" + ip + " 实际拷贝个数：" + newEveryHost.size() + ",  原目录文件个数:" + oldEveryHost.size());
                     return false;
                 }
 
@@ -238,7 +238,7 @@ public class CpWarAction extends AbstractAction {
                                 PublishAction.COPY_PUBLISH_OLD_WAR,
                                 event.getPublishActionGroup(),
                                 false,
-                                "校验文件时，文件拷贝'"+filename+"'md5异常。主机ip：" + ip + " 新目录文件md5：" + newMd5 + ",  旧目录文件md5:" + oldMd5);
+                                "校验文件拷贝完整性异常：md5不一致，文件名：'"+filename+"' 主机ip：" + ip + " 新目录文件md5：" + newMd5 + ",  原目录文件md5:" + oldMd5);
                         return false;
                     }
                 }

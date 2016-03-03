@@ -15,12 +15,14 @@ import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
+import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
 import com.olymtech.nebula.service.starry.IStarryCdnApi;
 import com.olymtech.nebula.service.starry.IStarrySlbApi;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,6 +69,11 @@ public class PublishController extends BaseController {
     private IStarrySlbApi starrySlbApi;
     @Resource
     private IElkLogService elkLogService;
+    @Resource
+    private IFileAnalyzeService fileAnalyzeService;
+
+    @Value("${master_deploy_dir}")
+    private String MasterDeployDir;
 
 
     @RequiresPermissions("publishevent:page")
@@ -895,6 +902,33 @@ public class PublishController extends BaseController {
         } catch (Exception e) {
             return returnCallback("Error", "验证码错误.");
         }
+    }
+
+    /**
+     * 删除非war包文件
+     */
+    @RequestMapping(value = "/deleteErrorFiles", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object deleteErrorFiles(Integer eventId) {
+        NebulaPublishEvent event = publishEventService.selectById(eventId);
+        String publicWarDirPath = MasterDeployDir + "/" + event.getPublishProductKey() + "/publish_war/";
+        List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
+        String regex = ".*\\.war$";
+        List<String> errorNameList = new ArrayList<>();
+        Integer removedNum = 0;
+        for (int i = 0; i < appNameList.size(); i++) {
+            if (!appNameList.get(i).matches(regex)) {
+                errorNameList.add(appNameList.get(i));
+                Boolean removed = fileAnalyzeService.rmFile(event.getPublishProductKey(), appNameList.get(i));
+                if (removed == true) {
+                    removedNum++;
+                }
+            }
+        }
+        if (removedNum==errorNameList.size()) {
+            return returnCallback("Success", "删除非war包文件成功.");
+        }
+        return returnCallback("Error", "删除非war包文件失败.");
     }
 
 }
