@@ -1,6 +1,7 @@
 package com.olymtech.nebula.file.analyze.impl;
 
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -133,6 +134,12 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     @Override
     public Boolean rmFile(String key, String filename){
         Boolean result = false;
+
+        /** 删除的目录 不能为空*/
+        if(StringUtils.isEmpty(key) || StringUtils.isEmpty(filename)){
+            return false;
+        }
+
         try {
             String  filePath = masterDeployDir+key+"/"+filename;
             File file = new File(filePath);

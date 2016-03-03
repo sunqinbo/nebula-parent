@@ -15,7 +15,7 @@ public class NebulaPublishSchedule extends BaseDO{
 
     private String errorMsg;
 
-    private Integer errorType;
+    private Integer errorType = 0;
 
     public Integer getErrorType() {
         return errorType;
@@ -48,6 +48,21 @@ public class NebulaPublishSchedule extends BaseDO{
         this.publishActionGroup = publishActionGroup;
         this.isSuccessAction = isSuccessAction;
         this.errorMsg = errorMsg;
+    }
+
+    public NebulaPublishSchedule(Integer publishEventId,
+                                 PublishAction publishAction,
+                                 PublishActionGroup publishActionGroup,
+                                 Boolean isSuccessAction,
+                                 String errorMsg,
+                                 Integer errorType){
+        super();
+        this.publishEventId = publishEventId;
+        this.publishAction = publishAction;
+        this.publishActionGroup = publishActionGroup;
+        this.isSuccessAction = isSuccessAction;
+        this.errorMsg = errorMsg;
+        this.errorType = errorType;
     }
 
     public NebulaPublishSchedule(Integer publishEventId,
