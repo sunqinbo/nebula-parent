@@ -211,7 +211,7 @@ public class PublishWarAction extends AbstractAction {
                         PublishAction.PUBLISH_NEW_WAR,
                         event.getPublishActionGroup(),
                         false,
-                        "分发war包完整性校验时，获取数据异常。实际成功数：" + minionFileMap.size() + ",  目标成功数:" + targets.size());
+                        "获取minion war包md5数据异常。实际获取数据主机数：" + minionFileMap.size() + ",  目标主机数数:" + targets.size());
                 return false;
             }
 
@@ -220,7 +220,7 @@ public class PublishWarAction extends AbstractAction {
                 String filename = entry.getKey();
                 String masterMd5 = entry.getValue();
                 for (Map.Entry<String, Map<String,String>> entryEvent : minionFileMap.entrySet()) {
-                    String ip = entry.getKey();
+                    String ip = entryEvent.getKey();
                     Map<String,String> minionEveryHost = entryEvent.getValue();
                     String minionMd5 = minionEveryHost.get(filename);
 

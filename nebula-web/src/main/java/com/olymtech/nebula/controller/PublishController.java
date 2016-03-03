@@ -681,19 +681,26 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:addnextpublish")
     @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Object addnextpublish(Integer eventId, String nowPublish) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
-        nebulaPublishEvent.setPublishEnv(nowPublish);
-        nebulaPublishEvent.setId(null);
-        nebulaPublishEvent.setIsApproved(false);
-        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
-        nebulaPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
-        int id = publishEventService.createPublishEvent(nebulaPublishEvent);
-        NebulaPublishEvent nebulaPublishEventReal = new NebulaPublishEvent();
-        nebulaPublishEventReal.setId(eventId);
-        nebulaPublishEvent.setIsApproved(true);
-        nebulaPublishEventReal.setPid(id);
-        publishEventService.updateByIdSelective(nebulaPublishEventReal);
+    public Object addNextPublish(Integer eventId, String nowPublish) throws Exception {
+        NebulaPublishEvent publishEvent = publishEventService.getPublishEventById(eventId);
+
+        NebulaPublishEvent newPublishEvent = new NebulaPublishEvent();
+
+        newPublishEvent.setPublishSubject(publishEvent.getPublishSubject());
+        newPublishEvent.setPublishBuName(publishEvent.getPublishBuName());
+        newPublishEvent.setPublishBuCname(publishEvent.getPublishBuCname());
+        newPublishEvent.setPublishProductName(publishEvent.getPublishProductName());
+        newPublishEvent.setPublishProductCname(publishEvent.getPublishProductCname());
+        newPublishEvent.setPublishEnv(nowPublish);
+        newPublishEvent.setPublishSvn(publishEvent.getPublishSvn());
+        newPublishEvent.setProductSrcSvn(publishEvent.getProductSrcSvn());
+        newPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
+        newPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
+        int id = publishEventService.createPublishEvent(newPublishEvent);
+
+        publishEvent.setPid(id);
+        publishEventService.updateByIdSelective(publishEvent);
+
         return returnCallback("Success", id);
     }
 
