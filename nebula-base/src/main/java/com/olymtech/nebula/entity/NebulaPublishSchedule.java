@@ -15,6 +15,24 @@ public class NebulaPublishSchedule extends BaseDO{
 
     private String errorMsg;
 
+    private Integer errorType;
+
+    public Integer getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(Integer errorType) {
+        this.errorType = errorType;
+    }
+
+    public Boolean getSuccessAction() {
+        return isSuccessAction;
+    }
+
+    public void setSuccessAction(Boolean successAction) {
+        isSuccessAction = successAction;
+    }
+
     public NebulaPublishSchedule(){
         super();
     }
