@@ -330,7 +330,7 @@ $(document).ready(function(){
     });
     //进入下一阶段的发布（禁用）
     $("#nextPublish").click(function () {
-        if ($("#publishEnv").html() == "test") {
+        if ($("#publishEnv").html() == "test1"||$("#publishEnv").html() == "test2"||$("#publishEnv").html() == "test3") {
             nextPublish("stage");
         }
         if ($("#publishEnv").html() == "stage") {
@@ -691,7 +691,7 @@ function btnControl(publishStatus){
     switch (publishStatus){
         case "PUBLISHED":var btn_text;
             $("#restartTomcat_btn").show();
-            if ($("#publishEnv").html() == "test") {
+            if ($("#publishEnv").html() == "test1"||$("#publishEnv").html() == "test2"||$("#publishEnv").html() == "test3") {
                 btn_text = "准生产";
                 $("#nextPublish").text("进入" + btn_text).show();
             }
@@ -1042,7 +1042,9 @@ function checkLastPublish(){
 //查看发布阶段按钮名称控制
 function checkPublishBtnSet(){
     switch ($("#publishEnv").text()){
-        case "test":$("#checkNext_btn").text("查看准生产环境");break;
+        case "test1":
+        case "test2":
+        case "test3":$("#checkNext_btn").text("查看准生产环境");break;
         case "stage":$("#checkNext_btn").text("查看生产环境");$("#checkLast_btn").text("查看测试环境");break;
         default:$("#checkLast_btn").text("查看准生产环境");
     }

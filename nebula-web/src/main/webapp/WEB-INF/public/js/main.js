@@ -30,8 +30,14 @@ nebula.common.transform = {};
 nebula.common.transform.publishEnv = function(publishEnv){
     var result = "";
     switch (publishEnv){
-        case "test":
-            result = "测试";
+        case "test1":
+            result = "测试1";
+            break;
+        case "test2":
+            result = "测试2";
+            break;
+        case "test3":
+            result = "测试3";
             break;
         case "stage":
             result = "准生产";
