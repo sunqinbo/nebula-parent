@@ -912,9 +912,7 @@ public class PublishController extends BaseController {
         NebulaPublishEvent event = publishEventService.selectById(eventId);
         String publicWarDirPath = MasterDeployDir + "/" + event.getPublishProductKey() + "/publish_war/";
         List<String> appNameList = fileAnalyzeService.getFileListByDirPath(publicWarDirPath);
-        String appNames = "";
         String regex = ".*\\.war$";
-        List<String> appNameListWithoutWar = new ArrayList<>();
         List<String> errorNameList = new ArrayList<>();
         Integer removedNum = 0;
         for (int i = 0; i < appNameList.size(); i++) {
