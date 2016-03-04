@@ -193,7 +193,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
         ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
-        return elkLogService.count(elkSearchData);
+        return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
     }
 
 
