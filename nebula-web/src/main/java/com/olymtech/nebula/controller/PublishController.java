@@ -398,9 +398,17 @@ public class PublishController extends BaseController {
                 publishBaseService.insertAndUpdate(publishBase);
             }
 
+            /*获取日志错误数,错误数等于所有机器总和*/
+            Map<String, Integer> map = publishEventService.getLogCountSum(publishEvent);
+            Integer errorCountSum = map.get("errorCountSum");
+            Integer exceptionCountSum = map.get("exceptionCountSum");
+
             /** 更新事件单为 成功发布 */
             publishEvent.setIsSuccessPublish(true);
             publishEvent.setPublishStatus(PublishStatus.PUBLISHED);
+            publishEvent.setPublishEndDatetime(new Date());
+            publishEvent.setCountError(errorCountSum);
+            publishEvent.setCountException(exceptionCountSum);
             publishEventService.update(publishEvent);
 
             return returnCallback("Success", "成功发布确认成功");
@@ -439,9 +447,17 @@ public class PublishController extends BaseController {
             /** 清楚基线 */
             publishBaseService.cleanBaseByEventId(eventId);
 
+            /*获取日志错误数,错误数等于所有机器总和*/
+            Map<String, Integer> map = publishEventService.getLogCountSum(publishEvent);
+            Integer errorCountSum = map.get("errorCountSum");
+            Integer exceptionCountSum = map.get("exceptionCountSum");
+
             /** 更新事件单为 失败发布 */
             publishEvent.setIsSuccessPublish(false);
             publishEvent.setPublishStatus(PublishStatus.ROLLBACK);
+            publishEvent.setCountException(exceptionCountSum);
+            publishEvent.setCountError(errorCountSum);
+            publishEvent.setPublishEndDatetime(new Date());
             publishEventService.update(publishEvent);
 
             return returnCallback("Success", "失败发布确认成功");
@@ -465,7 +481,6 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             publishEventService.retryPublishRollback(eventId);
-
             NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
             publishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
             publishEventService.update(publishEvent);
@@ -653,8 +668,8 @@ public class PublishController extends BaseController {
             if (PublishStatus.PUBLISHED == nebulaPublishEvent.getPublishStatus() || PublishStatus.ROLLBACK == nebulaPublishEvent.getPublishStatus() || PublishStatus.CANCEL == nebulaPublishEvent.getPublishStatus()) {
             } else {
                 for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"ERROR"));
-                    nebulaPublishHost.setExcNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "EXCEPTION"));
+                    nebulaPublishHost.setLogNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "ERROR"));
+                    nebulaPublishHost.setExcNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "EXCEPTION"));
                 }
             }
             map.put("HostInfos", nebulaPublishHosts);
@@ -847,7 +862,7 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success", map);
 //    }
-    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost,String logType) {
+    /*public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType) {
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
         if (publishEvent.getPublishDatetime() == null) {
@@ -858,6 +873,8 @@ public class PublishController extends BaseController {
         ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
         return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
     }
+        return elkLogService.count(elkSearchData);
+    }*/
 
     /**
      * 获取log 详细信息

@@ -1,12 +1,10 @@
 package com.olymtech.nebula.service;
 
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.BaseDO;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liwenji on 2015/11/4.
@@ -36,4 +34,8 @@ public interface IPublishEventService {
     public int getLastPublishId(Integer eventId);
 
     public void updateByIdSelective(NebulaPublishEvent nebulaPublishEventReal);
+
+    Map<String,Integer> getLogCountSum(NebulaPublishEvent publishEvent);
+
+    int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType);
 }
