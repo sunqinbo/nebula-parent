@@ -127,24 +127,28 @@ function listBtn(pageNum) {
                         datatype: "json",
                         success: function (data) {
                             gettb(pageNum);
-                            $.notify({
-                                icon: '',
-                                message: "成功删除发布事件"
-
-                            }, {
-                                type: 'info',
-                                timer: 1000
-                            });
+                            if(data.callbackMsg=="Success") {
+                                nebula.common.alert.success("成功删除发布事件", 1000);
+                            }
+                            //$.notify({
+                            //    icon: '',
+                            //    message: "成功删除发布事件"
+                            //
+                            //}, {
+                            //    type: 'info',
+                            //    timer: 1000
+                            //});
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            $.notify({
-                                icon: '',
-                                message: "很抱歉，删除发布事件失败，原因" + errorThrown
-
-                            }, {
-                                type: 'info',
-                                timer: 1000
-                            });
+                            nebula.common.alert.danger("很抱歉，删除发布事件失败，原因" + errorThrown, 1000);
+                            //$.notify({
+                            //    icon: '',
+                            //    message: "很抱歉，删除发布事件失败，原因" + errorThrown
+                            //
+                            //}, {
+                            //    type: 'info',
+                            //    timer: 1000
+                            //});
                         }
                     });
                 }

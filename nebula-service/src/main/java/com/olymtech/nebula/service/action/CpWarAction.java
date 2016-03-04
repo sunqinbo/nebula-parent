@@ -135,8 +135,8 @@ public class CpWarAction extends AbstractAction {
             String newDir = BaseWarDir + publishModule.getPublishModuleKey();
             String oldDir = BaseWarDir + oldModule;
 
-            ResultInfoSet newResult = saltStackService.checkFilesMd5ByDir(targets, newDir, "");
-            ResultInfoSet oldResult = saltStackService.checkFilesMd5ByDir(targets, oldDir, "");
+            ResultInfoSet newResult = saltStackService.checkFilesMd5ByDir(targets, newDir, ".war");
+            ResultInfoSet oldResult = saltStackService.checkFilesMd5ByDir(targets, oldDir, ".war");
 
             ResultInfo newResultInfo = newResult.get(0);
             Map<String, Object> newResults = newResultInfo.getResults();

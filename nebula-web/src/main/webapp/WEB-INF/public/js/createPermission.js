@@ -47,14 +47,7 @@ $(function(){
                     $("#unenableRadio").attr("checked", true);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "很抱歉载入权限信息失败，原因"+ errorThrown
-
-                },{
-                    type: 'info',
-                    timer: 1000
-                });
+                nebula.common.alert.danger( "很抱歉载入权限信息失败，原因"+ errorThrown, 1000);
             }
         });
         $("#submit").hide();
@@ -98,24 +91,10 @@ function btnClick(isCreate){
         data: $('#insertform').serialize(),
         async: false,
         success: function (data) {
-            $.notify({
-                icon: '',
-                message: "添加权限成功"
-
-            }, {
-                type: 'info',
-                timer: 1000
-            });
+            nebula.common.alert.success(data.responseContext, 1000);
         },
-        error: function (request) {
-            $.notify({
-                icon: '',
-                message: "添加权限失败" + errorThrown
-
-            }, {
-                type: 'info',
-                timer: 1000
-            });
+        error: function (errorThrown) {
+            nebula.common.alert.danger("添加权限失败" + errorThrown, 1000);
         }
     });
 }
@@ -130,22 +109,15 @@ function selectControl(){
             success: function(data) {
                 var selectString=""
                 for(var i= 0,len=data.length;i<len;i++){
-                    var perimission=data[i];
-                    if(perimission.id!=$("#permissionId").val()) {
-                        selectString = selectString + "<option value='" + perimission.id + "'>" + perimission.permissionCname + "</option>";
+                    var permission=data[i];
+                    if(permission.id!=$("#permissionId").val()) {
+                        selectString = selectString + "<option value='" + permission.id + "'>" + permission.permissionCname + "</option>";
                     }
                 }
                 $("#pidSelect").html(selectString);
             },
-            error: function(request) {
-                $.notify({
-                    icon: '',
-                    message: "查询页面失败"+ errorThrown
-
-                },{
-                    type: 'info',
-                    timer: 1000
-                });
+            error: function(errorThrown) {
+                nebula.common.alert.danger("查询页面失败" + errorThrown, 1000);
             }
         });
         $("#pidSelectDiv").show();

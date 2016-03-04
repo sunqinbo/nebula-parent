@@ -47,14 +47,7 @@ $(function(){
                     $("#unenableRadio").attr("checked", true);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.notify({
-                    icon: '',
-                    message: "很抱歉载入角色信息失败，原因"+ errorThrown
-
-                },{
-                    type: 'info',
-                    timer: 1000
-                });
+                nebula.common.alert.danger("很抱歉载入角色信息失败，原因"+ errorThrown, 1000);
             }
         });
         $("#submit").hide();
@@ -96,14 +89,7 @@ $(function(){
             $.fn.zTree.init($("#permissionList"), checkSetting, zNodes);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $.notify({
-                icon: '',
-                message: "很抱歉载入权限失败，原因"+ errorThrown
-
-            },{
-                type: 'info',
-                timer: 1000
-            });
+            nebula.common.alert.danger("很抱歉载入权限失败，原因"+ errorThrown, 1000);
         }
     });
 
@@ -169,24 +155,10 @@ function btnClick(isCreate){
         },
         datatype:"json",
         success: function (data) {
-            $.notify({
-                icon: '',
-                message: tips+"角色成功"
-
-            },{
-                type: 'info',
-                timer: 1000
-            });
+            nebula.common.alert.success(data.responseContext, 1000);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $.notify({
-                icon: '',
-                message: "很抱歉"+tips+"角色失败，原因"+ errorThrown
-
-            },{
-                type: 'info',
-                timer: 1000
-            });
+            nebula.common.alert.danger("很抱歉"+tips+"角色失败，原因"+ errorThrown, 1000);
         }
     })
 }

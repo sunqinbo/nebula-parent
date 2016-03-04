@@ -653,7 +653,8 @@ public class PublishController extends BaseController {
             if (PublishStatus.PUBLISHED == nebulaPublishEvent.getPublishStatus() || PublishStatus.ROLLBACK == nebulaPublishEvent.getPublishStatus() || PublishStatus.CANCEL == nebulaPublishEvent.getPublishStatus()) {
             } else {
                 for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost));
+                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"ERROR"));
+                    nebulaPublishHost.setExcNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"EXCEPTION"));
                 }
             }
             map.put("HostInfos", nebulaPublishHosts);
@@ -680,19 +681,26 @@ public class PublishController extends BaseController {
     @RequiresPermissions("publishevnt:addnextpublish")
     @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
     @ResponseBody
-    public Object addnextpublish(Integer eventId, String nowPublish) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
-        nebulaPublishEvent.setPublishEnv(nowPublish);
-        nebulaPublishEvent.setId(null);
-        nebulaPublishEvent.setIsApproved(false);
-        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
-        nebulaPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
-        int id = publishEventService.createPublishEvent(nebulaPublishEvent);
-        NebulaPublishEvent nebulaPublishEventReal = new NebulaPublishEvent();
-        nebulaPublishEventReal.setId(eventId);
-        nebulaPublishEvent.setIsApproved(true);
-        nebulaPublishEventReal.setPid(id);
-        publishEventService.updateByIdSelective(nebulaPublishEventReal);
+    public Object addNextPublish(Integer eventId, String nowPublish) throws Exception {
+        NebulaPublishEvent publishEvent = publishEventService.getPublishEventById(eventId);
+
+        NebulaPublishEvent newPublishEvent = new NebulaPublishEvent();
+
+        newPublishEvent.setPublishSubject(publishEvent.getPublishSubject());
+        newPublishEvent.setPublishBuName(publishEvent.getPublishBuName());
+        newPublishEvent.setPublishBuCname(publishEvent.getPublishBuCname());
+        newPublishEvent.setPublishProductName(publishEvent.getPublishProductName());
+        newPublishEvent.setPublishProductCname(publishEvent.getPublishProductCname());
+        newPublishEvent.setPublishEnv(nowPublish);
+        newPublishEvent.setPublishSvn(publishEvent.getPublishSvn());
+        newPublishEvent.setProductSrcSvn(publishEvent.getProductSrcSvn());
+        newPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
+        newPublishEvent.setSubmitEmpId(getLoginUser().getEmpId());
+        int id = publishEventService.createPublishEvent(newPublishEvent);
+
+        publishEvent.setPid(id);
+        publishEventService.updateByIdSelective(publishEvent);
+
         return returnCallback("Success", id);
     }
 
@@ -703,13 +711,13 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
     @ResponseBody
     public Object approvalPublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
         NebulaUserInfo user = getLoginUser();
         String publishEnv = nebulaPublishEvent.getPublishEnv();
         /*如果是生产发布,判断登录人的角色是否是部门主管的角色*/
         if (publishEnv.equals("product")) {
             Boolean userRoleIsExamine = userService.userRoleIsNeedRole(user, "examine");
-            if (userRoleIsExamine == false) {
+            if (!userRoleIsExamine) {
                 return returnCallback("Error", "审批人必须是部门主管才能审批!");
             }
         }
@@ -728,7 +736,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     @ResponseBody
     public Object deletePublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsDelete(true);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
@@ -839,7 +847,7 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success", map);
 //    }
-    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost) {
+    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost,String logType) {
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
         if (publishEvent.getPublishDatetime() == null) {
@@ -847,7 +855,7 @@ public class PublishController extends BaseController {
         }
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
-        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), "ERROR", fromDate, toDate, 1, 10);
+        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
         return elkLogService.count(elkSearchData);
     }
 
