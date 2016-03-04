@@ -417,12 +417,12 @@ function Initialization() {
                     isSuccessAction = HostList[i]["isSuccessAction"];
                 if (HostList[i]["actionResult"] != null)
                     actionResult = HostList[i]["actionResult"];
-                if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
-                {
+                //if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
+                //{
                     logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"ERROR"+"&quot;"+")' href='#'><span class='label label-danger'>error:"+
                         HostList[i]["logNumber"]+"</span></a><br/><br/>"+"<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"EXCEPTION"+"&quot;"+")' href='#'><span class='label label-danger'>exc:"+
                         HostList[i]["excNumber"]+"</span></a>";
-                }
+                //}
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
                     actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult +
                     "</td><td>"+logNumShow+"</td></tr>";
@@ -795,11 +795,20 @@ function approvalBtn(){
 function errorNumClick(hostName,type){
     $("#hostName_modal").val(hostName);
     $("#publishDatetime_modal").val($("#publishDatetime").text());
-    $("#logEndTime_modal").val( new Date().Format("yyyy-MM-dd hh:mm:ss"));
-    //$("#keyWord_modal").val("ERROR");
-    $("#keyWord_modal").val(type);
     //设置开关为开启状态
     $('#freshControl_switch').bootstrapSwitch('setState', true);
+    if($("#publishEndTime").val()){
+        $("#freshControl_div").hide();
+        $('#freshControl_switch').bootstrapSwitch('setState', false);
+        $("#pageSort").show();
+        $("#logEndTime_modal").val($("#publishEndTime").val());
+        $("#logEndTime_modal").attr('disabled',true);
+        $()
+    }else {
+        $("#logEndTime_modal").val(new Date().Format("yyyy-MM-dd hh:mm:ss"));
+    }
+    //$("#keyWord_modal").val("ERROR");
+    $("#keyWord_modal").val(type);
     //模态框状态设置（开启）
     $("#isclosed_modal").val("0");
     //轮询事件
@@ -828,7 +837,11 @@ function logFrenshControl(pageNum,currentPage){
         return;
     }
     if($('#freshControl_checkbox').prop("checked")){
-        $('#logEndTime_modal').val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
+        if($("#publishEndTime").val()){
+            $("#logEndTime_modal").val($("#publishEndTime").val());
+        }else {
+            $('#logEndTime_modal').val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
+        }
         setTimeout(logFrenshControl,2000);
     }
     //else{

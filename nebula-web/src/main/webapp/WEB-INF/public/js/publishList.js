@@ -70,6 +70,7 @@ function gettb(pageNum){
                         detailString=detailString+"<button name='delete_button' style='float: right;' class='btn btn-danger btn-sm' type='button'>删除</button>"
                     }
                 }
+                var errorCount=event.countError+event.countException;
                 tbString=tbString+"<tr><td>"+event.id+
                     "</td><td>"+event.publishSubject+
                     "</td><td>"+nebula.common.transform.publishEnv(event.publishEnv)+
@@ -78,7 +79,7 @@ function gettb(pageNum){
                     "</td><td>"+event.submitDatetime+
                     "</td><td>"+(event.submitUser?event.submitUser.nickname:"")+
                     "</td><td>"+(event.publishUser?event.publishUser.nickname:"")+
-                    "</td><td></td><td><div id='listBtn' class='btn-group'>"+detailString+"</div></td>";
+                    "</td><td><span class='label label-danger'>"+errorCount+"</span></td><td><div id='listBtn' class='btn-group'>"+detailString+"</div></td>";
             }
             totalPage=data["pages"];
             (function() {

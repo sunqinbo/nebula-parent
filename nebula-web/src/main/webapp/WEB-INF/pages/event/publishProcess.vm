@@ -100,18 +100,6 @@
                                     <label>发布状态：</label>
                                     <label id="publishStatus"></label>
                                 </td>
-                            ##  <td>
-                            ##   <label>发布结果：</label>
-                            ##   <label>$!{Event.isSuccessPublish}</label>
-                            ##  </td>
-                            ##  <td>
-                            ##    <label>发布分批：</label>
-                            ##    <label>是/否</label>
-                            ##  </td>
-                            ##                                <td>
-                            ##                                    <label>发布人：</label>
-                            ##                                    <label>$!{Event.publishUser.nickname}</label>
-                            ##                                </td>
                                 <td>
                                     <label>发布进度：</label>
                                     <label></label>
@@ -126,20 +114,7 @@
                             ##                                        'yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
                             ##                                </td>
                             </tr>
-                            ##                            <tr>
-                            ##                                <td>
-                            ##                                    <label>提交人：</label>
-                            ##                                    <label>$!{Event.submitUser.nickname}</label>
-                            ##                                </td>
-                            ##                                <td>
-                            ##                                    <label>提交时间：</label>
-                            ##                                    <label>$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.submitDatetime)</label>
-                            ##                                </td>
-                            ##                                <td colspan="2">
-                            ##                                    <label>提交SVN地址：</label>
-                            ##                                    <label style="text-transform: none;">$!{Event.publishSvn}</label>
-                            ##                                </td>
-                            ##                            </tr>
+                            <input hidden type="text" id="publishEndTime" value="$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishEndDatetime)"/>
                             </tbody>
                         </table>
                         <div>
@@ -515,7 +490,7 @@
                                 <input id="keyWord_modal" type="text" class="form-control"/>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div id="freshControl_div" class="col-md-2">
                             <label>自动刷新</label>
                             <div id="freshControl_switch" class="switch switch-mini" data-on="success"
                                  data-off="warning">
