@@ -399,7 +399,7 @@ public class PublishController extends BaseController {
             }
 
             /** 更新事件单为 成功发布 */
-            publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED,publishEvent);
+            publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, publishEvent);
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -437,7 +437,7 @@ public class PublishController extends BaseController {
             publishBaseService.cleanBaseByEventId(eventId);
 
             /** 更新事件单为 失败发布 */
-            publishEventService.updateLogCountSum(false,PublishStatus.ROLLBACK,publishEvent);
+            publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, publishEvent);
 
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {
@@ -644,12 +644,9 @@ public class PublishController extends BaseController {
         if (eventId != null) {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
             NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
-            if (PublishStatus.PUBLISHED == nebulaPublishEvent.getPublishStatus() || PublishStatus.ROLLBACK == nebulaPublishEvent.getPublishStatus() || PublishStatus.CANCEL == nebulaPublishEvent.getPublishStatus()) {
-            } else {
-                for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                    nebulaPublishHost.setLogNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "ERROR"));
-                    nebulaPublishHost.setExcNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "EXCEPTION"));
-                }
+            for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
+                nebulaPublishHost.setLogNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "ERROR"));
+                nebulaPublishHost.setExcNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "EXCEPTION"));
             }
             map.put("HostInfos", nebulaPublishHosts);
             map.put("eventStatus", nebulaPublishEvent.getPublishStatus());
