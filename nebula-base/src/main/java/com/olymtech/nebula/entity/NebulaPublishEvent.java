@@ -60,6 +60,36 @@ public class NebulaPublishEvent extends BaseDO {
 
     private NebulaUserInfo approveUser;
 
+    private Integer countError;
+
+    private Integer countException;
+
+    private Date publishEndDatetime;
+
+    public Integer getCountError() {
+        return countError;
+    }
+
+    public void setCountError(Integer countError) {
+        this.countError = countError;
+    }
+
+    public Integer getCountException() {
+        return countException;
+    }
+
+    public void setCountException(Integer countException) {
+        this.countException = countException;
+    }
+
+    public Date getPublishEndDatetime() {
+        return publishEndDatetime;
+    }
+
+    public void setPublishEndDatetime(Date publishEndDatetime) {
+        this.publishEndDatetime = publishEndDatetime;
+    }
+
     public NebulaUserInfo getApproveUser() {
         return approveUser;
     }

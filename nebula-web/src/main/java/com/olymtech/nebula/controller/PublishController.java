@@ -924,10 +924,9 @@ public class PublishController extends BaseController {
                 }
             }
         }
-        if (removedNum==errorNameList.size()) {
+        if (removedNum == errorNameList.size()) {
             return returnCallback("Success", "删除非war包文件成功.");
         }
         return returnCallback("Error", "删除非war包文件失败.");
     }
-
 }

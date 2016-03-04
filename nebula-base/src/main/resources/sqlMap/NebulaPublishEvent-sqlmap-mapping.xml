@@ -2,59 +2,62 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="nebula_publish_event">
     <resultMap id="RM-NebulaPublishEvent" type="com.olymtech.nebula.entity.NebulaPublishEvent">
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="publish_subject" property="publishSubject" jdbcType="VARCHAR" />
-        <result column="publish_bu_name" property="publishBuName" jdbcType="VARCHAR" />
-        <result column="publish_bu_cname" property="publishBuCname" jdbcType="VARCHAR" />
-        <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR" />
-        <result column="publish_product_cname" property="publishProductCname" jdbcType="VARCHAR" />
-        <result column="publish_env" property="publishEnv" jdbcType="VARCHAR" />
-        <result column="publish_svn" property="publishSvn" jdbcType="VARCHAR" />
-        <result column="product_src_svn" property="productSrcSvn" jdbcType="VARCHAR" />
-        <result column="publish_product_key" property="publishProductKey" jdbcType="VARCHAR" />
-        <result column="publish_datetime" property="publishDatetime" jdbcType="TIMESTAMP" />
-        <result column="submit_datetime" property="submitDatetime" jdbcType="TIMESTAMP" />
-        <result column="approve_datetime" property="approveDatetime" jdbcType="TIMESTAMP" />
-        <result column="submit_emp_id" property="submitEmpId" jdbcType="INTEGER" />
-        <result column="pid" property="pid" jdbcType="INTEGER" />
-        <result column="publish_emp_id" property="publishEmpId" jdbcType="INTEGER" />
-        <result column="approve_emp_id" property="approveEmpId" jdbcType="INTEGER" />
-        <result column="is_success_publish" property="isSuccessPublish" jdbcType="INTEGER" />
-        <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
-        <result column="publish_status" property="publishStatus" />
-        <result column="is_approved" property="isApproved" jdbcType="INTEGER" />
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="publish_subject" property="publishSubject" jdbcType="VARCHAR"/>
+        <result column="publish_bu_name" property="publishBuName" jdbcType="VARCHAR"/>
+        <result column="publish_bu_cname" property="publishBuCname" jdbcType="VARCHAR"/>
+        <result column="publish_product_name" property="publishProductName" jdbcType="VARCHAR"/>
+        <result column="publish_product_cname" property="publishProductCname" jdbcType="VARCHAR"/>
+        <result column="publish_env" property="publishEnv" jdbcType="VARCHAR"/>
+        <result column="publish_svn" property="publishSvn" jdbcType="VARCHAR"/>
+        <result column="product_src_svn" property="productSrcSvn" jdbcType="VARCHAR"/>
+        <result column="publish_product_key" property="publishProductKey" jdbcType="VARCHAR"/>
+        <result column="publish_datetime" property="publishDatetime" jdbcType="TIMESTAMP"/>
+        <result column="submit_datetime" property="submitDatetime" jdbcType="TIMESTAMP"/>
+        <result column="approve_datetime" property="approveDatetime" jdbcType="TIMESTAMP"/>
+        <result column="submit_emp_id" property="submitEmpId" jdbcType="INTEGER"/>
+        <result column="pid" property="pid" jdbcType="INTEGER"/>
+        <result column="publish_emp_id" property="publishEmpId" jdbcType="INTEGER"/>
+        <result column="approve_emp_id" property="approveEmpId" jdbcType="INTEGER"/>
+        <result column="is_success_publish" property="isSuccessPublish" jdbcType="INTEGER"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+        <result column="publish_status" property="publishStatus"/>
+        <result column="is_approved" property="isApproved" jdbcType="INTEGER"/>
+        <result column="count_error" property="countError" jdbcType="INTEGER"/>
+        <result column="count_exception" property="countException" jdbcType="INTEGER"/>
+        <result column="publish_end_datetime" property="publishEndDatetime" jdbcType="TIMESTAMP"/>
 
         <association property="submitUser" column="submit_emp_id" javaType="com.olymtech.nebula.entity.NebulaUserInfo">
-            <id column="s_id" property="id" jdbcType="INTEGER" />
-            <result column="s_username" property="username" jdbcType="VARCHAR" />
-            <result column="s_mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
-            <result column="s_weixin_acc" property="weixinAcc" jdbcType="VARCHAR" />
-            <result column="s_qq_acc" property="qqAcc" jdbcType="VARCHAR" />
-            <result column="s_email" property="email" jdbcType="VARCHAR" />
-            <result column="s_nickname" property="nickname" jdbcType="VARCHAR" />
-            <result column="s_dept_name" property="deptName" jdbcType="VARCHAR" />
-            <result column="s_job_title" property="jobTitle" jdbcType="VARCHAR" />
-            <result column="s_emp_id" property="empId" jdbcType="INTEGER" />
-            <result column="s_supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER" />
-            <result column="s_is_enable" property="isEnable" jdbcType="INTEGER" />
-            <result column="s_password" property="password" jdbcType="VARCHAR" />
-            <result column="s_security_key" property="securityKey" jdbcType="VARCHAR" />
+            <id column="s_id" property="id" jdbcType="INTEGER"/>
+            <result column="s_username" property="username" jdbcType="VARCHAR"/>
+            <result column="s_mobile_phone" property="mobilePhone" jdbcType="VARCHAR"/>
+            <result column="s_weixin_acc" property="weixinAcc" jdbcType="VARCHAR"/>
+            <result column="s_qq_acc" property="qqAcc" jdbcType="VARCHAR"/>
+            <result column="s_email" property="email" jdbcType="VARCHAR"/>
+            <result column="s_nickname" property="nickname" jdbcType="VARCHAR"/>
+            <result column="s_dept_name" property="deptName" jdbcType="VARCHAR"/>
+            <result column="s_job_title" property="jobTitle" jdbcType="VARCHAR"/>
+            <result column="s_emp_id" property="empId" jdbcType="INTEGER"/>
+            <result column="s_supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER"/>
+            <result column="s_is_enable" property="isEnable" jdbcType="INTEGER"/>
+            <result column="s_password" property="password" jdbcType="VARCHAR"/>
+            <result column="s_security_key" property="securityKey" jdbcType="VARCHAR"/>
         </association>
         <association property="publishUser" column="publish_emp_id" javaType="com.olymtech.nebula.entity.NebulaUserInfo">
-            <id column="p_id" property="id" jdbcType="INTEGER" />
-            <result column="p_username" property="username" jdbcType="VARCHAR" />
-            <result column="p_mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
-            <result column="p_weixin_acc" property="weixinAcc" jdbcType="VARCHAR" />
-            <result column="p_qq_acc" property="qqAcc" jdbcType="VARCHAR" />
-            <result column="p_email" property="email" jdbcType="VARCHAR" />
-            <result column="p_nickname" property="nickname" jdbcType="VARCHAR" />
-            <result column="p_dept_name" property="deptName" jdbcType="VARCHAR" />
-            <result column="p_job_title" property="jobTitle" jdbcType="VARCHAR" />
-            <result column="p_emp_id" property="empId" jdbcType="INTEGER" />
-            <result column="p_supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER" />
-            <result column="p_is_enable" property="isEnable" jdbcType="INTEGER" />
-            <result column="p_password" property="password" jdbcType="VARCHAR" />
-            <result column="p_security_key" property="securityKey" jdbcType="VARCHAR" />
+            <id column="p_id" property="id" jdbcType="INTEGER"/>
+            <result column="p_username" property="username" jdbcType="VARCHAR"/>
+            <result column="p_mobile_phone" property="mobilePhone" jdbcType="VARCHAR"/>
+            <result column="p_weixin_acc" property="weixinAcc" jdbcType="VARCHAR"/>
+            <result column="p_qq_acc" property="qqAcc" jdbcType="VARCHAR"/>
+            <result column="p_email" property="email" jdbcType="VARCHAR"/>
+            <result column="p_nickname" property="nickname" jdbcType="VARCHAR"/>
+            <result column="p_dept_name" property="deptName" jdbcType="VARCHAR"/>
+            <result column="p_job_title" property="jobTitle" jdbcType="VARCHAR"/>
+            <result column="p_emp_id" property="empId" jdbcType="INTEGER"/>
+            <result column="p_supervisor_emp_id" property="supervisorEmpId" jdbcType="INTEGER"/>
+            <result column="p_is_enable" property="isEnable" jdbcType="INTEGER"/>
+            <result column="p_password" property="password" jdbcType="VARCHAR"/>
+            <result column="p_security_key" property="securityKey" jdbcType="VARCHAR"/>
         </association>
     </resultMap>
     <sql id="NebulaPublishEvent-Base-Column-List">
@@ -78,7 +81,10 @@
         is_success_publish,
         is_delete,
         publish_status,
-        is_approved
+        is_approved,
+        count_error,
+        count_exception,
+        publish_end_datetime
     </sql>
     <sql id="NebulaPublishEvent-User-Base-Column-List">
         npe.id as id,
@@ -102,6 +108,9 @@
         is_delete,
         publish_status,
         is_approved,
+        count_error,
+        count_exception,
+        publish_end_datetime,
         snui.id as s_id,
         snui.username as s_username,
         snui.mobile_phone as s_mobile_phone,
@@ -131,7 +140,8 @@
         pnui.password as p_password,
         pnui.security_key as p_security_key
     </sql>
-    <select id="Nebula-NebulaPublishEventDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishEvent">
+    <select id="Nebula-NebulaPublishEventDao-Select-By-Id" parameterType="java.lang.Integer"
+            resultMap="RM-NebulaPublishEvent">
         select
         <include refid="NebulaPublishEvent-Base-Column-List"/>
         from nebula_publish_event
@@ -140,7 +150,8 @@
     <select id="Nebula-NebulaPublishEventDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from nebula_publish_event
     </select>
-    <select id="Nebula-NebulaPublishEventDao-Select-Count-Where" parameterType="NebulaPublishEvent" resultType="java.lang.Integer">
+    <select id="Nebula-NebulaPublishEventDao-Select-Count-Where" parameterType="NebulaPublishEvent"
+            resultType="java.lang.Integer">
         select count(id) from nebula_publish_event
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="publishEnv != null">
@@ -154,8 +165,11 @@
             </if>
         </trim>
     </select>
-    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-Where" parameterType="NebulaPublishEvent" resultMap="RM-NebulaPublishEvent">
-        select <include refid="NebulaPublishEvent-Base-Column-List"/> from nebula_publish_event
+    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-Where" parameterType="NebulaPublishEvent"
+            resultMap="RM-NebulaPublishEvent">
+        select
+        <include refid="NebulaPublishEvent-Base-Column-List"/>
+        from nebula_publish_event
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="publishEnv != null">
                 publish_env = #{publishEnv}
@@ -173,8 +187,10 @@
         group by id order by id desc
     </select>
 
-    <select id="Nebula-NebulaPublishEventDao-Select-Count-With-User-Where" parameterType="NebulaPublishEvent" resultType="java.lang.Integer">
-        select count(npe.id) from nebula_publish_event npe left join nebula_user_info nui on npe.submit_emp_id = nui.emp_id
+    <select id="Nebula-NebulaPublishEventDao-Select-Count-With-User-Where" parameterType="NebulaPublishEvent"
+            resultType="java.lang.Integer">
+        select count(npe.id) from nebula_publish_event npe left join nebula_user_info nui on npe.submit_emp_id =
+        nui.emp_id
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="publishEnv != null">
                 publish_env = #{publishEnv}
@@ -187,9 +203,12 @@
             </if>
         </trim>
     </select>
-    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-With-User-Where" parameterType="NebulaPublishEvent" resultMap="RM-NebulaPublishEvent">
-        select <include refid="NebulaPublishEvent-User-Base-Column-List"/>
-        from nebula_publish_event npe left join nebula_user_info snui on npe.submit_emp_id = snui.emp_id LEFT JOIN nebula_user_info pnui on npe.publish_emp_id = pnui.emp_id
+    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-With-User-Where" parameterType="NebulaPublishEvent"
+            resultMap="RM-NebulaPublishEvent">
+        select
+        <include refid="NebulaPublishEvent-User-Base-Column-List"/>
+        from nebula_publish_event npe left join nebula_user_info snui on npe.submit_emp_id = snui.emp_id LEFT JOIN
+        nebula_user_info pnui on npe.publish_emp_id = pnui.emp_id
         <trim prefix="WHERE" prefixOverrides="AND |OR ">
             <if test="publishEnv != null">
                 publish_env = #{publishEnv}
@@ -222,8 +241,11 @@
         order by npe.id desc
     </select>
 
-    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-No-PUBLISHING" parameterType="NebulaPublishEvent" resultMap="RM-NebulaPublishEvent">
-        select <include refid="NebulaPublishEvent-Base-Column-List"/> from nebula_publish_event
+    <select id="Nebula-NebulaPublishEventDao-Select-All-Paging-No-PUBLISHING" parameterType="NebulaPublishEvent"
+            resultMap="RM-NebulaPublishEvent">
+        select
+        <include refid="NebulaPublishEvent-Base-Column-List"/>
+        from nebula_publish_event
         where publish_product_name= #{publishProductName}
         AND publish_bu_name = #{publishBuName}
         AND publish_status ='PUBLISHING'
@@ -254,7 +276,10 @@
         is_success_publish,
         is_delete,
         publish_status,
-        is_approved)
+        is_approved,
+        count_error,
+        count_exception,
+        publish_end_datetime)
         values (#{id,jdbcType=INTEGER},
         #{publishSubject,jdbcType=VARCHAR},
         #{publishBuName,jdbcType=VARCHAR},
@@ -275,7 +300,10 @@
         #{isSuccessPublish,jdbcType=INTEGER},
         #{isDelete,jdbcType=INTEGER},
         #{publishStatus,jdbcType=VARCHAR},
-        #{isApproved,jdbcType=INTEGER})
+        #{isApproved,jdbcType=INTEGER},
+        #{countError,jdbcType=INTEGER},
+        #{countException,jdbcType=INTEGER},
+        #{publishEndDatetime,jdbcType=TIMESTAMP} )
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -283,199 +311,227 @@
     <insert id="Nebula-NebulaPublishEventDao-Insert-Selective" parameterType="NebulaPublishEvent">
         insert into nebula_publish_event
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null" >
+            <if test="id != null">
                 id,
             </if>
-            <if test="publishSubject != null" >
+            <if test="publishSubject != null">
                 publish_subject,
             </if>
-            <if test="publishBuName != null" >
+            <if test="publishBuName != null">
                 publish_bu_name,
             </if>
-            <if test="publishBuCname != null" >
+            <if test="publishBuCname != null">
                 publish_bu_cname,
             </if>
-            <if test="publishProductName != null" >
+            <if test="publishProductName != null">
                 publish_product_name,
             </if>
-            <if test="publishProductCname != null" >
+            <if test="publishProductCname != null">
                 publish_product_cname,
             </if>
-            <if test="publishEnv != null" >
+            <if test="publishEnv != null">
                 publish_env,
             </if>
-            <if test="publishSvn != null" >
+            <if test="publishSvn != null">
                 publish_svn,
             </if>
-            <if test="productSrcSvn != null" >
+            <if test="productSrcSvn != null">
                 product_src_svn,
             </if>
-            <if test="publishProductKey != null" >
+            <if test="publishProductKey != null">
                 publish_product_key,
             </if>
-            <if test="publishDatetime != null" >
+            <if test="publishDatetime != null">
                 publish_datetime,
             </if>
-            <if test="submitDatetime != null" >
+            <if test="submitDatetime != null">
                 submit_datetime,
             </if>
-            <if test="approveDatetime != null" >
+            <if test="approveDatetime != null">
                 approve_datetime,
             </if>
-            <if test="submitEmpId != null" >
+            <if test="submitEmpId != null">
                 submit_emp_id,
             </if>
-            <if test="pid != null" >
+            <if test="pid != null">
                 pid,
             </if>
-            <if test="publishEmpId != null" >
+            <if test="publishEmpId != null">
                 publish_emp_id,
             </if>
-            <if test="approveEmpId != null" >
+            <if test="approveEmpId != null">
                 approve_emp_id,
             </if>
-            <if test="isSuccessPublish != null" >
+            <if test="isSuccessPublish != null">
                 is_success_publish,
             </if>
-            <if test="isDelete != null" >
+            <if test="isDelete != null">
                 is_delete,
             </if>
-            <if test="publishStatus != null" >
+            <if test="publishStatus != null">
                 publish_status,
             </if>
-            <if test="isApproved != null" >
+            <if test="isApproved != null">
                 is_approved,
+            </if>
+            <if test="countError != null">
+                count_error,
+            </if>
+            <if test="countException != null">
+                count_exception,
+            </if>
+            <if test="publishEndDatetime != null">
+                publish_end_datetime,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null" >
+            <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="publishSubject != null" >
+            <if test="publishSubject != null">
                 #{publishSubject,jdbcType=VARCHAR},
             </if>
-            <if test="publishBuName != null" >
+            <if test="publishBuName != null">
                 #{publishBuName,jdbcType=VARCHAR},
             </if>
-            <if test="publishBuCname != null" >
+            <if test="publishBuCname != null">
                 #{publishBuCname,jdbcType=VARCHAR},
             </if>
-            <if test="publishProductName != null" >
+            <if test="publishProductName != null">
                 #{publishProductName,jdbcType=VARCHAR},
             </if>
-            <if test="publishProductCname != null" >
+            <if test="publishProductCname != null">
                 #{publishProductCname,jdbcType=VARCHAR},
             </if>
-            <if test="publishEnv != null" >
+            <if test="publishEnv != null">
                 #{publishEnv,jdbcType=VARCHAR},
             </if>
-            <if test="publishSvn != null" >
+            <if test="publishSvn != null">
                 #{publishSvn,jdbcType=VARCHAR},
             </if>
-            <if test="productSrcSvn != null" >
+            <if test="productSrcSvn != null">
                 #{productSrcSvn,jdbcType=VARCHAR},
             </if>
-            <if test="publishProductKey != null" >
+            <if test="publishProductKey != null">
                 #{publishProductKey,jdbcType=VARCHAR},
             </if>
-            <if test="publishDatetime != null" >
+            <if test="publishDatetime != null">
                 #{publishDatetime,jdbcType=TIMESTAMP},
             </if>
-            <if test="submitDatetime != null" >
+            <if test="submitDatetime != null">
                 #{submitDatetime,jdbcType=TIMESTAMP},
             </if>
-            <if test="approveDatetime != null" >
+            <if test="approveDatetime != null">
                 #{approveDatetime,jdbcType=TIMESTAMP},
             </if>
-            <if test="submitEmpId != null" >
+            <if test="submitEmpId != null">
                 #{submitEmpId,jdbcType=INTEGER},
             </if>
-            <if test="pid != null" >
+            <if test="pid != null">
                 #{pid,jdbcType=INTEGER},
             </if>
-            <if test="publishEmpId != null" >
+            <if test="publishEmpId != null">
                 #{publishEmpId,jdbcType=INTEGER},
             </if>
-            <if test="approveEmpId != null" >
+            <if test="approveEmpId != null">
                 #{publishEmpId,jdbcType=INTEGER},
             </if>
-            <if test="isSuccessPublish != null" >
+            <if test="isSuccessPublish != null">
                 #{isSuccessPublish,jdbcType=INTEGER},
             </if>
-            <if test="isDelete != null" >
+            <if test="isDelete != null">
                 #{isDelete,jdbcType=INTEGER},
             </if>
-            <if test="publishStatus != null" >
+            <if test="publishStatus != null">
                 #{publishStatus,jdbcType=VARCHAR},
             </if>
-            <if test="isApproved != null" >
+            <if test="isApproved != null">
                 #{isApproved,jdbcType=INTEGER},
+            </if>
+            <if test="countError != null">
+                #{countError,jdbcType=INTEGER},
+            </if>
+            <if test="countException != null">
+                #{countException,jdbcType=INTEGER},
+            </if>
+            <if test="isApproved != null">
+                #{publishEndDatetime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
     <update id="Nebula-NebulaPublishEventDao-Update-By-Id-Selective" parameterType="NebulaPublishEvent">
         update nebula_publish_event
         <set>
-            <if test="publishSubject != null" >
+            <if test="publishSubject != null">
                 publish_subject = #{publishSubject,jdbcType=VARCHAR},
             </if>
-            <if test="publishBuName != null" >
+            <if test="publishBuName != null">
                 publish_bu_name = #{publishBuName,jdbcType=VARCHAR},
             </if>
-            <if test="publishBuCname != null" >
+            <if test="publishBuCname != null">
                 publish_bu_cname = #{publishBuCname,jdbcType=VARCHAR},
             </if>
-            <if test="publishProductName != null" >
+            <if test="publishProductName != null">
                 publish_product_name = #{publishProductName,jdbcType=VARCHAR},
             </if>
-            <if test="publishProductCname != null" >
+            <if test="publishProductCname != null">
                 publish_product_cname = #{publishProductCname,jdbcType=VARCHAR},
             </if>
-            <if test="publishEnv != null" >
+            <if test="publishEnv != null">
                 publish_env = #{publishEnv,jdbcType=VARCHAR},
             </if>
-            <if test="publishSvn != null" >
+            <if test="publishSvn != null">
                 publish_svn = #{publishSvn,jdbcType=VARCHAR},
             </if>
-            <if test="productSrcSvn != null" >
+            <if test="productSrcSvn != null">
                 product_src_svn = #{productSrcSvn,jdbcType=VARCHAR},
             </if>
-            <if test="publishProductKey != null" >
+            <if test="publishProductKey != null">
                 publish_product_key = #{publishProductKey,jdbcType=VARCHAR},
             </if>
-            <if test="publishDatetime != null" >
+            <if test="publishDatetime != null">
                 publish_datetime = #{publishDatetime,jdbcType=TIMESTAMP},
             </if>
-            <if test="submitDatetime != null" >
+            <if test="submitDatetime != null">
                 submit_datetime = #{submitDatetime,jdbcType=TIMESTAMP},
             </if>
-            <if test="approveDatetime != null" >
+            <if test="approveDatetime != null">
                 approve_datetime = #{approveDatetime,jdbcType=TIMESTAMP},
             </if>
-            <if test="submitEmpId != null" >
+            <if test="submitEmpId != null">
                 submit_emp_id = #{submitEmpId,jdbcType=INTEGER},
             </if>
-            <if test="pid != null" >
+            <if test="pid != null">
                 pid = #{pid,jdbcType=INTEGER},
             </if>
-            <if test="publishEmpId != null" >
+            <if test="publishEmpId != null">
                 publish_emp_id = #{publishEmpId,jdbcType=INTEGER},
             </if>
-            <if test="approveEmpId != null" >
+            <if test="approveEmpId != null">
                 approve_emp_id = #{approveEmpId,jdbcType=INTEGER},
             </if>
-            <if test="isSuccessPublish != null" >
+            <if test="isSuccessPublish != null">
                 is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
             </if>
-            <if test="isDelete != null" >
+            <if test="isDelete != null">
                 is_delete = #{isDelete,jdbcType=INTEGER},
             </if>
-            <if test="publishStatus != null" >
+            <if test="publishStatus != null">
                 publish_status = #{publishStatus,jdbcType=VARCHAR},
             </if>
-            <if test="isApproved != null" >
+            <if test="isApproved != null">
                 is_approved = #{isApproved,jdbcType=INTEGER},
             </if>
+            <if test="countError != null">
+                count_error = #{countError,jdbcType=INTEGER},
+            </if>
+            <if test="countException != null">
+                count_exception = #{countException,jdbcType=INTEGER},
+            </if>
+            <if test="publishEndDatetime != null">
+                publish_end_datetime= #{publishEndDatetime,jdbcType=TIMESTAMP},
+            </if>
+
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -500,7 +556,10 @@
         is_success_publish = #{isSuccessPublish,jdbcType=INTEGER},
         is_delete = #{isDelete,jdbcType=INTEGER},
         publish_status = #{publishStatus,jdbcType=VARCHAR},
-        is_approved = #{isApproved,jdbcType=INTEGER}
+        is_approved = #{isApproved,jdbcType=INTEGER},
+        count_error = #{countError,jdbcType=INTEGER},
+        count_exception = #{countException,jdbcType=INTEGER},
+        publish_end_datetime = #{publishEndDatetime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
