@@ -398,19 +398,8 @@ public class PublishController extends BaseController {
                 publishBaseService.insertAndUpdate(publishBase);
             }
 
-            /*获取日志错误数,错误数等于所有机器总和*/
-            Map<String, Integer> map = publishEventService.getLogCountSum(publishEvent);
-            Integer errorCountSum = map.get("errorCountSum");
-            Integer exceptionCountSum = map.get("exceptionCountSum");
-
             /** 更新事件单为 成功发布 */
-            publishEvent.setIsSuccessPublish(true);
-            publishEvent.setPublishStatus(PublishStatus.PUBLISHED);
-            publishEvent.setPublishEndDatetime(new Date());
-            publishEvent.setCountError(errorCountSum);
-            publishEvent.setCountException(exceptionCountSum);
-            publishEventService.update(publishEvent);
-
+            publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED,publishEvent);
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -447,18 +436,8 @@ public class PublishController extends BaseController {
             /** 清楚基线 */
             publishBaseService.cleanBaseByEventId(eventId);
 
-            /*获取日志错误数,错误数等于所有机器总和*/
-            Map<String, Integer> map = publishEventService.getLogCountSum(publishEvent);
-            Integer errorCountSum = map.get("errorCountSum");
-            Integer exceptionCountSum = map.get("exceptionCountSum");
-
             /** 更新事件单为 失败发布 */
-            publishEvent.setIsSuccessPublish(false);
-            publishEvent.setPublishStatus(PublishStatus.ROLLBACK);
-            publishEvent.setCountException(exceptionCountSum);
-            publishEvent.setCountError(errorCountSum);
-            publishEvent.setPublishEndDatetime(new Date());
-            publishEventService.update(publishEvent);
+            publishEventService.updateLogCountSum(false,PublishStatus.ROLLBACK,publishEvent);
 
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {

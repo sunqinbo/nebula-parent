@@ -152,10 +152,10 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     /**
-     * 获取日志错误数,日志错误数等于所有机器日志总和
+     * 更新错误数,发布状态
      */
     @Override
-    public Map<String, Integer> getLogCountSum(NebulaPublishEvent publishEvent) {
+    public Boolean updateLogCountSum(Boolean isSuccessPublish, PublishStatus publishStatus, NebulaPublishEvent publishEvent) {
         /*获取日志错误数,错误数等于所有机器总和*/
         Integer errorCountSum = 0;
         Integer exceptionCountSum = 0;
@@ -170,9 +170,13 @@ public class PublishEventServiceImpl implements IPublishEventService {
                 exceptionCountSum += exceptionCount;
             }
         }
-        map.put("errorCountSum", errorCountSum);
-        map.put("exceptionCountSum", exceptionCountSum);
-        return map;
+        publishEvent.setIsSuccessPublish(isSuccessPublish);
+        publishEvent.setPublishStatus(publishStatus);
+        publishEvent.setPublishEndDatetime(new Date());
+        publishEvent.setCountError(errorCountSum);
+        publishEvent.setCountException(exceptionCountSum);
+        nebulaPublishEventDao.update(publishEvent);
+        return true;
 
     }
 
