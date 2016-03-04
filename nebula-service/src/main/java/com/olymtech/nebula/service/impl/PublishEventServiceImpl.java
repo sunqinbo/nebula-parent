@@ -156,23 +156,25 @@ public class PublishEventServiceImpl implements IPublishEventService {
      */
     @Override
     public Boolean updateLogCountSum(Boolean isSuccessPublish, PublishStatus publishStatus, NebulaPublishEvent publishEvent) {
-        /*获取日志错误数,错误数等于所有机器总和*/
-        Integer errorCountSum = 0;
-        Integer exceptionCountSum = 0;
-        Map<String, Integer> map = new HashMap<>();
-        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(publishEvent.getId(), null);
-        if (PublishStatus.PUBLISHED == publishEvent.getPublishStatus() || PublishStatus.ROLLBACK == publishEvent.getPublishStatus() || PublishStatus.CANCEL == publishEvent.getPublishStatus()) {
-        } else {
-            for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                Integer errorCount = getPublishLogHostLogCount(publishEvent, nebulaPublishHost, "ERROR");
-                Integer exceptionCount = getPublishLogHostLogCount(publishEvent, nebulaPublishHost, "EXCEPTION");
-                errorCountSum += errorCount;
-                exceptionCountSum += exceptionCount;
-            }
-        }
+
         publishEvent.setIsSuccessPublish(isSuccessPublish);
         publishEvent.setPublishStatus(publishStatus);
+        /**先设置时间，这个在 getPublishLogHostLogCount 用到
+         * PublishEndDatetime 为null 表示还没有发布完
+         * PublishEndDatetime 不为null 表示发布已经完成
+         * */
         publishEvent.setPublishEndDatetime(new Date());
+
+        /**获取日志错误数,错误数等于所有机器总和*/
+        Integer errorCountSum = 0;
+        Integer exceptionCountSum = 0;
+        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(publishEvent.getId(), null);
+        for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
+            Integer errorCount = getPublishLogHostLogCount(publishEvent, nebulaPublishHost, "ERROR");
+            Integer exceptionCount = getPublishLogHostLogCount(publishEvent, nebulaPublishHost, "EXCEPTION");
+            errorCountSum += errorCount;
+            exceptionCountSum += exceptionCount;
+        }
         publishEvent.setCountError(errorCountSum);
         publishEvent.setCountException(exceptionCountSum);
         nebulaPublishEventDao.update(publishEvent);
@@ -185,13 +187,19 @@ public class PublishEventServiceImpl implements IPublishEventService {
      */
     @Override
     public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType) {
-//        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
         if (publishEvent.getPublishDatetime() == null) {
             return 0;
         }
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
+        /**
+         * toDate 发布未结束 取 当前时间
+         *        发布结束  取 发布完成时间
+         */
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
+        if(publishEvent.getPublishEndDatetime() != null){
+            toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
+        }
         ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
         return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
     }
