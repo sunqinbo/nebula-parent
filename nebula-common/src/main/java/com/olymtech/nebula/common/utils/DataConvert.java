@@ -68,7 +68,7 @@ public class DataConvert {
         Map<String,String> resultMap = new HashMap<>();
         for (Map.Entry<String, String> entry : fileMap.entrySet()) {
             String entryKey = entry.getKey();
-            entryKey = entryKey.replace(key,"");
+            entryKey = entryKey.replace(key+"/","");
             resultMap.put(entryKey,entry.getValue());
         }
         return resultMap;

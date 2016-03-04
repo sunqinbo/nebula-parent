@@ -215,13 +215,22 @@ public class PublishWarAction extends AbstractAction {
                 return false;
             }
 
+            List<NebulaPublishApp> appList = publishAppService.selectByEventIdAndModuleId(event.getId(), publishModule.getId());
+
+
             Map<String,String> masterHost = masterFileMap.get(MasterId);
-            for (Map.Entry<String, String> entry : masterHost.entrySet()) {
-                String filename = entry.getKey();
-                String masterMd5 = entry.getValue();
+            for (NebulaPublishApp app : appList) {
+                /** 需要校验的文件 */
+                String filename = app.getPublishAppName()+".war";
+                /** master上md5 */
+                String masterMd5 = masterHost.get(filename);
+
+                /** 多台minion循环 */
                 for (Map.Entry<String, Map<String,String>> entryEvent : minionFileMap.entrySet()) {
                     String ip = entryEvent.getKey();
+                    /** 单台minion数据 */
                     Map<String,String> minionEveryHost = entryEvent.getValue();
+                    /** minion上md5 */
                     String minionMd5 = minionEveryHost.get(filename);
 
                     if( !masterMd5.equals(minionMd5) ){
@@ -234,7 +243,9 @@ public class PublishWarAction extends AbstractAction {
                         return false;
                     }
                 }
+
             }
+
         }
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.PUBLISH_NEW_WAR, event.getPublishActionGroup(), true, "All models and sub targes 'execute and check' success");
         return true;
