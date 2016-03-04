@@ -87,3 +87,7 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+# diamond
+diamond_config_data.log
+diamond_config_data.log*
+

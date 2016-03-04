@@ -34,11 +34,11 @@ public class ElkLogServiceImpl implements IElkLogService {
     private IElKClientService elKClientService;
 
     @Override
-    public PageInfo search(ElkSearchData elkSearchData){
+    public PageInfo search(ElkSearchData elkSearchData,String publishEnv){
         PageInfo pageInfo = new PageInfo();
 
         try{
-            SearchResponse searchResponse = elKClientService.search(elkSearchData);
+            SearchResponse searchResponse = elKClientService.search(elkSearchData,publishEnv);
             long total = searchResponse.getHits().getTotalHits();
             elkSearchData.setTotal(total);
 
@@ -70,10 +70,10 @@ public class ElkLogServiceImpl implements IElkLogService {
     }
 
     @Override
-    public Integer count(ElkSearchData elkSearchData){
+    public Integer count(ElkSearchData elkSearchData,String publishEnv){
         int totalint = -1;
         try{
-            SearchResponse searchResponse = elKClientService.search(elkSearchData);
+            SearchResponse searchResponse = elKClientService.search(elkSearchData,publishEnv);
             long total = searchResponse.getHits().getTotalHits();
             totalint = new Long(total).intValue();
         }catch (NoNodeAvailableException e){
