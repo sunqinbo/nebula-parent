@@ -7,6 +7,7 @@ package com.olymtech.nebula.core.elk.core;
 import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.common.utils.EsUtils;
 import com.olymtech.nebula.entity.ElkSearchData;
+import com.olymtech.nebula.entity.enums.PublishEnv;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -31,18 +32,32 @@ public class ElKClientFactory {
 
     private static Logger logger = LoggerFactory.getLogger(ElKClientFactory.class);
 
-    private static TransportClient client = null;
+    private static TransportClient stageClient = null;
 
-    public static TransportClient getClient(String elkServer){
-        if(client == null){
+    private static TransportClient productClient = null;
+
+    public static TransportClient getStageClient(String elkServer){
+        if(stageClient == null){
             Settings settings = ImmutableSettings.settingsBuilder()
                     .put("cluster.name", "StageElkCluster")
                     .build();
 
-            client = new TransportClient(settings)
+            stageClient = new TransportClient(settings)
                     .addTransportAddress(new InetSocketTransportAddress(elkServer, 9300));
         }
-        return client;
+        return stageClient;
+    }
+
+    public static TransportClient getProductClient(String elkServer){
+        if(productClient == null){
+            Settings settings = ImmutableSettings.settingsBuilder()
+                    .put("cluster.name", "tinytank")
+                    .build();
+
+            productClient = new TransportClient(settings)
+                    .addTransportAddress(new InetSocketTransportAddress(elkServer, 9300));
+        }
+        return productClient;
     }
 
 

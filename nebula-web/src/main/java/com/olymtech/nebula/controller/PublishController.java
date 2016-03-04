@@ -399,10 +399,7 @@ public class PublishController extends BaseController {
             }
 
             /** 更新事件单为 成功发布 */
-            publishEvent.setIsSuccessPublish(true);
-            publishEvent.setPublishStatus(PublishStatus.PUBLISHED);
-            publishEventService.update(publishEvent);
-
+            publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED,publishEvent);
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -440,9 +437,7 @@ public class PublishController extends BaseController {
             publishBaseService.cleanBaseByEventId(eventId);
 
             /** 更新事件单为 失败发布 */
-            publishEvent.setIsSuccessPublish(false);
-            publishEvent.setPublishStatus(PublishStatus.ROLLBACK);
-            publishEventService.update(publishEvent);
+            publishEventService.updateLogCountSum(false,PublishStatus.ROLLBACK,publishEvent);
 
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {
@@ -465,7 +460,6 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             publishEventService.retryPublishRollback(eventId);
-
             NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
             publishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
             publishEventService.update(publishEvent);
@@ -653,8 +647,8 @@ public class PublishController extends BaseController {
             if (PublishStatus.PUBLISHED == nebulaPublishEvent.getPublishStatus() || PublishStatus.ROLLBACK == nebulaPublishEvent.getPublishStatus() || PublishStatus.CANCEL == nebulaPublishEvent.getPublishStatus()) {
             } else {
                 for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                    nebulaPublishHost.setLogNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"ERROR"));
-                    nebulaPublishHost.setExcNumber(getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost,"EXCEPTION"));
+                    nebulaPublishHost.setLogNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "ERROR"));
+                    nebulaPublishHost.setExcNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "EXCEPTION"));
                 }
             }
             map.put("HostInfos", nebulaPublishHosts);
@@ -711,13 +705,13 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
     @ResponseBody
     public Object approvalPublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
         NebulaUserInfo user = getLoginUser();
         String publishEnv = nebulaPublishEvent.getPublishEnv();
         /*如果是生产发布,判断登录人的角色是否是部门主管的角色*/
         if (publishEnv.equals("product")) {
             Boolean userRoleIsExamine = userService.userRoleIsNeedRole(user, "examine");
-            if (userRoleIsExamine == false) {
+            if (!userRoleIsExamine) {
                 return returnCallback("Error", "审批人必须是部门主管才能审批!");
             }
         }
@@ -736,7 +730,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     @ResponseBody
     public Object deletePublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
         nebulaPublishEvent.setIsDelete(true);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
@@ -847,7 +841,7 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success", map);
 //    }
-    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost,String logType) {
+    /*public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType) {
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
         if (publishEvent.getPublishDatetime() == null) {
@@ -856,8 +850,10 @@ public class PublishController extends BaseController {
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
         ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
-        return elkLogService.count(elkSearchData);
+        return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
     }
+        return elkLogService.count(elkSearchData);
+    }*/
 
     /**
      * 获取log 详细信息
@@ -865,19 +861,26 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/log/getPublishLogByHost", method = {RequestMethod.POST})
     @ResponseBody
     public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest) {
-        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent publishEvent = publishEventService.getPublishEventById(eventId);
         if (!StringUtils.isNotEmpty(elkSearchDataReuqest.getHost())) {
             return returnCallback("Error", "host参数为必选项");
         }
 
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()), -8);
+        /** 如果 已发布 已回滚 已取消 ，toDate重新设置为发布结束时间 */
+        if (PublishStatus.PUBLISHED == publishEvent.getPublishStatus() || PublishStatus.ROLLBACK == publishEvent.getPublishStatus() || PublishStatus.CANCEL == publishEvent.getPublishStatus()) {
+            if(publishEvent.getPublishEndDatetime() != null){
+                toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
+            }
+        }
+
         if (elkSearchDataReuqest.getPageNum() == null) {
             elkSearchDataReuqest.setPageNum(1);
         }
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
                 elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(), elkSearchDataReuqest.getPageSize());
-        PageInfo pageInfo = elkLogService.search(elkSearchData);
+        PageInfo pageInfo = elkLogService.search(elkSearchData,publishEvent.getPublishEnv());
         return returnCallback("Success", pageInfo);
     }
 
@@ -927,15 +930,14 @@ public class PublishController extends BaseController {
             if (!appNameList.get(i).matches(regex)) {
                 errorNameList.add(appNameList.get(i));
                 Boolean removed = fileAnalyzeService.rmFile(event.getPublishProductKey(), appNameList.get(i));
-                if (removed == true) {
+                if (removed) {
                     removedNum++;
                 }
             }
         }
-        if (removedNum==errorNameList.size()) {
+        if (removedNum == errorNameList.size()) {
             return returnCallback("Success", "删除非war包文件成功.");
         }
         return returnCallback("Error", "删除非war包文件失败.");
     }
-
 }

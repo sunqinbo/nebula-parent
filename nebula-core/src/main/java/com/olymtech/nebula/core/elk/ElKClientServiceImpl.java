@@ -10,6 +10,7 @@ import com.olymtech.nebula.core.elk.core.ElKClientFactory;
 import com.olymtech.nebula.entity.ElkSearchData;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -28,26 +29,39 @@ public class ElKClientServiceImpl implements IElKClientService {
 
     private static Logger logger = LoggerFactory.getLogger(ElKClientServiceImpl.class);
 
-    @Value("${elk.server.ip}")
-    private String elkServer;
+    @Value("${elk.stage.server.ip}")
+    private String elkStageServerIp;
+
+    @Value("${elk.product.server.ip}")
+    private String elkProductServerIp;
+
+    public TransportClient getElkClient(String publishEnv){
+        if(publishEnv.equals("product")){
+            return ElKClientFactory.getProductClient(elkProductServerIp);
+        }else {
+            return ElKClientFactory.getStageClient(elkStageServerIp);
+        }
+    }
 
     @Override
-    public SearchResponse search(ElkSearchData elkSearchData){
+    public SearchResponse search(ElkSearchData elkSearchData,String publishEnv){
         FilterBuilder boolFilter = null;
         if(!StringUtils.isNotEmpty(elkSearchData.getKeyWord())){
             boolFilter =  FilterBuilders.boolFilter()
                     .must(FilterBuilders.rangeFilter("@timestamp").from(elkSearchData.getFromDate()).to(elkSearchData.getToDate()).includeLower(true).includeUpper(false))
+                    .must(FilterBuilders.termFilter("type", "tomcat"))
                     .must(FilterBuilders.termFilter("host", elkSearchData.getHost()));
         }else{
             boolFilter =  FilterBuilders.boolFilter()
                     .must(FilterBuilders.rangeFilter("@timestamp").from(elkSearchData.getFromDate()).to(elkSearchData.getToDate()).includeLower(true).includeUpper(false))
+                    .must(FilterBuilders.termFilter("type", "tomcat"))
                     .must(FilterBuilders.termFilter("host", elkSearchData.getHost()))
                     .must(FilterBuilders.termFilter("message", elkSearchData.getKeyWord().toLowerCase()));
         }
 
         //"logstash-2016.01*"
 
-        SearchResponse searchResponse = ElKClientFactory.getClient(elkServer).prepareSearch(getElkIndex(elkSearchData))
+        SearchResponse searchResponse = getElkClient(publishEnv).prepareSearch(getElkIndex(elkSearchData))
                 .setPostFilter(boolFilter)
                 .setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize())
                 .addSort("@timestamp", SortOrder.DESC).execute().actionGet();
@@ -55,8 +69,8 @@ public class ElKClientServiceImpl implements IElKClientService {
     }
 
     @Override
-    public Long count(ElkSearchData elkSearchData){
-        SearchResponse searchResponse = ElKClientFactory.getClient(elkServer).prepareSearch(getElkIndex(elkSearchData))
+    public Long count(ElkSearchData elkSearchData,String publishEnv){
+        SearchResponse searchResponse = getElkClient(publishEnv).prepareSearch(getElkIndex(elkSearchData))
                 .setFrom(elkSearchData.getPageFrom()).setSize(elkSearchData.getPageSize()).execute().actionGet();
         long totalHits = searchResponse.getHits().totalHits();
         return totalHits;

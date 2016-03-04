@@ -11,7 +11,7 @@ import com.olymtech.nebula.entity.ElkSearchData;
  * Created by Gavin on 2016-02-02 12:37.
  */
 public interface IElkLogService {
-    PageInfo search(ElkSearchData elkSearchData);
+    PageInfo search(ElkSearchData elkSearchData,String publishEnv);
 
-    Integer count(ElkSearchData elkSearchData);
+    Integer count(ElkSearchData elkSearchData,String publishEnv);
 }

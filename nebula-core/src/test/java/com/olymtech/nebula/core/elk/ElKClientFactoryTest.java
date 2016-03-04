@@ -9,13 +9,20 @@ import org.elasticsearch.search.SearchHit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import java.util.Date;
 
 /**
  * Created by Gavin on 2016-01-28 16:56.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:spring.config.xml"})
+@TransactionConfiguration(defaultRollback = false)
 public class ElKClientFactoryTest {
 
     @Autowired
@@ -37,7 +44,7 @@ public class ElKClientFactoryTest {
         String toDate = "2016-02-02 23:34:36";
 
         ElkSearchData elkSearchData = new ElkSearchData("stage_pm_web01", DateUtils.strToDate(fromDate),DateUtils.strToDate(toDate),1,10);
-        SearchResponse searchResponse = elKClientService.search(elkSearchData);
+        SearchResponse searchResponse = elKClientService.search(elkSearchData,"stage");
         long total = searchResponse.getHits().getTotalHits();
         System.out.println(total);
         for(SearchHit hit:searchResponse.getHits()){

@@ -93,8 +93,8 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     public Boolean copyFile(String srcFilePath, String destFilePath){
         Boolean result = false;
         try{
-            FileOutputStream dest = new FileOutputStream(new File(srcFilePath));
-            FileSystemResource src = new FileSystemResource(destFilePath);
+            FileOutputStream dest = new FileOutputStream(new File(destFilePath));
+            FileSystemResource src = new FileSystemResource(srcFilePath);
             FileCopyUtils.copy(src.getInputStream(), dest);
             result = true;
         }catch (Exception e){
