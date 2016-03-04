@@ -12,7 +12,7 @@ import org.elasticsearch.action.search.SearchResponse;
  */
 public interface IElKClientService {
 
-    SearchResponse search(ElkSearchData elkSearchData);
+    SearchResponse search(ElkSearchData elkSearchData,String publishEnv);
 
-    Long count(ElkSearchData elkSearchData);
+    Long count(ElkSearchData elkSearchData,String publishEnv);
 }

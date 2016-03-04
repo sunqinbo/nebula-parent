@@ -850,6 +850,8 @@ public class PublishController extends BaseController {
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
         ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
+        return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
+    }
         return elkLogService.count(elkSearchData);
     }*/
 
@@ -859,19 +861,26 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/log/getPublishLogByHost", method = {RequestMethod.POST})
     @ResponseBody
     public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest) {
-        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent publishEvent = publishEventService.getPublishEventById(eventId);
         if (!StringUtils.isNotEmpty(elkSearchDataReuqest.getHost())) {
             return returnCallback("Error", "host参数为必选项");
         }
 
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()), -8);
+        /** 如果 已发布 已回滚 已取消 ，toDate重新设置为发布结束时间 */
+        if (PublishStatus.PUBLISHED == publishEvent.getPublishStatus() || PublishStatus.ROLLBACK == publishEvent.getPublishStatus() || PublishStatus.CANCEL == publishEvent.getPublishStatus()) {
+            if(publishEvent.getPublishEndDatetime() != null){
+                toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
+            }
+        }
+
         if (elkSearchDataReuqest.getPageNum() == null) {
             elkSearchDataReuqest.setPageNum(1);
         }
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
                 elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(), elkSearchDataReuqest.getPageSize());
-        PageInfo pageInfo = elkLogService.search(elkSearchData);
+        PageInfo pageInfo = elkLogService.search(elkSearchData,publishEvent.getPublishEnv());
         return returnCallback("Success", pageInfo);
     }
 
@@ -921,7 +930,7 @@ public class PublishController extends BaseController {
             if (!appNameList.get(i).matches(regex)) {
                 errorNameList.add(appNameList.get(i));
                 Boolean removed = fileAnalyzeService.rmFile(event.getPublishProductKey(), appNameList.get(i));
-                if (removed == true) {
+                if (removed) {
                     removedNum++;
                 }
             }
