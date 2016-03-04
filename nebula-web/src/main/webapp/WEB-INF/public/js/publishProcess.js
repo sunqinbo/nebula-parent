@@ -270,7 +270,7 @@ $(document).ready(function(){
         });
     });
     $("#btn3").click(function () {
-        if($("#publishEnv").text=='product') {
+        if($("#publishEnv").text()=='product') {
             $('#codeModal').modal('show');
         }
         else {
