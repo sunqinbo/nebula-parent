@@ -6,6 +6,7 @@ package com.olymtech.nebula.service;
 
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaUserInfo;
 
 import java.util.List;
@@ -45,4 +46,7 @@ public interface IUserService {
 
     /*判断登录人角色是否是所需角色*/
     Boolean userRoleIsNeedRole(NebulaUserInfo user, String roleName);
+
+    /*判断登录人是否是提交人,是否是管理员,是否是超级管理员,满足之一才有权限*/
+    Boolean ifLoginUserValid(NebulaUserInfo loginUser, NebulaPublishEvent publishEvent);
 }
