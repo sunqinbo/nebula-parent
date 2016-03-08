@@ -200,4 +200,15 @@ public class UserServiceImpl implements IUserService {
         }
         return false;
     }
+
+    /*判断登录人是否是提交人,是否是管理员,是否是超级管理员,满足之一才有权限*/
+    @Override
+    public Boolean ifLoginUserValid(NebulaUserInfo loginUser, NebulaPublishEvent publishEvent) {
+        if (loginUser.getEmpId()==publishEvent.getSubmitEmpId()
+                || userRoleIsNeedRole(loginUser, "admin")
+                || userRoleIsNeedRole(loginUser, "root")) {
+            return true;
+        }
+        return false;
+    }
 }

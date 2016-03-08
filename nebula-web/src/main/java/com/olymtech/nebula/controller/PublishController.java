@@ -210,6 +210,12 @@ public class PublishController extends BaseController {
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PRE_MASTER);
 
+        /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+        NebulaUserInfo loginUser = getLoginUser();
+        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+            return returnCallback("Error", "对不起,您没有该权限!");
+        }
+
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(GetPublishSvnAction.class));
@@ -241,6 +247,12 @@ public class PublishController extends BaseController {
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
         nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PRE_MINION);
+
+        /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+        NebulaUserInfo loginUser = getLoginUser();
+        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+            return returnCallback("Error", "对不起,您没有该权限!");
+        }
 
         /** 修改发布状态 */
         nebulaPublishEvent.setPublishStatus(PublishStatus.PUBLISHING);
@@ -279,6 +291,13 @@ public class PublishController extends BaseController {
         }
         Integer eventId = Integer.parseInt(idString);
         NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+
+        /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+        NebulaUserInfo loginUser = getLoginUser();
+        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+            return returnCallback("Error", "对不起,您没有该权限!");
+        }
+
         /*如果是生产发布,需要做验证*/
         if (nebulaPublishEvent.getPublishEnv().equals("product")) {
             NebulaUserInfo userInfo = getLoginUser();
@@ -323,6 +342,13 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent nebulaPublishEvent = publishEventService.selectWithChildByEventId(eventId);
+
+            /*判断登录人是否是提交人,是否是管理员,是否是超级管理员之一*/
+            NebulaUserInfo loginUser = getLoginUser();
+            if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+                return returnCallback("Error", "对不起,您没有该权限!");
+            }
+
             List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
             if (nebulaPublishSchedules == null || nebulaPublishSchedules.size() == 0) {
                 return returnCallback("Error", "无法获取发布事件进度");
@@ -330,7 +356,6 @@ public class PublishController extends BaseController {
             Integer size = nebulaPublishSchedules.size();
             NebulaPublishSchedule publishSchedule = nebulaPublishSchedules.get(size - 1);
             List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(publishSchedule.getPublishActionGroup());
-
 
             //创建任务队列
             ActionChain chain = new ActionChain();
@@ -379,6 +404,13 @@ public class PublishController extends BaseController {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
             publishEvent.setPublishActionGroup(PublishActionGroup.SUCCESS_END);
+
+            /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+            NebulaUserInfo loginUser = getLoginUser();
+            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+                return returnCallback("Error", "对不起,您没有该权限!");
+            }
+
             //创建任务队列
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(CleanHistoryDirAction.class));
@@ -422,6 +454,20 @@ public class PublishController extends BaseController {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
             publishEvent.setPublishActionGroup(PublishActionGroup.FAIL_END);
+
+            /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+            NebulaUserInfo loginUser = getLoginUser();
+            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+                return returnCallback("Error", "对不起,您没有该权限!");
+            }
+
+            /*如果是生产,判断用户是否是超级管理员*/
+            if (publishEvent.getPublishEnv().equals("product")) {
+                if (!userService.userRoleIsNeedRole(loginUser,"root")) {
+                    return returnCallback("Error", "对不起,您不是超级管理员,没有该权限!");
+                }
+            }
+
             //创建任务队列
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
@@ -462,6 +508,13 @@ public class PublishController extends BaseController {
             publishEventService.retryPublishRollback(eventId);
             NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
             publishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+
+            /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+            NebulaUserInfo loginUser = getLoginUser();
+            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+                return returnCallback("Error", "对不起,您没有该权限!");
+            }
+
             publishEventService.update(publishEvent);
 
             return returnCallback("Success", "重新发布回退成功");
@@ -486,6 +539,13 @@ public class PublishController extends BaseController {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
             publishEvent.setPublishActionGroup(PublishActionGroup.RESTART_TOMCAT);
+
+            /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+            NebulaUserInfo loginUser = getLoginUser();
+            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+                return returnCallback("Error", "对不起,您没有该权限!");
+            }
+
             //创建任务队列
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
@@ -516,6 +576,13 @@ public class PublishController extends BaseController {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
             publishEvent.setPublishActionGroup(PublishActionGroup.CANCEL_END);
+
+            /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
+            NebulaUserInfo loginUser = getLoginUser();
+            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+                return returnCallback("Error", "对不起,您没有该权限!");
+            }
+
             //创建任务队列
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
@@ -867,7 +934,7 @@ public class PublishController extends BaseController {
         Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()), -8);
         /** 如果 已发布 已回滚 已取消 ，toDate重新设置为发布结束时间 */
         if (PublishStatus.PUBLISHED == publishEvent.getPublishStatus() || PublishStatus.ROLLBACK == publishEvent.getPublishStatus() || PublishStatus.CANCEL == publishEvent.getPublishStatus()) {
-            if(publishEvent.getPublishEndDatetime() != null){
+            if (publishEvent.getPublishEndDatetime() != null) {
                 toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
             }
         }
@@ -877,7 +944,7 @@ public class PublishController extends BaseController {
         }
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
                 elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(), elkSearchDataReuqest.getPageSize());
-        PageInfo pageInfo = elkLogService.search(elkSearchData,publishEvent.getPublishEnv());
+        PageInfo pageInfo = elkLogService.search(elkSearchData, publishEvent.getPublishEnv());
         return returnCallback("Success", pageInfo);
     }
 
