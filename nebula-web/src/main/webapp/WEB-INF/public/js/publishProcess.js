@@ -122,6 +122,7 @@ $(document).ready(function(){
     $('#checkmodal').appendTo("body");
     $("#logModal").appendTo("body");
     $("#codeModal").appendTo("body");
+    $('#changeModal').appendTo("body");
     $("#refreshCDN").click(function(){
         $('#mymodal').modal('show');
     });
@@ -1105,6 +1106,11 @@ function verificationCodeBtn(){
             });
         }
     })
+}
+
+//发布变更
+function showChangeListModal(){
+    $('#changeModal').modal('show');
 }
 
 //日期格式化
