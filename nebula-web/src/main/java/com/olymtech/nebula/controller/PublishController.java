@@ -212,7 +212,7 @@ public class PublishController extends BaseController {
 
         /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
         NebulaUserInfo loginUser = getLoginUser();
-        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+        if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
             return returnCallback("Error", "对不起,您没有该权限!");
         }
 
@@ -224,6 +224,7 @@ public class PublishController extends BaseController {
 
         Dispatcher dispatcher = new Dispatcher(chain, request, response);
         dispatcher.doDispatch(nebulaPublishEvent);
+
         /** 修改发布状态 */
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
         nebulaPublishEvent.setPublishDatetime(new Date());
@@ -250,7 +251,7 @@ public class PublishController extends BaseController {
 
         /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
         NebulaUserInfo loginUser = getLoginUser();
-        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+        if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
             return returnCallback("Error", "对不起,您没有该权限!");
         }
 
@@ -294,7 +295,7 @@ public class PublishController extends BaseController {
 
         /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
         NebulaUserInfo loginUser = getLoginUser();
-        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+        if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
             return returnCallback("Error", "对不起,您没有该权限!");
         }
 
@@ -345,7 +346,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员之一*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -407,7 +408,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -457,13 +458,13 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
             /*如果是生产,判断用户是否是超级管理员*/
             if (publishEvent.getPublishEnv().equals("product")) {
-                if (!userService.userRoleIsNeedRole(loginUser,"root")) {
+                if (!userService.userRoleIsNeedRole(loginUser, "root")) {
                     return returnCallback("Error", "对不起,您不是超级管理员,没有该权限!");
                 }
             }
@@ -511,7 +512,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -542,7 +543,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -579,7 +580,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -610,13 +611,37 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/updateEtcEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback updateEtcEnd(HttpServletRequest request) throws Exception {
-        String eventId = request.getParameter("id");
-        if (!StringUtils.isNotEmpty(eventId)) {
+        String eventIdString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(eventIdString)) {
             return returnCallback("Error", "id参数为空");
         }
-        publishScheduleService.logScheduleByAction(Integer.parseInt(eventId), PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+
+        Integer eventId = Integer.parseInt(eventIdString);
+        NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+        /** 生产环境 编辑etc后，需要审核 */
+        if(publishEvent.getPublishEnv().equals("product")){
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
+        }else{
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+        }
         return returnCallback("Success", "完成ETC编辑");
     }
+
+    @RequiresPermissions("publishevnt:etcApprove")
+    @RequestMapping(value = "/etcApprove", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback etcApprove(HttpServletRequest request) throws Exception {
+        String eventIdString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(eventIdString)) {
+            return returnCallback("Error", "id参数为空");
+        }
+        Integer eventId = Integer.parseInt(eventIdString);
+        publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+        return returnCallback("Success", "审批ETC完成");
+    }
+
 
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody

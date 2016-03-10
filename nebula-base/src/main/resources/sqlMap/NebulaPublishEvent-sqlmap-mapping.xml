@@ -26,6 +26,9 @@
         <result column="count_error" property="countError" jdbcType="INTEGER"/>
         <result column="count_exception" property="countException" jdbcType="INTEGER"/>
         <result column="publish_end_datetime" property="publishEndDatetime" jdbcType="TIMESTAMP"/>
+        <result column="change_list" property="changeList" jdbcType="LONGVARCHAR"/>
+        <result column="publish_remark" property="publishRemark" jdbcType="LONGVARCHAR"/>
+
 
         <association property="submitUser" column="submit_emp_id" javaType="com.olymtech.nebula.entity.NebulaUserInfo">
             <id column="s_id" property="id" jdbcType="INTEGER"/>
@@ -84,7 +87,9 @@
         is_approved,
         count_error,
         count_exception,
-        publish_end_datetime
+        publish_end_datetime,
+        change_list,
+        publish_remark
     </sql>
     <sql id="NebulaPublishEvent-User-Base-Column-List">
         npe.id as id,
@@ -111,6 +116,8 @@
         count_error,
         count_exception,
         publish_end_datetime,
+        change_list,
+        publish_remark,
         snui.id as s_id,
         snui.username as s_username,
         snui.mobile_phone as s_mobile_phone,
@@ -279,7 +286,9 @@
         is_approved,
         count_error,
         count_exception,
-        publish_end_datetime)
+        publish_end_datetime,
+        change_list,
+        publish_remark)
         values (#{id,jdbcType=INTEGER},
         #{publishSubject,jdbcType=VARCHAR},
         #{publishBuName,jdbcType=VARCHAR},
@@ -303,7 +312,9 @@
         #{isApproved,jdbcType=INTEGER},
         #{countError,jdbcType=INTEGER},
         #{countException,jdbcType=INTEGER},
-        #{publishEndDatetime,jdbcType=TIMESTAMP} )
+        #{publishEndDatetime,jdbcType=TIMESTAMP},
+        #{changeList,jdbcType=LONGVARCHAR},
+        #{publishRemark,jdbcType=LONGVARCHAR} )
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -383,6 +394,12 @@
             <if test="publishEndDatetime != null">
                 publish_end_datetime,
             </if>
+            <if test="changeList != null">
+                change_list,
+            </if>
+            <if test="publishRemark != null">
+                publish_remark,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -454,8 +471,11 @@
             <if test="countException != null">
                 #{countException,jdbcType=INTEGER},
             </if>
-            <if test="isApproved != null">
-                #{publishEndDatetime,jdbcType=TIMESTAMP},
+            <if test="changeList != null">
+                #{changeList,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="publishRemark != null">
+                #{publishRemark,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>
@@ -531,7 +551,12 @@
             <if test="publishEndDatetime != null">
                 publish_end_datetime= #{publishEndDatetime,jdbcType=TIMESTAMP},
             </if>
-
+            <if test="changeList != null">
+                change_list= #{changeList,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="publishRemark != null">
+                publish_remark= #{publishRemark,jdbcType=LONGVARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -559,7 +584,9 @@
         is_approved = #{isApproved,jdbcType=INTEGER},
         count_error = #{countError,jdbcType=INTEGER},
         count_exception = #{countException,jdbcType=INTEGER},
-        publish_end_datetime = #{publishEndDatetime,jdbcType=TIMESTAMP}
+        publish_end_datetime = #{publishEndDatetime,jdbcType=TIMESTAMP},
+        change_list= #{changeList,jdbcType=LONGVARCHAR},
+        publish_remark= #{publishRemark,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

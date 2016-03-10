@@ -78,10 +78,10 @@ public class LoginController extends BaseController {
     public Callback test(HttpServletRequest request, HttpServletResponse response) {
         Subject subject = SecurityUtils.getSubject();
         //subject.checkPermissions("user:update,delete");
-        subject.checkPermissions("user:add");
+//        subject.checkPermissions("user:add");
         //throw new NullPointerException("xxxx");
-
-        System.out.println("test");
+        Boolean has = subject.hasRole("root");
+        System.out.println(has);
         return null;
     }
 

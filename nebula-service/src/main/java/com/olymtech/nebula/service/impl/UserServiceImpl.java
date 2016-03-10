@@ -204,6 +204,8 @@ public class UserServiceImpl implements IUserService {
     /*判断登录人是否是提交人,是否是管理员,是否是超级管理员,满足之一才有权限*/
     @Override
     public Boolean ifLoginUserValid(NebulaUserInfo loginUser, NebulaPublishEvent publishEvent) {
+//        Subject subject = SecurityUtils.getSubject();
+//        subject.hasRole("admin");
         if (loginUser.getEmpId()==publishEvent.getSubmitEmpId()
                 || userRoleIsNeedRole(loginUser, "admin")
                 || userRoleIsNeedRole(loginUser, "root")) {
