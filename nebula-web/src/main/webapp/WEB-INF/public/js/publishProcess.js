@@ -38,6 +38,9 @@ $(document).ready(function(){
                     }
                     if (jsonData.callbackMsg.match(/Success/)) {
                         nebula.common.alert.success(data.responseContext, 1000);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
                     }
                 },
                 error: function (errorThrown) {

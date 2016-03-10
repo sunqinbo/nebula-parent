@@ -189,7 +189,7 @@
             #else
                 <div class="col-md-12">
                     <div id="publish_btn" class="card card-plain">
-                        #if($!user.empId==$!{Event.submitEmpId})
+                        #if($!user.empId==$!{Event.submitEmpId}||$shiro.hasRole("admin")||$shiro.hasRole("root"))
                             <div class="header">发布操作</div>
                             <hr/>
                             <div class="content">

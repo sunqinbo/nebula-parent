@@ -9,8 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Map;
 @Service
 public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
 
-    private Logger logger       = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${master_deploy_dir}")
     private String masterDeployDir;
@@ -30,16 +29,16 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     @Override
     public List<String> getFileListByDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
-        try{
+        try {
             File file = new File(dirPath);
             File[] files = file.listFiles();
-            for (File f:files) {
-                if (!f.isDirectory()){
+            for (File f : files) {
+                if (!f.isDirectory()) {
                     fileList.add(f.getName());
                 }
             }
-        }catch (Exception e){
-            logger.error("getFileListByDirPath error,dirPath:"+dirPath,e);
+        } catch (Exception e) {
+            logger.error("getFileListByDirPath error,dirPath:" + dirPath, e);
         }
         return fileList;
     }
@@ -47,58 +46,56 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     @Override
     public List<String> getFileListByRecursionDirPath(String dirPath) {
         List<String> fileList = new ArrayList<String>();
-        try{
+        try {
             File file = new File(dirPath);
-            reverseRecursionDirPath(file,fileList);
-        }catch (Exception e){
-            logger.error("getFileListByRecursionDirPath error,dirPath:"+dirPath,e);
+            reverseRecursionDirPath(file, fileList);
+        } catch (Exception e) {
+            logger.error("getFileListByRecursionDirPath error,dirPath:" + dirPath, e);
         }
         return fileList;
     }
 
     @Override
-    public Map<String,Boolean> getDirMapByDirPath(String dirPath) {
-        Map<String,Boolean> fileList = new HashMap<>();
-        try{
+    public Map<String, Boolean> getDirMapByDirPath(String dirPath) {
+        Map<String, Boolean> fileList = new HashMap<>();
+        try {
             File file = new File(dirPath);
             File[] files = file.listFiles();
-            for (File f:files) {
-                if (!f.isDirectory()){
+            for (File f : files) {
+                if (!f.isDirectory()) {
                     fileList.put(f.getName(), false);
-                }
-                else {
+                } else {
                     fileList.put(f.getName(), true);
                 }
             }
-        }catch(Exception e){
-            logger.error("getDirMapByDirPath error,dirPath:"+dirPath,e);
+        } catch (Exception e) {
+            logger.error("getDirMapByDirPath error,dirPath:" + dirPath, e);
         }
         return fileList;
     }
 
-    public void reverseRecursionDirPath(File file,List<String> fileList){
+    public void reverseRecursionDirPath(File file, List<String> fileList) {
         File[] files = file.listFiles();
-        for (File f:files) {
+        for (File f : files) {
             if (!f.isDirectory()) {
                 fileList.add(f.getName());
-            }
-            else {
+            } else {
                 File newfile = new File(f.getAbsolutePath());
-                reverseRecursionDirPath(newfile,fileList);
+                reverseRecursionDirPath(newfile, fileList);
             }
         }
     }
 
     @Override
-    public Boolean copyFile(String srcFilePath, String destFilePath){
+    public Boolean copyFile(String srcFilePath, String destFilePath) {
         Boolean result = false;
-        try{
+        try {
             FileOutputStream dest = new FileOutputStream(new File(destFilePath));
             FileSystemResource src = new FileSystemResource(srcFilePath);
             FileCopyUtils.copy(src.getInputStream(), dest);
             result = true;
-        }catch (Exception e){
-            logger.error("copyFile error:",e);
+        } catch (Exception e) {
+            logger.error("copyFile error:", e);
             result = false;
         }
         return result;
@@ -132,27 +129,56 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
 //    }
 
     @Override
-    public Boolean rmFile(String key, String filename){
+    public Boolean rmFile(String key, String filename) {
         Boolean result = false;
 
         /** 删除的目录 不能为空*/
-        if(StringUtils.isEmpty(key) || StringUtils.isEmpty(filename)){
+        if (StringUtils.isEmpty(key) || StringUtils.isEmpty(filename)) {
             return false;
         }
 
         try {
-            String  filePath = masterDeployDir+key+"/"+filename;
+            String filePath = masterDeployDir + key + "/" + filename;
             File file = new File(filePath);
-            if(file.isFile() && file.exists()){
+            if (file.isFile() && file.exists()) {
                 file.delete();
                 return true;
-            }else{
-                logger.error("rmFile "+filename+" failed: not is file, file not exists.");
+            } else {
+                logger.error("rmFile " + filename + " failed: not is file, file not exists.");
             }
-        }catch (Exception e){
-            logger.error("rmFile "+filename+" error:",e);
+        } catch (Exception e) {
+            logger.error("rmFile " + filename + " error:", e);
         }
         return result;
     }
 
+    /**
+     * 复制一个目录及其子目录、文件到另外一个目录
+     * @param src
+     * @param dest
+     * @throws IOException
+     */
+    @Override
+    public Boolean copyFolder(File src, File dest) throws IOException {
+        try {
+            if (src.isDirectory()) {
+                if (!dest.exists()) {
+                    dest.mkdir();
+                }
+                String files[] = src.list();
+                for (String file : files) {
+                    File srcFile = new File(src, file);
+                    File destFile = new File(dest, file);
+                    // 递归复制
+                    copyFolder(srcFile, destFile);
+                }
+            } else {
+                copyFile(src.getAbsolutePath(), dest.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            logger.error("copyFolder error:",e);
+            return false;
+        }
+        return true;
+    }
 }
