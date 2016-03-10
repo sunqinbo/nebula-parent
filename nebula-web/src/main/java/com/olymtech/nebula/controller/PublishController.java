@@ -618,6 +618,8 @@ public class PublishController extends BaseController {
 
         Integer eventId = Integer.parseInt(eventIdString);
         NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+
+        publishEventService.updateChangeList(publishEvent);
         /** 生产环境 编辑etc后，需要审核 */
         if(publishEvent.getPublishEnv().equals("product")){
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");

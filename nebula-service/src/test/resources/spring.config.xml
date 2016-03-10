@@ -18,6 +18,8 @@
 
 
     <bean id="propertyConfigurer" class="com.olymtech.util.diamond.DiamondPropertyPlaceholderConfigurer">
+        <property name="order" value="1" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
         <property name="diamondConfigKeys">
             <list>
                 <bean class="com.olymtech.util.diamond.DiamondConfigKey">

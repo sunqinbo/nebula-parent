@@ -2,6 +2,7 @@ package com.olymtech.nebula.service;
 
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.FileChangeData;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.enums.PublishStatus;
@@ -40,4 +41,8 @@ public interface IPublishEventService {
     public Boolean updateLogCountSum(Boolean isSuccessPublish, PublishStatus publishStatus, NebulaPublishEvent publishEvent);
 
     public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType);
+
+    Boolean updateChangeList(NebulaPublishEvent publishEvent);
+
+    List<FileChangeData> changeListJsonStringToList(String responseContext);
 }

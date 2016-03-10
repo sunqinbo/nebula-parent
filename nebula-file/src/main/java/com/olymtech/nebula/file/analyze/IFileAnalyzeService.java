@@ -27,4 +27,6 @@ public interface IFileAnalyzeService {
     Boolean rmFile(String key, String filename);
 
     Boolean copyFolder(File src, File dest) throws IOException;
+
+    String getDirDiffList(String srcDir, String destDir);
 }

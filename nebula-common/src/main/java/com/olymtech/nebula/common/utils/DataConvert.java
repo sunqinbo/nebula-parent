@@ -50,7 +50,7 @@ public class DataConvert {
                 maps.put(entry.getKey(),String.valueOf(entry.getValue()));
             }
         }catch (Exception e){
-            logger.error("fileJsonStringToList error:"+fileJsonString);
+            logger.error("jsonStringToList error:"+fileJsonString);
         }
         return maps;
     }
@@ -72,6 +72,19 @@ public class DataConvert {
             resultMap.put(entryKey,entry.getValue());
         }
         return resultMap;
+    }
+
+    public static Map<String,Object> jsonStringToMap(String fileJsonString){
+        Map<String,Object> maps = new HashMap<>();
+        try{
+            JSONObject jsonObject = JSONObject.parseObject(fileJsonString);
+            for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+                maps.put(entry.getKey(),entry.getValue());
+            }
+        }catch (Exception e){
+            logger.error("jsonStringToMap error:"+fileJsonString);
+        }
+        return maps;
     }
 
 

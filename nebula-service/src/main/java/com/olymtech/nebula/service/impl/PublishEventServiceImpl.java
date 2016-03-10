@@ -1,5 +1,6 @@
 package com.olymtech.nebula.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.common.utils.DateUtils;
@@ -8,10 +9,13 @@ import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
+import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,6 +51,12 @@ public class PublishEventServiceImpl implements IPublishEventService {
 
     @Resource
     private IElkLogService elkLogService;
+
+    @Resource
+    private IFileAnalyzeService fileAnalyzeService;
+
+    @Value("${master_deploy_dir}")
+    private String MasterDeployDir;
 
 
     @Override
@@ -204,5 +214,69 @@ public class PublishEventServiceImpl implements IPublishEventService {
         return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
     }
 
+    /**
+     * 更新changelist
+     * @param publishEvent
+     * @return
+     */
+    @Override
+    public Boolean updateChangeList(NebulaPublishEvent publishEvent){
+        try {
+            String destPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc";
+            String srcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc";
+            String responseContext = fileAnalyzeService.getDirDiffList(srcPath,destPath);
+            if(StringUtils.isEmpty(responseContext)){
+                return false;
+            }
+            publishEvent.setChangeList(responseContext);
+            nebulaPublishEventDao.update(publishEvent);
+            return true;
+        }catch (Exception e){
+            logger.error("updateChangeList error:",e);
+        }
+        return false;
+    }
+
+    /**
+     *
+
+     {
+         "/a.properties": {
+             "change": "+dddd:3333\n",
+             "filename": "/a.properties",
+             "time": "2016-03-09 09:30:18.000000000"
+         },
+         "/arsenal.properties": {
+             "change": " ssss=3333\n-eeee=3333\n+cccc=4444\n",
+             "filename": "/arsenal.properties",
+             "time": "2016-03-09 09:29:27.000000000"
+         },
+         "/baidu/b.txt": {
+             "change": "-ddddddddddd\n",
+             "filename": "/baidu/b.txt",
+             "time": "1970-01-01 08:00:00.000000000"
+         }
+     }
+
+     *
+     * @param responseContext
+     * @return
+     */
+    @Override
+    public List<FileChangeData> changeListJsonStringToList(String responseContext){
+        List<FileChangeData> fileChangeDatas = new ArrayList<>();
+        JSONObject jsonObject = JSONObject.parseObject(responseContext);
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            String jsonString = entry.getValue().toString();
+            JSONObject everyData = JSONObject.parseObject(jsonString);
+            Map<String ,String> everyMap = new HashMap<>();
+            for (Map.Entry<String, Object> everyEntry : everyData.entrySet()){
+                everyMap.put(everyEntry.getKey(), String.valueOf(everyEntry.getValue()));
+            }
+            FileChangeData fileChangeData = new FileChangeData(everyMap.get("change"),everyMap.get("filename"),everyMap.get("time"));
+            fileChangeDatas.add(fileChangeData);
+        }
+        return fileChangeDatas;
+    }
 
 }

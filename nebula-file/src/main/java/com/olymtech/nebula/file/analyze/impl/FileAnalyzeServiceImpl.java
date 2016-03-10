@@ -1,5 +1,6 @@
 package com.olymtech.nebula.file.analyze.impl;
 
+import com.olymtech.nebula.common.utils.DataConvert;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
 
     @Value("${master_deploy_dir}")
     private String masterDeployDir;
+
+    @Value("${script_get_dir_diff_list}")
+    private static String scriptGetDirDiffList;
 
     @Override
     public List<String> getFileListByDirPath(String dirPath) {
@@ -181,4 +185,74 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
         }
         return true;
     }
+
+    /**
+     *
+     *
+     *
+
+     {
+         "msg": "\u83b7\u53d6\u6587\u4ef6\u5dee\u5f02\u6210\u529f",
+         "responseContext": {
+            "/a.properties": {
+                 "change": "+dddd:3333\n",
+                 "filename": "/a.properties",
+                 "time": "2016-03-09 09:30:18.000000000"
+             },
+             "/arsenal.properties": {
+                 "change": " ssss=3333\n-eeee=3333\n+cccc=4444\n",
+                 "filename": "/arsenal.properties",
+                 "time": "2016-03-09 09:29:27.000000000"
+             },
+             "/baidu/b.txt": {
+                 "change": "-ddddddddddd\n",
+                 "filename": "/baidu/b.txt",
+                 "time": "1970-01-01 08:00:00.000000000"
+             }
+         },
+         "status": "success"
+     }
+
+     * 返回 responseContext 的 string
+     * 返回 null 均为错误
+     * @param srcDir
+     * @param destDir
+     * @return
+     */
+    @Override
+    public String getDirDiffList(String srcDir,String destDir){
+        String responseContext = "";
+        try {
+            String command = scriptGetDirDiffList + " -s " + srcDir + " -d " + destDir;
+
+            Process ps = Runtime.getRuntime().exec(command);
+            ps.waitFor();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(ps.getInputStream()));
+            StringBuffer sb = new StringBuffer();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            String result = sb.toString();
+            Map<String,Object> map = DataConvert.jsonStringToMap(result);
+
+            if(map==null){
+                return null;
+            }
+            if(map.get("status") == null){
+                return null;
+            }
+
+            String status = map.get("status").toString();
+            if (status.equals("error")){
+                return null;
+            }
+            responseContext = map.get("responseContext").toString();
+        } catch (Exception e) {
+            logger.error("getDirDiffList error:",e);
+        }
+        return responseContext;
+    }
+
 }
