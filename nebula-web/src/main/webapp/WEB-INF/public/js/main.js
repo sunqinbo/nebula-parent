@@ -189,7 +189,11 @@ nebula.publish.event.createPublishEvent = function(){
     var publishProductCname = $("#select-product").find("option:selected").text();
     //var productSrcSvn = $("#select-product").find("option:selected").attr("value-svn");
     var publishEnv = $("#select-publich-env").val();
-    var publishSvn = $("#publich-svn").val();
+    var publishSvn = $("#publich-svn").val().trim();
+    if(publishSvn==""){
+        nebula.common.alert.danger("SVN地址不能为空",1000);
+        return false;
+    }
     if(isNaN(publishSvn)){
         nebula.common.alert.danger("SVN地址必须为数字",1000);
         return false;
