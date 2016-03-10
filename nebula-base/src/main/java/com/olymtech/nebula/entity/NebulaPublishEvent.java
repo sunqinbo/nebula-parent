@@ -66,6 +66,26 @@ public class NebulaPublishEvent extends BaseDO {
 
     private Date publishEndDatetime;
 
+    private String changeList;
+
+    private String publishRemark;
+
+    public String getChangeList() {
+        return changeList;
+    }
+
+    public void setChangeList(String changeList) {
+        this.changeList = changeList;
+    }
+
+    public String getPublishRemark() {
+        return publishRemark;
+    }
+
+    public void setPublishRemark(String publishRemark) {
+        this.publishRemark = publishRemark;
+    }
+
     public Integer getCountError() {
         return countError;
     }

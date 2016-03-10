@@ -212,7 +212,7 @@ public class PublishController extends BaseController {
 
         /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
         NebulaUserInfo loginUser = getLoginUser();
-        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+        if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
             return returnCallback("Error", "对不起,您没有该权限!");
         }
 
@@ -224,6 +224,7 @@ public class PublishController extends BaseController {
 
         Dispatcher dispatcher = new Dispatcher(chain, request, response);
         dispatcher.doDispatch(nebulaPublishEvent);
+
         /** 修改发布状态 */
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PUBLISH);
         nebulaPublishEvent.setPublishDatetime(new Date());
@@ -250,7 +251,7 @@ public class PublishController extends BaseController {
 
         /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
         NebulaUserInfo loginUser = getLoginUser();
-        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+        if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
             return returnCallback("Error", "对不起,您没有该权限!");
         }
 
@@ -294,7 +295,7 @@ public class PublishController extends BaseController {
 
         /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
         NebulaUserInfo loginUser = getLoginUser();
-        if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+        if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
             return returnCallback("Error", "对不起,您没有该权限!");
         }
 
@@ -345,7 +346,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员之一*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,nebulaPublishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, nebulaPublishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -407,7 +408,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -457,13 +458,13 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
             /*如果是生产,判断用户是否是超级管理员*/
             if (publishEvent.getPublishEnv().equals("product")) {
-                if (!userService.userRoleIsNeedRole(loginUser,"root")) {
+                if (!userService.userRoleIsNeedRole(loginUser, "root")) {
                     return returnCallback("Error", "对不起,您不是超级管理员,没有该权限!");
                 }
             }
@@ -511,7 +512,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -542,7 +543,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 
@@ -579,7 +580,7 @@ public class PublishController extends BaseController {
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
             NebulaUserInfo loginUser = getLoginUser();
-            if (!userService.ifLoginUserValid(loginUser,publishEvent)) {
+            if (!userService.ifLoginUserValid(loginUser, publishEvent)) {
                 return returnCallback("Error", "对不起,您没有该权限!");
             }
 

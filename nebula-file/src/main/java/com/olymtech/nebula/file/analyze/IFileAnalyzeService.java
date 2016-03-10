@@ -1,6 +1,8 @@
 package com.olymtech.nebula.file.analyze;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,4 +25,6 @@ public interface IFileAnalyzeService {
     public Boolean copyFile(String srcFile, String destFile);
 
     Boolean rmFile(String key, String filename);
+
+    Boolean copyFolder(File src, File dest) throws IOException;
 }
