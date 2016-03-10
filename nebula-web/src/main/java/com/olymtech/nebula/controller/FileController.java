@@ -176,4 +176,10 @@ public class FileController extends BaseController {
         }
         return returnCallback("Error",tip+"创建失败，"+tip+"已存在");
     }
+
+    //文件变更查看页面
+    @RequestMapping(value = "/checkList.htm",method = RequestMethod.GET)
+    public String checkList(){
+        return "event/changeListCheck";
+    }
 }

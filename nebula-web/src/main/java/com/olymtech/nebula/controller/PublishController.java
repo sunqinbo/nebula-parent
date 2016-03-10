@@ -614,13 +614,37 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/updateEtcEnd", method = {RequestMethod.POST})
     @ResponseBody
     public Callback updateEtcEnd(HttpServletRequest request) throws Exception {
-        String eventId = request.getParameter("id");
-        if (!StringUtils.isNotEmpty(eventId)) {
+        String eventIdString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(eventIdString)) {
             return returnCallback("Error", "id参数为空");
         }
-        publishScheduleService.logScheduleByAction(Integer.parseInt(eventId), PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+
+        Integer eventId = Integer.parseInt(eventIdString);
+        NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+        /** 生产环境 编辑etc后，需要审核 */
+        if(publishEvent.getPublishEnv().equals("product")){
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
+        }else{
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+        }
         return returnCallback("Success", "完成ETC编辑");
     }
+
+    @RequiresPermissions("publishevnt:etcApprove")
+    @RequestMapping(value = "/etcApprove", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback etcApprove(HttpServletRequest request) throws Exception {
+        String eventIdString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(eventIdString)) {
+            return returnCallback("Error", "id参数为空");
+        }
+        Integer eventId = Integer.parseInt(eventIdString);
+        publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+        return returnCallback("Success", "审批ETC完成");
+    }
+
 
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody

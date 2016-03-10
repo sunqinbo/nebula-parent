@@ -13,6 +13,7 @@ public enum PublishAction {
     ANALYZE_PROJECT("分析发布工程"),
     GET_SRC_SVN("获取源SVN文件"),
     UPDATE_ETC("更新配置"),
+    ETC_APPROVE("配置审核"),
 
     CREATE_PUBLISH_DIR("创建发布目录"),
     COPY_PUBLISH_OLD_ETC("拷贝原etc文件"),

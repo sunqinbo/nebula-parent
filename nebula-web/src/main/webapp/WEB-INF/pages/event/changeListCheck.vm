@@ -1,0 +1,97 @@
+ #parse("./head/header.vm")
+ #parse("./head/sidebar.vm")
+ #parse("./head/navbar.vm")
+
+<style>
+    .etc_list{
+        /*border: 1px solid #c6c6c6;*/
+        max-height: 280px;
+        overflow: auto;
+    }
+    .etc_list li{
+        list-style-image: url(/public/assets/img/file-icon.png);
+    }
+    .etc_list_on{
+        background-color: #C5E1E4;
+    }
+</style>
+ <script>
+     function clicka(btn){
+         $("#etc_list>a>li").each(function () {
+             $(this).removeClass("etc_list_on");
+         })
+         $(btn.children[0]).addClass("etc_list_on");
+     }
+ </script>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div  Style="min-height: 400px">
+                        <div class="row">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="box box-success">
+                                    <h4 class="box-title">etc变更列表</h4>
+                                    <hr/>
+                                    <input type="hidden" id="event-id" value="$!eventId">
+                                    <div class="box-body">
+                                       <ul id="etc_list" class="etc_list">
+                                           <a onclick="clicka(this)" href="#"><li id="test-test">etc1</li></a>
+                                           <a onclick="clicka(this)" href="#"><li>etc2</li></a>
+                                           <a onclick="clicka(this)" href="#"><li>etc3</li></a>
+                                           <a href="#"><li>etc4</li></a>
+                                           <a href="#"><li>etc5</li></a>
+                                           <a href="#"><li>etc6</li></a>
+                                           <a href="#"><li>etc7</li></a>
+                                           <a href="#"><li>etc8</li></a>
+                                           <a href="#"><li>etc9</li></a>
+                                           <a href="#"><li>etc10</li></a>
+                                           <a href="#"><li>etc11</li></a>
+                                           <a href="#"><li>etc12</li></a>
+                                           <a href="#"><li>etc13</li></a>
+                                       </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.row -->
+                    </div>
+                    <!--放button按钮 -->
+                </div>
+            </div>
+
+            <div class="col-md-offset-1 col-md-4">
+                    <div class="card">
+                        <!--放文本 -->
+                        <div style="height: 400px">
+                            <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
+                            </div>
+                            <div id="btnputer" style="text-align: center">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center">
+                        <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
+                    </div>
+            </div>
+            <div class="col-md-4">
+                    <div class="card">
+                        <!--放文本 -->
+                        <div style="height: 400px">
+                            <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
+                            </div>
+                            <div id="btnputer" style="text-align: center">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center">
+                        <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+#parse("./head/footer.vm")

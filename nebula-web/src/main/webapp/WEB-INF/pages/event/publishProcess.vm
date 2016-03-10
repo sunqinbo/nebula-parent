@@ -51,6 +51,7 @@
                         #if(${Event.isApproved})
                             <button style="float: right" class="btn btn-xs" type="button" id="detail_btn">展开</button>
                         #end
+                        <button   style="margin-right: 20px;float: right" class="btn btn-warning btn-sm" type="button" onclick="showChangeListModal()">发布变更</button>
                     </div>
                     <div style="text-align: center;">
                     ##                        <label style="font-size: large">标题：</label>
@@ -549,5 +550,36 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="changeModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- 模态弹出窗内容 -->
+            <div class="modal-header">
+                <button id="close_logModal_pan" type="button" class="close" data-dismiss="modal"><span
+                        aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 style="color: #0089db" class="modal-title">发布变更信息</h4>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center;margin-bottom: 50px;">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>taskId</th>
+                            <th>objectPath</th>
+                            <th>status</th>
+                            <th>creationTime</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
 #parse("head/footer.vm")
