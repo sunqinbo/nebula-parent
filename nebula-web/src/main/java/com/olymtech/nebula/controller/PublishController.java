@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,6 +72,8 @@ public class PublishController extends BaseController {
     private IElkLogService elkLogService;
     @Resource
     private IFileAnalyzeService fileAnalyzeService;
+    @Resource
+    private IFileReadService fileReadService;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -1004,5 +1007,29 @@ public class PublishController extends BaseController {
             return returnCallback("Success", "删除非war包文件成功.");
         }
         return returnCallback("Error", "删除非war包文件失败.");
+    }
+
+    /**
+     * 仅生产环境下可对编辑etc的配置进行查看
+     */
+    @RequestMapping(value = "/viewEtcContent", method = {RequestMethod.POST})
+    @ResponseBody
+    public Object viewEtcContent(Integer eventId, String key) {
+        NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+        String dirSrcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc" + key;
+        String destPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc" + key;
+        if (!publishEvent.getPublishEnv().equals("product")) {
+            return returnCallback("Error", "发布环境不是生产");
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        try {
+            List<String> srcFileContent = fileReadService.ReadFile(dirSrcPath);
+            List<String> destFileContent = fileReadService.ReadFile(destPath);
+            map.put("srcFileContent", srcFileContent);
+            map.put("destFileContent", destFileContent);
+        } catch (IOException e) {
+            return returnCallback("Error", "文件内容解析异常");
+        }
+        return returnCallback("Success", map);
     }
 }
