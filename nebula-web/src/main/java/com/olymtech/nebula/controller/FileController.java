@@ -1,9 +1,6 @@
 package com.olymtech.nebula.controller;
 
-import com.olymtech.nebula.entity.JsTreeData;
-import com.olymtech.nebula.entity.JsTreeDataRoot;
-import com.olymtech.nebula.entity.JsTreeDataState;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
 import com.olymtech.nebula.service.IFileReadService;
 import com.olymtech.nebula.service.IPublishEventService;
@@ -179,7 +176,16 @@ public class FileController extends BaseController {
 
     //文件变更查看页面
     @RequestMapping(value = "/checkList.htm",method = RequestMethod.GET)
-    public String checkList(){
+    public String checkList(Model model){
+        String idString = request.getParameter("eventId");
+        if(StringUtils.isEmpty(idString)){
+            model.addAttribute("error","id为空");
+        }else{
+            Integer id = Integer.parseInt(idString);
+            NebulaPublishEvent publishEvent = publishEventService.selectById(id);
+            List<FileChangeData> fileChangeDatas = publishEventService.changeListJsonStringToList(publishEvent.getChangeList());
+            model.addAttribute("fileChangeDatas",fileChangeDatas);
+        }
         return "event/changeListCheck";
     }
 }
