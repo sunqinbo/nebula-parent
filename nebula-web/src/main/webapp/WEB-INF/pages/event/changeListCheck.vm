@@ -64,7 +64,7 @@
             </div>
 
             <div class="col-md-offset-1 col-md-8">
-                <div id="file_title"><label>原文件</label><label style="margin-left: 50%">新文件</label></div>
+                <div id="file_title"><label>更新后的配置</label><label style="margin-left: 43%">原配置</label></div>
                 <div class="card">
                     <!--放文本 -->
                     <div id=view style="height: 370px"></div>
