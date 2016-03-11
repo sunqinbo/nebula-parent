@@ -394,6 +394,18 @@ $(document).ready(function(){
         window.open('/etc_edit/checkList.htm?eventId='+$("#eventId").val());
     });
 
+    //重新发布
+    $("#restartPublish").click(function () {
+        $("#restartPublish").hide();
+        $("#step1").hide();
+        $("#step2").hide();
+        $("#step3").hide();
+        $("#step4").hide();
+        $("#step5").hide();
+        $("#step6").hide();
+        btnUnclick();
+    });
+
 });
 
 //页面加载控制进度条
@@ -719,6 +731,7 @@ function btnControl(publishStatus){
             $("#step5").show();
             break;
         case "ROLLBACK":$("#restartTomcat_btn").show();
+            $("#restartPublish").show();
             $("#processbar4").setStep(5);
             $("#step4").show();
     }

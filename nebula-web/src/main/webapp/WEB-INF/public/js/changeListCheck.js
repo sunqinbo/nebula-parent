@@ -38,7 +38,6 @@ function clickFileName(btn){
             for (var i = 1; i < data.responseContext.destFileContent.length; i++)
                 orig2 += "\r\n" + data.responseContext.destFileContent[i];
             initUI(value,orig1,orig2);
-            $("#btnputer").show();
         },
         error: function (errorThrown) {
             nebula.common.alert.danger("很抱歉，获取etc文件失败，原因" + errorThrown,1000);
