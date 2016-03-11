@@ -568,13 +568,15 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>taskId</th>
-                            <th>objectPath</th>
-                            <th>status</th>
-                            <th>creationTime</th>
+                            <th>文件名</th>
+                            <th>改变内容</th>
+                            <th>改变时间</th>
                         </tr>
                         </thead>
                         <tbody>
+                        #foreach($fileChange in $!fileChangeDatas)
+                            <tr><td>$!fileChange.filename</td><td>$!fileChange.change</td><td>$!fileChange.time</td></tr>
+                        #end
                         </tbody>
                     </table>
                     <div class="form-group">

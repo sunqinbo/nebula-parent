@@ -155,6 +155,8 @@ public class PublishController extends BaseController {
             nebulaPublishEvent.setApproveUser(userService.selectByEmpId(approveEmpId));
         }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
+        List<FileChangeData> fileChangeDatas=publishEventService.changeListJsonStringToList(nebulaPublishEvent.getChangeList());
+        model.addAttribute("fileChangeDatas",fileChangeDatas);
         model.addAttribute("Modules", publishModules);
         model.addAttribute("Event", nebulaPublishEvent);
         model.addAttribute("LastEventId", publishEventService.getLastPublishId(id));
