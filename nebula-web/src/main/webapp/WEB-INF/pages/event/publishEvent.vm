@@ -67,6 +67,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-sm-2 control-label">发布备注</label>
+                                <div class="col-sm-10">
+                                    <textarea id="publishRemark" class="form-control" style="resize: none;border: 1px solid #E3E3E3;"  rows="8" cols="70" placeholder="请输入发布变更内容..."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-12" style="text-align: center">
                                     #if($shiro.hasPermission("publishapply:commit"))
                                         <button id="publish-event-submit" class="btn btn-default"
@@ -96,26 +102,30 @@
                 <div style="text-align: center;margin-bottom: 50px;">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">发布名称:</label>
+                            <label class="col-sm-3 control-label">发布名称:</label>
                             <lable id="publishSubject_lb" style="float: left" class="control-label"></lable>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">发布事件事业部:</label>
+                            <label class="col-sm-3 control-label">发布事件事业部:</label>
                             <lable id="publishBuCname_lb" style="float: left" class="control-label"></lable>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">发布产品:</label>
+                            <label class="col-sm-3 control-label">发布产品:</label>
                             <lable id="publishProductCname_lb" style="float: left" class="control-label"></lable>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">发布环境:</label>
+                            <label class="col-sm-3 control-label">发布环境:</label>
                             <lable id="publishEnv_lb" style="float: left" class="control-label"></lable>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">发布svn地址:</label>
+                            <label class="col-sm-3 control-label">发布svn地址:</label>
                             <lable  class="control-label">
-                                <div class="col-sm-offset-1 col-sm-10" id="publishSvn_lb" style="float: left;color: red;font-size:large;text-align:left;word-break:break-all" ></div>
+                                <div  id="publishSvn_lb" style="float: left;color: red;font-size:large;text-align:left;word-break:break-all" ></div>
                             </lable>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布备注:</label>
+                            <textarea id="publishRemark_lb" class="form-control" disabled style="float: left;resize: none;width: 70%"  rows="8" ></textarea>
                         </div>
                     </div>
                 </div>

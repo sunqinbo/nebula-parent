@@ -190,6 +190,7 @@ nebula.publish.event.createPublishEvent = function(){
     //var productSrcSvn = $("#select-product").find("option:selected").attr("value-svn");
     var publishEnv = $("#select-publich-env").val();
     var publishSvn = $("#publich-svn").val().trim();
+    var publishRemark=$("#publishRemark").val();
     if(publishSvn==""){
         nebula.common.alert.danger("SVN地址不能为空",1000);
         return false;
@@ -199,7 +200,7 @@ nebula.publish.event.createPublishEvent = function(){
         return false;
     }
     publishSvn=$("#select-product").find("option:selected").attr("value-publishSvn")+publishSvn;
-    if(publishSubject==""||publishBuCname=="请选择"||publishProductCname=="请选择"||publishEnv==""||publishSvn==""){
+    if(publishSubject==""||publishBuCname=="请选择"||publishProductCname=="请选择"||publishEnv==""||publishSvn==""||publishRemark==""){
         nebula.common.alert.danger("请确认选择的所有字段",1000);
         return false;
     }
@@ -208,6 +209,7 @@ nebula.publish.event.createPublishEvent = function(){
     $("#publishProductCname_lb").text(publishProductCname)
     $("#publishEnv_lb").text($("#select-publich-env").find("option:selected").text())
     $("#publishSvn_lb").text(publishSvn)
+    $("#publishRemark_lb").text($("#publishRemark").val());
     $('#eventTipModal').modal('show');
 };
 //事件提交
@@ -220,6 +222,7 @@ nebula.publish.event.submitPublishEvent = function(){
     var productSrcSvn = $("#select-product").find("option:selected").attr("value-svn");
     var publishEnv = $("#select-publich-env").val();
     var publishSvn = $("#select-product").find("option:selected").attr("value-publishSvn")+$("#publich-svn").val();
+    var publishRemark=$("#publishRemark").val()
     $.ajax({
         url:"/publish/add",
         type:"post",
@@ -233,6 +236,7 @@ nebula.publish.event.submitPublishEvent = function(){
             data["publishEnv"]=publishEnv;
             data["publishSvn"]=publishSvn;
             data["productSrcSvn"]=productSrcSvn;
+            data["publishRemark"]=publishRemark;
             return data;
         })(),
         success:function(jsonData){
