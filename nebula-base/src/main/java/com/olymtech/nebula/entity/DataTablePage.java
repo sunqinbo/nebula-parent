@@ -10,6 +10,16 @@ public class DataTablePage {
     private int pageNum;
     private Map<String,Object> map;
 
+    public DataTablePage(){
+
+    }
+
+    public DataTablePage(int pageSize,
+                         int pageNum){
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+    }
+
     public int getPageSize() {
         return pageSize;
     }
