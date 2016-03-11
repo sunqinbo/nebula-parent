@@ -575,7 +575,7 @@
                         </thead>
                         <tbody>
                         #foreach($fileChange in $!fileChangeDatas)
-                            <tr><td>$!fileChange.filename</td><td>$!fileChange.change</td><td>$!fileChange.time</td></tr>
+                            <tr><td>$!fileChange.filename</td><td><textarea id="publishRemark_lb" class="form-control" disabled style="resize: none;"  rows="8" >$!fileChange.change</textarea></td><td>$!fileChange.time</td></tr>
                         #end
                         </tbody>
                     </table>
