@@ -28,7 +28,7 @@ public class FileAnalyzeServiceImpl implements IFileAnalyzeService {
     private String masterDeployDir;
 
     @Value("${script_get_dir_diff_list}")
-    private static String scriptGetDirDiffList;
+    private String scriptGetDirDiffList;
 
     @Override
     public List<String> getFileListByDirPath(String dirPath) {

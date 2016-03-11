@@ -4,7 +4,11 @@
  */
 package com.olymtech.nebula.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.dao.INebulaPublishScheduleDao;
+import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
@@ -57,6 +61,43 @@ public class PublishScheduleServiceImpl implements IPublishScheduleService {
                 nebulaPublishScheduleDao.deleteById(nebulaPublishSchedule.getId());
             }
         }
+    }
+
+    @Override
+    public List<NebulaPublishSchedule> selectAllPaging(DataTablePage dataTablePage, NebulaPublishSchedule publishSchedule){
+        PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
+        return nebulaPublishScheduleDao.selectAllPaging(publishSchedule);
+    }
+
+    /**
+     * 找到一个action记录
+     * 查询出多个为异常，返回null
+     * 查询出一个，为正常
+     * @param eventId
+     * @param publishAction
+     * @param actionGroup
+     * @return
+     */
+    @Override
+    public NebulaPublishSchedule selectEntryAction(Integer eventId,PublishAction publishAction,PublishActionGroup actionGroup){
+        NebulaPublishSchedule publishSchedule = new NebulaPublishSchedule(eventId,publishAction,actionGroup);
+        DataTablePage dataTablePage = new DataTablePage(1,10);
+        List<NebulaPublishSchedule> nebulaPublishSchedules = selectAllPaging(dataTablePage,publishSchedule);
+        if(nebulaPublishSchedules.size() == 1){
+            return nebulaPublishSchedules.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteById(Integer id){
+        nebulaPublishScheduleDao.deleteById(id);
+    }
+
+    @Override
+    public void update(NebulaPublishSchedule publishSchedule){
+        nebulaPublishScheduleDao.update(publishSchedule);
     }
 
 }

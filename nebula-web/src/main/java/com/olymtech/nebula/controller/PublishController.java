@@ -624,7 +624,11 @@ public class PublishController extends BaseController {
         Integer eventId = Integer.parseInt(eventIdString);
         NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
 
-        publishEventService.updateChangeList(publishEvent);
+        Boolean result = publishEventService.updateChangeList(publishEvent);
+        if(!result){
+            return returnCallback("Error", "获取配置变更列表失败");
+        }
+
         /** 生产环境 编辑etc后，需要审核 */
         if(publishEvent.getPublishEnv().equals("product")){
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
@@ -633,21 +637,52 @@ public class PublishController extends BaseController {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
         }
-        return returnCallback("Success", "完成ETC编辑");
+        return returnCallback("Success", "完成配置编辑");
     }
 
     @RequiresPermissions("publishevnt:etcApprove")
-    @RequestMapping(value = "/etcApprove", method = {RequestMethod.POST})
+    @RequestMapping(value = "/etcApprovePass", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback etcApprove(HttpServletRequest request) throws Exception {
+    public Callback etcApprovePass(HttpServletRequest request) throws Exception {
         String eventIdString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(eventIdString)) {
             return returnCallback("Error", "id参数为空");
         }
         Integer eventId = Integer.parseInt(eventIdString);
         publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
-        return returnCallback("Success", "审批ETC完成");
+        return returnCallback("Success", "审批通过");
     }
+
+    @RequiresPermissions("publishevnt:etcApprove")
+    @RequestMapping(value = "/etcApproveReject", method = {RequestMethod.POST})
+    @ResponseBody
+    public Callback etcApproveReject(HttpServletRequest request) throws Exception {
+        String eventIdString = request.getParameter("id");
+        if (!StringUtils.isNotEmpty(eventIdString)) {
+            return returnCallback("Error", "id参数为空");
+        }
+        Integer eventId = Integer.parseInt(eventIdString);
+        NebulaPublishSchedule etcApproveSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER);
+        NebulaPublishSchedule updateEtcSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER);
+
+        if(etcApproveSchedule == null){
+            return returnCallback("Error", "审批驳回失败：审批流程获取失败");
+        }
+
+        if(updateEtcSchedule == null){
+            return returnCallback("Error", "审批驳回失败：编辑配置流程获取失败");
+        }
+
+        /** 删除审核流程，回到编辑配置流程 */
+        publishScheduleService.deleteById(etcApproveSchedule.getId());
+
+        /** 编辑etc设置成null，未开始 */
+        updateEtcSchedule.setIsSuccessAction(null);
+        publishScheduleService.update(updateEtcSchedule);
+
+        return returnCallback("Success", "审批驳回");
+    }
+
 
 
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})

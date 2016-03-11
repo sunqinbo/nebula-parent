@@ -4,6 +4,7 @@
  */
 package com.olymtech.nebula.service;
 
+import com.olymtech.nebula.entity.DataTablePage;
 import com.olymtech.nebula.entity.NebulaPublishSchedule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
@@ -20,4 +21,12 @@ public interface IPublishScheduleService {
     public List<NebulaPublishSchedule> selectByEventId(Integer eventId);
 
     public void deleteByEventIdWithOutCreateAction(Integer eventId);
+
+    List<NebulaPublishSchedule> selectAllPaging(DataTablePage dataTablePage, NebulaPublishSchedule publishSchedule);
+
+    NebulaPublishSchedule selectEntryAction(Integer eventId, PublishAction publishAction, PublishActionGroup actionGroup);
+
+    void deleteById(Integer id);
+
+    void update(NebulaPublishSchedule publishSchedule);
 }
