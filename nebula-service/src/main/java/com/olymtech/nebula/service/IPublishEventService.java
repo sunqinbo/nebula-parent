@@ -18,8 +18,6 @@ public interface IPublishEventService {
 
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent);
 
-    public NebulaPublishEvent getPublishEventById(Integer id);
-
     public PageInfo getPublishEvent(DataTablePage dataTablePage, NebulaPublishEvent nebulaPublishEvent);
 
     public NebulaPublishEvent selectById(Integer eventId);
