@@ -7,7 +7,7 @@ $(function () {
     });
 });
 function clickFileName(btn){
-    var value, orig1, orig2;
+    var value="", orig1, orig2="";
     $("#etc_list>a>li").each(function () {
         $(this).removeClass("etc_list_on");
     })
@@ -30,11 +30,15 @@ function clickFileName(btn){
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
             }
-            value=data.responseContext.srcFileContent[0];
+            if(data.responseContext.srcFileContent.length>0) {
+                value = data.responseContext.srcFileContent[0];
+            }
             for (var i = 1; i < data.responseContext.srcFileContent.length; i++)
                 value += "\r\n" + data.responseContext.srcFileContent[i];
             //value=orig1;
-            orig2=data.responseContext.destFileContent[0];
+            if(data.responseContext.destFileContent.length>0) {
+                orig2 = data.responseContext.destFileContent[0];
+            }
             for (var i = 1; i < data.responseContext.destFileContent.length; i++)
                 orig2 += "\r\n" + data.responseContext.destFileContent[i];
             initUI(value,orig1,orig2);
