@@ -499,7 +499,8 @@ public class PublishController extends BaseController {
     }
 
     /**
-     * 重新发布
+     * 回退重发
+     * 不会创建新的发布事件，本次事件重发
      */
     @RequiresPermissions("publishevnt:retryPublishRollback")
     @RequestMapping(value = "/retryPublishRollback", method = {RequestMethod.POST})
@@ -807,7 +808,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/add/nextpublish", method = {RequestMethod.POST})
     @ResponseBody
     public Object addNextPublish(Integer eventId, String nowPublish) throws Exception {
-        NebulaPublishEvent publishEvent = publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
 
         NebulaPublishEvent newPublishEvent = new NebulaPublishEvent();
 
@@ -836,7 +837,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/update/approval", method = {RequestMethod.POST})
     @ResponseBody
     public Object approvalPublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
         NebulaUserInfo user = getLoginUser();
         String publishEnv = nebulaPublishEvent.getPublishEnv();
         /*如果是生产发布,判断登录人的角色是否是部门主管的角色*/
@@ -861,7 +862,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/delete", method = {RequestMethod.POST})
     @ResponseBody
     public Object deletePublish(Integer eventId) throws Exception {
-        NebulaPublishEvent nebulaPublishEvent = publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
         nebulaPublishEvent.setIsDelete(true);
         publishEventService.update(nebulaPublishEvent);
         return returnCallback("Success", "");
@@ -992,7 +993,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/log/getPublishLogByHost", method = {RequestMethod.POST})
     @ResponseBody
     public Object getPublishLogByHost(Integer eventId, ElkSearchData elkSearchDataReuqest) {
-        NebulaPublishEvent publishEvent = publishEventService.getPublishEventById(eventId);
+        NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
         if (!StringUtils.isNotEmpty(elkSearchDataReuqest.getHost())) {
             return returnCallback("Error", "host参数为必选项");
         }

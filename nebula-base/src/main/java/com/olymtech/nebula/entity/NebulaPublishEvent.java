@@ -146,14 +146,6 @@ public class NebulaPublishEvent extends BaseDO {
         isDelete = delete;
     }
 
-    public Boolean getApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(Boolean approved) {
-        isApproved = approved;
-    }
-
     public Integer getApproveEmpId() {
         return approveEmpId;
     }
