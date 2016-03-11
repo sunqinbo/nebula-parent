@@ -68,13 +68,13 @@
                     <!--放文本 -->
                     <div id=view style="height: 400px"></div>
                 </div>
-##                #if($shiro.hasPermission("publishevnt:etcApprove"))
+                #if($shiro.hasPermission("publishevnt:etcApprove"))
 ##                    <div id="btnputer" hidden style="text-align: center">
                         <button id="pass_btn" type="button" class="btn btn-info">通过</button>
                         <button id="unPass_btn" style="margin-left: 50px;" type="button" class="btn btn-danger">不通过
                         </button>
 ##                    </div>
-##                #end
+                #end
             ##            <div class="col-md-4">
             ##                    <div class="card">
             ##                        <!--放文本 -->
