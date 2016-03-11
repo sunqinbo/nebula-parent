@@ -24,6 +24,11 @@
     .CodeMirror-merge-copy {
         display: none !important;
     }
+
+    .container-fluid a{
+        color: #4cb9fc !important;
+    }
+
 </style>
 <link href="/public/plugins/CodeMirror-master/doc/docs.css" rel="stylesheet"/>
 <link href="/public/plugins/CodeMirror-master/lib/codemirror.css" rel="stylesheet"/>
@@ -63,7 +68,7 @@
                 </div>
             </div>
 
-            <div class="col-md-offset-1 col-md-8">
+            <div class="col-md-9">
                 <div id="file_title"><label>更新后的配置</label><label style="margin-left: 43%">原配置</label></div>
                 <div class="card">
                     <!--放文本 -->

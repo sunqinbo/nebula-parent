@@ -1080,8 +1080,8 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Object viewEtcContent(Integer eventId, String key) {
         NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
-        String dirSrcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc" + key;
-        String destPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc" + key;
+        String publishEtcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc" + key;
+        String oldEtcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc" + key;
 //        String dirSrcPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_svn\\etc" + key;
 //        String destPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_etc" + key;
         if (!publishEvent.getPublishEnv().equals("product")) {
@@ -1089,10 +1089,10 @@ public class PublishController extends BaseController {
         }
         Map<String, List<String>> map = new HashMap<>();
         try {
-            List<String> srcFileContent = fileReadService.ReadFile(dirSrcPath);
-            List<String> destFileContent = fileReadService.ReadFile(destPath);
-            map.put("srcFileContent", srcFileContent);
-            map.put("destFileContent", destFileContent);
+            List<String> publishFileContent = fileReadService.ReadFile(publishEtcPath);
+            List<String> oldFileContent = fileReadService.ReadFile(oldEtcPath);
+            map.put("publishFileContent", publishFileContent);
+            map.put("oldFileContent", oldFileContent);
         } catch (IOException e) {
             return returnCallback("Error", "文件内容解析异常");
         }
