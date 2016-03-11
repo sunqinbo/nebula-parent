@@ -14,8 +14,8 @@ public class DataTablePage {
 
     }
 
-    public DataTablePage(int pageSize,
-                         int pageNum){
+    public DataTablePage(int pageNum,
+                         int pageSize){
         this.pageNum = pageNum;
         this.pageSize = pageSize;
     }

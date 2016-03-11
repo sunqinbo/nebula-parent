@@ -1,6 +1,11 @@
-//$(function () {
-//
-//});
+$(function () {
+    $("#pass_btn").click(function(){
+        etcApprove(true);
+    });
+    $("#unPass_btn").click(function(){
+        etcApprove(false);
+    });
+});
 function clickFileName(btn){
     var value, orig1, orig2;
     $("#etc_list>a>li").each(function () {
@@ -57,6 +62,37 @@ function initUI(value,orig1,orig2) {
     });
 }
 
+function etcApprove(isPass){
+    var url="/publish/etcApprovePass";
+    if(!isPass){
+        url="/publish/etcApproveReject";
+    }
+    $.ajax({
+        type: "post",
+        url: url,
+        datetype: "json",
+        async: false,
+        data: {
+            id: $("#event-id").val(),
+        },
+        success: function (data) {
+            if (!data.callbackMsg) {
+                data = JSON.parse(data);
+            }
+            if (data.callbackMsg == "Error") {
+                nebula.common.alert.danger(data.responseContext, 1000);
+                return;
+            }
+            nebula.common.alert.success(data.responseContext, 1000);
+            setTimeout(function () {
+                window.location.href="/publish/process.htm?id="+$("#event-id").val();
+            }, 1000);
+        },
+        error: function (errorThrown) {
+            nebula.common.alert.danger("很抱歉，审批配置失败，原因" + errorThrown, 1000);
+        }
+    });
+}
 //function toggleDifferences() {
 //    dv.setShowDifferences(highlight = !highlight);
 //}
