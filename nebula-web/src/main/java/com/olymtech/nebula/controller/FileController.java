@@ -185,6 +185,7 @@ public class FileController extends BaseController {
             NebulaPublishEvent publishEvent = publishEventService.selectById(id);
             List<FileChangeData> fileChangeDatas = publishEventService.changeListJsonStringToList(publishEvent.getChangeList());
             model.addAttribute("fileChangeDatas",fileChangeDatas);
+            model.addAttribute("eventId",id);
         }
         return "event/changeListCheck";
     }

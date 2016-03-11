@@ -154,6 +154,8 @@ $(document).ready(function(){
         }, {
             title: "编辑etc",
         }, {
+            title:"配置审核",
+        },{
             title: "准备完成",
         }]
     });
@@ -387,6 +389,11 @@ $(document).ready(function(){
         });
     });
 
+    //审核配置
+    $("#etc_Approve_btn").click(function(){
+        window.open('/etc_edit/checkList.htm?eventId='+$("#eventId").val());
+    });
+
 });
 
 //页面加载控制进度条
@@ -445,7 +452,7 @@ function Initialization() {
             var lastGroup=data.responseContext.lastGroup;
             btnUnclick();
             //动作不为编辑ETC 且正在执行，显示等待条
-            if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && whichStep == 4)) {
+            if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && (whichStep == 4||whichStep == 5))) {
                 $("#loading-status").show();
             } else {
                 $("#loading-status").hide();
@@ -455,7 +462,8 @@ function Initialization() {
             var lastStep;
             switch (actionGroup) {
                 case 1:
-                    lastStep = 4;
+                    lastStep = 5;
+                    //获取模块信息
                     if(whichStep>2&&$("#moduleAndApps tr").length==0){
                         $.ajax({
                             data:{eventId: $("#eventId").val()},
@@ -634,12 +642,16 @@ function Initialization() {
                 }
             }
             //动作为ect开始时
-            if (actionGroup == 1 && whichStep == 4 && (actionState == "" || actionState == "null")) {
-                //添加编辑按钮
-                $("#restartPublish").show();
-                $("#cancelPublish").show();
+            if (actionGroup == 1 && (whichStep == 4||whichStep == 5) && (actionState == "" || actionState == "null")) {
+                if (whichStep == 4) {
+                    //添加编辑按钮
+                    $("#restartPublish").show();
+                    $("#cancelPublish").show();
 
-                $("#etc_btns").show();
+                    $("#etc_btns").show();
+                }else{
+                    $("#etc_Approve_btn").show();
+                }
             }
             else {
                 $("#restartPublish").hide();

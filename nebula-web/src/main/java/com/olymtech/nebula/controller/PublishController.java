@@ -686,7 +686,7 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object publishProcessGetStep(Integer eventId) throws Exception {
-        String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC"};
+        String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC","ETC_APPROVE"};
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
         String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
@@ -1079,6 +1079,8 @@ public class PublishController extends BaseController {
         NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
         String dirSrcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc" + key;
         String destPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc" + key;
+//        String dirSrcPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_svn\\etc" + key;
+//        String destPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_etc" + key;
         if (!publishEvent.getPublishEnv().equals("product")) {
             return returnCallback("Error", "发布环境不是生产");
         }

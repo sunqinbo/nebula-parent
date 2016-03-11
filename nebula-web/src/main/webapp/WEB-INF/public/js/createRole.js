@@ -155,6 +155,13 @@ function btnClick(isCreate){
         },
         datatype:"json",
         success: function (data) {
+            if(!data.callbackMsg){
+                data=JSON.parse(data);
+            }
+            if(data.callbackMsg=="Error") {
+                nebula.common.alert.danger(data.responseContext, 1000);
+                return;
+            }
             nebula.common.alert.success(data.responseContext, 1000);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

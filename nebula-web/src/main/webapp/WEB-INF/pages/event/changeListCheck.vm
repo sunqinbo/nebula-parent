@@ -1,35 +1,45 @@
- #parse("./head/header.vm")
- #parse("./head/sidebar.vm")
- #parse("./head/navbar.vm")
+#parse("./head/header.vm")
+#parse("./head/sidebar.vm")
+#parse("./head/navbar.vm")
 
 <style>
-    .etc_list{
+    .etc_list {
         /*border: 1px solid #c6c6c6;*/
         max-height: 280px;
         overflow: auto;
     }
-    .etc_list li{
+
+    .etc_list li {
         list-style-image: url(/public/assets/img/file-icon.png);
     }
-    .etc_list_on{
+
+    .etc_list_on {
         background-color: #C5E1E4;
     }
+
+    .CodeMirror-merge, .CodeMirror-merge .CodeMirror {
+        height: 400px !important;
+    }
+
+    .CodeMirror-merge-copy {
+        display: none !important;
+    }
 </style>
- <script>
-     function clicka(btn){
-         $("#etc_list>a>li").each(function () {
-             $(this).removeClass("etc_list_on");
-         })
-         $(btn.children[0]).addClass("etc_list_on");
-     }
- </script>
+<link href="/public/plugins/CodeMirror-master/doc/docs.css" rel="stylesheet"/>
+<link href="/public/plugins/CodeMirror-master/lib/codemirror.css" rel="stylesheet"/>
+<link href="/public/plugins/CodeMirror-master/addon/merge/merge.css" rel="stylesheet"/>
+<script src="/public/plugins/CodeMirror-master/lib/codemirror.js"></script>
+<script src="/public/plugins/CodeMirror-master/mode/xml/xml.js"></script>
+<script src="/public/plugins/CodeMirror-master/diff_math_path.js"></script>
+<script src="/public/plugins/CodeMirror-master/addon/merge/merge.js"></script>
+<script src="/public/js/changeListCheck.js"></script>
 
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
                 <div class="card">
-                    <div  Style="min-height: 400px">
+                    <div Style="min-height: 400px">
                         <div class="row">
                             <div class="col-md-offset-1 col-md-10">
                                 <div class="box box-success">
@@ -37,21 +47,13 @@
                                     <hr/>
                                     <input type="hidden" id="event-id" value="$!eventId">
                                     <div class="box-body">
-                                       <ul id="etc_list" class="etc_list">
-                                           <a onclick="clicka(this)" href="#"><li id="test-test">etc1</li></a>
-                                           <a onclick="clicka(this)" href="#"><li>etc2</li></a>
-                                           <a onclick="clicka(this)" href="#"><li>etc3</li></a>
-                                           <a href="#"><li>etc4</li></a>
-                                           <a href="#"><li>etc5</li></a>
-                                           <a href="#"><li>etc6</li></a>
-                                           <a href="#"><li>etc7</li></a>
-                                           <a href="#"><li>etc8</li></a>
-                                           <a href="#"><li>etc9</li></a>
-                                           <a href="#"><li>etc10</li></a>
-                                           <a href="#"><li>etc11</li></a>
-                                           <a href="#"><li>etc12</li></a>
-                                           <a href="#"><li>etc13</li></a>
-                                       </ul>
+                                        <ul id="etc_list" class="etc_list">
+                                            #foreach($fileChange in $!fileChangeDatas)
+                                                <a onclick="clickFileName(this)" href="#">
+                                                    <li id="test-test">$!fileChange.filename</li>
+                                                </a>
+                                            #end
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -61,33 +63,31 @@
                 </div>
             </div>
 
-            <div class="col-md-offset-1 col-md-4">
-                    <div class="card">
-                        <!--放文本 -->
-                        <div style="height: 400px">
-                            <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
-                            </div>
-                            <div id="btnputer" style="text-align: center">
-                            </div>
-                        </div>
-                    </div>
-                    <div style="text-align: center">
-                        <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
-                    </div>
-            </div>
-            <div class="col-md-4">
-                    <div class="card">
-                        <!--放文本 -->
-                        <div style="height: 400px">
-                            <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
-                            </div>
-                            <div id="btnputer" style="text-align: center">
-                            </div>
-                        </div>
-                    </div>
-                    <div style="text-align: center">
-                        <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
-                    </div>
+            <div class="col-md-offset-1 col-md-8">
+                <div class="card">
+                    <!--放文本 -->
+                    <div id=view style="height: 400px"></div>
+                </div>
+                <div id="btnputer" hidden style="text-align: center">
+                    <button id="pass_close" type="button" class="btn btn-info">通过</button>
+                    <button id="unPass_close" style="margin-left: 50px;" type="button" class="btn btn-danger">不通过
+                    </button>
+                </div>
+            ##            <div class="col-md-4">
+            ##                    <div class="card">
+            ##                        <!--放文本 -->
+            ##                        <div style="height: 400px">
+            ##                            <div id="textputer" Style="padding-top: 10px;height: 350px;text-align: center">
+            ##                            </div>
+            ##                            <div id="btnputer" style="text-align: center">
+            ##                            </div>
+            ##                        </div>
+            ##                    </div>
+            ##                    <div style="text-align: center">
+            ##                        <button id="btn_close" type="button" class="btn btn-info">关闭并返回</button>
+            ##                    </div>
+            ##            </div>
+            ##            <div id=view></div>
             </div>
         </div>
     </div>
