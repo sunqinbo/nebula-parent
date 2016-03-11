@@ -30,10 +30,10 @@ function clickFileName(btn){
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
             }
-            orig1=data.responseContext.srcFileContent[0];
+            value=data.responseContext.srcFileContent[0];
             for (var i = 1; i < data.responseContext.srcFileContent.length; i++)
-                orig1 += "\r\n" + data.responseContext.srcFileContent[i];
-            value=orig1;
+                value += "\r\n" + data.responseContext.srcFileContent[i];
+            //value=orig1;
             orig2=data.responseContext.destFileContent[0];
             for (var i = 1; i < data.responseContext.destFileContent.length; i++)
                 orig2 += "\r\n" + data.responseContext.destFileContent[i];
