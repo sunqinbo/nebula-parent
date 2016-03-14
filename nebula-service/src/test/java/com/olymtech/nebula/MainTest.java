@@ -1,5 +1,7 @@
 package com.olymtech.nebula;
 
+import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.NebulaUserInfo;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.FileCopyUtils;
 
@@ -11,19 +13,37 @@ import java.io.*;
 public class MainTest {
     public static void main(String[] args) {
 
-        String dirPath = "/Users/wangyiqiang/Desktop";
-        String destPath = "/Users/wangyiqiang/test";
+//        String dirPath = "/Users/wangyiqiang/Desktop";
+//        String destPath = "/Users/wangyiqiang/test";
+//
+////        Boolean success = createDir(destPath);
+////        System.out.println(success);
+//
+//        File src = new File(dirPath);
+//        File dest = new File(destPath);
+//        try {
+//            Boolean success = copyFolder(src, dest);
+//            System.out.println(success);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        Integer a = 1;
+        Integer b = 1;
+        if(a == b){
+            System.out.println("a == b");
+        }else{
+            System.out.println("a != b");
+        }
 
-//        Boolean success = createDir(destPath);
-//        System.out.println(success);
+        NebulaUserInfo userA = new NebulaUserInfo();
+        userA.setEmpId(1000);
+        NebulaUserInfo userB = new NebulaUserInfo();
+        userB.setEmpId(1000);
 
-        File src = new File(dirPath);
-        File dest = new File(destPath);
-        try {
-            Boolean success = copyFolder(src, dest);
-            System.out.println(success);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(userA.getEmpId().equals(userB.getEmpId())){
+            System.out.println("userA == userB");
+        }else{
+            System.out.println("userA != userB");
         }
 
     }
@@ -85,5 +105,6 @@ public class MainTest {
         }
         return result;
     }
+
 
 }

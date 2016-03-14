@@ -206,7 +206,7 @@ public class UserServiceImpl implements IUserService {
     public Boolean ifLoginUserValid(NebulaUserInfo loginUser, NebulaPublishEvent publishEvent) {
 //        Subject subject = SecurityUtils.getSubject();
 //        subject.hasRole("admin");
-        if (loginUser.getEmpId()==publishEvent.getSubmitEmpId()
+        if (loginUser.getEmpId().equals(publishEvent.getSubmitEmpId())
                 || userRoleIsNeedRole(loginUser, "admin")
                 || userRoleIsNeedRole(loginUser, "root")) {
             return true;
