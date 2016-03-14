@@ -77,11 +77,6 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     @Override
-    public NebulaPublishEvent getPublishEventById(Integer id) {
-        return nebulaPublishEventDao.selectById(id);
-    }
-
-    @Override
     public PageInfo getPublishEvent(DataTablePage dataTablePage, NebulaPublishEvent nebulaPublishEvent) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
         List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPagingWithUser(nebulaPublishEvent);

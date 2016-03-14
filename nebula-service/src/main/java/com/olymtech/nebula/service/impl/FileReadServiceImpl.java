@@ -1,6 +1,8 @@
 package com.olymtech.nebula.service.impl;
 
 import com.olymtech.nebula.service.IFileReadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -12,10 +14,18 @@ import java.util.List;
  */
 @Service
 public class FileReadServiceImpl implements IFileReadService {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public List<String> ReadFile(String path) throws IOException {
         List<String> filecontent = new ArrayList<>();
         File file = new File(path);
+
+        if(!file.isFile()){
+            return filecontent;
+        }
+
         FileInputStream fileread = new FileInputStream(file);
         BufferedReader reader = null;
         try {
@@ -41,14 +51,17 @@ public class FileReadServiceImpl implements IFileReadService {
     public void SaveFile(String path, String content) throws IOException {
         File file = new File(path);
         FileOutputStream fos = new FileOutputStream(file, false);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
         String hh = "\r\n";
         content = content.replace("\n", hh);
         try {
-            fos.write(content.getBytes());
+            osw.write(content);
+            osw.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("SaveFile error:",e);
         } finally {
             fos.close();
+            osw.close();
         }
     }
 

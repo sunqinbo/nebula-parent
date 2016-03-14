@@ -1,8 +1,13 @@
-//$(function () {
-//
-//});
+$(function () {
+    $("#pass_btn").click(function(){
+        etcApprove(true);
+    });
+    $("#unPass_btn").click(function(){
+        etcApprove(false);
+    });
+});
 function clickFileName(btn){
-    var value, orig1, orig2;
+    var value="", orig1, orig2="";
     $("#etc_list>a>li").each(function () {
         $(this).removeClass("etc_list_on");
     })
@@ -25,15 +30,18 @@ function clickFileName(btn){
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
             }
-            orig1=data.responseContext.srcFileContent[0];
-            for (var i = 1; i < data.responseContext.srcFileContent.length; i++)
-                orig1 += "\r\n" + data.responseContext.srcFileContent[i];
-            value=orig1;
-            orig2=data.responseContext.destFileContent[0];
-            for (var i = 1; i < data.responseContext.destFileContent.length; i++)
-                orig2 += "\r\n" + data.responseContext.destFileContent[i];
+            if(data.responseContext.publishFileContent.length>0) {
+                value = data.responseContext.publishFileContent[0];
+            }
+            for (var i = 1; i < data.responseContext.publishFileContent.length; i++)
+                value += "\r\n" + data.responseContext.publishFileContent[i];
+            //value=orig1;
+            if(data.responseContext.oldFileContent.length>0) {
+                orig2 = data.responseContext.oldFileContent[0];
+            }
+            for (var i = 1; i < data.responseContext.oldFileContent.length; i++)
+                orig2 += "\r\n" + data.responseContext.oldFileContent[i];
             initUI(value,orig1,orig2);
-            $("#btnputer").show();
         },
         error: function (errorThrown) {
             nebula.common.alert.danger("很抱歉，获取etc文件失败，原因" + errorThrown,1000);
@@ -57,6 +65,37 @@ function initUI(value,orig1,orig2) {
     });
 }
 
+function etcApprove(isPass){
+    var url="/publish/etcApprovePass";
+    if(!isPass){
+        url="/publish/etcApproveReject";
+    }
+    $.ajax({
+        type: "post",
+        url: url,
+        datetype: "json",
+        async: false,
+        data: {
+            id: $("#event-id").val(),
+        },
+        success: function (data) {
+            if (!data.callbackMsg) {
+                data = JSON.parse(data);
+            }
+            if (data.callbackMsg == "Error") {
+                nebula.common.alert.danger(data.responseContext, 1000);
+                return;
+            }
+            nebula.common.alert.success(data.responseContext, 1000);
+            setTimeout(function () {
+                window.location.href="/publish/process.htm?id="+$("#event-id").val();
+            }, 1000);
+        },
+        error: function (errorThrown) {
+            nebula.common.alert.danger("很抱歉，审批配置失败，原因" + errorThrown, 1000);
+        }
+    });
+}
 //function toggleDifferences() {
 //    dv.setShowDifferences(highlight = !highlight);
 //}
