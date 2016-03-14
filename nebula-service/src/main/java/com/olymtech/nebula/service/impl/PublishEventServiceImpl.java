@@ -207,73 +207,75 @@ public class PublishEventServiceImpl implements IPublishEventService {
          *        发布结束  取 发布完成时间
          */
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
-        if(publishEvent.getPublishEndDatetime() != null){
+        if (publishEvent.getPublishEndDatetime() != null) {
             toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
         }
         ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
-        return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
+        return elkLogService.count(elkSearchData, publishEvent.getPublishEnv());
     }
 
     /**
      * 更新changelist
+     *
      * @param publishEvent
      * @return
      */
     @Override
-    public Boolean updateChangeList(NebulaPublishEvent publishEvent){
+    public Boolean updateChangeList(NebulaPublishEvent publishEvent) {
         try {
             String destPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc";
             String srcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc";
-            String responseContext = fileAnalyzeService.getDirDiffList(srcPath,destPath);
-            if(StringUtils.isEmpty(responseContext)){
+            String responseContext = fileAnalyzeService.getDirDiffList(srcPath, destPath);
+            if (StringUtils.isEmpty(responseContext)) {
                 return false;
             }
             publishEvent.setChangeList(responseContext);
             nebulaPublishEventDao.update(publishEvent);
             return true;
-        }catch (Exception e){
-            logger.error("updateChangeList error:",e);
+        } catch (Exception e) {
+            logger.error("updateChangeList error:", e);
         }
         return false;
     }
 
     /**
-     *
-
-     {
-         "/a.properties": {
-             "change": "+dddd:3333\n",
-             "filename": "/a.properties",
-             "time": "2016-03-09 09:30:18.000000000"
-         },
-         "/arsenal.properties": {
-             "change": " ssss=3333\n-eeee=3333\n+cccc=4444\n",
-             "filename": "/arsenal.properties",
-             "time": "2016-03-09 09:29:27.000000000"
-         },
-         "/baidu/b.txt": {
-             "change": "-ddddddddddd\n",
-             "filename": "/baidu/b.txt",
-             "time": "1970-01-01 08:00:00.000000000"
-         }
-     }
-
+     * {
+     * "/a.properties": {
+     * "change": "+dddd:3333\n",
+     * "filename": "/a.properties",
+     * "time": "2016-03-09 09:30:18.000000000"
+     * },
+     * "/arsenal.properties": {
+     * "change": " ssss=3333\n-eeee=3333\n+cccc=4444\n",
+     * "filename": "/arsenal.properties",
+     * "time": "2016-03-09 09:29:27.000000000"
+     * },
+     * "/baidu/b.txt": {
+     * "change": "-ddddddddddd\n",
+     * "filename": "/baidu/b.txt",
+     * "time": "1970-01-01 08:00:00.000000000"
+     * }
+     * }
      *
      * @param responseContext
      * @return
      */
     @Override
-    public List<FileChangeData> changeListJsonStringToList(String responseContext){
+    public List<FileChangeData> changeListJsonStringToList(String responseContext) {
+
         List<FileChangeData> fileChangeDatas = new ArrayList<>();
+        if (StringUtils.isEmpty(responseContext)) {
+            return fileChangeDatas;
+        }
         JSONObject jsonObject = JSONObject.parseObject(responseContext);
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
             String jsonString = entry.getValue().toString();
             JSONObject everyData = JSONObject.parseObject(jsonString);
-            Map<String ,String> everyMap = new HashMap<>();
-            for (Map.Entry<String, Object> everyEntry : everyData.entrySet()){
+            Map<String, String> everyMap = new HashMap<>();
+            for (Map.Entry<String, Object> everyEntry : everyData.entrySet()) {
                 everyMap.put(everyEntry.getKey(), String.valueOf(everyEntry.getValue()));
             }
-            FileChangeData fileChangeData = new FileChangeData(everyMap.get("change"),everyMap.get("filename"),everyMap.get("time"));
+            FileChangeData fileChangeData = new FileChangeData(everyMap.get("change"), everyMap.get("filename"), everyMap.get("time"));
             fileChangeDatas.add(fileChangeData);
         }
         return fileChangeDatas;
