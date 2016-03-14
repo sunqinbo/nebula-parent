@@ -239,7 +239,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishDatetime(new Date());
         nebulaPublishEvent.setPublishEmpId(getLoginUser().getEmpId());
         publishEventService.update(nebulaPublishEvent);
-        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_PREPARATION,loginUser.getNickname()+"发布准备完成!",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_PREPARATION, "发布准备完成", loginUser.getEmpId());
         return returnCallback("Success", "发布准备执行完成");
     }
 
@@ -283,7 +283,7 @@ public class PublishController extends BaseController {
             logger.error("publishReal error:", e);
             return returnCallback("Error", "预发布出现错误");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH,loginUser.getNickname()+"启动预发布成功!",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH,"启动预发布成功",loginUser.getEmpId());
         return returnCallback("Success", "预发布完成");
     }
 
@@ -336,7 +336,7 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "预发布出现错误");
         }
 
-        publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,loginUser.getNickname()+"启动正式发布成功!",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,"启动正式发布成功",loginUser.getEmpId());
 
         return returnCallback("Success", "预发布完成");
     }
@@ -446,7 +446,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 成功发布 */
             publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS,loginUser.getNickname()+"确认发布成功!",loginUser.getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser.getEmpId());
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -499,7 +499,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 失败发布 */
             publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK,loginUser.getNickname()+"回滚成功!",loginUser.getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK, "回滚成功", loginUser.getEmpId());
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {
             logger.error("publishFailEnd error:", e);
@@ -532,7 +532,7 @@ public class PublishController extends BaseController {
             }
 
             publishEventService.update(publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.RE_PUBLISH,getLoginUser().getNickname()+"重新发布成功!",getLoginUser().getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.RE_PUBLISH, "重新发布成功", getLoginUser().getEmpId());
             return returnCallback("Success", "重新发布回退成功");
         } catch (Exception e) {
             logger.error("retryPublishRollback error:", e);
@@ -647,7 +647,7 @@ public class PublishController extends BaseController {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT,getLoginUser().getNickname()+"完成配置编辑!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT,"完成配置编辑",getLoginUser().getEmpId());
         return returnCallback("Success", "完成配置编辑");
     }
 
@@ -661,6 +661,7 @@ public class PublishController extends BaseController {
         }
         Integer eventId = Integer.parseInt(eventIdString);
         publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL, "配置审批通过", getLoginUser().getEmpId());
         return returnCallback("Success", "审批通过");
     }
 
@@ -691,6 +692,7 @@ public class PublishController extends BaseController {
         updateEtcSchedule.setIsSuccessAction(null);
         publishScheduleService.update(updateEtcSchedule);
 
+        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL, "配置审批驳回", getLoginUser().getEmpId());
         return returnCallback("Success", "审批驳回");
     }
 
@@ -837,7 +839,7 @@ public class PublishController extends BaseController {
         publishEvent.setPid(id);
         publishEventService.updateByIdSelective(publishEvent);
 
-        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH,getLoginUser().getNickname()+"进入下一个发布!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH, "发布升级完成", getLoginUser().getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -864,7 +866,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
 
-        publishEventLogService.logPublishAction(eventId, LogAction.APPROVER,getLoginUser().getNickname()+"审批通过!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_APPROVE, "发布审批通过", getLoginUser().getEmpId());
         return returnCallback("Success", "");
     }
 
@@ -1109,8 +1111,6 @@ public class PublishController extends BaseController {
         } catch (IOException e) {
             return returnCallback("Error", "文件内容解析异常");
         }
-
-        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL,getLoginUser().getNickname()+"查看了etc配置!",getLoginUser().getEmpId());
         return returnCallback("Success", map);
     }
 }
