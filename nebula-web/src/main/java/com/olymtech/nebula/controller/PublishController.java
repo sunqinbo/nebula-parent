@@ -158,8 +158,8 @@ public class PublishController extends BaseController {
             nebulaPublishEvent.setApproveUser(userService.selectByEmpId(approveEmpId));
         }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
-        List<FileChangeData> fileChangeDatas=publishEventService.changeListJsonStringToList(nebulaPublishEvent.getChangeList());
-        model.addAttribute("fileChangeDatas",fileChangeDatas);
+        List<FileChangeData> fileChangeDatas = publishEventService.changeListJsonStringToList(nebulaPublishEvent.getChangeList());
+        model.addAttribute("fileChangeDatas", fileChangeDatas);
         model.addAttribute("Modules", publishModules);
         model.addAttribute("Event", nebulaPublishEvent);
         model.addAttribute("LastEventId", publishEventService.getLastPublishId(id));
@@ -185,7 +185,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
 
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
-        publishEventLogService.logPublishAction(nebulaPublishEvent.getId(), LogAction.APPLY_PUBLISH_EVENT,getLoginUser().getNickname()+"申请创建发布事件成功!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(nebulaPublishEvent.getId(), LogAction.APPLY_PUBLISH_EVENT, getLoginUser().getNickname() + "申请创建发布事件成功!", getLoginUser().getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -239,7 +239,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishDatetime(new Date());
         nebulaPublishEvent.setPublishEmpId(getLoginUser().getEmpId());
         publishEventService.update(nebulaPublishEvent);
-        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_PREPARATION,loginUser.getNickname()+"发布准备完成!",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_PREPARATION, loginUser.getNickname() + "发布准备完成!", loginUser.getEmpId());
         return returnCallback("Success", "发布准备执行完成");
     }
 
@@ -283,7 +283,7 @@ public class PublishController extends BaseController {
             logger.error("publishReal error:", e);
             return returnCallback("Error", "预发布出现错误");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH,loginUser.getNickname()+"启动预发布成功!",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH, loginUser.getNickname() + "启动预发布成功!", loginUser.getEmpId());
         return returnCallback("Success", "预发布完成");
     }
 
@@ -336,7 +336,7 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "预发布出现错误");
         }
 
-        publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,loginUser.getNickname()+"启动正式发布成功!",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH, loginUser.getNickname() + "启动正式发布成功!", loginUser.getEmpId());
 
         return returnCallback("Success", "预发布完成");
     }
@@ -446,7 +446,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 成功发布 */
             publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS,loginUser.getNickname()+"确认发布成功!",loginUser.getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, loginUser.getNickname() + "确认发布成功!", loginUser.getEmpId());
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -499,7 +499,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 失败发布 */
             publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK,loginUser.getNickname()+"回滚成功!",loginUser.getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK, loginUser.getNickname() + "回滚成功!", loginUser.getEmpId());
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {
             logger.error("publishFailEnd error:", e);
@@ -532,7 +532,7 @@ public class PublishController extends BaseController {
             }
 
             publishEventService.update(publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.RE_PUBLISH,getLoginUser().getNickname()+"重新发布成功!",getLoginUser().getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.RE_PUBLISH, getLoginUser().getNickname() + "重新发布成功!", getLoginUser().getEmpId());
             return returnCallback("Success", "重新发布回退成功");
         } catch (Exception e) {
             logger.error("retryPublishRollback error:", e);
@@ -635,19 +635,19 @@ public class PublishController extends BaseController {
         NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
 
         Boolean result = publishEventService.updateChangeList(publishEvent);
-        if(!result){
+        if (!result) {
             return returnCallback("Error", "获取配置变更列表失败");
         }
 
         /** 生产环境 编辑etc后，需要审核 */
-        if(publishEvent.getPublishEnv().equals("product")){
+        if (publishEvent.getPublishEnv().equals("product")) {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
-        }else{
+        } else {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT,getLoginUser().getNickname()+"完成配置编辑!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT, getLoginUser().getNickname() + "完成配置编辑!", getLoginUser().getEmpId());
         return returnCallback("Success", "完成配置编辑");
     }
 
@@ -676,11 +676,11 @@ public class PublishController extends BaseController {
         NebulaPublishSchedule etcApproveSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER);
         NebulaPublishSchedule updateEtcSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER);
 
-        if(etcApproveSchedule == null){
+        if (etcApproveSchedule == null) {
             return returnCallback("Error", "审批驳回失败：审批流程获取失败");
         }
 
-        if(updateEtcSchedule == null){
+        if (updateEtcSchedule == null) {
             return returnCallback("Error", "审批驳回失败：编辑配置流程获取失败");
         }
 
@@ -695,11 +695,10 @@ public class PublishController extends BaseController {
     }
 
 
-
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object publishProcessGetStep(Integer eventId) throws Exception {
-        String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC","ETC_APPROVE"};
+        String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC", "ETC_APPROVE"};
         String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
         String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
@@ -837,7 +836,7 @@ public class PublishController extends BaseController {
         publishEvent.setPid(id);
         publishEventService.updateByIdSelective(publishEvent);
 
-        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH,getLoginUser().getNickname()+"进入下一个发布!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH, getLoginUser().getNickname() + "进入下一个发布!", getLoginUser().getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -864,7 +863,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
 
-        publishEventLogService.logPublishAction(eventId, LogAction.APPROVER,getLoginUser().getNickname()+"审批通过!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.APPROVER, getLoginUser().getNickname() + "审批通过!", getLoginUser().getEmpId());
         return returnCallback("Success", "");
     }
 
@@ -921,12 +920,19 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/add/refreshObjectCaches", method = {RequestMethod.POST})
     @ResponseBody
     public Object refreshObjectCaches(String objectPath, String objectType) {
+        String[] object = {"http://pstage.200jit.com/", "http://pptest.200jit.com/", "http://pmtest.200jit.com/", "http://patest.200jit.com/", "http://www.cargopm.com/"};
+        List<String> objectPathList = Arrays.asList(object);
+        Boolean result = objectPathList.contains(objectPath);
+        if (result == false) {
+            return returnCallback("Error", "获取cdn刷新列表失败");
+        }
         RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.refreshObjectCaches("olymtech@aliyun.com", "cn-hangzhou", objectPath, objectType);
         if (refreshObjectCachesResponse != null) {
             return returnCallback("Success", refreshObjectCachesResponse);
         } else {
             return returnCallback("Error", "获取cdn刷新列表失败");
         }
+
     }
 
     /**
@@ -1110,7 +1116,7 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "文件内容解析异常");
         }
 
-        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL,getLoginUser().getNickname()+"查看了etc配置!",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL, getLoginUser().getNickname() + "查看了etc配置!", getLoginUser().getEmpId());
         return returnCallback("Success", map);
     }
 }
