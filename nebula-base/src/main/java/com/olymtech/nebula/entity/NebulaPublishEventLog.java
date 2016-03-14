@@ -1,18 +1,32 @@
 package com.olymtech.nebula.entity;
 
+import com.olymtech.nebula.entity.enums.LogAction;
+
 import java.util.Date;
 
-public class NebulaPublishEventLog extends BaseDO{
+public class NebulaPublishEventLog extends BaseDO {
 
     private Integer publishEventId;
 
-    private String logAction;
+    private LogAction logAction;
 
     private String logInfo;
 
     private Date logDatetime;
 
     private Integer optEmpId;
+
+    public NebulaPublishEventLog() {
+        super();
+    }
+
+    public NebulaPublishEventLog(Integer publishEventId, LogAction logAction, String logInfo, Integer optEmpId) {
+        super();
+        this.publishEventId = publishEventId;
+        this.logAction = logAction;
+        this.logInfo = logInfo;
+        this.optEmpId = optEmpId;
+    }
 
     public Integer getPublishEventId() {
         return publishEventId;
@@ -22,12 +36,12 @@ public class NebulaPublishEventLog extends BaseDO{
         this.publishEventId = publishEventId;
     }
 
-    public String getLogAction() {
+    public LogAction getLogAction() {
         return logAction;
     }
 
-    public void setLogAction(String logAction) {
-        this.logAction = logAction == null ? null : logAction.trim();
+    public void setLogAction(LogAction logAction) {
+        this.logAction = logAction;
     }
 
     public String getLogInfo() {
