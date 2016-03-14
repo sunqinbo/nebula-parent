@@ -12,6 +12,7 @@ import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
 import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.*;
+import com.olymtech.nebula.entity.enums.LogAction;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
@@ -74,6 +75,8 @@ public class PublishController extends BaseController {
     private IFileAnalyzeService fileAnalyzeService;
     @Resource
     private IFileReadService fileReadService;
+    @Resource
+    private IPublishEventLogService publishEventLogService;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -182,6 +185,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
 
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
+        publishEventLogService.logPublishAction(nebulaPublishEvent.getId(), LogAction.APPLY_PUBLISH_EVENT,getLoginUser().getNickname()+"申请创建发布事件成功!",getLoginUser().getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -235,7 +239,7 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setPublishDatetime(new Date());
         nebulaPublishEvent.setPublishEmpId(getLoginUser().getEmpId());
         publishEventService.update(nebulaPublishEvent);
-
+        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_PREPARATION,loginUser.getNickname()+"发布准备完成!",loginUser.getEmpId());
         return returnCallback("Success", "发布准备执行完成");
     }
 
@@ -279,7 +283,7 @@ public class PublishController extends BaseController {
             logger.error("publishReal error:", e);
             return returnCallback("Error", "预发布出现错误");
         }
-
+        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH,loginUser.getNickname()+"启动预发布成功!",loginUser.getEmpId());
         return returnCallback("Success", "预发布完成");
     }
 
@@ -331,6 +335,9 @@ public class PublishController extends BaseController {
             logger.error("publishReal error:", e);
             return returnCallback("Error", "预发布出现错误");
         }
+
+        publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,loginUser.getNickname()+"启动正式发布成功!",loginUser.getEmpId());
+
         return returnCallback("Success", "预发布完成");
     }
 
@@ -385,6 +392,7 @@ public class PublishController extends BaseController {
             if (chain.getActions().size() != 0) {
                 Dispatcher dispatcher = new Dispatcher(chain, request, response);
                 dispatcher.doDispatch(nebulaPublishEvent);
+
                 return returnCallback("Success", "继续发布完成");
             } else {
                 return returnCallback("Error", "继续发布链为空");
@@ -438,6 +446,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 成功发布 */
             publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, publishEvent);
+            publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS,loginUser.getNickname()+"确认发布成功!",loginUser.getEmpId());
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -490,7 +499,7 @@ public class PublishController extends BaseController {
 
             /** 更新事件单为 失败发布 */
             publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, publishEvent);
-
+            publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK,loginUser.getNickname()+"回滚成功!",loginUser.getEmpId());
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {
             logger.error("publishFailEnd error:", e);
@@ -523,7 +532,7 @@ public class PublishController extends BaseController {
             }
 
             publishEventService.update(publishEvent);
-
+            publishEventLogService.logPublishAction(eventId, LogAction.RE_PUBLISH,getLoginUser().getNickname()+"重新发布成功!",getLoginUser().getEmpId());
             return returnCallback("Success", "重新发布回退成功");
         } catch (Exception e) {
             logger.error("retryPublishRollback error:", e);
@@ -638,6 +647,7 @@ public class PublishController extends BaseController {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
         }
+        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT,getLoginUser().getNickname()+"完成配置编辑!",getLoginUser().getEmpId());
         return returnCallback("Success", "完成配置编辑");
     }
 
@@ -827,6 +837,7 @@ public class PublishController extends BaseController {
         publishEvent.setPid(id);
         publishEventService.updateByIdSelective(publishEvent);
 
+        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH,getLoginUser().getNickname()+"进入下一个发布!",getLoginUser().getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -852,6 +863,8 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setApproveEmpId(user.getEmpId());
         nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
+
+        publishEventLogService.logPublishAction(eventId, LogAction.APPROVER,getLoginUser().getNickname()+"审批通过!",getLoginUser().getEmpId());
         return returnCallback("Success", "");
     }
 
@@ -1096,6 +1109,8 @@ public class PublishController extends BaseController {
         } catch (IOException e) {
             return returnCallback("Error", "文件内容解析异常");
         }
+
+        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL,getLoginUser().getNickname()+"查看了etc配置!",getLoginUser().getEmpId());
         return returnCallback("Success", map);
     }
 }
