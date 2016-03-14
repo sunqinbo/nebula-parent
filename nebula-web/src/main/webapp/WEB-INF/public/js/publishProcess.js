@@ -1030,7 +1030,7 @@ function getSlbInfo(){
                     if(j!=0){
                         hostInfoString+="<br/>";
                     }
-                    hostInfoString+="<div class='col-md-5'>"+slbHostInfo[j].serverId+"</div>"+"&nbsp;&nbsp;: &nbsp;&nbsp;"+serverHealthStatus;
+                    hostInfoString+="<div class='col-md-7'>"+slbHostInfo[j].serverId+"</div>"+":"+"<div class='col-md-5'>"+serverHealthStatus+"</div>";
                 }
                 //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
                 switch (slbInfo.loadBalancerStatus){
@@ -1043,7 +1043,7 @@ function getSlbInfo(){
                     "<td>"+slbInfo.loadBalancerAddress+"</td>"+
                     "<td>"+slbInfo.loadBalancerId+"</td>"+
                     "<td>"+loadBalancerStatus+"</td>"+
-                    "<td>"+hostInfoString+"</td>";
+                    "<td class='col-md-4'>"+hostInfoString+"</td>";
                 "</tr>"
             }
             $("#slbInfo_tb").html(slbTbString);
