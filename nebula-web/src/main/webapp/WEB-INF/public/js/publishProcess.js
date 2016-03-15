@@ -1030,7 +1030,7 @@ function getSlbInfo(){
                     if(j!=0){
                         hostInfoString+="<br/>";
                     }
-                    hostInfoString+="<div class='col-md-7'>"+slbHostInfo[j].serverId+"</div>"+":"+"<div class='col-md-5'>"+serverHealthStatus+"</div>";
+                    hostInfoString+="<div class='col-md-7'>"+slbHostInfo[j].serverId+":</div><div class='col-md-5'>"+serverHealthStatus+"</div>";
                 }
                 //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
                 switch (slbInfo.loadBalancerStatus){
