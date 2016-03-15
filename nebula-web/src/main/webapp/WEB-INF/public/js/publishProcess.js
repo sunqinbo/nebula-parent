@@ -28,7 +28,7 @@ $(document).ready(function(){
                 url: "/publish/updateEtcEnd",
                 type: "post",
                 data: {"id": $("#eventId").val()},
-                success: function (jsonData) {
+                success: function (data) {
                     if(!data.callbackMsg){
                         data=JSON.parse(data);
                     }
@@ -36,7 +36,7 @@ $(document).ready(function(){
                         nebula.common.alert.danger(data.responseContext, 1000);
                         return;
                     }
-                    if (jsonData.callbackMsg.match(/Success/)) {
+                    if (data.callbackMsg.match(/Success/)) {
                         nebula.common.alert.success(data.responseContext, 1000);
                         setTimeout(function () {
                             window.location.reload();
