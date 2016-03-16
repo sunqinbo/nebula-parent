@@ -243,7 +243,8 @@ $(document).ready(function(){
             async: false,
             data: {
                 "publishBuName": $("#publishBuName").val(),
-                "publishProductName": $("#publishProductName").val()
+                "publishProductName": $("#publishProductName").val(),
+                "publishEnv": $("#publishEnv").val()
             },
             type: "post",
             url: "/publish/get/noPublish",

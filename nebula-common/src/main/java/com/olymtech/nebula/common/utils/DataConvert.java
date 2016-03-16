@@ -82,7 +82,7 @@ public class DataConvert {
                 maps.put(entry.getKey(),entry.getValue());
             }
         }catch (Exception e){
-            logger.error("jsonStringToMap error:"+fileJsonString);
+            logger.error("jsonStringToMap error:"+fileJsonString,e);
         }
         return maps;
     }

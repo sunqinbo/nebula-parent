@@ -255,6 +255,7 @@
         from nebula_publish_event
         where publish_product_name= #{publishProductName}
         AND publish_bu_name = #{publishBuName}
+        AND publish_env = #{publishEnv}
         AND publish_status ='PUBLISHING'
     </select>
 

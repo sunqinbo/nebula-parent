@@ -264,11 +264,11 @@ nebula.publish.process.preMasterPublish = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
                 return;
             }
             if(jsonData.callbackMsg.match(/Success/)){
@@ -285,11 +285,11 @@ nebula.publish.process.preMinionPublish = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
                 return;
             }
             if(jsonData.callbackMsg.match(/Success/)){
@@ -307,11 +307,11 @@ nebula.publish.process.publishReal = function(){
         type:"post",
         data:{"id":id,"totpCode": $("#code_momdal").val()},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
                 return;
             }
             if(jsonData.callbackMsg.match(/Success/)){
@@ -328,11 +328,11 @@ nebula.publish.process.publishContinue = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
                 return;
             }
             if(jsonData.callbackMsg.match(/Success/)){
@@ -349,11 +349,11 @@ nebula.publish.process.publishSuccessEnd = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
                 return;
             }
             if(jsonData.callbackMsg.match(/Success/)){
@@ -371,11 +371,11 @@ nebula.publish.process.publishFailEnd = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
                 return;
             }
             if(jsonData.callbackMsg.match(/Success/)){
@@ -393,17 +393,17 @@ nebula.publish.process.retryPublishRollback = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
-            }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
-                return;
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
                 window.location.href="/publishProcess.htm?id="+id;
                 nebula.common.alert.info("正式发布执行完成",2000);
+            }
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
+                return;
             }
         }
     });
@@ -416,16 +416,16 @@ nebula.publish.process.restartTomcat = function(){
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
-            }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
-                return;
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
                 nebula.common.alert.info("重启tomcat执行完成",2000);
+            }
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
+                return;
             }
         }
     });
@@ -438,16 +438,16 @@ nebula.publish.process.cancelPublish = function () {
         type:"post",
         data:{"id":id},
         success:function(jsonData){
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
-            }
-            if(data.callbackMsg=="Error") {
-                nebula.common.alert.danger(data.responseContext, 1000);
-                return;
+            if(!jsonData.callbackMsg){
+                jsonData=JSON.parse(jsonData);
             }
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
                 nebula.common.alert.info("取消发布执行完成",2000);
+            }
+            if(jsonData.callbackMsg=="Error") {
+                nebula.common.alert.danger(jsonData.responseContext, 1000);
+                return;
             }
         }
     });
