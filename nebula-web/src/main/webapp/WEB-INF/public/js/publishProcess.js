@@ -244,7 +244,7 @@ $(document).ready(function(){
             data: {
                 "publishBuName": $("#publishBuName").val(),
                 "publishProductName": $("#publishProductName").val(),
-                "publishEnv": $("#publishEnv").val()
+                "publishEnv": $("#publishEnv").text()
             },
             type: "post",
             url: "/publish/get/noPublish",
