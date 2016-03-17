@@ -642,7 +642,14 @@ public class PublishController extends BaseController {
         /** 生产环境 编辑etc后，需要审核 */
         if (publishEvent.getPublishEnv().equals("product")) {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
-            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
+
+            /** 配置变更为空（配置无变更），不需要审批 */
+            NebulaPublishEvent publishEventInDB = publishEventService.selectWithChildByEventId(eventId);
+            if(publishEventInDB.getChangeList().equals("{}")){
+                publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+            }else{
+                publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
+            }
         } else {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
