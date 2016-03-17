@@ -7,6 +7,7 @@ import com.olymtech.nebula.dao.IAclRoleDao;
 import com.olymtech.nebula.dao.IAclRolePermissionDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.service.IAclRoleService;
+import com.olymtech.nebula.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class AclRoleServiceImpl implements IAclRoleService {
 
     @Resource
     private IAclPermissionDao aclPermissionDao;
+
+    @Resource
+    private IUserService userService;
 
 
     @Override
@@ -100,7 +104,7 @@ public class AclRoleServiceImpl implements IAclRoleService {
     }
 
     @Override
-    public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles) {
+    public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles,NebulaUserInfo loginUser) {
         List<AclRole> aclRoleList = aclRoleDao.selectAllPaging(new AclRole());
         List<Select2Data> select2Datas = new ArrayList<>();
         for (AclRole aclRole : aclRoleList) {
@@ -114,7 +118,18 @@ public class AclRoleServiceImpl implements IAclRoleService {
                     }
                 }
             }
-            select2Datas.add(select2Data);
+
+            if(userService.userRoleIsNeedRole(loginUser,"root")){
+                select2Datas.add(select2Data);
+            }else if(userService.userRoleIsNeedRole(loginUser,"admin")){
+                if(!aclRole.getRoleName().equals("root")){
+                    select2Datas.add(select2Data);
+                }
+            }else{
+                if(!aclRole.getRoleName().equals("root") || !aclRole.getRoleName().equals("admin")){
+                    select2Datas.add(select2Data);
+                }
+            }
         }
         return select2Datas;
     }

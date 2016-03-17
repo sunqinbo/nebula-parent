@@ -3,6 +3,7 @@ package com.olymtech.nebula.service;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.entity.AclRole;
 import com.olymtech.nebula.entity.DataTablePage;
+import com.olymtech.nebula.entity.NebulaUserInfo;
 import com.olymtech.nebula.entity.Select2Data;
 
 import java.util.List;
@@ -24,6 +25,6 @@ public interface IAclRoleService {
 
     public List<Select2Data> getAllRoles();
 
-    public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles);
+    public List<Select2Data> getSelect2Datas(List<AclRole> aclRoles, NebulaUserInfo loginUser);
 
 }

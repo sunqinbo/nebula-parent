@@ -97,7 +97,7 @@ public class RoleController extends BaseController {
         if (empId != null) {
             aclRoles = userService.getAclUserWithRolesByEmpId(empId).getAclRoles();
         }
-        List<Select2Data> select2Datas = aclRoleService.getSelect2Datas(aclRoles);
+        List<Select2Data> select2Datas = aclRoleService.getSelect2Datas(aclRoles, getLoginUser());
         return select2Datas;
     }
 
