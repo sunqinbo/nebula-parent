@@ -916,7 +916,7 @@ public class PublishController extends BaseController {
     }
 
     /**
-     * 获取cdn刷新列表
+     * 刷新cdn
      */
     @RequestMapping(value = "/add/refreshObjectCaches", method = {RequestMethod.POST})
     @ResponseBody
@@ -924,14 +924,14 @@ public class PublishController extends BaseController {
         String[] object = {"http://pstage.200jit.com/", "http://pptest.200jit.com/", "http://pmtest.200jit.com/", "http://patest.200jit.com/", "http://www.cargopm.com/"};
         List<String> objectPathList = Arrays.asList(object);
         Boolean result = objectPathList.contains(objectPath);
-        if (result == false) {
-            return returnCallback("Error", "获取cdn刷新列表失败");
+        if (!result) {
+            return returnCallback("Error", "您提交的地址，不在刷新列表内");
         }
         RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.refreshObjectCaches("olymtech@aliyun.com", "cn-hangzhou", objectPath, objectType);
         if (refreshObjectCachesResponse != null) {
             return returnCallback("Success", refreshObjectCachesResponse);
         } else {
-            return returnCallback("Error", "获取cdn刷新列表失败");
+            return returnCallback("Error", "刷新cdn刷新列表失败");
         }
     }
 
