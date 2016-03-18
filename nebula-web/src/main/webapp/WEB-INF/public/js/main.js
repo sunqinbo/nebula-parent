@@ -226,6 +226,7 @@ nebula.publish.event.submitPublishEvent = function(){
     $.ajax({
         url:"/publish/add",
         type:"post",
+        async: false,
         data:(function(){
             var data={};
             data["publishSubject"]=publishSubject;
