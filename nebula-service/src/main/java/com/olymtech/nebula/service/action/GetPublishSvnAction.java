@@ -53,7 +53,7 @@ public class GetPublishSvnAction extends AbstractAction {
         }catch (Exception e){
             logger.error("GetPublishSvnAction error:",e);
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_PUBLISH_SVN, event.getPublishActionGroup(), false, "error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_PUBLISH_SVN, event.getPublishActionGroup(), false, "获取发布war包时发生错误，可点击“重试”，尝试再次拉去。");
         return false;
     }
 

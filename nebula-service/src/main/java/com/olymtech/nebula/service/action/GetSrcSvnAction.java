@@ -64,7 +64,7 @@ public class GetSrcSvnAction extends AbstractAction {
         }catch (Exception e){
             logger.error("GetPublishSvnAction error:",e);
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, event.getPublishActionGroup(), false, "error message");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.GET_SRC_SVN, event.getPublishActionGroup(), false, "获取源war包/配置时发生错误，可点击“重试”，尝试再次拉去。");
         return false;
     }
 
