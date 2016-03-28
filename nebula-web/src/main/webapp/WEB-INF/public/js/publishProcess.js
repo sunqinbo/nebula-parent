@@ -27,6 +27,7 @@ $(document).ready(function(){
             $.ajax({
                 url: "/publish/updateEtcEnd",
                 type: "post",
+                async: false,
                 data: {"id": $("#eventId").val()},
                 success: function (data) {
                     if(!data.callbackMsg){
@@ -1072,6 +1073,7 @@ function checkLastPublish(){
     $.ajax({
         type:"POST",
         url:"/publish/getLastPublishId",
+        async: false,
         data:{
             eventId:$("#eventId").val()
         },
