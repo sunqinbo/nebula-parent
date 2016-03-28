@@ -324,9 +324,11 @@ nebula.publish.process.publishReal = function(){
 
 nebula.publish.process.publishContinue = function(){
     var id = $("#eventId").val();
+    $("#false_btn").hide();
     $.ajax({
         url:"/publish/publishContinue",
         type:"post",
+        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
