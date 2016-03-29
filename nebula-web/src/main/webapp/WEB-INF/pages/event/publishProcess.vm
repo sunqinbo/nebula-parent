@@ -220,11 +220,13 @@
                                         刷新CDN
                                     </button>
                                 #end
+                            #if($!{Event.publishEnv}!="product"||$shiro.hasRole("root"))
                                 #if($shiro.hasPermission("publishevnt:publishReal"))
                                     <button type="button" style="display: none" id="restartTomcat_btn"
                                             class="btn btn-danger" onclick="nebula.publish.process.restartTomcat()">重启tomcat
                                     </button>
                                 #end
+                            #end
                                 #if($shiro.hasPermission("publishevnt:retryPublishRollback"))
                                     <button type="button" style="display: none" id="restartPublish" class="btn btn-danger"
                                             onclick="nebula.publish.process.retryPublishRollback()">重新发布
