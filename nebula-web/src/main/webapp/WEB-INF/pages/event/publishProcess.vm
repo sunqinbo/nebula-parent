@@ -195,8 +195,7 @@
                             <hr/>
                             <div class="content">
                                 #if($shiro.hasPermission("publishevnt:prePublishMaster"))
-                                    <button type="button" id="btn1" class="btn btn-default"
-                                            onclick="nebula.publish.process.preMasterPublish();">发布准备
+                                    <button type="button" id="btn1" class="btn btn-default">发布准备
                                     </button>
                                 #end
                                 #if($shiro.hasPermission("publishevnt:prePublishMinion"))

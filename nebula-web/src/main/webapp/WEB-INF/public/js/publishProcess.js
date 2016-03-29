@@ -234,12 +234,6 @@ $(document).ready(function(){
     setInterval("getSlbInfo()", 30000);
     //按钮点击事件
     $("#btn1").click(function () {
-        $("#loading-status").show();
-        $("#btn1").attr('disabled', true);
-        $("#btn1").removeClass("btn-info");
-        $("#step1").show();
-    });
-    $("#btn2").click(function () {
         $.ajax({
             async: false,
             data: {
@@ -264,10 +258,10 @@ $(document).ready(function(){
                 }
                 else {
                     $("#loading-status").show();
-                    $("#btn2").attr('disabled', true);
-                    $("#btn2").removeClass("btn-info");
-                    $("#step2").show();
-                    nebula.publish.process.preMinionPublish();
+                    $("#btn1").attr('disabled', true);
+                    $("#btn1").removeClass("btn-info");
+                    $("#step1").show();
+                    nebula.publish.process.preMasterPublish();
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -275,6 +269,52 @@ $(document).ready(function(){
                 return;
             }
         });
+        //$("#loading-status").show();
+        //$("#btn1").attr('disabled', true);
+        //$("#btn1").removeClass("btn-info");
+        //$("#step1").show();
+    });
+    $("#btn2").click(function () {
+        //$.ajax({
+        //    async: false,
+        //    data: {
+        //        "publishBuName": $("#publishBuName").val(),
+        //        "publishProductName": $("#publishProductName").val(),
+        //        "publishEnv": $("#publishEnv").text()
+        //    },
+        //    type: "post",
+        //    url: "/publish/get/noPublish",
+        //    datetype: "json",
+        //    success: function (data) {
+        //        if(data.length>0){
+        //            //var msg=""
+        //            //for(var i= 0,len=data.length;i<len;i++){
+        //            //    msg+=data[i]["id"]+",";
+        //            //}
+        //            var msg=data[0]["id"];
+        //            msg="很抱歉，该产品已有发布中的事件，请先"+"<a target='_blank' href='/publish/process.htm?id="+msg+"'>前往</a>结束该事件";
+        //            //msg="很抱歉，该产品正在发布中,发布id为:"+msg+"请稍后再试";
+        //            nebula.common.alert.warning(msg,1000);
+        //            return;
+        //        }
+        //        else {
+        //            $("#loading-status").show();
+        //            $("#btn2").attr('disabled', true);
+        //            $("#btn2").removeClass("btn-info");
+        //            $("#step2").show();
+        //            nebula.publish.process.preMinionPublish();
+        //        }
+        //    },
+        //    error: function (XMLHttpRequest, textStatus, errorThrown) {
+        //        nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown,1000);
+        //        return;
+        //    }
+        //});
+        $("#loading-status").show();
+        $("#btn2").attr('disabled', true);
+        $("#btn2").removeClass("btn-info");
+        $("#step2").show();
+        nebula.publish.process.preMinionPublish();
     });
     $("#btn3").click(function () {
         if($("#publishEnv").text()=='product') {
