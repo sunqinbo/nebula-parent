@@ -100,7 +100,7 @@ public class StartTomcatAction extends AbstractAction {
 
     @Override
     public boolean doCheck(NebulaPublishEvent event) throws Exception {
-        Thread.sleep(10000);
+        Thread.sleep(5000);
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
