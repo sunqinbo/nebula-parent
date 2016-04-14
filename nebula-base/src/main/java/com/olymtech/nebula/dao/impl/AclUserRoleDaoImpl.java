@@ -5,9 +5,7 @@
 package com.olymtech.nebula.dao.impl;
 
 import com.olymtech.nebula.dao.IAclUserRoleDao;
-import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.AclUserRole;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

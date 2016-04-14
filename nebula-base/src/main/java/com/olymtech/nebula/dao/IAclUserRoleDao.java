@@ -4,9 +4,7 @@
  */
 package com.olymtech.nebula.dao;
 
-import com.olymtech.nebula.entity.AclRolePermission;
 import com.olymtech.nebula.entity.AclUserRole;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import java.util.List;
 
