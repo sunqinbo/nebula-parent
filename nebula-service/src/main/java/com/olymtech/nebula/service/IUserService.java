@@ -49,4 +49,5 @@ public interface IUserService {
 
     /*判断登录人是否是提交人,是否是管理员,是否是超级管理员,满足之一才有权限*/
     Boolean ifLoginUserValid(NebulaUserInfo loginUser, NebulaPublishEvent publishEvent);
+
 }
