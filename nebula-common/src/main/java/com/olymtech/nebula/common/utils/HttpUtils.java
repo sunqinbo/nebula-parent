@@ -86,7 +86,6 @@ public class HttpUtils {
     public static String postRequestWithPostBody(String url, Map<String, String> requestMap,
                                                  String... encode) {
         org.apache.commons.httpclient.HttpClient httpClient = new org.apache.commons.httpclient.HttpClient();
-        //http://ap-sms.alipay.com/noti-queue-api/alarms.htm
         PostMethod postMethod = new PostMethod(url);
         NameValuePair[] nameValuePairs = new NameValuePair[requestMap.size()];
         int count = 0;

@@ -33,7 +33,7 @@ public class NebulaApiController extends BaseController {
     @Resource
     private IUserService userService;
 
-    @RequestMapping(value = "/add", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         String publishSvn = nebulaPublishEvent.getPublishSvn();
