@@ -263,7 +263,6 @@ nebula.publish.process.preMasterPublish = function(){
     $.ajax({
         url:"/publish/preMasterPublish",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -307,7 +306,6 @@ nebula.publish.process.publishReal = function(){
     $.ajax({
         url:"/publish/publishReal",
         type:"post",
-        async: false,
         data:{"id":id,"totpCode": $("#code_momdal").val()},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -330,7 +328,6 @@ nebula.publish.process.publishContinue = function(){
     $.ajax({
         url:"/publish/publishContinue",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -352,7 +349,6 @@ nebula.publish.process.publishSuccessEnd = function(){
     $.ajax({
         url:"/publish/publishSuccessEnd",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -375,7 +371,6 @@ nebula.publish.process.publishFailEnd = function(){
     $.ajax({
         url:"/publish/publishFailEnd",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -398,7 +393,6 @@ nebula.publish.process.retryPublishRollback = function(){
     $.ajax({
         url:"/publish/retryPublishRollback",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -406,7 +400,7 @@ nebula.publish.process.retryPublishRollback = function(){
             }
             if(jsonData.callbackMsg.match(/Success/)){
                 $("#restartPublish").hide();
-                window.location.href="/publishProcess.htm?id="+id;
+                window.location.href="/publish/process.htm?id="+id;
                 nebula.common.alert.info("正式发布执行完成",2000);
             }
             if(jsonData.callbackMsg=="Error") {
@@ -422,7 +416,6 @@ nebula.publish.process.restartTomcat = function(){
     $.ajax({
         url:"/publish/restartTomcat",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){
@@ -445,7 +438,6 @@ nebula.publish.process.cancelPublish = function () {
     $.ajax({
         url:"/publish/cancelPublish",
         type:"post",
-        async: false,
         data:{"id":id},
         success:function(jsonData){
             if(!jsonData.callbackMsg){

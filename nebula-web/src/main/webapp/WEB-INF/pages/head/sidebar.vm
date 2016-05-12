@@ -11,7 +11,7 @@
 
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="http://localhost:8080/" class="simple-text">
+            <a href="/" class="simple-text">
                 <i class="pe-7s-box1"></i>
                 发布系统
             </a>

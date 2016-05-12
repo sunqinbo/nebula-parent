@@ -37,10 +37,16 @@ public class NebulaApiController extends BaseController {
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         String publishSvn = nebulaPublishEvent.getPublishSvn();
-        String pattern = "svn://svn.olymtech.com/warspace/";
-        Pattern p = Pattern.compile(pattern);
-        Matcher match = p.matcher(publishSvn);
-        if (!match.find()) {
+
+        String patternOnline = "svn://svn.olymtech.com/warspace/";
+        Pattern pO = Pattern.compile(patternOnline);
+        Matcher matchO = pO.matcher(publishSvn);
+
+        String patternTest="172.16.137.150";
+        Pattern pT = Pattern.compile(patternTest);
+        Matcher matchT = pT.matcher(publishSvn);
+
+        if (!matchO.find() || !matchT.find() ) {
             return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
         }
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
