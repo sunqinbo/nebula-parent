@@ -208,6 +208,10 @@ public class DateUtils {
         return new Date(date1.getTime() + (minute * 1000 * 60));
     }
 
+    public static Date addSeconds(Date date1, long second){
+        return new Date(date1.getTime() + (second * 1000));
+    }
+
     /**
      * yyyy-MM-dd HH:mm 日期格式转换为日期
      *

@@ -1,5 +1,6 @@
 package com.olymtech.nebula.controller.api;
 
+import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.controller.BaseController;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaUserInfo;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,11 +48,22 @@ public class NebulaApiController extends BaseController {
         Pattern pT = Pattern.compile(patternTest);
         Matcher matchT = pT.matcher(publishSvn);
 
-        if (!matchO.find() || !matchT.find() ) {
+        if (!(matchO.find() || matchT.find()) ) {
             return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
         }
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
         NebulaUserInfo user = userService.findByUsername("quarryWeb");
+
+        String publishEnv = nebulaPublishEvent.getPublishEnv();
+        String patternEnv = "test";
+        Pattern pEnv = Pattern.compile(patternEnv);
+        Matcher matchEnv = pEnv.matcher(publishEnv);
+        if(matchEnv.find()){
+            nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+            nebulaPublishEvent.setIsApproved(true);
+            nebulaPublishEvent.setApproveEmpId(nebulaPublishEvent.getSubmitEmpId());
+            nebulaPublishEvent.setApproveDatetime(DateUtils.addSeconds(new Date(), 2));
+        }
 
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
         publishEventLogService.logPublishAction(id, LogAction.APPLY_PUBLISH_EVENT,user.getNickname() + "申请创建发布事件成功!", user.getEmpId());
