@@ -77,6 +77,8 @@ public class PublishController extends BaseController {
     private IFileReadService fileReadService;
     @Resource
     private IPublishEventLogService publishEventLogService;
+    @Resource
+    private IQuarryApiService quarryApiService;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -447,6 +449,10 @@ public class PublishController extends BaseController {
             /** 更新事件单为 成功发布 */
             publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, publishEvent);
             publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser.getEmpId());
+
+            /** 通知quarry部署完成 */
+            quarryApiService.notifyDeployEndToQuarry(publishEvent);
+
             return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
@@ -500,6 +506,10 @@ public class PublishController extends BaseController {
             /** 更新事件单为 失败发布 */
             publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, publishEvent);
             publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK, "回滚成功", loginUser.getEmpId());
+
+            /** 通知quarry部署完成 */
+            quarryApiService.notifyDeployEndToQuarry(publishEvent);
+
             return returnCallback("Success", "失败发布确认成功");
         } catch (Exception e) {
             logger.error("publishFailEnd error:", e);
@@ -611,6 +621,9 @@ public class PublishController extends BaseController {
             publishEvent.setIsSuccessPublish(false);
             publishEvent.setPublishStatus(PublishStatus.CANCEL);
             publishEventService.update(publishEvent);
+
+            /** 通知quarry部署完成 */
+            quarryApiService.notifyDeployEndToQuarry(publishEvent);
 
             return returnCallback("Success", "取消发布确认成功");
         } catch (Exception e) {

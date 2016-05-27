@@ -70,6 +70,8 @@ public class NebulaPublishEvent extends BaseDO {
 
     private String publishRemark;
 
+    private String quarryRid;
+
     public String getChangeList() {
         return changeList;
     }
@@ -346,5 +348,13 @@ public class NebulaPublishEvent extends BaseDO {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getQuarryRid() {
+        return quarryRid;
+    }
+
+    public void setQuarryRid(String quarryRid) {
+        this.quarryRid = quarryRid;
     }
 }

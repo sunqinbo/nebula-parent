@@ -9,6 +9,7 @@ import com.olymtech.nebula.entity.enums.PublishStatus;
 import com.olymtech.nebula.service.IUserService;
 import com.olymtech.nebula.service.impl.PublishEventLogServiceImpl;
 import com.olymtech.nebula.service.impl.PublishEventServiceImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,9 @@ public class NebulaApiController extends BaseController {
     @Resource
     private IUserService userService;
 
+    @Value("${web.auth.username}")
+    private String webAuthUserName;
+
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
@@ -52,7 +56,7 @@ public class NebulaApiController extends BaseController {
             return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
         }
         nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
-        NebulaUserInfo user = userService.findByUsername("quarryWeb");
+        NebulaUserInfo user = userService.findByUsername(webAuthUserName);
 
         String publishEnv = nebulaPublishEvent.getPublishEnv();
         String patternEnv = "test";
