@@ -439,6 +439,7 @@ $(document).ready(function(){
     //重新发布
     $("#restartPublish").click(function () {
         $("#restartPublish").hide();
+        $("#cancelPublish").hide();
         $("#step1").hide();
         $("#step2").hide();
         $("#step3").hide();
