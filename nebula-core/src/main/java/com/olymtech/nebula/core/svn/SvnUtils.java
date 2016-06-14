@@ -4,7 +4,6 @@
  */
 package com.olymtech.nebula.core.svn;
 
-import com.olymtech.nebula.common.utils.DateUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.*;
 
 import java.io.File;
-import java.util.Date;
 
 /**
  * Created by Gavin on 2015-10-21 16:05.
@@ -69,6 +67,25 @@ public class SvnUtils {
                 authManager);
         return svnClientManager;
 
+    }
+
+    /**
+     * 确定一个URL在SVN上是否存在
+     * @param svnDirPath
+     * @param authManager
+     * @return
+     */
+    public static boolean isURLExist(String svnDirPath,ISVNAuthenticationManager authManager){
+        try {
+            SVNURL url = SVNURL.parseURIEncoded(svnDirPath);
+            SVNRepository svnRepository = SVNRepositoryFactory.create(url);
+            svnRepository.setAuthenticationManager(authManager);
+            SVNNodeKind nodeKind = svnRepository.checkPath("", -1);
+            return nodeKind == SVNNodeKind.NONE ? false : true;
+        } catch (SVNException e) {
+            logger.error("svn isURLExist error:",e);
+        }
+        return false;
     }
 
     /**  svn checkout */
