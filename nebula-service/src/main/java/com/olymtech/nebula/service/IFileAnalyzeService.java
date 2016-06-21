@@ -1,4 +1,4 @@
-package com.olymtech.nebula.file.analyze;
+package com.olymtech.nebula.service;
 
 
 import java.io.File;

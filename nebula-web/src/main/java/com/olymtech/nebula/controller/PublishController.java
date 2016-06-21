@@ -16,7 +16,7 @@ import com.olymtech.nebula.entity.enums.LogAction;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
-import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import com.olymtech.nebula.service.IFileAnalyzeService;
 import com.olymtech.nebula.service.*;
 import com.olymtech.nebula.service.action.*;
 import com.olymtech.nebula.service.starry.IStarryCdnApi;

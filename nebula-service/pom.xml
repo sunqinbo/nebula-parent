@@ -40,12 +40,6 @@
 
         <dependency>
             <groupId>com.olymtech.nebula</groupId>
-            <artifactId>nebula-file</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.olymtech.nebula</groupId>
             <artifactId>nebula-common</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -11,14 +11,11 @@
     <modules>
         <module>nebula-common</module>
         <module>nebula-base</module>
-        <module>nebula-script</module>
         <module>nebula-monitor</module>
         <module>nebula-web</module>
-        <module>nebula-security</module>
         <module>nebula-api</module>
         <module>nebula-service</module>
         <module>nebula-core</module>
-        <module>nebula-file</module>
     </modules>
 
     <profiles>

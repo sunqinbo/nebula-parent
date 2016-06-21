@@ -8,7 +8,7 @@ import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.svn.SvnUtils;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.enums.PublishAction;
-import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import com.olymtech.nebula.service.IFileAnalyzeService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

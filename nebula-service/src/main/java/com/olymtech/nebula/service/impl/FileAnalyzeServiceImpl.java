@@ -1,7 +1,7 @@
-package com.olymtech.nebula.file.analyze.impl;
+package com.olymtech.nebula.service.impl;
 
 import com.olymtech.nebula.common.utils.DataConvert;
-import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import com.olymtech.nebula.service.IFileAnalyzeService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

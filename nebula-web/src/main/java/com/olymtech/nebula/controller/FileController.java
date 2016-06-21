@@ -1,7 +1,7 @@
 package com.olymtech.nebula.controller;
 
 import com.olymtech.nebula.entity.*;
-import com.olymtech.nebula.file.analyze.IFileAnalyzeService;
+import com.olymtech.nebula.service.IFileAnalyzeService;
 import com.olymtech.nebula.service.IFileReadService;
 import com.olymtech.nebula.service.IPublishEventService;
 import org.apache.commons.lang.StringUtils;
