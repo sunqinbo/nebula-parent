@@ -23,17 +23,18 @@ public class SvnServiceImpl implements ISvnService {
 
     private ISVNAuthenticationManager authManager = null;
 
-    @Value("${war_svn_url}")
-    private String warSvnUrl;
-    @Value("${war_svn_username}")
-    private String warSvnUsername;
-    @Value("${war_svn_password}")
-    private String warSvnPassword;
+    @Value("${dev_svn_url}")
+    private String devSvnUrl;
+    @Value("${dev_svn_username}")
+    private String devSvnUsername;
+    @Value("${dev_svn_password}")
+    private String devSvnPassword;
+
 
     @Override
     public SVNClientManager getWarSvnClientManager(){
         if(warSvnClientManager == null){
-            warSvnClientManager = SvnUtils.createSvnClientManager(warSvnUrl, warSvnUsername, warSvnPassword);
+            warSvnClientManager = SvnUtils.createSvnClientManager(devSvnUrl, devSvnUsername, devSvnPassword);
         }
         return warSvnClientManager;
     }
@@ -41,7 +42,7 @@ public class SvnServiceImpl implements ISvnService {
     @Override
     public ISVNAuthenticationManager getWarAuthManager(){
         if(authManager == null){
-            authManager = SVNWCUtil.createDefaultAuthenticationManager(warSvnUsername, warSvnPassword);
+            authManager = SVNWCUtil.createDefaultAuthenticationManager(devSvnUsername, devSvnPassword);
         }
         return authManager;
     }
