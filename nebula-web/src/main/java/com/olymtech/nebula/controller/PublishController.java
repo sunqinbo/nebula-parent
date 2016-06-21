@@ -10,6 +10,7 @@ import com.olymtech.nebula.core.action.Action;
 import com.olymtech.nebula.core.action.ActionChain;
 import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.core.googleauth.GoogleAuthFactory;
+import com.olymtech.nebula.core.svn.SvnUtils;
 import com.olymtech.nebula.core.utils.SpringUtils;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.LogAction;
@@ -29,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +81,8 @@ public class PublishController extends BaseController {
     private IPublishEventLogService publishEventLogService;
     @Resource
     private IQuarryApiService quarryApiService;
+    @Resource
+    private ISvnService svnService;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -176,6 +180,13 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Object createPublishEvent(NebulaPublishEvent nebulaPublishEvent) throws Exception {
         String publishSvn = nebulaPublishEvent.getPublishSvn();
+        /** 判断svn目录是否已存在 */
+        String svnDirPath = nebulaPublishEvent.getPublishSvn();
+        ISVNAuthenticationManager authenticationManager = svnService.getWarAuthManager();
+        Boolean isURLExist = SvnUtils.isURLExist(svnDirPath, authenticationManager);
+        if (!isURLExist) {
+            return returnCallback("Error", "您输入的SVN地址无效,请重新输入");
+        }
         String pattern = "svn://svn.olymtech.com/warspace/";
         Pattern p = Pattern.compile(pattern);
         Matcher match = p.matcher(publishSvn);

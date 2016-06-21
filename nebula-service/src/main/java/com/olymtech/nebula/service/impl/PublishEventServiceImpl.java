@@ -68,18 +68,21 @@ public class PublishEventServiceImpl implements IPublishEventService {
     public int createPublishEvent(NebulaPublishEvent nebulaPublishEvent) {
         Date now = new Date();
         String dateKey = getKeyDate(now);
-        String key = nebulaPublishEvent.getPublishEnv() + "." + nebulaPublishEvent.getPublishProductName() + "." + dateKey;
+        String key = nebulaPublishEvent.getPublishEnv() + "." + nebulaPublishEvent.getPublishProductName() + "." +
+                dateKey;
         nebulaPublishEvent.setPublishProductKey(key);
         nebulaPublishEvent.setSubmitDatetime(now);
         Integer id = nebulaPublishEventDao.insert(nebulaPublishEvent);
-        publishScheduleService.logScheduleByAction(id, PublishAction.CREATE_PUBLISH_EVENT, PublishActionGroup.PRE_MASTER, true, "");
+        publishScheduleService.logScheduleByAction(id, PublishAction.CREATE_PUBLISH_EVENT, PublishActionGroup
+                .PRE_MASTER, true, "");
         return id;
     }
 
     @Override
     public PageInfo getPublishEvent(DataTablePage dataTablePage, NebulaPublishEvent nebulaPublishEvent) {
         PageHelper.startPage(dataTablePage.getPageNum(), dataTablePage.getPageSize());
-        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPagingWithUser(nebulaPublishEvent);
+        List<NebulaPublishEvent> nebulaPublishEvents = nebulaPublishEventDao.selectAllPagingWithUser
+                (nebulaPublishEvent);
         PageInfo pageInfo = new PageInfo(nebulaPublishEvents);
         return pageInfo;
     }
@@ -94,8 +97,10 @@ public class PublishEventServiceImpl implements IPublishEventService {
         NebulaPublishEvent nebulaPublishEvent = nebulaPublishEventDao.selectById(eventId);
         List<NebulaPublishModule> publishModules = nebulaPublishModuleService.selectByEventId(eventId);
         for (NebulaPublishModule publishModule : publishModules) {
-            List<NebulaPublishApp> publishApps = publishAppService.selectByEventIdAndModuleId(eventId, publishModule.getId());
-            List<NebulaPublishHost> publishHosts = publishHostService.selectByEventIdAndModuleId(eventId, publishModule.getId());
+            List<NebulaPublishApp> publishApps = publishAppService.selectByEventIdAndModuleId(eventId, publishModule
+                    .getId());
+            List<NebulaPublishHost> publishHosts = publishHostService.selectByEventIdAndModuleId(eventId,
+                    publishModule.getId());
             publishModule.setPublishApps(publishApps);
             publishModule.setPublishHosts(publishHosts);
         }
@@ -160,7 +165,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
      * 更新错误数,发布状态
      */
     @Override
-    public Boolean updateLogCountSum(Boolean isSuccessPublish, PublishStatus publishStatus, NebulaPublishEvent publishEvent) {
+    public Boolean updateLogCountSum(Boolean isSuccessPublish, PublishStatus publishStatus, NebulaPublishEvent
+            publishEvent) {
 
         publishEvent.setIsSuccessPublish(isSuccessPublish);
         publishEvent.setPublishStatus(publishStatus);
@@ -173,7 +179,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
         /**获取日志错误数,错误数等于所有机器总和*/
         Integer errorCountSum = 0;
         Integer exceptionCountSum = 0;
-        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(publishEvent.getId(), null);
+        List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(publishEvent.getId
+                (), null);
         for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
             Integer errorCount = getPublishLogHostLogCount(publishEvent, nebulaPublishHost, "ERROR");
             Integer exceptionCount = getPublishLogHostLogCount(publishEvent, nebulaPublishHost, "EXCEPTION");
@@ -191,7 +198,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
      * 获取log count
      */
     @Override
-    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType) {
+    public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String
+            logType) {
 
         if (publishEvent.getPublishDatetime() == null) {
             return 0;
@@ -205,7 +213,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
         if (publishEvent.getPublishEndDatetime() != null) {
             toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
         }
-        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
+        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate,
+                toDate, 1, 10);
         return elkLogService.count(elkSearchData, publishEvent.getPublishEnv());
     }
 
@@ -270,7 +279,8 @@ public class PublishEventServiceImpl implements IPublishEventService {
             for (Map.Entry<String, Object> everyEntry : everyData.entrySet()) {
                 everyMap.put(everyEntry.getKey(), String.valueOf(everyEntry.getValue()));
             }
-            FileChangeData fileChangeData = new FileChangeData(everyMap.get("change"), everyMap.get("filename"), everyMap.get("time"));
+            FileChangeData fileChangeData = new FileChangeData(everyMap.get("change"), everyMap.get("filename"),
+                    everyMap.get("time"));
             fileChangeDatas.add(fileChangeData);
         }
         return fileChangeDatas;
