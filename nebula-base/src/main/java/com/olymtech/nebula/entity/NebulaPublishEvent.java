@@ -72,6 +72,12 @@ public class NebulaPublishEvent extends BaseDO {
 
     private String quarryRid;
 
+    /** 当前发布批次 */
+    private Integer nowBatchTag;
+
+    /** 总发布批次 */
+    private Integer batchTotal;
+
     public String getChangeList() {
         return changeList;
     }
@@ -356,5 +362,21 @@ public class NebulaPublishEvent extends BaseDO {
 
     public void setQuarryRid(String quarryRid) {
         this.quarryRid = quarryRid;
+    }
+
+    public Integer getNowBatchTag() {
+        return nowBatchTag;
+    }
+
+    public void setNowBatchTag(Integer nowBatchTag) {
+        this.nowBatchTag = nowBatchTag;
+    }
+
+    public Integer getBatchTotal() {
+        return batchTotal;
+    }
+
+    public void setBatchTotal(Integer batchTotal) {
+        this.batchTotal = batchTotal;
     }
 }

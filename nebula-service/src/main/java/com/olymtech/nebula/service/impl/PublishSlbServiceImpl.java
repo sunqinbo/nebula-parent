@@ -54,4 +54,10 @@ public class PublishSlbServiceImpl implements IPublishSlbService {
         return nebulaPublishSlbDao.selectByPublishEventId(eventId);
     }
 
+    @Override
+    public List<NebulaPublishSlb> selectByPublishEventIdAndModuleId(Integer eventId, Integer moduleId) {
+        NebulaPublishSlb publishSlbSearch = new NebulaPublishSlb(eventId,moduleId);
+        return nebulaPublishSlbDao.selectAllPaging(publishSlbSearch);
+    }
+
 }

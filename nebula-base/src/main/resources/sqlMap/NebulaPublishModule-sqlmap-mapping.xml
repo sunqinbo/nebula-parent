@@ -8,6 +8,8 @@
         <result column="publish_module_name" property="publishModuleName" jdbcType="VARCHAR" />
         <result column="publish_module_key" property="publishModuleKey" jdbcType="VARCHAR" />
         <result column="module_src_svn" property="moduleSrcSvn" jdbcType="VARCHAR" />
+        <result column="now_batch_tag" property="nowBatchTag" jdbcType="INTEGER"/>
+        <result column="batch_total" property="batchTotal" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="NebulaPublishModule-Base-Column-List">
         id,
@@ -15,7 +17,9 @@
         publish_product_name,
         publish_module_name,
         publish_module_key,
-        module_src_svn
+        module_src_svn,
+        now_batch_tag,
+        batch_total
     </sql>
     <select id="Nebula-NebulaPublishModuleDao-Select-By-Id" parameterType="java.lang.Integer" resultMap="RM-NebulaPublishModule">
         select
@@ -69,13 +73,17 @@
         publish_product_name,
         publish_module_name,
         publish_module_key,
-        module_src_svn)
+        module_src_svn,
+        now_batch_tag,
+        batch_total)
         values (#{id,jdbcType=INTEGER},
         #{publishEventId,jdbcType=INTEGER},
         #{publishProductName,jdbcType=VARCHAR},
         #{publishModuleName,jdbcType=VARCHAR},
         #{publishModuleKey,jdbcType=VARCHAR},
-        #{moduleSrcSvn,jdbcType=VARCHAR})
+        #{moduleSrcSvn,jdbcType=VARCHAR},
+        #{nowBatchTag,jdbcType=INTEGER},
+        #{batchTotal,jdbcType=INTEGER})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -101,6 +109,12 @@
             <if test="moduleSrcSvn != null" >
                 module_src_svn,
             </if>
+            <if test="nowBatchTag != null">
+                now_batch_tag,
+            </if>
+            <if test="batchTotal != null">
+                batch_total,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null" >
@@ -120,6 +134,18 @@
             </if>
             <if test="moduleSrcSvn != null" >
                 #{moduleSrcSvn,jdbcType=VARCHAR},
+            </if>
+            <if test="nowBatchTag != null">
+                #{nowBatchTag,jdbcType=INTEGER},
+            </if>
+            <if test="batchTotal != null">
+                #{batchTotal,jdbcType=INTEGER},
+            </if>
+            <if test="nowBatchTag != null">
+                #{nowBatchTag,jdbcType=INTEGER},
+            </if>
+            <if test="batchTotal != null">
+                #{batchTotal,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -141,6 +167,12 @@
             <if test="moduleSrcSvn != null" >
                 module_src_svn = #{moduleSrcSvn,jdbcType=VARCHAR},
             </if>
+            <if test="nowBatchTag != null">
+                now_batch_tag = #{nowBatchTag,jdbcType=INTEGER},
+            </if>
+            <if test="batchTotal != null">
+                batch_total = #{batchTotal,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -150,7 +182,9 @@
         publish_product_name = #{publishProductName,jdbcType=VARCHAR},
         publish_module_name = #{publishModuleName,jdbcType=VARCHAR},
         publish_module_key = #{publishModuleKey,jdbcType=VARCHAR},
-        module_src_svn = #{moduleSrcSvn,jdbcType=VARCHAR}
+        module_src_svn = #{moduleSrcSvn,jdbcType=VARCHAR},
+        now_batch_tag = #{nowBatchTag,jdbcType=INTEGER},
+        batch_total = #{batchTotal,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

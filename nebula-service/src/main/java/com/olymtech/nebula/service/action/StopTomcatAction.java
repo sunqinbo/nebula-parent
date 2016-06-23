@@ -6,11 +6,14 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.HostPublishStatus;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.service.INebulaPublishModuleService;
 import com.olymtech.nebula.service.IPublishHostService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import com.suse.saltstack.netapi.results.ResultInfo;
@@ -32,9 +35,11 @@ public class StopTomcatAction extends AbstractAction {
     private ISaltStackService saltStackService;
     @Autowired
     private IPublishScheduleService publishScheduleService;
-
     @Autowired
     private IPublishHostService publishHostService;
+    @Autowired
+    private INebulaPublishModuleDao publishModuleDao;
+
 
     @Value("${stop_command_path}")
     private String stopCommandPath;
@@ -46,11 +51,20 @@ public class StopTomcatAction extends AbstractAction {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+            if(event.getNowBatchTag()<=publishModule.getBatchTotal()){
+                /** 更新当前批次 */
+                publishModule.setNowBatchTag(event.getNowBatchTag());
+                publishModuleDao.updateByIdSelective(publishModule);
+            }else {
+                continue;
+            }
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targets.add(nebulaPublishHost.getPassPublishHostIp());
+                if(nebulaPublishHost.getBatchTag().equals(event.getNowBatchTag())){
+                    targets.add(nebulaPublishHost.getPassPublishHostIp());
+                }
             }
 
             List<String> pathList = new ArrayList<String>();
@@ -69,11 +83,13 @@ public class StopTomcatAction extends AbstractAction {
                 if (entry.getValue().equals("")) {
                     nebulaPublishHost.setActionResult("success");
                     nebulaPublishHost.setIsSuccessAction(true);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.PUBLISHING);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     successCount++;
                 } else {
                     nebulaPublishHost.setActionResult(entry.getValue().toString());
                     nebulaPublishHost.setIsSuccessAction(false);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.FAILED);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }
             }

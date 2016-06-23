@@ -61,7 +61,7 @@ public class Dispatcher implements Observer {
      * @param event 事件
      * @throws Exception
      */
-    public void doDispatch(NebulaPublishEvent event) throws Exception {
+    public Boolean doDispatch(NebulaPublishEvent event) throws Exception {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 //        if (publishModules == null || publishModules.size() == 0) {
 //            throw new SaltNullTargesException("publishModules is null");
@@ -74,7 +74,7 @@ public class Dispatcher implements Observer {
         }
 
         List<Action> actions = actionChain.getActions();
-        if (actions != null || actions.size() == 0) {
+        if (actions != null || actions.size() != 0) {
             for (int i = 0; i < actions.size(); i++) {
                 Action action = actions.get(i);
                 action.setObserver(this);
@@ -88,7 +88,7 @@ public class Dispatcher implements Observer {
                     if (!result) {
                         logger.info(action.getActionName() + "执行失败");
                         triggerFailure(event);
-                        return;
+                        return false;
                     }
 
                     /** action 执行成功，但是执行check失败 */
@@ -96,7 +96,7 @@ public class Dispatcher implements Observer {
                     if (!resultCheck) {
                         logger.info(action.getActionName() + "执行Check失败");
                         triggerFailure(event);
-                        return;
+                        return false;
                     }
 
                     logger.info(action.getActionName() + "执行成功");
@@ -105,6 +105,7 @@ public class Dispatcher implements Observer {
                 }
                 actionIndex = i;
             }
+            return true;
         } else {
             throw new ActionNullException("动作为空");
         }

@@ -13,6 +13,10 @@ public class SimpleHost {
 
     private String hostIp;
 
+    private String hostInstanceId;
+
+    private Integer batchTag;
+
     public String getHostName() {
         return hostName;
     }
@@ -27,5 +31,21 @@ public class SimpleHost {
 
     public void setHostIp(String hostIp) {
         this.hostIp = hostIp;
+    }
+
+    public String getHostInstanceId() {
+        return hostInstanceId;
+    }
+
+    public void setHostInstanceId(String hostInstanceId) {
+        this.hostInstanceId = hostInstanceId;
+    }
+
+    public Integer getBatchTag() {
+        return batchTag;
+    }
+
+    public void setBatchTag(Integer batchTag) {
+        this.batchTag = batchTag;
     }
 }

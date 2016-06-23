@@ -14,6 +14,12 @@ public class NebulaPublishModule extends BaseDO {
 
     private String moduleSrcSvn;
 
+    /** 当前发布批次 */
+    private Integer nowBatchTag;
+
+    /** 发布总批次 */
+    private Integer batchTotal;
+
     private List<NebulaPublishHost> publishHosts;
 
     private List<NebulaPublishApp>  publishApps;
@@ -82,5 +88,21 @@ public class NebulaPublishModule extends BaseDO {
 
     public void setModuleSrcSvn(String moduleSrcSvn) {
         this.moduleSrcSvn = moduleSrcSvn == null ? null : moduleSrcSvn.trim();
+    }
+
+    public Integer getNowBatchTag() {
+        return nowBatchTag;
+    }
+
+    public void setNowBatchTag(Integer nowBatchTag) {
+        this.nowBatchTag = nowBatchTag;
+    }
+
+    public Integer getBatchTotal() {
+        return batchTotal;
+    }
+
+    public void setBatchTotal(Integer batchTotal) {
+        this.batchTotal = batchTotal;
     }
 }

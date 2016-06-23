@@ -1,5 +1,6 @@
 package com.olymtech.nebula.entity;
 
+import com.olymtech.nebula.entity.enums.HostPublishStatus;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 
@@ -13,6 +14,8 @@ public class NebulaPublishHost extends BaseDO {
 
     private String passPublishHostIp;
 
+    private String hostInstanceId;
+
     private PublishAction actionName;
 
     private PublishActionGroup actionGroup;
@@ -20,6 +23,12 @@ public class NebulaPublishHost extends BaseDO {
     private Boolean isSuccessAction;
 
     private String actionResult;
+
+    /** 发布匹配 */
+    private Integer batchTag;
+
+    /** 主机发布状态 */
+    private HostPublishStatus hostPublishStatus;
 
     private Integer logNumber;
 
@@ -103,5 +112,29 @@ public class NebulaPublishHost extends BaseDO {
 
     public void setExcNumber(Integer excNumber) {
         this.excNumber = excNumber;
+    }
+
+    public String getHostInstanceId() {
+        return hostInstanceId;
+    }
+
+    public void setHostInstanceId(String hostInstanceId) {
+        this.hostInstanceId = hostInstanceId;
+    }
+
+    public Integer getBatchTag() {
+        return batchTag;
+    }
+
+    public void setBatchTag(Integer batchTag) {
+        this.batchTag = batchTag;
+    }
+
+    public HostPublishStatus getHostPublishStatus() {
+        return hostPublishStatus;
+    }
+
+    public void setHostPublishStatus(HostPublishStatus hostPublishStatus) {
+        this.hostPublishStatus = hostPublishStatus;
     }
 }

@@ -331,27 +331,44 @@ public class PublishController extends BaseController {
                     return returnCallback("Error", "验证码错误");
                 }
             } catch (Exception e) {
-                return returnCallback("Error", "验证码错误");
+                return returnCallback("Error", "验证码异常");
             }
         }
         nebulaPublishEvent.setPublishActionGroup(PublishActionGroup.PUBLISH_REAL);
+
         //创建任务队列
         ActionChain chain = new ActionChain();
         chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
         chain.addAction(SpringUtils.getBean(ChangeLnAction.class));
         chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+        chain.addAction(SpringUtils.getBean(CheckHealthAction.class));
 
         try {
-            Dispatcher dispatcher = new Dispatcher(chain, request, response);
-            dispatcher.doDispatch(nebulaPublishEvent);
+
+            if(nebulaPublishEvent.getNowBatchTag()==null){
+                nebulaPublishEvent.setNowBatchTag(1);
+                publishEventService.updateByIdSelective(nebulaPublishEvent);
+            }
+            /** 按批次发布 */
+            for(int i = 1;i<=nebulaPublishEvent.getBatchTotal();i++){
+                Dispatcher dispatcher = new Dispatcher(chain, request, response);
+                Boolean result = dispatcher.doDispatch(nebulaPublishEvent);
+
+                if(result){
+                    nebulaPublishEvent.setNowBatchTag(i);
+                    publishEventService.updateByIdSelective(nebulaPublishEvent);
+                }else{
+                    return returnCallback("Error", "正式发布出错，发布批次:"+i);
+                }
+            }
         } catch (Exception e) {
             logger.error("publishReal error:", e);
-            return returnCallback("Error", "预发布出现错误");
+            return returnCallback("Error", "正式发布出现错误");
         }
 
         publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,"启动正式发布成功",loginUser.getEmpId());
 
-        return returnCallback("Success", "预发布完成");
+        return returnCallback("Success", "正式发布完成");
     }
 
     /**

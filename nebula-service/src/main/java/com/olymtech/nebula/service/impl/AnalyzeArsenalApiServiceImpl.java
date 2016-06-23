@@ -160,6 +160,13 @@ public class AnalyzeArsenalApiServiceImpl implements IAnalyzeArsenalApiService {
                         simpleHost.setHostName(jsonObject.getString("instanceName"));
                         JSONObject ipJson = jsonObject.getJSONObject("innerIpAddress");
                         simpleHost.setHostIp(ipJson.getString("ipAddress"));
+                        simpleHost.setHostInstanceId(jsonObject.getString("instanceId"));
+
+                        Integer batchTag = null;
+                        if(jsonObject.get("batchTag") != null){
+                            batchTag = Integer.parseInt(jsonObject.getString("batchTag"));
+                        }
+                        simpleHost.setBatchTag(batchTag);
                         hosts.add(simpleHost);
                     }
                 }

@@ -20,6 +20,15 @@ public class NebulaPublishSlb extends BaseDO {
 
     private String aliyunAccount;
 
+    public NebulaPublishSlb(){
+
+    }
+
+    public NebulaPublishSlb(Integer publishEventId,Integer publishModuleId){
+        this.publishEventId = publishEventId;
+        this.publishModuleId = publishModuleId;
+    }
+
     public String getRegionId() {
         return regionId;
     }

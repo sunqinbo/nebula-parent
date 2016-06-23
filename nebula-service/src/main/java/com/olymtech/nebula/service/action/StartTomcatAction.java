@@ -7,9 +7,11 @@ package com.olymtech.nebula.service.action;
 import com.olymtech.nebula.common.utils.DataConvert;
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.HostPublishStatus;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishHostService;
@@ -35,9 +37,11 @@ public class StartTomcatAction extends AbstractAction {
     private ISaltStackService saltStackService;
     @Autowired
     private IPublishScheduleService publishScheduleService;
-
     @Autowired
     private IPublishHostService publishHostService;
+    @Autowired
+    private INebulaPublishModuleDao publishModuleDao;
+
 
     @Value("${start_command_path}")
     private String startCommandPath;
@@ -51,11 +55,20 @@ public class StartTomcatAction extends AbstractAction {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+            if(event.getNowBatchTag()<=publishModule.getBatchTotal()){
+                /** 更新当前批次 */
+                publishModule.setNowBatchTag(event.getNowBatchTag());
+                publishModuleDao.updateByIdSelective(publishModule);
+            }else{
+                continue;
+            }
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targets.add(nebulaPublishHost.getPassPublishHostIp());
+                if(nebulaPublishHost.getBatchTag().equals(event.getNowBatchTag())){
+                    targets.add(nebulaPublishHost.getPassPublishHostIp());
+                }
             }
 
             List<String> pathList = new ArrayList<String>();
@@ -74,6 +87,7 @@ public class StartTomcatAction extends AbstractAction {
                 nebulaPublishHost.setActionName(PublishAction.START_TOMCAT);
                 nebulaPublishHost.setActionResult(entry.getValue().toString());
                 nebulaPublishHost.setIsSuccessAction(true);//TODO 暂时这里返回的都是salt执行成功的，因为返回的数据没有标准化，后期处理
+                nebulaPublishHost.setHostPublishStatus(HostPublishStatus.PUBLISHING);
                 publishHostService.updatePublishHost(nebulaPublishHost);
                 successCount++;
             }
@@ -104,13 +118,20 @@ public class StartTomcatAction extends AbstractAction {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+
+            if(event.getNowBatchTag()>publishModule.getBatchTotal()){
+                continue;
+            }
+
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targets = new ArrayList<String>();
             /** Map<ip:NebulaPublishHost> */
             Map<String,NebulaPublishHost> hostMap = new HashMap<>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targets.add(nebulaPublishHost.getPassPublishHostIp());
-                hostMap.put(nebulaPublishHost.getPassPublishHostIp(),nebulaPublishHost);
+                if(nebulaPublishHost.getBatchTag().equals(event.getNowBatchTag())){
+                    targets.add(nebulaPublishHost.getPassPublishHostIp());
+                    hostMap.put(nebulaPublishHost.getPassPublishHostIp(),nebulaPublishHost);
+                }
             }
 
             ResultInfoSet minionResult = saltStackService.checkTomcat(targets);
@@ -130,10 +151,12 @@ public class StartTomcatAction extends AbstractAction {
                 if (everyHost.size() == 0) {
                     nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>获得进程校验数据并解析失败。返回数据："+jsonString);
                     nebulaPublishHost.setIsSuccessAction(false);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.FAILED);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 } else {
                     nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>获得进程校验数据并解析成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.PUBLISHING);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     minionMap.put(nebulaPublishHost.getPassPublishHostIp(),everyHost);
                 }
@@ -178,10 +201,12 @@ public class StartTomcatAction extends AbstractAction {
                     String portStatus = portCheck?"开启":"关闭";
                     nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程时错误，java进程个数："+javaCountCheck+" ,8080端口状态："+portStatus);
                     nebulaPublishHost.setIsSuccessAction(false);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.FAILED);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }else{
                     nebulaPublishHost.setActionResult(nebulaPublishHost.getActionResult()+"<br>校验进程成功。");
                     nebulaPublishHost.setIsSuccessAction(true);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.PUBLISHED);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     successCount++;
                 }

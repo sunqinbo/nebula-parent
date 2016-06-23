@@ -24,6 +24,7 @@ public enum PublishAction {
     STOP_TOMCAT("停止Tomcat"),
     CHANGE_LN("更改文件指向"),
     START_TOMCAT("启动Tomcat"),
+    CHECK_HEALTH("健康检查"),
 
     CLEAN_HISTORY_DIR("清除历史发布目录"),
     UPDATE_SRC_SVN("更新到源SVN"),

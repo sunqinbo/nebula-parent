@@ -6,9 +6,11 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
+import com.olymtech.nebula.entity.enums.HostPublishStatus;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.service.IPublishHostService;
@@ -36,6 +38,8 @@ public class ChangeLnAction extends AbstractAction {
     private IPublishScheduleService publishScheduleService;
     @Autowired
     private IPublishHostService publishHostService;
+    @Autowired
+    private INebulaPublishModuleDao publishModuleDao;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
@@ -54,11 +58,20 @@ public class ChangeLnAction extends AbstractAction {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+            if(event.getNowBatchTag()<=publishModule.getBatchTotal()){
+                /** 更新当前批次 */
+                publishModule.setNowBatchTag(event.getNowBatchTag());
+                publishModuleDao.updateByIdSelective(publishModule);
+            }else {
+                continue;
+            }
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targets.add(nebulaPublishHost.getPassPublishHostIp());
+                if(nebulaPublishHost.getBatchTag().equals(event.getNowBatchTag())){
+                    targets.add(nebulaPublishHost.getPassPublishHostIp());
+                }
             }
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
@@ -77,11 +90,13 @@ public class ChangeLnAction extends AbstractAction {
                 if (entry.getValue().equals("")) {
                     nebulaPublishHost.setActionResult("do change ln action success");
                     nebulaPublishHost.setIsSuccessAction(true);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.PUBLISHING);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                     successCount++;
                 } else {
                     nebulaPublishHost.setActionResult(entry.getValue().toString());
                     nebulaPublishHost.setIsSuccessAction(false);
+                    nebulaPublishHost.setHostPublishStatus(HostPublishStatus.FAILED);
                     publishHostService.updatePublishHost(nebulaPublishHost);
                 }
             }
