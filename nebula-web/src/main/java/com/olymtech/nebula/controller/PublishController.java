@@ -591,7 +591,7 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             publishEventService.retryPublishRollback(eventId);
-            NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
+            NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
 
             /** 批次重新计算 */
             publishEvent = publishEventService.initNowBatchTag(publishEvent);
@@ -790,11 +790,13 @@ public class PublishController extends BaseController {
         String[] groupPreMaster = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC", "ETC_APPROVE"};
         String[] groupPreMinion = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] groupPublishReal = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CHECK_HEALTH"};
-        String[] groupFailEnd = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
+        String[] groupFailEnd = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CHECK_HEALTH", "CLEAN_FAIL_DIR"};
         String[] groupSuccessEnd = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
         String[] groupCleanEnd = {"CLEAN_PUBLISH_DIR"};
         String[] groupRestartTomcat = {"STOP_TOMCAT", "START_TOMCAT", "CHECK_HEALTH"};
         List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
+
+        NebulaPublishEvent event = publishEventService.selectById(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
         if (last != 0) {
@@ -834,9 +836,18 @@ public class PublishController extends BaseController {
                     group = groupRestartTomcat;
                     break;
             }
+            /** 获取当前步 */
             for (int i = 0; i < group.length; i++) {
                 if (actionNameString.equals(group[i])) {
-                    whichStep = i + 1;
+                    if(event.getNowBatchTag() != null){
+                        if(event.getNowBatchTag() < event.getBatchTotal()){
+                            whichStep = i;
+                        }else{
+                            whichStep = i + 1;
+                        }
+                    }else{
+                        whichStep = i + 1;
+                    }
                 }
             }
             int lastGroup = 0;

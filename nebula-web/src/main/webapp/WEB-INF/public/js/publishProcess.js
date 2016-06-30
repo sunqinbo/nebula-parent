@@ -202,6 +202,8 @@ $(document).ready(function(){
         }, {
             title: "启动tomcat",
         }, {
+            title: "健康检查",
+        }, {
             title: "清楚失败目录",
         }, {
             title: "回滚完成",
@@ -567,7 +569,7 @@ function Initialization() {
                     lastStep = 4;
                     break;
                 case 4:
-                    lastStep = 4;
+                    lastStep = 5;
                     break;
                 case 5:
                     lastStep = 2;
@@ -576,7 +578,7 @@ function Initialization() {
                     lastStep = 1;
                     break;
                 case 7:
-                    lastStep = 2;
+                    lastStep = 3;
                     break;
             }
 
@@ -666,7 +668,7 @@ function Initialization() {
                         $("#restartTomcat_btn").show();
                         $("#restartTomcat_btn").attr('disabled', false);
                         $("#restartTomcat_btn").addClass("btn-danger");
-                        $("#processbar6").setStep(3);
+                        $("#processbar6").setStep(4);
                         $("#btn_ConfirmResult").attr('disabled', false);
                         $("#btn_ConfirmResult").addClass("btn-info");
                         $("#backPublish").addClass("btn-danger");
