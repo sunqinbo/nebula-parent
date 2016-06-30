@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.olymtech.nebula.common.utils.DateUtils;
+import com.olymtech.nebula.core.action.ActionChain;
+import com.olymtech.nebula.core.action.Dispatcher;
 import com.olymtech.nebula.dao.INebulaPublishEventDao;
 import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishAction;
@@ -19,7 +21,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.olymtech.nebula.common.utils.DateUtils.getKeyDate;
 
@@ -72,6 +78,20 @@ public class PublishEventServiceImpl implements IPublishEventService {
                 dateKey;
         nebulaPublishEvent.setPublishProductKey(key);
         nebulaPublishEvent.setSubmitDatetime(now);
+
+        /** 测试环境不需要审批 */
+        String pEnvString = "test";
+        Pattern pEnv = Pattern.compile(pEnvString);
+        Matcher mEnv = pEnv.matcher(nebulaPublishEvent.getPublishEnv());
+        if(mEnv.find()){
+            nebulaPublishEvent.setIsApproved(true);
+            nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
+            nebulaPublishEvent.setApproveEmpId(nebulaPublishEvent.getSubmitEmpId());
+            nebulaPublishEvent.setApproveDatetime(new Date());
+        }else {
+            nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
+        }
+
         Integer id = nebulaPublishEventDao.insert(nebulaPublishEvent);
         publishScheduleService.logScheduleByAction(id, PublishAction.CREATE_PUBLISH_EVENT, PublishActionGroup
                 .PRE_MASTER, true, "");
@@ -284,6 +304,46 @@ public class PublishEventServiceImpl implements IPublishEventService {
             fileChangeDatas.add(fileChangeData);
         }
         return fileChangeDatas;
+    }
+
+    @Override
+    public Callback batchPublish(ActionChain chain, NebulaPublishEvent event,HttpServletRequest request, HttpServletResponse response){
+        String actionGroupName = event.getPublishActionGroup().getDescription();
+        try {
+            /** 为null，从未发布 */
+            if(event.getNowBatchTag()==null){
+                event.setNowBatchTag(1);
+                event.setIsBatchFinish(false);
+                updateByIdSelective(event);
+            /** 所有批次已经发布完 */
+            }else if(event.getIsBatchFinish()){
+                event.setNowBatchTag(1);
+                event.setIsBatchFinish(false);
+                updateByIdSelective(event);
+            }
+
+            /** 按批次发布 */
+            for(int i = event.getNowBatchTag();i<=event.getBatchTotal();i++){
+                /** 设置当前执行的批次 */
+                event.setNowBatchTag(i);
+                updateByIdSelective(event);
+
+                Dispatcher dispatcher = new Dispatcher(chain, request, response);
+                Boolean result = dispatcher.doDispatch(event);
+
+                /** 执行结果判断 */
+                if(!result){
+                    return new Callback("Error", actionGroupName+"出错，发布批次:"+i);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("batchPublish error:", e);
+            return new Callback("Error", actionGroupName+"出现错误");
+        }
+
+        event.setIsBatchFinish(true);
+        updateByIdSelective(event);
+        return new Callback("Success", actionGroupName+"完成");
     }
 
 }

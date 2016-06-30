@@ -89,16 +89,23 @@ public class CheckHealthAction extends AbstractAction {
             long startTime = System.currentTimeMillis();
             Boolean result;
             do{
-                result = checkHealthAllHost(targetHosts,event,publishModule);
                 long endTime = System.currentTimeMillis(); //获取结束时间
                 if ((endTime - startTime) / 1000 > time) {
+                    publishScheduleService.logScheduleByAction(
+                            event.getId(),
+                            PublishAction.CHECK_HEALTH,
+                            event.getPublishActionGroup(),
+                            false,
+                            time+"秒内，健康检查失败，应用未恢复正常，发布终止。"
+                    );
                     return false;
                 }
+                result = checkHealthAllHost(targetHosts,event,publishModule);
                 Thread.sleep(5000);
-            }while (result);
+            }while (!result);
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHECK_HEALTH, event.getPublishActionGroup(), null, "All models and sub targes 'execute' success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHECK_HEALTH, event.getPublishActionGroup(), true, "All check health 'execute' success");
         return true;
     }
 
@@ -113,50 +120,61 @@ public class CheckHealthAction extends AbstractAction {
      */
     public Boolean checkHealthAllHost(List<NebulaPublishHost> targetHosts,NebulaPublishEvent event,NebulaPublishModule module){
 
-        List<NebulaPublishSlb> publishSlbs = publishSlbService.selectByPublishEventIdAndModuleId(event.getId(), module.getId());
+        try{
+            List<NebulaPublishSlb> publishSlbs = publishSlbService.selectByPublishEventIdAndModuleId(event.getId(), module.getId());
 
-        Map<String,NebulaPublishHost> hostIPMap = new HashMap<>();
-        Map<String,NebulaPublishHost> hostInstanceIdMap = new HashMap<>();
-        for(NebulaPublishHost publishHost :targetHosts){
-            hostIPMap.put(publishHost.getPassPublishHostIp(),publishHost);
-            hostInstanceIdMap.put(publishHost.getHostInstanceId(),publishHost);
-        }
-
-        /**
-         * 检测slb状态
-         */
-        for (NebulaPublishSlb publishSlb : publishSlbs) {
-            DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
-            DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
-            String loadBalancerStatus = loadBalancerAttributeResponse.getLoadBalancerStatus();
-
-            /** 判断slb状态 */
-            if(!loadBalancerStatus.equals("active")){
-                return false;
+            Map<String,NebulaPublishHost> hostIPMap = new HashMap<>();
+            Map<String,NebulaPublishHost> hostInstanceIdMap = new HashMap<>();
+            for(NebulaPublishHost publishHost :targetHosts){
+                hostIPMap.put(publishHost.getPassPublishHostIp(),publishHost);
+                hostInstanceIdMap.put(publishHost.getHostInstanceId(),publishHost);
             }
 
-            /** 判断后端服务器状态 */
-            for(DescribeHealthStatusResponse.BackendServer backendServer:describeHealthStatusResponse.getBackendServers()){
-                /** 实例id － 被发布机，暂无对应关系；只能通过匹配InstanceId，查看 */
-                NebulaPublishHost host = hostInstanceIdMap.get(backendServer.getServerId());
-                if(host != null && !backendServer.getServerHealthStatus().equals("normal")){
+            /**
+             * 检测slb状态
+             */
+            for (NebulaPublishSlb publishSlb : publishSlbs) {
+                DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
+                DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
+                String loadBalancerStatus = loadBalancerAttributeResponse.getLoadBalancerStatus();
+
+                /** 判断slb状态 */
+                if(!loadBalancerStatus.equals("active")){
+                    return false;
+                }
+
+                /** 判断后端服务器状态 */
+                for(DescribeHealthStatusResponse.BackendServer backendServer:describeHealthStatusResponse.getBackendServers()){
+                    /** 实例id － 被发布机，暂无对应关系；只能通过匹配InstanceId，查看 */
+                    NebulaPublishHost host = hostInstanceIdMap.get(backendServer.getServerId());
+                    if(host != null && !backendServer.getServerHealthStatus().equals("normal")){
+                        return false;
+                    }
+                }
+            }
+
+            /**
+             * 检测nginx状态
+             */
+            List<NginxServer> nginxServers;
+            if(event.getPublishEnv().equals("test1")||event.getPublishEnv().equals("test2")||event.getPublishEnv().equals("test3")||event.getPublishEnv().equals("stage")){
+                nginxServers = nginxService.getStageNginxServers();
+            }else{
+                nginxServers = nginxService.getProductNginxServers();
+            }
+
+            for(NginxServer nginxServer:nginxServers){
+                String ip = nginxServer.getName().split(":")[0];
+                NebulaPublishHost host = hostIPMap.get(ip);
+                if(host != null && !nginxServer.getStatus().equals("up")){
                     return false;
                 }
             }
+            return true;
+        }catch (Exception e){
+            logger.error("checkHealthAllHost error:",e);
+            return false;
         }
-
-        /**
-         * 检测nginx状态
-         */
-        List<NginxServer> nginxServers = nginxService.getMasterNginxServers();
-        for(NginxServer nginxServer:nginxServers){
-            String ip = nginxServer.getName().split(":")[0];
-            NebulaPublishHost host = hostIPMap.get(ip);
-            if(host != null && !nginxServer.getStatus().equals("up")){
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override

@@ -32,16 +32,51 @@ public class NginxServiceImpl implements INginxService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${master_nginx_url}")
-    private String masterNginxUrl;
+    @Value("${master_nginx_url_stage}")
+    private String stageMasterNginxUrl;
+    @Value("${slave_nginx_url_stage}")
+    private String stageSlaveNginxUrl;
+    @Value("${master_nginx_url_product}")
+    private String productMasterNginxUrl;
+    @Value("${slave_nginx_url_product}")
+    private String productSlaveNginxUrl;
+
+
     @Value("${master_nginx_username}")
     private String masterNginxUsername;
     @Value("${master_nginx_password}")
     private String masterNginxPassword;
 
     @Override
-    public List<NginxServer> getMasterNginxServers(){
-        return getNginxServers(masterNginxUrl,masterNginxUsername,masterNginxPassword);
+    public List<NginxServer> getStageNginxServers(){
+        List<NginxServer> master = getNginxServers(stageMasterNginxUrl,masterNginxUsername,masterNginxPassword);
+        List<NginxServer> slave = getNginxServers(stageSlaveNginxUrl,masterNginxUsername,masterNginxPassword);
+        if(master == null && slave == null){
+            return null;
+        }else if(master != null && slave == null){
+            return master;
+        }else if(master == null && slave != null){
+            return slave;
+        }else{
+            master.addAll(slave);
+            return master;
+        }
+    }
+
+    @Override
+    public List<NginxServer> getProductNginxServers(){
+        List<NginxServer> master = getNginxServers(productMasterNginxUrl,masterNginxUsername,masterNginxPassword);
+        List<NginxServer> slave = getNginxServers(productSlaveNginxUrl,masterNginxUsername,masterNginxPassword);
+        if(master == null && slave == null){
+            return null;
+        }else if(master != null && slave == null){
+            return master;
+        }else if(master == null && slave != null){
+            return slave;
+        }else{
+            master.addAll(slave);
+            return master;
+        }
     }
 
     private List<NginxServer> getNginxServers(String nginxUrl,String username,String password){

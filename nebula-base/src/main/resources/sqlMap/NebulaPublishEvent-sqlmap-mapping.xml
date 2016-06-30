@@ -31,6 +31,7 @@
         <result column="quarry_rid" property="quarryRid" jdbcType="VARCHAR"/>
         <result column="now_batch_tag" property="nowBatchTag" jdbcType="INTEGER"/>
         <result column="batch_total" property="batchTotal" jdbcType="INTEGER"/>
+        <result column="is_batch_finish" property="isBatchFinish" jdbcType="INTEGER"/>
 
         <association property="submitUser" column="submit_emp_id" javaType="com.olymtech.nebula.entity.NebulaUserInfo">
             <id column="s_id" property="id" jdbcType="INTEGER"/>
@@ -94,7 +95,8 @@
         publish_remark,
         quarry_rid,
         now_batch_tag,
-        batch_total
+        batch_total,
+        is_batch_finish
     </sql>
     <sql id="NebulaPublishEvent-User-Base-Column-List">
         npe.id as id,
@@ -126,6 +128,7 @@
         quarry_rid,
         now_batch_tag,
         batch_total,
+        is_batch_finish,
         snui.id as s_id,
         snui.username as s_username,
         snui.mobile_phone as s_mobile_phone,
@@ -306,7 +309,8 @@
         publish_remark,
         quarry_rid,
         now_batch_tag,
-        batch_total)
+        batch_total,
+        is_batch_finish)
         values (#{id,jdbcType=INTEGER},
         #{publishSubject,jdbcType=VARCHAR},
         #{publishBuName,jdbcType=VARCHAR},
@@ -335,7 +339,8 @@
         #{publishRemark,jdbcType=LONGVARCHAR} ,
         #{quarryRid,jdbcType=VARCHAR},
         #{nowBatchTag,jdbcType=INTEGER},
-        #{batchTotal,jdbcType=INTEGER})
+        #{batchTotal,jdbcType=INTEGER},
+        #{isBatchFinish,jdbcType=INTEGER})
         <selectKey resultType="java.lang.Integer" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -430,6 +435,9 @@
             <if test="batchTotal != null">
                 batch_total,
             </if>
+            <if test="isBatchFinish != null">
+                is_batch_finish,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -515,6 +523,9 @@
             </if>
             <if test="batchTotal != null">
                 #{batchTotal,jdbcType=INTEGER},
+            </if>
+            <if test="isBatchFinish != null">
+                #{isBatchFinish,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -605,6 +616,9 @@
             <if test="batchTotal != null">
                 batch_total = #{batchTotal,jdbcType=INTEGER},
             </if>
+            <if test="isBatchFinish != null">
+                is_batch_finish = #{isBatchFinish,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -637,7 +651,8 @@
         publish_remark= #{publishRemark,jdbcType=LONGVARCHAR},
         quarry_rid= #{quarryRid,jdbcType=VARCHAR},
         now_batch_tag = #{nowBatchTag,jdbcType=INTEGER},
-        batch_total = #{batchTotal,jdbcType=INTEGER}
+        batch_total = #{batchTotal,jdbcType=INTEGER},
+        is_batch_finish = #{isBatchFinish,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

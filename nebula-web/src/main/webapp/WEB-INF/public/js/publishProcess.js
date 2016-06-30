@@ -187,6 +187,8 @@ $(document).ready(function(){
         }, {
             title: "启动tomcat",
         }, {
+            title: "健康检查",
+        },{
             title: "正式发布完成",
         }]
     });
@@ -224,6 +226,8 @@ $(document).ready(function(){
         }, {
             title: "启动tomcat",
         }, {
+            title: "健康检查",
+        },{
             title: "重启完成",
         }]
     });
@@ -231,7 +235,7 @@ $(document).ready(function(){
     Initialization();
     setInterval("Initialization()", 5000);
     getSlbInfo();
-    setInterval("getSlbInfo()", 30000);
+    setInterval("getSlbInfo()", 5000);
     //按钮点击事件
     $("#btn1").click(function () {
         $.ajax({
@@ -465,14 +469,20 @@ function Initialization() {
         success: function (data) {
             //机器信息列表相关
             var HostList = data.responseContext.HostInfos;
+            var publishStatus = nebula.common.transform.publishStatus(data.responseContext.eventStatus);
+            $("#publishStatus").html(publishStatus);
+
             var tbString = "";
             for (var i = 0; i < HostList.length; i++) {
                 var passPublishHostName = "";
-                var actionName = ""
-                var isSuccessAction = ""
-                var actionResult = ""
+                var actionName = "";
+                var isSuccessAction = "";
+                var actionResult = "";
                 var passPublishHostIp = "";
                 var logNumShow="";
+                var hostPublishStatus = "";
+                var batchTag = "";
+                var host = HostList[i];
                 if (HostList[i]["passPublishHostName"] != null)
                     passPublishHostName =""+ HostList[i]["passPublishHostName"];
                 if (HostList[i]["passPublishHostName"] != null)
@@ -483,6 +493,8 @@ function Initialization() {
                     isSuccessAction = HostList[i]["isSuccessAction"];
                 if (HostList[i]["actionResult"] != null)
                     actionResult = HostList[i]["actionResult"];
+                hostPublishStatus = (host.hostPublishStatus!=null)?host.hostPublishStatus:"";
+                batchTag = (host.batchTag!=null)?host.batchTag:"";
                 //if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
                 //{
                     logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"ERROR"+"&quot;"+")' href='#'><span class='label label-danger'>error:"+
@@ -490,7 +502,8 @@ function Initialization() {
                         HostList[i]["excNumber"]+"</span></a>";
                 //}
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
-                    actionName + "</td><td>" + isSuccessAction + "</td><td>" + actionResult +
+                    nebula.common.transform.publishAction(actionName) + "</td><td>" + nebula.common.transform.hostPublishStatus(hostPublishStatus) +
+                    "</td><td>"+nebula.common.transform.batchTag(batchTag)+"</td><td>" + actionResult +
                     "</td><td>"+logNumShow+"</td></tr>";
             }
             $("#hostInfo").html(tbString);
@@ -551,7 +564,7 @@ function Initialization() {
                     lastStep = 5;
                     break;
                 case 3:
-                    lastStep = 3;
+                    lastStep = 4;
                     break;
                 case 4:
                     lastStep = 4;

@@ -9,9 +9,9 @@ package com.olymtech.nebula.entity.enums;
  */
 public enum HostPublishStatus {
 
-    PENDING_PUBLISH("待发布"),
-    PUBLISHING("发布中"),
-    PUBLISHED("已发布"),
+    PENDING_PUBLISH("待上线"),
+    PUBLISHING("上线中"),
+    PUBLISHED("已上线"),
     FAILED("失败");
 
     private String description;

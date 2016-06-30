@@ -8,6 +8,8 @@ import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
+import com.olymtech.nebula.entity.enums.PublishStatus;
+import com.olymtech.nebula.service.IPublishEventService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,8 @@ public class CleanPublishDirAction extends AbstractAction {
 
     @Autowired
     private IPublishScheduleService publishScheduleService;
+    @Autowired
+    private IPublishEventService publishEventService;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -39,12 +43,25 @@ public class CleanPublishDirAction extends AbstractAction {
         try{
             Boolean result = deleteDir(tmpDir);
             if(result){
+
+                /** 更新错误数,发布状态 */
+                if(event.getPublishActionGroup() == PublishActionGroup.SUCCESS_END){
+                    publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, event);
+                }else if(event.getPublishActionGroup() == PublishActionGroup.FAIL_END){
+                    publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, event);
+                }else if(event.getPublishActionGroup() == PublishActionGroup.CANCEL_END){
+                    event.setIsSuccessPublish(false);
+                    event.setPublishStatus(PublishStatus.CANCEL);
+                    publishEventService.update(event);
+                }
+
                 publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_PUBLISH_DIR, PublishActionGroup.CLEAN_END, true, "清除发布目录成功");
                 return true;
             }
         }catch (Exception e){
             logger.error("CleanPublishDirAction error:",e);
         }
+
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_PUBLISH_DIR, PublishActionGroup.CLEAN_END, false, "清除发布目录失败："+localPath);
         return false;
     }

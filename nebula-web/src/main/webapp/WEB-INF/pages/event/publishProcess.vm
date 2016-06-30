@@ -342,8 +342,9 @@
                                     <th>主机名</th>
                                     <th>主机ip</th>
                                 ##                                <th>环境</th>
-                                    <th>action</th>
-                                    <th>是否成功</th>
+                                    <th>动作</th>
+                                    <th>上线状态</th>
+                                    <th>批次</th>
                                     <th>更新信息</th>
                                     <th>错误数</th>
                                 </tr>

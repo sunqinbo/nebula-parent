@@ -78,6 +78,9 @@ public class NebulaPublishEvent extends BaseDO {
     /** 总发布批次 */
     private Integer batchTotal;
 
+    /** 所有批次是否完成 */
+    private Boolean isBatchFinish;
+
     public String getChangeList() {
         return changeList;
     }
@@ -378,5 +381,13 @@ public class NebulaPublishEvent extends BaseDO {
 
     public void setBatchTotal(Integer batchTotal) {
         this.batchTotal = batchTotal;
+    }
+
+    public Boolean getIsBatchFinish() {
+        return isBatchFinish;
+    }
+
+    public void setIsBatchFinish(Boolean isBatchFinish) {
+        this.isBatchFinish = isBatchFinish;
     }
 }

@@ -38,7 +38,7 @@ public class NginxServiceImplTest {
 
     @Test
     public void testGetMasterNginxServers() throws Exception {
-        List<NginxServer> nginxServerList = nginxService.getMasterNginxServers();
+        List<NginxServer> nginxServerList = nginxService.getStageNginxServers();
 
     }
 }

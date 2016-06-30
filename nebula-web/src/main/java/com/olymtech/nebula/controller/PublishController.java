@@ -190,12 +190,15 @@ public class PublishController extends BaseController {
         String pattern = "svn://svn.olymtech.com/warspace/";
         Pattern p = Pattern.compile(pattern);
         Matcher match = p.matcher(publishSvn);
-        if (!match.find()) {
+
+        String pattern1 = "svn://172.16.137.150/warspace/";
+        Pattern p1 = Pattern.compile(pattern1);
+        Matcher match1 = p1.matcher(publishSvn);
+        if (!match.find()&&!match1.find()) {
             return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
         }
         Integer empId = getLoginUser().getEmpId();
         nebulaPublishEvent.setSubmitEmpId(empId);
-        nebulaPublishEvent.setPublishStatus(PublishStatus.PENDING_APPROVE);
 
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
         publishEventLogService.logPublishAction(nebulaPublishEvent.getId(), LogAction.APPLY_PUBLISH_EVENT, getLoginUser().getNickname() + "申请创建发布事件成功!", getLoginUser().getEmpId());
@@ -343,32 +346,39 @@ public class PublishController extends BaseController {
         chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
         chain.addAction(SpringUtils.getBean(CheckHealthAction.class));
 
-        try {
+        /** 批次发布 */
+        Callback callback = publishEventService.batchPublish(chain, nebulaPublishEvent, request, response);
 
-            if(nebulaPublishEvent.getNowBatchTag()==null){
-                nebulaPublishEvent.setNowBatchTag(1);
-                publishEventService.updateByIdSelective(nebulaPublishEvent);
-            }
-            /** 按批次发布 */
-            for(int i = 1;i<=nebulaPublishEvent.getBatchTotal();i++){
-                Dispatcher dispatcher = new Dispatcher(chain, request, response);
-                Boolean result = dispatcher.doDispatch(nebulaPublishEvent);
-
-                if(result){
-                    nebulaPublishEvent.setNowBatchTag(i);
-                    publishEventService.updateByIdSelective(nebulaPublishEvent);
-                }else{
-                    return returnCallback("Error", "正式发布出错，发布批次:"+i);
-                }
-            }
-        } catch (Exception e) {
-            logger.error("publishReal error:", e);
-            return returnCallback("Error", "正式发布出现错误");
+        if(callback.getCallbackMsg().equals("Error")){
+            return callback;
+        }else{
+            publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,"启动正式发布成功",loginUser.getEmpId());
+            return callback;
         }
 
-        publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,"启动正式发布成功",loginUser.getEmpId());
+//        try {
+//
+//            if(nebulaPublishEvent.getNowBatchTag()==null){
+//                nebulaPublishEvent.setNowBatchTag(1);
+//                publishEventService.updateByIdSelective(nebulaPublishEvent);
+//            }
+//            /** 按批次发布 */
+//            for(int i = 1;i<=nebulaPublishEvent.getBatchTotal();i++){
+//                Dispatcher dispatcher = new Dispatcher(chain, request, response);
+//                Boolean result = dispatcher.doDispatch(nebulaPublishEvent);
+//
+//                if(result){
+//                    nebulaPublishEvent.setNowBatchTag(i);
+//                    publishEventService.updateByIdSelective(nebulaPublishEvent);
+//                }else{
+//                    return returnCallback("Error", "正式发布出错，发布批次:"+i);
+//                }
+//            }
+//        } catch (Exception e) {
+//            logger.error("publishReal error:", e);
+//            return returnCallback("Error", "正式发布出现错误");
+//        }
 
-        return returnCallback("Success", "正式发布完成");
     }
 
     /**
@@ -419,13 +429,23 @@ public class PublishController extends BaseController {
                 }
             }
 
+            PublishActionGroup actionGroup = nebulaPublishEvent.getPublishActionGroup();
             if (chain.getActions().size() != 0) {
-                Dispatcher dispatcher = new Dispatcher(chain, request, response);
-                dispatcher.doDispatch(nebulaPublishEvent);
+                /** 这三个actiongroup需要批次发布 */
+                if(actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT){
 
-                return returnCallback("Success", "继续发布完成");
+                    /** 批次发布 */
+                    Callback callback = publishEventService.batchPublish(chain, nebulaPublishEvent, request, response);
+
+                    return callback;
+                }else{
+                    Dispatcher dispatcher = new Dispatcher(chain, request, response);
+                    dispatcher.doDispatch(nebulaPublishEvent);
+                }
+
+                return returnCallback("Success", actionGroup+"继续发布完成");
             } else {
-                return returnCallback("Error", "继续发布链为空");
+                return returnCallback("Error", actionGroup+"继续发布链为空");
             }
         } catch (Exception e) {
             logger.error("publishContinue error:", e);
@@ -475,7 +495,6 @@ public class PublishController extends BaseController {
             }
 
             /** 更新事件单为 成功发布 */
-            publishEventService.updateLogCountSum(true, PublishStatus.PUBLISHED, publishEvent);
             publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser.getEmpId());
 
             /** 通知quarry部署完成 */
@@ -522,23 +541,31 @@ public class PublishController extends BaseController {
             chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
             chain.addAction(SpringUtils.getBean(ChangeFailLnAction.class));
             chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(CheckHealthAction.class));
             chain.addAction(SpringUtils.getBean(CleanFailDirAction.class));
             chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
 
-            Dispatcher dispatcher = new Dispatcher(chain, request, response);
-            dispatcher.doDispatch(publishEvent);
+//            Dispatcher dispatcher = new Dispatcher(chain, request, response);
+//            dispatcher.doDispatch(publishEvent);
 
-            /** 清楚基线 */
-            publishBaseService.cleanBaseByEventId(eventId);
+            /** 批次发布 */
+            Callback callback = publishEventService.batchPublish(chain, publishEvent, request, response);
 
-            /** 更新事件单为 失败发布 */
-            publishEventService.updateLogCountSum(false, PublishStatus.ROLLBACK, publishEvent);
-            publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK, "回滚成功", loginUser.getEmpId());
+            if(callback.getCallbackMsg().equals("Error")){
+                return callback;
+            }else{
+                /** 清楚基线 */
+                publishBaseService.cleanBaseByEventId(eventId);
 
-            /** 通知quarry部署完成 */
-            quarryApiService.notifyDeployEndToQuarry(publishEvent);
+                /** 更新事件单为 失败发布 */
+                publishEventLogService.logPublishAction(eventId, LogAction.ROLL_BACK, "回滚成功", loginUser.getEmpId());
 
-            return returnCallback("Success", "失败发布确认成功");
+                /** 通知quarry部署完成 */
+                quarryApiService.notifyDeployEndToQuarry(publishEvent);
+
+                return callback;
+            }
+
         } catch (Exception e) {
             logger.error("publishFailEnd error:", e);
         }
@@ -604,11 +631,17 @@ public class PublishController extends BaseController {
             ActionChain chain = new ActionChain();
             chain.addAction(SpringUtils.getBean(StopTomcatAction.class));
             chain.addAction(SpringUtils.getBean(StartTomcatAction.class));
+            chain.addAction(SpringUtils.getBean(CheckHealthAction.class));
 
-            Dispatcher dispatcher = new Dispatcher(chain, request, response);
-            dispatcher.doDispatch(publishEvent);
+            /** 批次发布 */
+            Callback callback = publishEventService.batchPublish(chain,publishEvent,request,response);
 
-            return returnCallback("Success", "重启tomcat成功");
+            return callback;
+
+//            Dispatcher dispatcher = new Dispatcher(chain, request, response);
+//            dispatcher.doDispatch(publishEvent);
+//
+//            return returnCallback("Success", "重启tomcat成功");
         } catch (Exception e) {
             logger.error("restartTomcat error:", e);
         }
@@ -644,11 +677,6 @@ public class PublishController extends BaseController {
 
             Dispatcher dispatcher = new Dispatcher(chain, request, response);
             dispatcher.doDispatch(publishEvent);
-
-            /** 更新事件单为 失败发布 */
-            publishEvent.setIsSuccessPublish(false);
-            publishEvent.setPublishStatus(PublishStatus.CANCEL);
-            publishEventService.update(publishEvent);
 
             /** 通知quarry部署完成 */
             quarryApiService.notifyDeployEndToQuarry(publishEvent);
@@ -747,13 +775,13 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/publishProcessStep", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Object publishProcessGetStep(Integer eventId) throws Exception {
-        String[] group1 = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC", "ETC_APPROVE"};
-        String[] group2 = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
-        String[] group3 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT"};
-        String[] group4 = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
-        String[] group5 = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
-        String[] group6 = {"CLEAN_PUBLISH_DIR"};
-        String[] group7 = {"STOP_TOMCAT", "START_TOMCAT"};
+        String[] groupPreMaster = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC", "ETC_APPROVE"};
+        String[] groupPreMinion = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
+        String[] groupPublishReal = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CHECK_HEALTH"};
+        String[] groupFailEnd = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CLEAN_FAIL_DIR"};
+        String[] groupSuccessEnd = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
+        String[] groupCleanEnd = {"CLEAN_PUBLISH_DIR"};
+        String[] groupRestartTomcat = {"STOP_TOMCAT", "START_TOMCAT", "CHECK_HEALTH"};
         List<NebulaPublishSchedule> nebulaPublishSchedules = publishScheduleService.selectByEventId(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
@@ -767,31 +795,31 @@ public class PublishController extends BaseController {
             switch (String.valueOf(nebulaPublishSchedule.getPublishActionGroup())) {
                 case "PRE_MASTER":
                     actionGroup = 1;
-                    group = group1;
+                    group = groupPreMaster;
                     break;
                 case "PRE_MINION":
                     actionGroup = 2;
-                    group = group2;
+                    group = groupPreMinion;
                     break;
                 case "PUBLISH_REAL":
                     actionGroup = 3;
-                    group = group3;
+                    group = groupPublishReal;
                     break;
                 case "FAIL_END":
                     actionGroup = 4;
-                    group = group4;
+                    group = groupFailEnd;
                     break;
                 case "SUCCESS_END":
                     actionGroup = 5;
-                    group = group5;
+                    group = groupSuccessEnd;
                     break;
                 case "CLEAN_END":
                     actionGroup = 6;
-                    group = group6;
+                    group = groupCleanEnd;
                     break;
                 case "RESTART_TOMCAT":
                     actionGroup = 7;
-                    group = group7;
+                    group = groupRestartTomcat;
                     break;
             }
             for (int i = 0; i < group.length; i++) {

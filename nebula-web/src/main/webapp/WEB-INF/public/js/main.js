@@ -28,27 +28,15 @@ nebula.common.timestapToDate=function(timestap){
 nebula.common.transform = {};
 
 nebula.common.transform.publishEnv = function(publishEnv){
-    var result = "";
-    switch (publishEnv){
-        case "test1":
-            result = "测试1";
-            break;
-        case "test2":
-            result = "测试2";
-            break;
-        case "test3":
-            result = "测试3";
-            break;
-        case "stage":
-            result = "准生产";
-            break;
-        case "product":
-            result = "生产";
-            break;
-        default:
-            result = "";
-    }
-    return result;
+    var array = {
+        "test1":"测试1",
+        "test2":"测试2",
+        "test3":"测试3",
+        "stage":"准生产",
+        "product":"生产",
+        "":"无"
+    };
+    return array[publishEnv];
 };
 
 nebula.common.transform.isSuccessPublish = function(isSuccessPublish){
@@ -61,33 +49,75 @@ nebula.common.transform.isSuccessPublish = function(isSuccessPublish){
 };
 
 nebula.common.transform.publishStatus = function(publishStatus){
-    var result = "";
-    switch (publishStatus){
-        case "PENDING_APPROVE":
-            result = "待审批";
-            break;
-        case "PENDING_PRE":
-            result = "待准备";
-            break;
-        case "PENDING_PUBLISH":
-            result = "待发布";
-            break;
-        case "PUBLISHING":
-            result = "发布中";
-            break;
-        case "PUBLISHED":
-            result = "已发布";
-            break;
-        case "ROLLBACK":
-            result = "已回滚";
-            break;
-        case "CANCEL":
-            result = "已取消";
-            break;
-        default:
-            result = "";
-    }
-    return result;
+    var array = {
+        "PENDING_APPROVE":"待审批",
+        "PENDING_PRE":"待准备",
+        "PENDING_PUBLISH":"待发布",
+        "PUBLISHING":"发布中",
+        "PUBLISHED":"已发布",
+        "ROLLBACK":"已回滚",
+        "CANCEL":"已取消",
+        "":"无"
+    };
+    return array[publishStatus];
+};
+
+nebula.common.transform.publishAction = function(publishAction){
+    var array = {
+        "CREATE_PUBLISH_EVENT":"创建发布事件",
+        "GET_PUBLISH_SVN":"获取发布WAR包",
+        "ANALYZE_PROJECT":"分析发布工程",
+        "GET_SRC_SVN":"获取源SVN文件",
+        "UPDATE_ETC":"更新配置",
+        "ETC_APPROVE":"配置审核",
+        "CREATE_PUBLISH_DIR":"创建发布目录",
+        "COPY_PUBLISH_OLD_ETC":"拷贝原etc文件",
+        "COPY_PUBLISH_OLD_WAR":"拷贝原war文件",
+        "PUBLISH_NEW_ETC":"发布新etc文件",
+        "PUBLISH_NEW_WAR":"发布新war文件",
+        "START_TOMCAT":"启动Tomcat",
+        "CHANGE_LN":"更改文件指向",
+        "STOP_TOMCAT":"停止Tomcat",
+        "CHECK_HEALTH":"健康检查",
+        "CLEAN_HISTORY_DIR":"清除历史发布目录",
+        "UPDATE_SRC_SVN":"更新到源SVN",
+        "CLEAN_FAIL_DIR":"清除失败发布目录",
+        "CLEAN_PUBLISH_DIR":"清除临时发布目录",
+        "":"无"
+    };
+    return array[publishAction];
+};
+
+nebula.common.transform.hostPublishStatus = function(hostPublishStatus){
+    var array = {
+        "PENDING_PUBLISH":"<span class='label label-default'>待上线</span>",
+        "PUBLISHING":"<span class='label label-warning'>上线中</span>",
+        "PUBLISHED":"<span class='label label-success'>已上线</span>",
+        "FAILED":"<span class='label label-danger'>失败</span>",
+        "":"无"
+    };
+    return array[hostPublishStatus];
+};
+
+nebula.common.transform.batchTag = function(batchTag){
+    var array = {
+        "1":"<span class='label label-info'>a</span>",
+        "2":"<span class='label label-info'>b</span>",
+        "3":"<span class='label label-info'>c</span>",
+        "4":"<span class='label label-info'>d</span>",
+        "5":"<span class='label label-info'>e</span>",
+        "6":"<span class='label label-info'>f</span>",
+        "7":"<span class='label label-info'>g</span>",
+        "8":"<span class='label label-info'>h</span>",
+        "9":"<span class='label label-info'>i</span>",
+        "10":"<span class='label label-info'>j</span>",
+        "11":"<span class='label label-info'>k</span>",
+        "12":"<span class='label label-info'>l</span>",
+        "13":"<span class='label label-info'>m</span>",
+        "14":"<span class='label label-info'>n</span>",
+        "15":"<span class='label label-info'>o</span>",
+    };
+    return array[batchTag];
 };
 
 nebula.common.alert = {};

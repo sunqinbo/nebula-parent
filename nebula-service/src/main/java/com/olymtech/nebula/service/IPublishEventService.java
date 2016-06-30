@@ -1,12 +1,12 @@
 package com.olymtech.nebula.service;
 
 import com.github.pagehelper.PageInfo;
-import com.olymtech.nebula.entity.DataTablePage;
-import com.olymtech.nebula.entity.FileChangeData;
-import com.olymtech.nebula.entity.NebulaPublishEvent;
-import com.olymtech.nebula.entity.NebulaPublishHost;
+import com.olymtech.nebula.core.action.ActionChain;
+import com.olymtech.nebula.entity.*;
 import com.olymtech.nebula.entity.enums.PublishStatus;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -43,4 +43,6 @@ public interface IPublishEventService {
     Boolean updateChangeList(NebulaPublishEvent publishEvent);
 
     List<FileChangeData> changeListJsonStringToList(String responseContext);
+
+    Callback batchPublish(ActionChain chain, NebulaPublishEvent event, HttpServletRequest request, HttpServletResponse response);
 }

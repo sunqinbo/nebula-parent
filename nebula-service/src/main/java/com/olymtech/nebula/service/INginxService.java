@@ -12,6 +12,8 @@ import java.util.List;
  * Created by Gavin on 2016-06-23 16:41.
  */
 public interface INginxService {
-    List<NginxServer> getMasterNginxServers();
 
+    List<NginxServer> getStageNginxServers();
+
+    List<NginxServer> getProductNginxServers();
 }

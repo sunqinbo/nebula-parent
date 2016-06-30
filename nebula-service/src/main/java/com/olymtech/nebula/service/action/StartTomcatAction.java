@@ -103,7 +103,7 @@ public class StartTomcatAction extends AbstractAction {
             }
 
         }
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, event.getPublishActionGroup(), null, "All models and sub targes 'execute' success");
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.START_TOMCAT, event.getPublishActionGroup(), true, "All models and sub targes 'execute' success");
         return true;
     }
 
