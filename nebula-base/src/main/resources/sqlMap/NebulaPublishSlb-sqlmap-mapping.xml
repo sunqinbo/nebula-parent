@@ -102,6 +102,10 @@
     delete from nebula_publish_slb
     where id = #{id,jdbcType=INTEGER}
   </delete>
+    <delete id="Nebula-NebulaPublishSlbDao-Delete-By-Event-Id" parameterType="java.lang.Integer">
+        delete from nebula_publish_slb
+        where publish_event_id = #{publishEventId,jdbcType=INTEGER}
+    </delete>
     <insert id="Nebula-NebulaPublishSlbDao-Insert" parameterType="NebulaPublishSlb">
         insert into nebula_publish_slb (
         id,

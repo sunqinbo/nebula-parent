@@ -60,4 +60,9 @@ public class PublishSlbServiceImpl implements IPublishSlbService {
         return nebulaPublishSlbDao.selectAllPaging(publishSlbSearch);
     }
 
+    @Override
+    public void deleteByEventId(Integer eventId){
+        nebulaPublishSlbDao.deleteByEventId(eventId);
+    }
+
 }

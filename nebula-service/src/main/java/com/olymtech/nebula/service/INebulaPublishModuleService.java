@@ -16,4 +16,8 @@ public interface INebulaPublishModuleService {
     public List<NebulaPublishModule> selectByEventId(Integer eventId);
 
     public void deleteByEventId(Integer eventId);
+
+    void update(NebulaPublishModule publishModule);
+
+    void updateByIdSelective(NebulaPublishModule publishModule);
 }

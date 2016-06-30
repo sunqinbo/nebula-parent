@@ -37,6 +37,13 @@ public class CleanPublishDirAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        /**
+         * 清理发布目录最后一批次执行，之前批次不执行
+         */
+        if(!event.getNowBatchTag().equals(event.getBatchTotal())){
+            return true;
+        }
+
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CLEAN_PUBLISH_DIR, PublishActionGroup.CLEAN_END, null, "");
         String localPath = MasterDeployDir + event.getPublishProductKey();
         File tmpDir = new File(localPath);

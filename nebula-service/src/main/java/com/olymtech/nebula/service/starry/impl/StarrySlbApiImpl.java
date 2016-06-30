@@ -36,13 +36,16 @@ public class StarrySlbApiImpl implements IStarrySlbApi {
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url, "post");
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {
+                logger.error("[ERROR]describeLoadBalancerAttribute jsonObject null:"+url);
                 return null;
             }
             if(!jsonObject.get("callbackMsg").toString().equals("Success")){
+                logger.error("[ERROR]describeLoadBalancerAttribute callbackMsg is not Success:"+url);
                 return null;
             }
             JSONObject jsonObjectData = jsonObject.getJSONObject("responseContext");
             if(jsonObjectData == null){
+                logger.error("[ERROR]describeLoadBalancerAttribute responseContext is null:"+url);
                 return null;
             }
             ObjectMapper mapper = new ObjectMapper();
@@ -62,13 +65,16 @@ public class StarrySlbApiImpl implements IStarrySlbApi {
             String jsonDataString = HttpUtils.getResponesEncodeUTF8ByURL(url, "post");
             JSONObject jsonObject = JSONObject.parseObject(jsonDataString);
             if (null == jsonObject) {
+                logger.error("[ERROR]describeHealthStatusTasks jsonObject is null:"+url);
                 return null;
             }
             if(!jsonObject.get("callbackMsg").toString().equals("Success")){
+                logger.error("[ERROR]describeHealthStatusTasks callbackMsg is not Success:"+url);
                 return null;
             }
             JSONObject jsonObjectData = jsonObject.getJSONObject("responseContext");
             if(jsonObjectData == null){
+                logger.error("[ERROR]describeHealthStatusTasks responseContext is null:"+url);
                 return null;
             }
             ObjectMapper mapper = new ObjectMapper();

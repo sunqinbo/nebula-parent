@@ -13,4 +13,10 @@ public class NebulaPublishSlbDaoImpl extends BaseDaoImpl<NebulaPublishSlb, Integ
     public List<NebulaPublishSlb> selectByPublishEventId(Integer eventId){
         return getSqlSession().selectList(CLASS_NAME + "-Select-By-Publish-EventId", eventId);
     }
+
+    @Override
+    public void deleteByEventId(Integer eventId){
+        getSqlSession().delete(CLASS_NAME + "-Delete-By-Event-Id", eventId);
+    }
+
 }

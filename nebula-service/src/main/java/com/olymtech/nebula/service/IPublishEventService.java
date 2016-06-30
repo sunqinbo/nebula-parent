@@ -45,4 +45,6 @@ public interface IPublishEventService {
     List<FileChangeData> changeListJsonStringToList(String responseContext);
 
     Callback batchPublish(ActionChain chain, NebulaPublishEvent event, HttpServletRequest request, HttpServletResponse response);
+
+    NebulaPublishEvent initNowBatchTag(NebulaPublishEvent event);
 }

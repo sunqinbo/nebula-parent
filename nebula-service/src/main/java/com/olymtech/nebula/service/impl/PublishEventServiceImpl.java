@@ -53,6 +53,9 @@ public class PublishEventServiceImpl implements IPublishEventService {
     private IPublishScheduleService publishScheduleService;
 
     @Autowired
+    private IPublishSlbService publishSlbService;
+
+    @Autowired
     private IPublishBaseService publishBaseService;
 
     @Resource
@@ -142,6 +145,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
             publishAppService.deleteByEventId(eventId);
             nebulaPublishModuleService.deleteByEventId(eventId);
             publishScheduleService.deleteByEventIdWithOutCreateAction(eventId);
+            publishSlbService.deleteByEventId(eventId);
             result = true;
         } catch (Exception e) {
             logger.error("retryPublishRollback error:", e);
@@ -307,7 +311,7 @@ public class PublishEventServiceImpl implements IPublishEventService {
     }
 
     @Override
-    public Callback batchPublish(ActionChain chain, NebulaPublishEvent event,HttpServletRequest request, HttpServletResponse response){
+    public Callback batchPublish(ActionChain chain, NebulaPublishEvent event, HttpServletRequest request, HttpServletResponse response){
         String actionGroupName = event.getPublishActionGroup().getDescription();
         try {
             /** 为null，从未发布 */
@@ -344,6 +348,22 @@ public class PublishEventServiceImpl implements IPublishEventService {
         event.setIsBatchFinish(true);
         updateByIdSelective(event);
         return new Callback("Success", actionGroupName+"完成");
+    }
+
+    /**
+     * 这里的event，有module host
+     * 批量操作前，需要初始化  NowBatchTag
+     * @param event
+     */
+    @Override
+    public NebulaPublishEvent initNowBatchTag(NebulaPublishEvent event){
+        event.setNowBatchTag(null);
+        nebulaPublishEventDao.update(event);
+        for(NebulaPublishModule publishModule:event.getPublishModules()){
+            publishModule.setNowBatchTag(null);
+            nebulaPublishModuleService.update(publishModule);
+        }
+        return event;
     }
 
 }

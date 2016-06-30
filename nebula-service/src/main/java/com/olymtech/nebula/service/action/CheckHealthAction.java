@@ -136,6 +136,7 @@ public class CheckHealthAction extends AbstractAction {
             for (NebulaPublishSlb publishSlb : publishSlbs) {
                 DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
                 DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
+
                 String loadBalancerStatus = loadBalancerAttributeResponse.getLoadBalancerStatus();
 
                 /** 判断slb状态 */
@@ -161,6 +162,11 @@ public class CheckHealthAction extends AbstractAction {
                 nginxServers = nginxService.getStageNginxServers();
             }else{
                 nginxServers = nginxService.getProductNginxServers();
+            }
+
+            if(nginxServers == null){
+                logger.error("[ERROR]checkHealthAllHost error: get nginx servers is null,please check nginx url.");
+                return false;
             }
 
             for(NginxServer nginxServer:nginxServers){

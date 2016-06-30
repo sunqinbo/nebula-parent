@@ -521,6 +521,10 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+
+            /** 批次重新计算 */
+            publishEvent = publishEventService.initNowBatchTag(publishEvent);
+
             publishEvent.setPublishActionGroup(PublishActionGroup.FAIL_END);
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
@@ -588,6 +592,10 @@ public class PublishController extends BaseController {
             Integer eventId = Integer.parseInt(idString);
             publishEventService.retryPublishRollback(eventId);
             NebulaPublishEvent publishEvent = publishEventService.selectById(eventId);
+
+            /** 批次重新计算 */
+            publishEvent = publishEventService.initNowBatchTag(publishEvent);
+
             publishEvent.setPublishStatus(PublishStatus.PENDING_PRE);
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/
@@ -619,6 +627,10 @@ public class PublishController extends BaseController {
         try {
             Integer eventId = Integer.parseInt(idString);
             NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
+
+            /** 批次重新计算 */
+            publishEvent = publishEventService.initNowBatchTag(publishEvent);
+
             publishEvent.setPublishActionGroup(PublishActionGroup.RESTART_TOMCAT);
 
             /*判断登录人是否是提交人,是否是管理员,是否是超级管理员*/

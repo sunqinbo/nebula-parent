@@ -8,4 +8,6 @@ public interface INebulaPublishSlbDao extends IBaseDao<NebulaPublishSlb,Integer>
 
 
     List<NebulaPublishSlb> selectByPublishEventId(Integer eventId);
+
+    void deleteByEventId(Integer eventId);
 }

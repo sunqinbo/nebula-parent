@@ -21,4 +21,6 @@ public interface IPublishSlbService {
     List<NebulaPublishSlb> selectByPublishEventId(Integer eventId);
 
     List<NebulaPublishSlb> selectByPublishEventIdAndModuleId(Integer eventId, Integer moduleId);
+
+    void deleteByEventId(Integer eventId);
 }

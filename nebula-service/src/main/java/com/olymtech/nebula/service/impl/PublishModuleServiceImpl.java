@@ -44,4 +44,14 @@ public class PublishModuleServiceImpl implements INebulaPublishModuleService {
         nebulaPublishModuleDao.deleteByEventId(eventId);
     }
 
+    @Override
+    public void update(NebulaPublishModule publishModule){
+        nebulaPublishModuleDao.update(publishModule);
+    }
+
+    @Override
+    public void updateByIdSelective(NebulaPublishModule publishModule){
+        nebulaPublishModuleDao.updateByIdSelective(publishModule);
+    }
+
 }

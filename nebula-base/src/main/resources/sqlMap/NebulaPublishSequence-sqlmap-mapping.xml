@@ -32,7 +32,7 @@
     <select id="Nebula-NebulaPublishSequenceDao-Select-By-ActionGroup" parameterType="java.lang.String" resultMap="RM-NebulaPublishSequence">
         select <include refid="NebulaPublishSequence-Base-Column-List"/> from nebula_publish_sequence
         WHERE action_group = #{actionGroup}
-        group by id order by id
+        group by id order by action_seq_id
     </select>
     <select id="Nebula-NebulaPublishSequenceDao-Select-Count" resultType="java.lang.Integer">
         select count(id) from nebula_publish_sequence
