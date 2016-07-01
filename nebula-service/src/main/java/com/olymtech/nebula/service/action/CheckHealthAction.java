@@ -56,6 +56,11 @@ public class CheckHealthAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
+        /** slb检测，需要15s更新，先设置15s
+         * 获取太快，将导致：
+         * 服务器异常，slb却仍然正常
+         * */
+        Thread.sleep(15000);
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHECK_HEALTH, event.getPublishActionGroup(), null, "");
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
