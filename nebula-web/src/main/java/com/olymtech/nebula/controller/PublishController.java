@@ -194,7 +194,7 @@ public class PublishController extends BaseController {
         String pattern1 = "svn://172.16.137.150/warspace/";
         Pattern p1 = Pattern.compile(pattern1);
         Matcher match1 = p1.matcher(publishSvn);
-        if (!match.find()&&!match1.find()) {
+        if (!match.find() && !match1.find()) {
             return returnCallback("Error", "请检测svn地址（svn://svn.olymtech.com/warspace/）");
         }
         Integer empId = getLoginUser().getEmpId();
@@ -299,7 +299,7 @@ public class PublishController extends BaseController {
             logger.error("publishReal error:", e);
             return returnCallback("Error", "预发布出现错误");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH,"启动预发布成功",loginUser.getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.START_PRE_PUBLISH, "启动预发布成功", loginUser.getEmpId());
         return returnCallback("Success", "预发布完成");
     }
 
@@ -349,10 +349,10 @@ public class PublishController extends BaseController {
         /** 批次发布 */
         Callback callback = publishEventService.batchPublish(chain, nebulaPublishEvent, request, response);
 
-        if(callback.getCallbackMsg().equals("Error")){
+        if (callback.getCallbackMsg().equals("Error")) {
             return callback;
-        }else{
-            publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH,"启动正式发布成功",loginUser.getEmpId());
+        } else {
+            publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH, "启动正式发布成功", loginUser.getEmpId());
             return callback;
         }
 
@@ -432,20 +432,20 @@ public class PublishController extends BaseController {
             PublishActionGroup actionGroup = nebulaPublishEvent.getPublishActionGroup();
             if (chain.getActions().size() != 0) {
                 /** 这三个actiongroup需要批次发布 */
-                if(actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT){
+                if (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT) {
 
                     /** 批次发布 */
                     Callback callback = publishEventService.batchPublish(chain, nebulaPublishEvent, request, response);
 
                     return callback;
-                }else{
+                } else {
                     Dispatcher dispatcher = new Dispatcher(chain, request, response);
                     dispatcher.doDispatch(nebulaPublishEvent);
                 }
 
-                return returnCallback("Success", actionGroup+"继续发布完成");
+                return returnCallback("Success", actionGroup + "继续发布完成");
             } else {
-                return returnCallback("Error", actionGroup+"继续发布链为空");
+                return returnCallback("Error", actionGroup + "继续发布链为空");
             }
         } catch (Exception e) {
             logger.error("publishContinue error:", e);
@@ -555,9 +555,9 @@ public class PublishController extends BaseController {
             /** 批次发布 */
             Callback callback = publishEventService.batchPublish(chain, publishEvent, request, response);
 
-            if(callback.getCallbackMsg().equals("Error")){
+            if (callback.getCallbackMsg().equals("Error")) {
                 return callback;
-            }else{
+            } else {
                 /** 清楚基线 */
                 publishBaseService.cleanBaseByEventId(eventId);
 
@@ -646,7 +646,7 @@ public class PublishController extends BaseController {
             chain.addAction(SpringUtils.getBean(CheckHealthAction.class));
 
             /** 批次发布 */
-            Callback callback = publishEventService.batchPublish(chain,publishEvent,request,response);
+            Callback callback = publishEventService.batchPublish(chain, publishEvent, request, response);
 
             return callback;
 
@@ -726,16 +726,16 @@ public class PublishController extends BaseController {
 
             /** 配置变更为空（配置无变更），不需要审批 */
             NebulaPublishEvent publishEventInDB = publishEventService.selectWithChildByEventId(eventId);
-            if(publishEventInDB.getChangeList().equals("{}")){
+            if (publishEventInDB.getChangeList().equals("{}")) {
                 publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
-            }else{
+            } else {
                 publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
             }
         } else {
             publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
             publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT,"完成配置编辑",getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT, "完成配置编辑", getLoginUser().getEmpId());
         return returnCallback("Success", "完成配置编辑");
     }
 
@@ -799,8 +799,18 @@ public class PublishController extends BaseController {
         NebulaPublishEvent event = publishEventService.selectById(eventId);
         int last = nebulaPublishSchedules.size();
         Map<String, Object> map = new HashMap<>();
+        NebulaPublishSchedule nebulaPublishSchedule = nebulaPublishSchedules.get(last - 1);
+
         if (last != 0) {
-            NebulaPublishSchedule nebulaPublishSchedule = nebulaPublishSchedules.get(last - 1);
+            int lastItem = 0;
+            for (int i = 0; i < nebulaPublishSchedules.size(); i++) {
+                if (nebulaPublishSchedules.get(i).getIsSuccessAction() == null || !nebulaPublishSchedules.get(i).getIsSuccessAction()) {
+                    nebulaPublishSchedule = nebulaPublishSchedules.get(i);
+                    lastItem = i;
+                    break;
+                }
+            }
+//            NebulaPublishSchedule nebulaPublishSchedule = nebulaPublishSchedules.get(last - 1);
             String actionNameString = String.valueOf(nebulaPublishSchedule.getPublishAction());
             Boolean actionState = nebulaPublishSchedule.getIsSuccessAction();
             int actionGroup = -1;
@@ -836,23 +846,35 @@ public class PublishController extends BaseController {
                     group = groupRestartTomcat;
                     break;
             }
+            if (actionGroup == 3 || actionGroup == 4 || actionGroup == 7) {
+                if (event.getNowBatchTag() != event.getBatchTotal() || event.getIsBatchFinish() != true) {
+                    if(actionState) {
+                        actionState = null;
+                    }
+                }
+            }
             /** 获取当前步 */
             for (int i = 0; i < group.length; i++) {
                 if (actionNameString.equals(group[i])) {
-                    if(event.getNowBatchTag() != null){
-                        if(event.getNowBatchTag() < event.getBatchTotal()){
-                            whichStep = i;
-                        }else{
-                            whichStep = i + 1;
-                        }
-                    }else{
-                        whichStep = i + 1;
-                    }
+//                    if(event.getNowBatchTag() != null){
+//                        if(event.getNowBatchTag() < event.getBatchTotal()){
+//                            whichStep = i;
+//                        }else{
+//                            whichStep = i + 1;
+//                        }
+//                    }else{
+                    whichStep = i + 1;
+//                    }
                 }
             }
             int lastGroup = 0;
             if (last > 2) {
-                NebulaPublishSchedule nebulaPublishScheduleLast = nebulaPublishSchedules.get(last - 2);
+                NebulaPublishSchedule nebulaPublishScheduleLast = new NebulaPublishSchedule();
+                if (lastItem == 0) {
+                    nebulaPublishScheduleLast = nebulaPublishSchedules.get(last - 2);
+                } else {
+                    nebulaPublishScheduleLast = nebulaPublishSchedules.get(lastItem);
+                }
                 switch (String.valueOf(nebulaPublishScheduleLast.getPublishActionGroup())) {
                     case "PRE_MASTER":
                         lastGroup = 1;
