@@ -430,6 +430,12 @@ public class PublishController extends BaseController {
             }
 
             PublishActionGroup actionGroup = nebulaPublishEvent.getPublishActionGroup();
+
+            /** 确认成功、回滚、取消发布，需要清除发布目录 */
+            if(actionGroup == PublishActionGroup.SUCCESS_END||actionGroup == PublishActionGroup.FAIL_END||actionGroup == PublishActionGroup.CANCEL_END){
+                chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
+            }
+
             if (chain.getActions().size() != 0) {
                 /** 这三个actiongroup需要批次发布 */
                 if(actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT){
