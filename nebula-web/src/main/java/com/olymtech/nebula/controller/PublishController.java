@@ -871,8 +871,12 @@ public class PublishController extends BaseController {
                     break;
             }
             if (actionGroup == 3 || actionGroup == 4 || actionGroup == 7) {
-                if (event.getNowBatchTag() != event.getBatchTotal() || event.getIsBatchFinish() != true) {
-                    if(actionState) {
+                if(event.getNowBatchTag() == null){
+
+                }else if(event.getIsBatchFinish() == null){
+                    actionState = null;
+                }else if (!event.getNowBatchTag().equals(event.getBatchTotal()) || !event.getIsBatchFinish()) {
+                    if(actionState != null && actionState){
                         actionState = null;
                     }
                 }
