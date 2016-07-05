@@ -142,6 +142,16 @@ public class CheckHealthAction extends AbstractAction {
                 DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
                 DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
 
+                if(loadBalancerAttributeResponse == null){
+                    logger.error("[ERROR]loadBalancerAttributeResponse is null. name:"+publishSlb.getLoadBalancerName()+" ip:"+publishSlb.getLoadBalancerAddress()+" id:"+publishSlb.getLoadBalancerId());
+                    return false;
+                }
+
+                if(describeHealthStatusResponse == null){
+                    logger.error("[ERROR]describeHealthStatusResponse is null. name:"+publishSlb.getLoadBalancerName()+" ip:"+publishSlb.getLoadBalancerAddress()+" id:"+publishSlb.getLoadBalancerId());
+                    return false;
+                }
+
                 String loadBalancerStatus = loadBalancerAttributeResponse.getLoadBalancerStatus();
 
                 /** 判断slb状态 */

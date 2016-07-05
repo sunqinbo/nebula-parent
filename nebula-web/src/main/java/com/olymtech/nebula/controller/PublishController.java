@@ -413,23 +413,41 @@ public class PublishController extends BaseController {
             //创建任务队列
             ActionChain chain = new ActionChain();
             Boolean flag = false;
-            for (NebulaPublishSequence publishSequence : publishSequences) {
-                nebulaPublishEvent.setPublishActionGroup(publishSequence.getActionGroup());
-                if (publishSequence.getActionName() == publishSchedule.getPublishAction()) {
-                    flag = true;
-                }
-                if (publishSequence.getActionClass() == null || "".equals(publishSequence.getActionClass())) {
-                    continue;
-                }
-                if (flag) {
+            PublishActionGroup actionGroup = nebulaPublishEvent.getPublishActionGroup();
+            /**
+             * 需要 按批次发布 的情况：
+             * 总批次 > 1; 正式发布、回滚、重启tomcat
+             * 批次发布，chain为 整个group
+             */
+            if(nebulaPublishEvent.getBatchTotal() > 1 &&
+                    (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT) ){
+                for (NebulaPublishSequence publishSequence : publishSequences) {
+                    if (publishSequence.getActionClass() == null || "".equals(publishSequence.getActionClass())) {
+                        continue;
+                    }
                     String actionClassName = publishSequence.getActionClass();
                     actionClassName = "com.olymtech.nebula.service.action." + actionClassName;
                     Action action = (Action) SpringUtils.getBean(Class.forName(actionClassName));
                     chain.addAction(action);
                 }
+            }else{
+                for (NebulaPublishSequence publishSequence : publishSequences) {
+                    nebulaPublishEvent.setPublishActionGroup(publishSequence.getActionGroup());
+                    if (publishSequence.getActionName() == publishSchedule.getPublishAction()) {
+                        flag = true;
+                    }
+                    if (publishSequence.getActionClass() == null || "".equals(publishSequence.getActionClass())) {
+                        continue;
+                    }
+                    if (flag) {
+                        String actionClassName = publishSequence.getActionClass();
+                        actionClassName = "com.olymtech.nebula.service.action." + actionClassName;
+                        Action action = (Action) SpringUtils.getBean(Class.forName(actionClassName));
+                        chain.addAction(action);
+                    }
+                }
             }
 
-            PublishActionGroup actionGroup = nebulaPublishEvent.getPublishActionGroup();
 
             /** 确认成功、回滚、取消发布，需要清除发布目录 */
             if(actionGroup == PublishActionGroup.SUCCESS_END||actionGroup == PublishActionGroup.FAIL_END||actionGroup == PublishActionGroup.CANCEL_END){
