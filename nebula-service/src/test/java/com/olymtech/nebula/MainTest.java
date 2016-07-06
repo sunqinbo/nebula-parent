@@ -27,23 +27,30 @@ public class MainTest {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        Integer a = 1;
-        Integer b = 1;
-        if(a == b){
-            System.out.println("a == b");
-        }else{
-            System.out.println("a != b");
-        }
 
-        NebulaUserInfo userA = new NebulaUserInfo();
-        userA.setEmpId(1000);
-        NebulaUserInfo userB = new NebulaUserInfo();
-        userB.setEmpId(1000);
 
-        if(userA.getEmpId().equals(userB.getEmpId())){
-            System.out.println("userA == userB");
-        }else{
-            System.out.println("userA != userB");
+//        Integer a = 1;
+//        Integer b = 1;
+//        if(a == b){
+//            System.out.println("a == b");
+//        }else{
+//            System.out.println("a != b");
+//        }
+//
+//        NebulaUserInfo userA = new NebulaUserInfo();
+//        userA.setEmpId(1000);
+//        NebulaUserInfo userB = new NebulaUserInfo();
+//        userB.setEmpId(1000);
+//
+//        if(userA.getEmpId().equals(userB.getEmpId())){
+//            System.out.println("userA == userB");
+//        }else{
+//            System.out.println("userA != userB");
+//        }
+
+        Boolean a  = null;
+        if(a != true){
+            System.out.println("xxx");
         }
 
     }
