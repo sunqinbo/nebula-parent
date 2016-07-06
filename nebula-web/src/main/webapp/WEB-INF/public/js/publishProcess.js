@@ -790,7 +790,7 @@ function btnControl(publishStatus){
             break;
         case "ROLLBACK":$("#restartTomcat_btn").show();
             $("#restartPublish").show();
-            $("#processbar4").setStep(5);
+            $("#processbar4").setStep(6);
             $("#step4").show();
     }
 }
