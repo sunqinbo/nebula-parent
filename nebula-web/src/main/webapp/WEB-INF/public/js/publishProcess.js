@@ -800,6 +800,7 @@ function btnUnclick() {
     $("#btn1").attr('disabled', true);
     $("#btn2").attr('disabled', true);
     $("#btn3").attr('disabled', true);
+    $("#btn3").removeClass("btn-info");
     $("#btn4").attr('disabled', true);
     $("#btn4").removeClass("btn-info");
     $("#btn_ConfirmResult").attr('disabled', true);
