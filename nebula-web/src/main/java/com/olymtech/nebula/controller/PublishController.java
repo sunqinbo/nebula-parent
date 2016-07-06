@@ -407,20 +407,27 @@ public class PublishController extends BaseController {
                 return returnCallback("Error", "无法获取发布事件进度");
             }
             Integer size = nebulaPublishSchedules.size();
+            /** 获取进度最后一步 */
             NebulaPublishSchedule publishSchedule = nebulaPublishSchedules.get(size - 1);
-            List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(publishSchedule.getPublishActionGroup());
+            /**  */
+            PublishActionGroup actionGroup = publishSchedule.getPublishActionGroup();
+            nebulaPublishEvent.setPublishActionGroup(actionGroup);
+            /** 获取当前组，所有action */
+            List<NebulaPublishSequence> publishSequences = publishSequenceService.selectByActionGroup(actionGroup);
 
             //创建任务队列
             ActionChain chain = new ActionChain();
             Boolean flag = false;
-            PublishActionGroup actionGroup = nebulaPublishEvent.getPublishActionGroup();
+
             /**
              * 需要 按批次发布 的情况：
              * 总批次 > 1; 正式发布、回滚、重启tomcat
              * 批次发布，chain为 整个group
              */
+            logger.info("[INFO]publishContinue batchTotal:"+nebulaPublishEvent.getBatchTotal()+" actionGroup:"+actionGroup);
             if(nebulaPublishEvent.getBatchTotal() > 1 &&
                     (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT) ){
+                logger.info("[INFO]publishContinue to create 'batch' publish chain.");
                 for (NebulaPublishSequence publishSequence : publishSequences) {
                     if (publishSequence.getActionClass() == null || "".equals(publishSequence.getActionClass())) {
                         continue;
@@ -431,6 +438,7 @@ public class PublishController extends BaseController {
                     chain.addAction(action);
                 }
             }else{
+                logger.info("[INFO]publishContinue to create 'normal' publish chain.");
                 for (NebulaPublishSequence publishSequence : publishSequences) {
                     nebulaPublishEvent.setPublishActionGroup(publishSequence.getActionGroup());
                     if (publishSequence.getActionName() == publishSchedule.getPublishAction()) {

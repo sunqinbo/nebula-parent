@@ -6,6 +6,7 @@ package com.olymtech.nebula.service.action;
 
 import com.aliyuncs.slb.model.v20140515.DescribeHealthStatusResponse;
 import com.aliyuncs.slb.model.v20140515.DescribeLoadBalancerAttributeResponse;
+import com.olymtech.nebula.common.utils.DateUtils;
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
 import com.olymtech.nebula.dao.INebulaPublishModuleDao;
@@ -27,10 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gavin on 2016-06-23 09:22.
@@ -56,12 +54,12 @@ public class CheckHealthAction extends AbstractAction {
 
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
-        /** slb检测，需要15s更新，先设置15s
+        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHECK_HEALTH, event.getPublishActionGroup(), null, "");
+        /** slb检测，需要15s更新，先设置20s
          * 获取太快，将导致：
          * 服务器异常，slb却仍然正常
          * */
-        Thread.sleep(15000);
-        publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHECK_HEALTH, event.getPublishActionGroup(), null, "");
+        Thread.sleep(20000);
 
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
@@ -92,10 +90,14 @@ public class CheckHealthAction extends AbstractAction {
             }
 
             long startTime = System.currentTimeMillis();
+            Date startDate = new Date(startTime);
+            logger.info("[INFO]CheckHealthAction time limit:"+time+" start:"+ DateUtils.simpleFormat(startDate)+" module:"+publishModule.getPublishModuleName());
             Boolean result;
             do{
                 long endTime = System.currentTimeMillis(); //获取结束时间
                 if ((endTime - startTime) / 1000 > time) {
+                    Date endDate = new Date(endTime);
+                    logger.info("[INFO]CheckHealthAction time out. >300s end:"+ DateUtils.simpleFormat(endDate)+" module:"+publishModule.getPublishModuleName());
                     publishScheduleService.logScheduleByAction(
                             event.getId(),
                             PublishAction.CHECK_HEALTH,
@@ -156,6 +158,8 @@ public class CheckHealthAction extends AbstractAction {
 
                 /** 判断slb状态 */
                 if(!loadBalancerStatus.equals("active")){
+                    logger.info("[INFO]slb status is not active.slb status:" + loadBalancerStatus
+                    +" name:"+publishSlb.getLoadBalancerName()+" ip:"+publishSlb.getLoadBalancerAddress()+" id:"+publishSlb.getLoadBalancerId());
                     return false;
                 }
 
@@ -164,6 +168,7 @@ public class CheckHealthAction extends AbstractAction {
                     /** 实例id － 被发布机，暂无对应关系；只能通过匹配InstanceId，查看 */
                     NebulaPublishHost host = hostInstanceIdMap.get(backendServer.getServerId());
                     if(host != null && !backendServer.getServerHealthStatus().equals("normal")){
+                        logger.info("[INFO]slb host status is not normal. host:"+host.getHostInstanceId()+" name:"+host.getPassPublishHostName());
                         return false;
                     }
                 }
@@ -188,6 +193,7 @@ public class CheckHealthAction extends AbstractAction {
                 String ip = nginxServer.getName().split(":")[0];
                 NebulaPublishHost host = hostIPMap.get(ip);
                 if(host != null && !nginxServer.getStatus().equals("up")){
+                    logger.info("[INFO]nginx host status is not up. host:"+host.getPassPublishHostName()+" ip:"+host.getPassPublishHostIp());
                     return false;
                 }
             }
