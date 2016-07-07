@@ -514,29 +514,22 @@ public class PublishController extends BaseController {
             chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
 
             Dispatcher dispatcher = new Dispatcher(chain, request, response);
-            dispatcher.doDispatch(publishEvent);
+            Boolean result = dispatcher.doDispatch(publishEvent);
 
-            /** 发布成功基线 */
-            for (NebulaPublishModule publishModule : publishEvent.getPublishModules()) {
-                NebulaPublishBase publishBase = new NebulaPublishBase(eventId,
-                        publishEvent.getPublishProductName(),
-                        publishEvent.getPublishEnv(),
-                        publishModule.getPublishModuleName(),
-                        publishModule.getPublishModuleKey());
-                publishBaseService.insertAndUpdate(publishBase);
+            if(result){
+                /** 更新事件单为 成功发布 */
+                publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser.getEmpId());
+
+                /** 通知quarry部署完成 */
+                quarryApiService.notifyDeployEndToQuarry(publishEvent);
+                return returnCallback("Success", "'成功发布'确认成功");
+            }else{
+                return returnCallback("Success", "'成功发布'确认失败");
             }
-
-            /** 更新事件单为 成功发布 */
-            publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser.getEmpId());
-
-            /** 通知quarry部署完成 */
-            quarryApiService.notifyDeployEndToQuarry(publishEvent);
-
-            return returnCallback("Success", "成功发布确认成功");
         } catch (Exception e) {
             logger.error("publishSuccessEnd error:", e);
         }
-        return returnCallback("Error", "成功发布确认失败");
+        return returnCallback("Error", "'成功发布'确认异常");
     }
 
     /**

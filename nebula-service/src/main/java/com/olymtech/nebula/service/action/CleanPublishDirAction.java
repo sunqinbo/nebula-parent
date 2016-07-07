@@ -5,10 +5,13 @@
 package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
+import com.olymtech.nebula.entity.NebulaPublishBase;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
+import com.olymtech.nebula.entity.NebulaPublishModule;
 import com.olymtech.nebula.entity.enums.PublishAction;
 import com.olymtech.nebula.entity.enums.PublishActionGroup;
 import com.olymtech.nebula.entity.enums.PublishStatus;
+import com.olymtech.nebula.service.IPublishBaseService;
 import com.olymtech.nebula.service.IPublishEventService;
 import com.olymtech.nebula.service.IPublishScheduleService;
 import org.slf4j.Logger;
@@ -31,6 +34,8 @@ public class CleanPublishDirAction extends AbstractAction {
     private IPublishScheduleService publishScheduleService;
     @Autowired
     private IPublishEventService publishEventService;
+    @Autowired
+    IPublishBaseService publishBaseService;
 
     @Value("${master_deploy_dir}")
     private String MasterDeployDir;
@@ -48,7 +53,25 @@ public class CleanPublishDirAction extends AbstractAction {
         String localPath = MasterDeployDir + event.getPublishProductKey();
         File tmpDir = new File(localPath);
         try{
-            Boolean result = deleteDir(tmpDir);
+            /**
+             * 目录不存在，删除目录动作，也算成功
+             * 目录存在，执行删除动作，返回删除结果result
+             */
+            Boolean result = true;
+            if(tmpDir.exists()){
+                result = deleteDir(tmpDir);
+            }
+
+            /** 发布成功基线 */
+            for (NebulaPublishModule publishModule : event.getPublishModules()) {
+                NebulaPublishBase publishBase = new NebulaPublishBase(event.getId(),
+                        event.getPublishProductName(),
+                        event.getPublishEnv(),
+                        publishModule.getPublishModuleName(),
+                        publishModule.getPublishModuleKey());
+                publishBaseService.insertAndUpdate(publishBase);
+            }
+
             if(result){
 
                 /** 更新错误数,发布状态 */

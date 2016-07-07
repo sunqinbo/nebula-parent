@@ -48,11 +48,32 @@ public class MainTest {
 //            System.out.println("userA != userB");
 //        }
 
-        Boolean a  = null;
-        if(a != true){
-            System.out.println("xxx");
+//        Boolean a  = null;
+//        if(a != true){
+//            System.out.println("xxx");
+//        }
+        File file = new File("/tmp/aaaaaaaaaa");
+        if(file.exists()){
+            System.out.println(deleteDir(file));
+            System.out.println("have");
+        }else{
+            System.out.println(deleteDir(file));
+            System.out.println("no");
         }
 
+    }
+
+    private static Boolean deleteDir(File dir){
+        if(dir.isDirectory()){
+            String[] child = dir.list();
+            for(int i = 0;i<child.length;i++){
+                Boolean success = deleteDir(new File(dir,child[i]));
+                if(!success){
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
     }
 
     /*copy目录及其子文件*/

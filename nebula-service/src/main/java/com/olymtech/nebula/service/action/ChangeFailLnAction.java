@@ -6,6 +6,7 @@ package com.olymtech.nebula.service.action;
 
 import com.olymtech.nebula.core.action.AbstractAction;
 import com.olymtech.nebula.core.salt.ISaltStackService;
+import com.olymtech.nebula.dao.INebulaPublishModuleDao;
 import com.olymtech.nebula.entity.NebulaPublishEvent;
 import com.olymtech.nebula.entity.NebulaPublishHost;
 import com.olymtech.nebula.entity.NebulaPublishModule;
@@ -40,6 +41,8 @@ public class ChangeFailLnAction extends AbstractAction {
 
     @Autowired
     private IPublishBaseService publishBaseService;
+    @Autowired
+    private INebulaPublishModuleDao publishModuleDao;
 
     @Value("${base_war_dir}")
     private String BaseWarDir;
@@ -51,6 +54,7 @@ public class ChangeFailLnAction extends AbstractAction {
     private String WarLink;
 
 
+
     @Override
     public boolean doAction(NebulaPublishEvent event) throws Exception {
         publishScheduleService.logScheduleByAction(event.getId(), PublishAction.CHANGE_LN, event.getPublishActionGroup(), null, "");
@@ -58,11 +62,20 @@ public class ChangeFailLnAction extends AbstractAction {
         List<NebulaPublishModule> publishModules = event.getPublishModules();
 
         for (NebulaPublishModule publishModule : publishModules) {
+            if(event.getNowBatchTag()<=publishModule.getBatchTotal()){
+                /** 更新当前批次 */
+                publishModule.setNowBatchTag(event.getNowBatchTag());
+                publishModuleDao.updateByIdSelective(publishModule);
+            }else{
+                continue;
+            }
 
             List<NebulaPublishHost> publishHosts = publishModule.getPublishHosts();
             List<String> targets = new ArrayList<String>();
             for (NebulaPublishHost nebulaPublishHost : publishHosts) {
-                targets.add(nebulaPublishHost.getPassPublishHostIp());
+                if(nebulaPublishHost.getBatchTag().equals(event.getNowBatchTag())){
+                    targets.add(nebulaPublishHost.getPassPublishHostIp());
+                }
             }
 
             HashMap<String, String> lnMap = new HashMap<String, String>();
