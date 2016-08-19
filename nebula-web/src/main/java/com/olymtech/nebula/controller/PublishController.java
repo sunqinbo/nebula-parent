@@ -164,7 +164,8 @@ public class PublishController extends BaseController {
             nebulaPublishEvent.setApproveUser(userService.selectByEmpId(approveEmpId));
         }
         List<NebulaPublishModule> publishModules = publishModuleService.selectByEventId(id);
-        List<FileChangeData> fileChangeDatas = publishEventService.changeListJsonStringToList(nebulaPublishEvent.getChangeList());
+        List<FileChangeData> fileChangeDatas = publishEventService.changeListJsonStringToList(nebulaPublishEvent
+                .getChangeList());
         model.addAttribute("fileChangeDatas", fileChangeDatas);
         model.addAttribute("Modules", publishModules);
         model.addAttribute("Event", nebulaPublishEvent);
@@ -201,7 +202,8 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setSubmitEmpId(empId);
 
         int id = publishEventService.createPublishEvent(nebulaPublishEvent);
-        publishEventLogService.logPublishAction(nebulaPublishEvent.getId(), LogAction.APPLY_PUBLISH_EVENT, getLoginUser().getNickname() + "申请创建发布事件成功!", getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(nebulaPublishEvent.getId(), LogAction.APPLY_PUBLISH_EVENT,
+                getLoginUser().getNickname() + "申请创建发布事件成功!", getLoginUser().getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -210,7 +212,8 @@ public class PublishController extends BaseController {
      */
     @RequestMapping(value = "/checkPublishSchedule", method = {RequestMethod.POST})
     @ResponseBody
-    public Callback checkPublishScheduleByEventId(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Callback checkPublishScheduleByEventId(HttpServletRequest request, HttpServletResponse response) throws
+            Exception {
         String idString = request.getParameter("id");
         if (!StringUtils.isNotEmpty(idString)) {
             return returnCallback("Error", "id is null");
@@ -352,7 +355,8 @@ public class PublishController extends BaseController {
         if (callback.getCallbackMsg().equals("Error")) {
             return callback;
         } else {
-            publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH, "启动正式发布成功", loginUser.getEmpId());
+            publishEventLogService.logPublishAction(eventId, LogAction.START_FORMAL_PUBLISH, "启动正式发布成功", loginUser
+                    .getEmpId());
             return callback;
         }
 
@@ -424,9 +428,11 @@ public class PublishController extends BaseController {
              * 总批次 > 1; 正式发布、回滚、重启tomcat
              * 批次发布，chain为 整个group
              */
-            logger.info("[INFO]publishContinue batchTotal:"+nebulaPublishEvent.getBatchTotal()+" actionGroup:"+actionGroup);
-            if(nebulaPublishEvent.getBatchTotal() > 1 &&
-                    (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT) ){
+            logger.info("[INFO]publishContinue batchTotal:" + nebulaPublishEvent.getBatchTotal() + " actionGroup:" +
+                    actionGroup);
+            if (nebulaPublishEvent.getBatchTotal() > 1 &&
+                    (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END ||
+                            actionGroup == PublishActionGroup.RESTART_TOMCAT)) {
                 logger.info("[INFO]publishContinue to create 'batch' publish chain.");
                 for (NebulaPublishSequence publishSequence : publishSequences) {
                     if (publishSequence.getActionClass() == null || "".equals(publishSequence.getActionClass())) {
@@ -437,7 +443,7 @@ public class PublishController extends BaseController {
                     Action action = (Action) SpringUtils.getBean(Class.forName(actionClassName));
                     chain.addAction(action);
                 }
-            }else{
+            } else {
                 logger.info("[INFO]publishContinue to create 'normal' publish chain.");
                 for (NebulaPublishSequence publishSequence : publishSequences) {
                     nebulaPublishEvent.setPublishActionGroup(publishSequence.getActionGroup());
@@ -458,13 +464,15 @@ public class PublishController extends BaseController {
 
 
             /** 确认成功、回滚、取消发布，需要清除发布目录 */
-            if(actionGroup == PublishActionGroup.SUCCESS_END||actionGroup == PublishActionGroup.FAIL_END||actionGroup == PublishActionGroup.CANCEL_END){
+            if (actionGroup == PublishActionGroup.SUCCESS_END || actionGroup == PublishActionGroup.FAIL_END ||
+                    actionGroup == PublishActionGroup.CANCEL_END) {
                 chain.addAction(SpringUtils.getBean(CleanPublishDirAction.class));
             }
 
             if (chain.getActions().size() != 0) {
                 /** 这三个actiongroup需要批次发布 */
-                if (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END || actionGroup == PublishActionGroup.RESTART_TOMCAT) {
+                if (actionGroup == PublishActionGroup.PUBLISH_REAL || actionGroup == PublishActionGroup.FAIL_END ||
+                        actionGroup == PublishActionGroup.RESTART_TOMCAT) {
 
                     /** 批次发布 */
                     Callback callback = publishEventService.batchPublish(chain, nebulaPublishEvent, request, response);
@@ -516,14 +524,15 @@ public class PublishController extends BaseController {
             Dispatcher dispatcher = new Dispatcher(chain, request, response);
             Boolean result = dispatcher.doDispatch(publishEvent);
 
-            if(result){
+            if (result) {
                 /** 更新事件单为 成功发布 */
-                publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser.getEmpId());
+                publishEventLogService.logPublishAction(eventId, LogAction.CONFIRM_SUCCESS, "确认发布成功", loginUser
+                        .getEmpId());
 
                 /** 通知quarry部署完成 */
                 quarryApiService.notifyDeployEndToQuarry(publishEvent);
                 return returnCallback("Success", "'成功发布'确认成功");
-            }else{
+            } else {
                 return returnCallback("Success", "'成功发布'确认失败");
             }
         } catch (Exception e) {
@@ -747,20 +756,26 @@ public class PublishController extends BaseController {
 
         /** 生产环境 编辑etc后，需要审核 */
         if (publishEvent.getPublishEnv().equals("product")) {
-            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup
+                    .PRE_MASTER, true, "");
 
             /** 配置变更为空（配置无变更），不需要审批 */
             NebulaPublishEvent publishEventInDB = publishEventService.selectWithChildByEventId(eventId);
             if (publishEventInDB.getChangeList().equals("{}")) {
-                publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+                publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup
+                        .PRE_MASTER, true, "");
             } else {
-                publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, null, "");
+                publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup
+                        .PRE_MASTER, null, "");
             }
         } else {
-            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER, true, "");
-            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup
+                    .PRE_MASTER, true, "");
+            publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup
+                    .PRE_MASTER, true, "");
         }
-        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT, "完成配置编辑", getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.FINISH_ETC_EDIT, "完成配置编辑", getLoginUser().getEmpId
+                ());
         return returnCallback("Success", "完成配置编辑");
     }
 
@@ -773,8 +788,10 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "id参数为空");
         }
         Integer eventId = Integer.parseInt(eventIdString);
-        publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER, true, "");
-        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL, "配置审批通过", getLoginUser().getEmpId());
+        publishScheduleService.logScheduleByAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER,
+                true, "");
+        publishEventLogService.logPublishAction(eventId, LogAction.CONFIGURATION_APPROVAL, "配置审批通过", getLoginUser()
+                .getEmpId());
         return returnCallback("Success", "审批通过");
     }
 
@@ -787,8 +804,10 @@ public class PublishController extends BaseController {
             return returnCallback("Error", "id参数为空");
         }
         Integer eventId = Integer.parseInt(eventIdString);
-        NebulaPublishSchedule etcApproveSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction.ETC_APPROVE, PublishActionGroup.PRE_MASTER);
-        NebulaPublishSchedule updateEtcSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction.UPDATE_ETC, PublishActionGroup.PRE_MASTER);
+        NebulaPublishSchedule etcApproveSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction
+                .ETC_APPROVE, PublishActionGroup.PRE_MASTER);
+        NebulaPublishSchedule updateEtcSchedule = publishScheduleService.selectEntryAction(eventId, PublishAction
+                .UPDATE_ETC, PublishActionGroup.PRE_MASTER);
 
         if (etcApproveSchedule == null) {
             return returnCallback("Error", "审批驳回失败：审批流程获取失败");
@@ -813,7 +832,8 @@ public class PublishController extends BaseController {
     @ResponseBody
     public Object publishProcessGetStep(Integer eventId) throws Exception {
         String[] groupPreMaster = {"GET_PUBLISH_SVN", "ANALYZE_PROJECT", "GET_SRC_SVN", "UPDATE_ETC", "ETC_APPROVE"};
-        String[] groupPreMinion = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR", "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
+        String[] groupPreMinion = {"CREATE_PUBLISH_DIR", "COPY_PUBLISH_OLD_ETC", "COPY_PUBLISH_OLD_WAR",
+                "PUBLISH_NEW_ETC", "PUBLISH_NEW_WAR"};
         String[] groupPublishReal = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CHECK_HEALTH"};
         String[] groupFailEnd = {"STOP_TOMCAT", "CHANGE_LN", "START_TOMCAT", "CHECK_HEALTH", "CLEAN_FAIL_DIR"};
         String[] groupSuccessEnd = {"CLEAN_HISTORY_DIR", "UPDATE_SRC_SVN"};
@@ -829,7 +849,8 @@ public class PublishController extends BaseController {
         if (last != 0) {
             int lastItem = 0;
             for (int i = 0; i < nebulaPublishSchedules.size(); i++) {
-                if (nebulaPublishSchedules.get(i).getIsSuccessAction() == null || !nebulaPublishSchedules.get(i).getIsSuccessAction()) {
+                if (nebulaPublishSchedules.get(i).getIsSuccessAction() == null || !nebulaPublishSchedules.get(i)
+                        .getIsSuccessAction()) {
                     nebulaPublishSchedule = nebulaPublishSchedules.get(i);
                     lastItem = i;
                     break;
@@ -872,12 +893,12 @@ public class PublishController extends BaseController {
                     break;
             }
             if (actionGroup == 3 || actionGroup == 4 || actionGroup == 7) {
-                if(event.getNowBatchTag() == null){
+                if (event.getNowBatchTag() == null) {
 
-                }else if(event.getIsBatchFinish() == null){
+                } else if (event.getIsBatchFinish() == null) {
                     actionState = null;
-                }else if (!event.getNowBatchTag().equals(event.getBatchTotal()) || !event.getIsBatchFinish()) {
-                    if(actionState != null && actionState){
+                } else if (!event.getNowBatchTag().equals(event.getBatchTotal()) || !event.getIsBatchFinish()) {
+                    if (actionState != null && actionState) {
                         actionState = null;
                     }
                 }
@@ -940,8 +961,10 @@ public class PublishController extends BaseController {
             List<NebulaPublishHost> nebulaPublishHosts = publishHostService.selectByEventIdAndModuleId(eventId, null);
             NebulaPublishEvent nebulaPublishEvent = publishEventService.selectById(eventId);
             for (NebulaPublishHost nebulaPublishHost : nebulaPublishHosts) {
-                nebulaPublishHost.setLogNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "ERROR"));
-                nebulaPublishHost.setExcNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent, nebulaPublishHost, "EXCEPTION"));
+                nebulaPublishHost.setLogNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent,
+                        nebulaPublishHost, "ERROR"));
+                nebulaPublishHost.setExcNumber(publishEventService.getPublishLogHostLogCount(nebulaPublishEvent,
+                        nebulaPublishHost, "EXCEPTION"));
             }
             map.put("HostInfos", nebulaPublishHosts);
             map.put("eventStatus", nebulaPublishEvent.getPublishStatus());
@@ -987,7 +1010,8 @@ public class PublishController extends BaseController {
         publishEvent.setPid(id);
         publishEventService.updateByIdSelective(publishEvent);
 
-        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH, "发布升级完成", getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.ENTER_NEXT_PUBLISH, "发布升级完成", getLoginUser()
+                .getEmpId());
         return returnCallback("Success", id);
     }
 
@@ -1014,7 +1038,8 @@ public class PublishController extends BaseController {
         nebulaPublishEvent.setApproveDatetime(new Date());
         publishEventService.update(nebulaPublishEvent);
 
-        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_APPROVE, "发布审批通过", getLoginUser().getEmpId());
+        publishEventLogService.logPublishAction(eventId, LogAction.PUBLISH_APPROVE, "发布审批通过", getLoginUser().getEmpId
+                ());
         return returnCallback("Success", "");
     }
 
@@ -1057,7 +1082,8 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/list/describeRefreshTasks", method = {RequestMethod.POST})
     @ResponseBody
     public Object getDescribeRefreshTasks() {
-        DescribeRefreshTasksResponse describeRefreshTasksResponse = starryCdnApi.describeRefreshTasks("olymtech@aliyun.com", "cn-hangzhou");
+        DescribeRefreshTasksResponse describeRefreshTasksResponse = starryCdnApi.describeRefreshTasks
+                ("olymtech@aliyun.com", "cn-hangzhou");
         if (describeRefreshTasksResponse != null) {
             return returnCallback("Success", describeRefreshTasksResponse);
         } else {
@@ -1071,13 +1097,15 @@ public class PublishController extends BaseController {
     @RequestMapping(value = "/add/refreshObjectCaches", method = {RequestMethod.POST})
     @ResponseBody
     public Object refreshObjectCaches(String objectPath, String objectType) {
-        String[] object = {"http://pstage.200jit.com/", "http://pptest.200jit.com/", "http://pmtest.200jit.com/", "http://patest.200jit.com/", "http://www.cargopm.com/"};
+        String[] object = {"http://pstage.200jit.com/", "http://pptest.200jit.com/", "http://pmtest.200jit.com/",
+                "http://patest.200jit.com/", "http://www.cargopm.com/"};
         List<String> objectPathList = Arrays.asList(object);
         Boolean result = objectPathList.contains(objectPath);
         if (!result) {
             return returnCallback("Error", "您提交的地址，不在刷新列表内");
         }
-        RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.refreshObjectCaches("olymtech@aliyun.com", "cn-hangzhou", objectPath, objectType);
+        RefreshObjectCachesResponse refreshObjectCachesResponse = starryCdnApi.refreshObjectCaches("olymtech@aliyun" +
+                ".com", "cn-hangzhou", objectPath, objectType);
         if (refreshObjectCachesResponse != null) {
             return returnCallback("Success", refreshObjectCachesResponse);
         } else {
@@ -1096,9 +1124,11 @@ public class PublishController extends BaseController {
     public Object getLoadBalancerAttribute(Integer eventId) {
         List<NebulaPublishSlb> publishSlbs = publishSlbService.selectByPublishEventId(eventId);
         for (NebulaPublishSlb publishSlb : publishSlbs) {
-            DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi.describeLoadBalancerAttribute(publishSlb);
+            DescribeLoadBalancerAttributeResponse loadBalancerAttributeResponse = starrySlbApi
+                    .describeLoadBalancerAttribute(publishSlb);
             publishSlb.setDescribeLoadBalancerAttributeResponse(loadBalancerAttributeResponse);
-            DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks(publishSlb);
+            DescribeHealthStatusResponse describeHealthStatusResponse = starrySlbApi.describeHealthStatusTasks
+                    (publishSlb);
             publishSlb.setDescribeHealthStatusResponse(describeHealthStatusResponse);
         }
         return returnCallback("Success", publishSlbs);
@@ -1142,7 +1172,8 @@ public class PublishController extends BaseController {
 //        }
 //        return returnCallback("Success", map);
 //    }
-    /*public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String logType) {
+    /*public int getPublishLogHostLogCount(NebulaPublishEvent publishEvent, NebulaPublishHost publishHost, String
+    logType) {
 //        NebulaPublishEvent publishEvent = (NebulaPublishEvent) publishEventService.getPublishEventById(eventId);
 
         if (publishEvent.getPublishDatetime() == null) {
@@ -1150,7 +1181,8 @@ public class PublishController extends BaseController {
         }
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(new Date(), -8);
-        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate, toDate, 1, 10);
+        ElkSearchData elkSearchData = new ElkSearchData(publishHost.getPassPublishHostName(), logType, fromDate,
+        toDate, 1, 10);
         return elkLogService.count(elkSearchData,publishEvent.getPublishEnv());
     }
         return elkLogService.count(elkSearchData);
@@ -1170,7 +1202,8 @@ public class PublishController extends BaseController {
         Date fromDate = DateUtils.getDateByGivenHour(publishEvent.getPublishDatetime(), -8);
         Date toDate = DateUtils.getDateByGivenHour(DateUtils.strToDate(elkSearchDataReuqest.getToDateString()), -8);
         /** 如果 已发布 已回滚 已取消 ，toDate重新设置为发布结束时间 */
-        if (PublishStatus.PUBLISHED == publishEvent.getPublishStatus() || PublishStatus.ROLLBACK == publishEvent.getPublishStatus() || PublishStatus.CANCEL == publishEvent.getPublishStatus()) {
+        if (PublishStatus.PUBLISHED == publishEvent.getPublishStatus() || PublishStatus.ROLLBACK == publishEvent
+                .getPublishStatus() || PublishStatus.CANCEL == publishEvent.getPublishStatus()) {
             if (publishEvent.getPublishEndDatetime() != null) {
                 toDate = DateUtils.getDateByGivenHour(publishEvent.getPublishEndDatetime(), -8);
             }
@@ -1180,7 +1213,8 @@ public class PublishController extends BaseController {
             elkSearchDataReuqest.setPageNum(1);
         }
         ElkSearchData elkSearchData = new ElkSearchData(elkSearchDataReuqest.getHost(),
-                elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(), elkSearchDataReuqest.getPageSize());
+                elkSearchDataReuqest.getKeyWord(), fromDate, toDate, elkSearchDataReuqest.getPageNum(),
+                elkSearchDataReuqest.getPageSize());
         PageInfo pageInfo = elkLogService.search(elkSearchData, publishEvent.getPublishEnv());
         return returnCallback("Success", pageInfo);
     }
@@ -1251,7 +1285,8 @@ public class PublishController extends BaseController {
         NebulaPublishEvent publishEvent = publishEventService.selectWithChildByEventId(eventId);
         String publishEtcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_svn/etc" + key;
         String oldEtcPath = MasterDeployDir + publishEvent.getPublishProductKey() + "/src_etc" + key;
-//        String dirSrcPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_svn\\etc" + key;
+//        String dirSrcPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_svn\\etc"
+// + key;
 //        String destPath = "F:\\home\\saas\\deploy_tmp\\" + publishEvent.getPublishProductKey() + "\\src_etc" + key;
         if (!publishEvent.getPublishEnv().equals("product")) {
             return returnCallback("Error", "发布环境不是生产");

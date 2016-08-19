@@ -21,18 +21,18 @@ function getLtb(pageNum){
         type: "post",
         url: "/user/list",
         data: {
-            "pageSize":10,
-            "pageNum":pageNum,
-            "nickname":$("#nickname_query").val()
+            "pageSize": 10,
+            "pageNum": pageNum,
+            "nickname": $("#nickname_query").val()
         },
         datetype: "json",
         success: function (data) {
-            var tbString="";
+            var tbString = "";
             var totalPage;
-            for(var i=0;i<data["list"].length;i++){
-                var edit_btn="";
-                var delete_btn="";
-                for(var j= 0,len=globelLoginUserPermission.length;j<len;j++) {
+            for (var i = 0; i < data["list"].length; i++) {
+                var edit_btn = "";
+                var delete_btn = "";
+                for (var j = 0, len = globelLoginUserPermission.length; j < len; j++) {
                     if (globelLoginUserPermission[j] == "user:update") {
                         edit_btn = "<button class='btn btn-success btn-sm' type='button'>编辑</button>";
                     }
@@ -41,42 +41,42 @@ function getLtb(pageNum){
                     }
                 }
                 //var isEnable=data["list"][i]["isEnable"]==1?"是":"否";
-                var rolelist="";
-                for(var j= 0,rolelen=data["list"][i]["aclRoles"].length;j<rolelen;j++){
-                    rolelist+=data["list"][i]["aclRoles"][j]["roleCname"]+",";
+                var rolelist = "";
+                for (var j = 0, rolelen = data["list"][i]["aclRoles"].length; j < rolelen; j++) {
+                    rolelist += data["list"][i]["aclRoles"][j]["roleCname"] + ",";
                 }
-                rolelist=rolelist.substring(0, rolelist.length - 1);
-                var usernameColor="<td style='color: red'>";
-                if(data["list"][i]["isEnable"]==1){
-                    usernameColor="<td style='color: green'>";
+                rolelist = rolelist.substring(0, rolelist.length - 1);
+                var usernameColor = "<td style='color: red'>";
+                if (data["list"][i]["isEnable"] == 1) {
+                    usernameColor = "<td style='color: green'>";
                 }
-                var gIsVerify="否";
-                if(data["list"][i]["gIsVerify"]){
-                    gIsVerify="是";
+                var gIsVerify = "否";
+                if (data["list"][i]["gIsVerify"]) {
+                    gIsVerify = "是";
                 }
-                tbString=tbString+"<tr><td hidden>"+data["list"][i]["id"]+"</td>" +
-                    "<td>"+data["list"][i]["empId"]+
-                    usernameColor+ data["list"][i]["username"]+
-                    //"</td><td>"+data["list"][i]["mobilePhone"]+
-                    //"</td><td>"+data["list"][i]["weixinAcc"]+
-                    //"</td><td>"+data["list"][i]["qqAcc"]+
-                    //"</td><td>"+data["list"][i]["email"]+
-                    "</td><td>"+data["list"][i]["nickname"]+
-                    "</td><td>"+data["list"][i]["bu"]+
-                    "</td><td>"+data["list"][i]["deptName"]+
-                    "</td><td>"+data["list"][i]["jobTitle"]+
-                    //"</td><td>"+data["list"][i]["empId"]+
-                    "</td><td>"+data["list"][i]["supervisorEmpId"]+
-                    "</td><td>"+rolelist+
-                    "</td><td>"+gIsVerify+
-                    //"</td><td>"+isEnable+
-                    "</td><td><div id='listBtn' class='btn-group'>"+edit_btn+delete_btn+"</div></td>";
+                tbString = tbString + "<tr><td hidden>" + data["list"][i]["id"] + "</td>" +
+                    "<td>" + data["list"][i]["empId"] +
+                    usernameColor + data["list"][i]["username"] +
+                        //"</td><td>"+data["list"][i]["mobilePhone"]+
+                        //"</td><td>"+data["list"][i]["weixinAcc"]+
+                        //"</td><td>"+data["list"][i]["qqAcc"]+
+                        //"</td><td>"+data["list"][i]["email"]+
+                    "</td><td>" + data["list"][i]["nickname"] +
+                    "</td><td>" + data["list"][i]["bu"] +
+                    "</td><td>" + data["list"][i]["deptName"] +
+                    "</td><td>" + data["list"][i]["jobTitle"] +
+                        //"</td><td>"+data["list"][i]["empId"]+
+                    "</td><td>" + data["list"][i]["supervisorEmpId"] +
+                    "</td><td>" + rolelist +
+                    "</td><td>" + gIsVerify +
+                        //"</td><td>"+isEnable+
+                    "</td><td><div id='listBtn' class='btn-group'>" + edit_btn + delete_btn + "</div></td>";
             }
             $("tbody").html(tbString);
             listBtn(pageNum);
-            totalPage=data["pages"];
+            totalPage = data["pages"];
             //pageSort(totalPage,pageNum);
-            (function() {
+            (function () {
                 $('#pageSort').pagination({
                     pages: totalPage,
                     styleClass: ['pagination-large'],
@@ -86,20 +86,21 @@ function getLtb(pageNum){
                         getLtb(num);  //分页点击
                     }
                 });
-                $('#pageSort').pagination('updatePages',totalPage);
+                $('#pageSort').pagination('updatePages', totalPage);
             })();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             $.notify({
                 icon: '',
-                message: "很抱歉，获取列表失败，原因"+ errorThrown
+                message: "很抱歉，获取列表失败，原因" + errorThrown
 
-            },{
+            }, {
                 type: 'info',
                 timer: 1000
             });
         }
-    })
+    });
+
 }
 
 //分页的div控制
@@ -141,7 +142,7 @@ function getLtb(pageNum){
 
 //删除，编辑按钮事件
 function listBtn(pageNum){
-    $("#listBtn>button").each(function(){
+    $("#listBtn>button").each(function() {
         if($(this).text()=="删除") {
             $(this).click(function() {
                 var ms = confirm("确认删除么？");

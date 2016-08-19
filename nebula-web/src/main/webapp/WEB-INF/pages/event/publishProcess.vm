@@ -6,8 +6,8 @@
 ##<script type="text/javascript" src="/public/assets/processbar/js/jquery.min.js"></script>
 <!-- 引入ystep插件 -->
 <script type="text/javascript" src="/public/assets/processbar/js/ystep.js"></script>
-    <script src="/public/assets/js/demo.js"></script>
-    <script src = "/public/assets/js/bootstrap-notify.js" ></script>
+<script src="/public/assets/js/demo.js"></script>
+<script src="/public/assets/js/bootstrap-notify.js"></script>
 <!--引入分页插件-->
 <link href="/public/plugins/sui/sui.min.css" rel="stylesheet"/>
 <script src="/public/plugins/sui/sui.min.js"></script>
@@ -51,7 +51,9 @@
                         #if(${Event.isApproved})
                             <button style="float: right" class="btn btn-xs" type="button" id="detail_btn">展开</button>
                         #end
-                        <button   style="margin-right: 20px;float: right" class="btn btn-warning btn-sm" type="button" onclick="showChangeListModal()">发布变更</button>
+                        <button style="margin-right: 20px;float: right" class="btn btn-warning btn-sm" type="button"
+                                onclick="showChangeListModal()">发布变更
+                        </button>
                     </div>
                     <div style="text-align: center;">
                     ##                        <label style="font-size: large">标题：</label>
@@ -115,7 +117,8 @@
                             ##                                        'yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</label>
                             ##                                </td>
                             </tr>
-                            <input hidden type="text" id="publishEndTime" value="$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishEndDatetime)"/>
+                            <input hidden type="text" id="publishEndTime"
+                                   value="$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishEndDatetime)"/>
                             </tbody>
                         </table>
                         <div>
@@ -141,7 +144,8 @@
                                 <tr>
                                     <td>发布</td>
                                     <td>$!{Event.publishUser.nickname}</td>
-                                    <td id="publishDatetime">$!date.format('yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</td>
+                                    <td id="publishDatetime">$!date.format(
+                                        'yyyy-MM-dd HH:mm:ss ',$!Event.publishDatetime)</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -222,22 +226,26 @@
                                 #end
                                 #if($shiro.hasPermission("publishevnt:publishReal"))
                                     <button type="button" style="display: none" id="restartTomcat_btn"
-                                            class="btn btn-danger" onclick="nebula.publish.process.restartTomcat()">重启tomcat
+                                            class="btn btn-danger" onclick="nebula.publish.process.restartTomcat()">
+                                        重启tomcat
                                     </button>
                                 #end
                                 #if($shiro.hasPermission("publishevnt:retryPublishRollback"))
-                                    <button type="button" style="display: none" id="restartPublish" class="btn btn-danger"
+                                    <button type="button" style="display: none" id="restartPublish"
+                                            class="btn btn-danger"
                                             onclick="nebula.publish.process.retryPublishRollback()">重新发布
                                     </button>
                                 #end
                                 #if($shiro.hasPermission("publishevnt:publishReal"))
-                                    <button type="button" style="display: none" id="cancelPublish" class="btn btn-danger"
+                                    <button type="button" style="display: none" id="cancelPublish"
+                                            class="btn btn-danger"
                                             onclick="nebula.publish.process.cancelPublish()">取消发布
                                     </button>
                                 #end
                                 #if(!$Event.pid)
                                     #if($shiro.hasPermission("publishevnt:publishReal"))
-                                        <button type="button" style="display: none" id="backPublish" class="btn btn-danger"
+                                        <button type="button" style="display: none" id="backPublish"
+                                                class="btn btn-danger"
                                                 onclick="nebula.publish.process.publishFailEnd()">版本回退
                                         </button>
                                     #end
@@ -266,17 +274,21 @@
                             <hr/>
                             <div id="processbar1" class="ystep4"></div>
                             <div id="etc_btns" style="display: none;margin-top: 30px">
-                                #if($shiro.hasPermission("publishevnt:updateEtc")||$!{Event.publishEnv}=="test1"||$!{Event.publishEnv}=="test2"||$!{Event.publishEnv}=="test3")
+                                #if($shiro.hasPermission("publishevnt:updateEtc")||$!{Event.publishEnv}==
+                                    "test1"||$!{Event.publishEnv}=="test2"||$!{Event.publishEnv}=="test3")
                                     <button type='button' id='etc_btn' class='btn btn-info'>编辑etc</button>
                                 #end
-                                #if($shiro.hasPermission("publishevnt:updateEtcEnd")||$!{Event.publishEnv}=="test1"||$!{Event.publishEnv}=="test2"||$!{Event.publishEnv}=="test3")
+                                #if($shiro.hasPermission("publishevnt:updateEtcEnd")||$!{Event.publishEnv}==
+                                    "test1"||$!{Event.publishEnv}=="test2"||$!{Event.publishEnv}=="test3")
                                     <button type='button' id='edit_success' style='margin-left: 30px'
                                             class='btn btn-info'>编辑完成
                                     </button>
                                 #end
                             </div>
                             #if($shiro.hasPermission("publishevnt:etcApprove")&&$!{Event.publishEnv}=="product")
-                                <button style="margin-top: 30px;display: none" type='button' id='etc_Approve_btn' class='btn btn-info'>审核配置</button>
+                                <button style="margin-top: 30px;display: none" type='button' id='etc_Approve_btn'
+                                        class='btn btn-info'>审核配置
+                                </button>
                             #end
                         </div>
                     </div>
@@ -542,10 +554,10 @@
                 <h4 style="color: #0089db" class="modal-title">动态验证码验证</h4>
             </div>
             <div class="modal-body">
-                    <div >
-                        <label>动态验证码：</label>
-                        <input type="text" id="code_momdal" class="form-control"/>
-                    </div>
+                <div>
+                    <label>动态验证码：</label>
+                    <input type="text" id="code_momdal" class="form-control"/>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -575,14 +587,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        #foreach($fileChange in $!fileChangeDatas)
-                            <tr><td>$!fileChange.filename</td><td><textarea id="publishRemark_lb" class="form-control" disabled style="resize: none;"  rows="8" >$!fileChange.change</textarea></td><td>$!fileChange.time</td></tr>
-                        #end
+                            #foreach($fileChange in $!fileChangeDatas)
+                            <tr>
+                                <td>$!fileChange.filename</td>
+                                <td><textarea id="publishRemark_lb" class="form-control" disabled style="resize: none;"
+                                              rows="8">$!fileChange.change</textarea></td>
+                                <td>$!fileChange.time</td>
+                            </tr>
+                            #end
                         </tbody>
                     </table>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布备注:</label>
-                        <textarea class="form-control" disabled style="resize: none;width: 70%"  rows="8" >$!{Event.publishRemark}</textarea>
+                        <textarea class="form-control" disabled style="resize: none;width: 70%"
+                                  rows="8">$!{Event.publishRemark}</textarea>
                     </div>
                 </div>
             </div>

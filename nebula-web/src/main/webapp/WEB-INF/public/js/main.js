@@ -238,7 +238,7 @@ nebula.publish.event.createPublishEvent = function(){
     $("#publishBuCname_lb").text(publishBuCname)
     $("#publishProductCname_lb").text(publishProductCname)
     $("#publishEnv_lb").text($("#select-publich-env").find("option:selected").text())
-    $("#publishSvn_lb").text(publishSvn)
+    $("#publishSvn_lb").text(publishSvn);
     $("#publishRemark_lb").text($("#publishRemark").val());
     $('#eventTipModal').modal('show');
 };

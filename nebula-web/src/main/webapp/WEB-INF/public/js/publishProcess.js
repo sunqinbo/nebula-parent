@@ -1,24 +1,24 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-    $("#detail_btn").click(function(){
-        if($("#detail_btn").text()=="展开") {
+    $("#detail_btn").click(function () {
+        if ($("#detail_btn").text() == "展开") {
             $("#detail_btn").text("收缩");
         }
-        else{
+        else {
             $("#detail_btn").text("展开");
         }
         $("#detail").slideToggle("swing");
     })
 
     //审批按钮
-    $("#approval_btn").click(function(){
+    $("#approval_btn").click(function () {
         approvalBtn();
         //$("#approval_btn").attr('disabled', true).removeClass("btn-info");
     });
 
     //编辑etc
     $("#etc_btn").click(function () {
-        window.open('/etc_edit/fileEdit.htm?id='+$("#eventId").val());
+        window.open('/etc_edit/fileEdit.htm?id=' + $("#eventId").val());
     })
     //编辑etc完成
     $("#edit_success").click(function () {
@@ -30,10 +30,10 @@ $(document).ready(function(){
                 async: false,
                 data: {"id": $("#eventId").val()},
                 success: function (data) {
-                    if(!data.callbackMsg){
-                        data=JSON.parse(data);
+                    if (!data.callbackMsg) {
+                        data = JSON.parse(data);
                     }
-                    if(data.callbackMsg=="Error") {
+                    if (data.callbackMsg == "Error") {
                         nebula.common.alert.danger(data.responseContext, 1000);
                         return;
                     }
@@ -45,7 +45,7 @@ $(document).ready(function(){
                     }
                 },
                 error: function (errorThrown) {
-                    nebula.common.alert.danger( "完成编辑失败，原因" + errorThrown, 1000);
+                    nebula.common.alert.danger("完成编辑失败，原因" + errorThrown, 1000);
                 }
             });
             $("#etc_btns").hide();
@@ -56,16 +56,16 @@ $(document).ready(function(){
     //发布事件阶段跳转按钮文字控制
     checkPublishBtnSet();
 
-    $("#modalCheck_btn").click(function(){
+    $("#modalCheck_btn").click(function () {
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: "/publish/list/describeRefreshTasks",
-            dataType:"json",
+            dataType: "json",
             success: function (data) {
-                if(!data.callbackMsg){
-                    data=JSON.parse(data);
+                if (!data.callbackMsg) {
+                    data = JSON.parse(data);
                 }
-                if(data.callbackMsg=="Success") {
+                if (data.callbackMsg == "Success") {
                     var modal_tbString = ""
                     for (var i = 0, modallen = data.responseContext.tasks.length; i < modallen; i++) {
                         var task = data.responseContext.tasks[i];
@@ -77,7 +77,7 @@ $(document).ready(function(){
                     }
                     $("#modal_tb").html(modal_tbString);
                 }
-                else{
+                else {
                     nebula.common.alert.danger(data.responseContext, 1000);
                 }
             },
@@ -87,20 +87,20 @@ $(document).ready(function(){
         })
     });
 
-    $("#modalSubmit_btn").click(function(){
+    $("#modalSubmit_btn").click(function () {
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: "/publish/add/refreshObjectCaches",
-            data:{
-                objectPath:$("#modalUrl_select").find("option:selected").text(),
-                objectType:"Directory",
+            data: {
+                objectPath: $("#modalUrl_select").find("option:selected").text(),
+                objectType: "Directory",
             },
-            dataType:"json",
+            dataType: "json",
             success: function (data) {
-                if(!data.callbackMsg){
-                    data=JSON.parse(data);
+                if (!data.callbackMsg) {
+                    data = JSON.parse(data);
                 }
-                if(data.callbackMsg=="Error") {
+                if (data.callbackMsg == "Error") {
                     nebula.common.alert.danger(data.responseContext, 1000);
                     return;
                 }
@@ -124,10 +124,10 @@ $(document).ready(function(){
     $("#logModal").appendTo("body");
     $("#codeModal").appendTo("body");
     $('#changeModal').appendTo("body");
-    $("#refreshCDN").click(function(){
+    $("#refreshCDN").click(function () {
         $('#mymodal').modal('show');
     });
-    $("#modalCheck_btn").click(function(){
+    $("#modalCheck_btn").click(function () {
         $('#checkmodal').modal('show');
     });
 
@@ -155,8 +155,8 @@ $(document).ready(function(){
         }, {
             title: "编辑etc",
         }, {
-            title:"配置审核",
-        },{
+            title: "配置审核",
+        }, {
             title: "准备完成",
         }]
     });
@@ -188,7 +188,7 @@ $(document).ready(function(){
             title: "启动tomcat",
         }, {
             title: "健康检查",
-        },{
+        }, {
             title: "正式发布完成",
         }]
     });
@@ -229,7 +229,7 @@ $(document).ready(function(){
             title: "启动tomcat",
         }, {
             title: "健康检查",
-        },{
+        }, {
             title: "重启完成",
         }]
     });
@@ -251,15 +251,15 @@ $(document).ready(function(){
             url: "/publish/get/noPublish",
             datetype: "json",
             success: function (data) {
-                if(data.length>0){
+                if (data.length > 0) {
                     //var msg=""
                     //for(var i= 0,len=data.length;i<len;i++){
                     //    msg+=data[i]["id"]+",";
                     //}
-                    var msg=data[0]["id"];
-                    msg="很抱歉，该产品已有发布中的事件，请先"+"<a target='_blank' href='/publish/process.htm?id="+msg+"'>前往</a>结束该事件";
+                    var msg = data[0]["id"];
+                    msg = "很抱歉，该产品已有发布中的事件，请先" + "<a target='_blank' href='/publish/process.htm?id=" + msg + "'>前往</a>结束该事件";
                     //msg="很抱歉，该产品正在发布中,发布id为:"+msg+"请稍后再试";
-                    nebula.common.alert.warning(msg,1000);
+                    nebula.common.alert.warning(msg, 1000);
                     return;
                 }
                 else {
@@ -271,7 +271,7 @@ $(document).ready(function(){
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown,1000);
+                nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown, 1000);
                 return;
             }
         });
@@ -323,7 +323,7 @@ $(document).ready(function(){
         nebula.publish.process.preMinionPublish();
     });
     $("#btn3").click(function () {
-        if($("#publishEnv").text()=='product') {
+        if ($("#publishEnv").text() == 'product') {
             $('#codeModal').modal('show');
         }
         else {
@@ -372,7 +372,7 @@ $(document).ready(function(){
         $("#btn4").attr('disabled', true);
         $("#btn4").removeClass("btn-info");
     });
-    $("#backPublish").click(function(){
+    $("#backPublish").click(function () {
         $("#loading-status").show();
         $("#restartTomcat_btn").hide();
         $("#restartPublish").hide();
@@ -383,7 +383,7 @@ $(document).ready(function(){
     });
     //进入下一阶段的发布（禁用）
     $("#nextPublish").click(function () {
-        if ($("#publishEnv").html() == "test1"||$("#publishEnv").html() == "test2"||$("#publishEnv").html() == "test3") {
+        if ($("#publishEnv").html() == "test1" || $("#publishEnv").html() == "test2" || $("#publishEnv").html() == "test3") {
             nextPublish("stage");
         }
         if ($("#publishEnv").html() == "stage") {
@@ -391,14 +391,14 @@ $(document).ready(function(){
         }
     });
 
-    $("#freshControl_switch").find("label").css("width","0px");
+    $("#freshControl_switch").find("label").css("width", "0px");
 
     //自动刷新按钮点击事件
     $("#freshControl_switch").click(function () {
-        if($('#freshControl_checkbox').prop("checked")){
+        if ($('#freshControl_checkbox').prop("checked")) {
             $('#freshControl_switch').bootstrapSwitch('setState', true);
             $("#pageSort").hide();
-        } else{
+        } else {
             $('#freshControl_switch').bootstrapSwitch('setState', false);
             $("#pageSort").show();
         }
@@ -411,7 +411,7 @@ $(document).ready(function(){
     });
 
     //删除非.war文件
-    $("#deleteNoWar_btn").click(function(){
+    $("#deleteNoWar_btn").click(function () {
         $.ajax({
             async: false,
             data: {
@@ -421,10 +421,10 @@ $(document).ready(function(){
             url: "/publish/deleteErrorFiles",
             datetype: "json",
             success: function (data) {
-                if(!data.callbackMsg){
-                    data=JSON.parse(data);
+                if (!data.callbackMsg) {
+                    data = JSON.parse(data);
                 }
-                if(data.callbackMsg=="Error") {
+                if (data.callbackMsg == "Error") {
                     nebula.common.alert.danger(data.responseContext, 1000);
                     return;
                 }
@@ -432,14 +432,14 @@ $(document).ready(function(){
                 nebula.common.alert.success(data.responseContext, 1000);
             },
             error: function (errorThrown) {
-                nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown,1000);
+                nebula.common.alert.danger("很抱歉，获取发布事件信息失败，原因" + errorThrown, 1000);
             }
         });
     });
 
     //审核配置
-    $("#etc_Approve_btn").click(function(){
-        window.open('/etc_edit/checkList.htm?eventId='+$("#eventId").val());
+    $("#etc_Approve_btn").click(function () {
+        window.open('/etc_edit/checkList.htm?eventId=' + $("#eventId").val());
     });
 
     //重新发布
@@ -481,12 +481,12 @@ function Initialization() {
                 var isSuccessAction = "";
                 var actionResult = "";
                 var passPublishHostIp = "";
-                var logNumShow="";
+                var logNumShow = "";
                 var hostPublishStatus = "";
                 var batchTag = "";
                 var host = HostList[i];
                 if (HostList[i]["passPublishHostName"] != null)
-                    passPublishHostName =""+ HostList[i]["passPublishHostName"];
+                    passPublishHostName = "" + HostList[i]["passPublishHostName"];
                 if (HostList[i]["passPublishHostName"] != null)
                     passPublishHostIp = HostList[i]["passPublishHostIp"];
                 if (HostList[i]["actionName"] != null)
@@ -495,18 +495,18 @@ function Initialization() {
                     isSuccessAction = HostList[i]["isSuccessAction"];
                 if (HostList[i]["actionResult"] != null)
                     actionResult = HostList[i]["actionResult"];
-                hostPublishStatus = (host.hostPublishStatus!=null)?host.hostPublishStatus:"";
-                batchTag = (host.batchTag!=null)?host.batchTag:"";
+                hostPublishStatus = (host.hostPublishStatus != null) ? host.hostPublishStatus : "";
+                batchTag = (host.batchTag != null) ? host.batchTag : "";
                 //if(data.responseContext.eventStatus!="PUBLISHED"&&data.responseContext.eventStatus!="ROLLBACK"&&data.responseContext.eventStatus!="CANCEL")
                 //{
-                    logNumShow+="<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"ERROR"+"&quot;"+")' href='#'><span class='label label-danger'>error:"+
-                        HostList[i]["logNumber"]+"</span></a><br/><br/>"+"<a onclick='errorNumClick("+"&quot;"+passPublishHostName+"&quot;"+",&quot;"+"EXCEPTION"+"&quot;"+")' href='#'><span class='label label-danger'>exc:"+
-                        HostList[i]["excNumber"]+"</span></a>";
+                logNumShow += "<a onclick='errorNumClick(" + "&quot;" + passPublishHostName + "&quot;" + ",&quot;" + "ERROR" + "&quot;" + ")' href='#'><span class='label label-danger'>error:" +
+                    HostList[i]["logNumber"] + "</span></a><br/><br/>" + "<a onclick='errorNumClick(" + "&quot;" + passPublishHostName + "&quot;" + ",&quot;" + "EXCEPTION" + "&quot;" + ")' href='#'><span class='label label-danger'>exc:" +
+                    HostList[i]["excNumber"] + "</span></a>";
                 //}
                 tbString = tbString + "<tr><td>" + passPublishHostName + "</td><td>" + passPublishHostIp + "</td><td>" +
                     nebula.common.transform.publishAction(actionName) + "</td><td>" + nebula.common.transform.hostPublishStatus(hostPublishStatus) +
-                    "</td><td>"+nebula.common.transform.batchTag(batchTag)+"</td><td>" + actionResult +
-                    "</td><td>"+logNumShow+"</td></tr>";
+                    "</td><td>" + nebula.common.transform.batchTag(batchTag) + "</td><td>" + actionResult +
+                    "</td><td>" + logNumShow + "</td></tr>";
             }
             $("#hostInfo").html(tbString);
 
@@ -516,13 +516,13 @@ function Initialization() {
             actionState = data.responseContext.actionState + "";
 
             //按钮显示控制
-            if(actionGroup==6) {
+            if (actionGroup == 6) {
                 btnControl(data.responseContext.eventStatus);
             }
-            var lastGroup=data.responseContext.lastGroup;
+            var lastGroup = data.responseContext.lastGroup;
             btnUnclick();
             //动作不为编辑ETC 且正在执行，显示等待条
-            if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && (whichStep == 4||whichStep == 5))) {
+            if ((actionState == "null" || actionState == "") && !(actionGroup == 1 && (whichStep == 4 || whichStep == 5))) {
                 $("#loading-status").show();
             } else {
                 $("#loading-status").hide();
@@ -534,30 +534,30 @@ function Initialization() {
                 case 1:
                     lastStep = 5;
                     //获取模块信息
-                    if(whichStep>2&&$("#moduleAndApps tr").length==0){
+                    if (whichStep > 2 && $("#moduleAndApps tr").length == 0) {
                         $.ajax({
-                            data:{eventId: $("#eventId").val()},
-                            url:"/publish/list/moduleAndApps",
-                            datatype:"json",
+                            data: {eventId: $("#eventId").val()},
+                            url: "/publish/list/moduleAndApps",
+                            datatype: "json",
                             type: "post",
-                            success:function(data){
-                                var moduletbString=""
-                                for(var i= 0,len=data.length;i<len;i++){
-                                    var module=data[i];
-                                    moduletbString+="<tr><td>"+module.publishModuleName+"</td>"
-                                    +"<td>"+module.publishModuleKey+"</td><td>";
-                                    for(var j= 0,len1=module.publishApps.length;j<len1;j++){
-                                        var app=module.publishApps[j];
-                                        moduletbString+=app.publishAppName+";";
+                            success: function (data) {
+                                var moduletbString = ""
+                                for (var i = 0, len = data.length; i < len; i++) {
+                                    var module = data[i];
+                                    moduletbString += "<tr><td>" + module.publishModuleName + "</td>"
+                                        + "<td>" + module.publishModuleKey + "</td><td>";
+                                    for (var j = 0, len1 = module.publishApps.length; j < len1; j++) {
+                                        var app = module.publishApps[j];
+                                        moduletbString += app.publishAppName + ";";
                                     }
-                                    moduletbString+="</td></tr>"
+                                    moduletbString += "</td></tr>"
                                 }
                                 $("#moduleAndApps").html("");
                                 $("#moduleAndApps").html(moduletbString);
                             },
                             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                var msg="很抱歉，获取发布模块信息失败，原因" + errorThrown
-                                nebula.common.alert.danger(msg,1000);
+                                var msg = "很抱歉，获取发布模块信息失败，原因" + errorThrown
+                                nebula.common.alert.danger(msg, 1000);
                             }
                         })
                     }
@@ -587,7 +587,7 @@ function Initialization() {
                 //var false_btn = "<Button type='button' class='btn btn-info' onclick='nebula.publish.process.publishContinue()'>重试</Button>"
                 //$("#false_btn").html(false_btn);
                 $("#false_btn").show();
-                if(data.responseContext.errorType==1){
+                if (data.responseContext.errorType == 1) {
                     $("#deleteNoWar_btn").show();
                 }
                 $("#errorMsgDiv").html(data.responseContext.errorMsg);
@@ -622,7 +622,7 @@ function Initialization() {
                             }
                             else {
                                 $("#btn" + i).attr('disabled', true);
-                                $("#btn"+i).removeClass("btn-info");
+                                $("#btn" + i).removeClass("btn-info");
                             }
                         }
                         return;
@@ -664,7 +664,8 @@ function Initialization() {
                     //        $("#step4").show();
                     //    }
                     //    return;
-                    case 8: $("#step6").show();
+                    case 8:
+                        $("#step6").show();
                         $("#restartTomcat_btn").show();
                         $("#restartTomcat_btn").attr('disabled', false);
                         $("#restartTomcat_btn").addClass("btn-danger");
@@ -712,14 +713,14 @@ function Initialization() {
                 }
             }
             //动作为ect开始时
-            if (actionGroup == 1 && (whichStep == 4||whichStep == 5) && (actionState == "" || actionState == "null")) {
+            if (actionGroup == 1 && (whichStep == 4 || whichStep == 5) && (actionState == "" || actionState == "null")) {
                 if (whichStep == 4) {
                     //添加编辑按钮
                     $("#restartPublish").show();
                     $("#cancelPublish").show();
 
                     $("#etc_btns").show();
-                }else{
+                } else {
                     $("#etc_Approve_btn").show();
                 }
             }
@@ -737,13 +738,13 @@ function Initialization() {
                     $("#step" + i).hide();
                 }
             }
-            if(actionGroup>5){
-                if(actionGroup!=6) {
+            if (actionGroup > 5) {
+                if (actionGroup != 6) {
                     $("#restartTomcat_btn").show();
                 }
                 $("#refreshCDN").show();
             }
-            if(actionGroup==7) {
+            if (actionGroup == 7) {
                 //$("#restartTomcat_btn").show();
                 $("#restartTomcat_btn").removeClass("btn-danger");
                 $("#backPublish").removeClass("btn-danger");
@@ -772,11 +773,12 @@ function Initialization() {
 }
 
 //按钮显示控制
-function btnControl(publishStatus){
-    switch (publishStatus){
-        case "PUBLISHED":var btn_text;
+function btnControl(publishStatus) {
+    switch (publishStatus) {
+        case "PUBLISHED":
+            var btn_text;
             $("#restartTomcat_btn").show();
-            if ($("#publishEnv").html() == "test1"||$("#publishEnv").html() == "test2"||$("#publishEnv").html() == "test3") {
+            if ($("#publishEnv").html() == "test1" || $("#publishEnv").html() == "test2" || $("#publishEnv").html() == "test3") {
                 btn_text = "准生产";
                 $("#nextPublish").text("进入" + btn_text).show();
             }
@@ -788,7 +790,8 @@ function btnControl(publishStatus){
             $("#processbar5").setStep(3);
             $("#step5").show();
             break;
-        case "ROLLBACK":$("#restartTomcat_btn").show();
+        case "ROLLBACK":
+            $("#restartTomcat_btn").show();
             $("#restartPublish").show();
             $("#processbar4").setStep(6);
             $("#step4").show();
@@ -805,7 +808,7 @@ function btnUnclick() {
     $("#btn4").removeClass("btn-info");
     $("#btn_ConfirmResult").attr('disabled', true);
     $("#btn_ConfirmResult").removeClass("btn-info");
-    $("#restartTomcat_btn").attr('disabled',true);
+    $("#restartTomcat_btn").attr('disabled', true);
     $("#backPublish").attr('disabled', true);
     $("#nextPublish").attr('disabled', true);
     //$("#refreshCDN").attr('disabled',true);
@@ -839,7 +842,7 @@ function nextPublish(nowPublish) {
 }
 
 //审批功能
-function approvalBtn(){
+function approvalBtn() {
     $.ajax({
         async: false,
         type: "post",
@@ -849,13 +852,13 @@ function approvalBtn(){
         url: "/publish/update/approval",
         datatype: "json",
         success: function (data) {
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if (!data.callbackMsg) {
+                data = JSON.parse(data);
             }
-            if(data.callbackMsg=="Error") {
+            if (data.callbackMsg == "Error") {
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
-            }else{
+            } else {
                 nebula.common.alert.success(data.responseContext, 1000);
                 window.location.reload();
             }
@@ -880,19 +883,19 @@ function approvalBtn(){
 }
 
 //错误数点击事件
-function errorNumClick(hostName,type){
+function errorNumClick(hostName, type) {
     $("#hostName_modal").val(hostName);
     $("#publishDatetime_modal").val($("#publishDatetime").text());
     //设置开关为开启状态
     $('#freshControl_switch').bootstrapSwitch('setState', true);
-    if($("#publishEndTime").val()){
+    if ($("#publishEndTime").val()) {
         $("#freshControl_div").hide();
         $('#freshControl_switch').bootstrapSwitch('setState', false);
         $("#pageSort").show();
         $("#logEndTime_modal").val($("#publishEndTime").val());
-        $("#logEndTime_modal").attr('disabled',true);
+        $("#logEndTime_modal").attr('disabled', true);
         $()
-    }else {
+    } else {
         $("#logEndTime_modal").val(new Date().Format("yyyy-MM-dd hh:mm:ss"));
     }
     //$("#keyWord_modal").val("ERROR");
@@ -905,14 +908,14 @@ function errorNumClick(hostName,type){
     logFrenshControl(1);
     //$("#keyWord_modal").change(logFrenshControl);
     //过滤框内容变更事件
-    $("#keyWord_modal").change(function(){
+    $("#keyWord_modal").change(function () {
         logFrenshControl(1)
     })
     //模态框关闭事件
-    $("#close_logModal_pan").click(function(){
+    $("#close_logModal_pan").click(function () {
         $("#isclosed_modal").val("1");
     })
-    $("#close_logModal_btn").click(function(){
+    $("#close_logModal_btn").click(function () {
         $("#isclosed_modal").val("1");
     });
     //点击空白或ESC不能取消模态框
@@ -920,17 +923,17 @@ function errorNumClick(hostName,type){
     //$('#logModal').modal('show');
 }
 //自动刷新日志文件
-function logFrenshControl(pageNum,currentPage){
-    if( $("#isclosed_modal").val()==1){
+function logFrenshControl(pageNum, currentPage) {
+    if ($("#isclosed_modal").val() == 1) {
         return;
     }
-    if($('#freshControl_checkbox').prop("checked")){
-        if($("#publishEndTime").val()){
+    if ($('#freshControl_checkbox').prop("checked")) {
+        if ($("#publishEndTime").val()) {
             $("#logEndTime_modal").val($("#publishEndTime").val());
-        }else {
+        } else {
             $('#logEndTime_modal').val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
         }
-        setTimeout(logFrenshControl,2000);
+        setTimeout(logFrenshControl, 2000);
     }
     //else{
     //    //clearTimeout(global_setTimeout);
@@ -939,34 +942,34 @@ function logFrenshControl(pageNum,currentPage){
         type: "POST",
         url: "/publish/log/getPublishLogByHost",
         data: {
-            host:$("#hostName_modal").val(),
-            eventId:$("#eventId").val(),
-            keyWord:$("#keyWord_modal").val(),
-            toDateString:$("#logEndTime_modal").val(),
-            pageNum:pageNum,
-            pageSize:10,
+            host: $("#hostName_modal").val(),
+            eventId: $("#eventId").val(),
+            keyWord: $("#keyWord_modal").val(),
+            toDateString: $("#logEndTime_modal").val(),
+            pageNum: pageNum,
+            pageSize: 10,
         },
         //async: true,
         success: function (data) {
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if (!data.callbackMsg) {
+                data = JSON.parse(data);
             }
-            if(data.callbackMsg=="Error") {
+            if (data.callbackMsg == "Error") {
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
             }
-            var tbLogString="";
-            for(var i= 0,len=data.responseContext["list"].length;i<len;i++){
-                var logInfo=data.responseContext["list"][i];
-                var elkUrl="http://elk.stage.900jit.com/#/doc/logstash-*/"+logInfo.index+"/tomcat?id="+logInfo.id+"&_g=()"
-                tbLogString+="<tr>"+
-                    "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>"+logInfo.message+"</div></td>"+
-                    "<td class='tdTopControl'><a href='"+elkUrl+"'target=_blank >详情</a></td>"
+            var tbLogString = "";
+            for (var i = 0, len = data.responseContext["list"].length; i < len; i++) {
+                var logInfo = data.responseContext["list"][i];
+                var elkUrl = "http://elk.stage.900jit.com/#/doc/logstash-*/" + logInfo.index + "/tomcat?id=" + logInfo.id + "&_g=()";
+                tbLogString += "<tr>" +
+                    "<td style='WORD-WRAP: break-word'><div class='doc-viewer'>" + logInfo.message + "</div></td>" +
+                    "<td class='tdTopControl'><a href='" + elkUrl + "'target=_blank >详情</a></td>"
                 "</tr>"
             }
             $("#logInfoTb_modal").html(tbLogString);
             //停止自动刷新时
-            if(!$('#freshControl_checkbox').prop("checked")) {
+            if (!$('#freshControl_checkbox').prop("checked")) {
                 var totalPage = data.responseContext["pages"];
                 //$('#pagination').twbsPagination({
                 //    totalPages: totalPage,
@@ -976,19 +979,19 @@ function logFrenshControl(pageNum,currentPage){
                 //        logAjax(page);
                 //    }
                 //});
-                (function() {
+                (function () {
                     $('#pageSort').pagination({
                         pages: totalPage,
                         styleClass: ['pagination-large'],
                         showCtrl: true,
                         displayPage: 6,
-                        currentPage:currentPage,
+                        currentPage: currentPage,
                         onSelect: function (num) {
                             $("#logInfoTb_modal").html("");
-                            logFrenshControl(num,num);  //分页点击
+                            logFrenshControl(num, num);  //分页点击
                         }
                     });
-                    $('#pageSort').pagination('updatePages',totalPage);
+                    $('#pageSort').pagination('updatePages', totalPage);
                 })();
 
             }
@@ -997,7 +1000,6 @@ function logFrenshControl(pageNum,currentPage){
             $.notify({
                 icon: '',
                 message: "获取日志失败，原因：" + errorThrown
-
             }, {
                 type: 'danger',
                 timer: 1000
@@ -1047,62 +1049,72 @@ function logFrenshControl(pageNum,currentPage){
 //}
 
 //结束时间失焦事件
-function endTimeOnblur(){
+function endTimeOnblur() {
     $("#endTimecheck_modal").val($("#logEndTime_modal").val());
 }
 //结束时间获取焦点事件
-function endTimeOnfocus(){
-    if($("#endTimecheck_modal").val()==0){
+function endTimeOnfocus() {
+    if ($("#endTimecheck_modal").val() == 0) {
         return;
     }
     var oldTime = (new Date($("#endTimecheck_modal").val())).getTime();
     var newTime = (new Date($("#logEndTime_modal").val())).getTime();
-    if(Math.abs((newTime-oldTime)/60000)>=1){
+    if (Math.abs((newTime - oldTime) / 60000) >= 1) {
         $('#freshControl_switch').bootstrapSwitch('setState', false);
         logFrenshControl(1);
     }
 }
 
 //获取slb信息
-function getSlbInfo(){
+function getSlbInfo() {
     $.ajax({
-        type:"POST",
-        url:"/publish/list/describeLoadBalancerAttributes",
-        data:{eventId:$("#eventId").val()},
+        type: "POST",
+        url: "/publish/list/describeLoadBalancerAttributes",
+        data: {eventId: $("#eventId").val()},
         success: function (data) {
-            var slbTbString="";
-            for(var i= 0,len=data.responseContext.length;i<len;i++){
-                var slbInfo=data.responseContext[i];
-                var slbHostInfo="";
-                if(data.responseContext[i].describeHealthStatusResponse!=null){
-                    slbHostInfo=data.responseContext[i].describeHealthStatusResponse.backendServers;
+            var slbTbString = "";
+            for (var i = 0, len = data.responseContext.length; i < len; i++) {
+                var slbInfo = data.responseContext[i];
+                var slbHostInfo = "";
+                if (data.responseContext[i].describeHealthStatusResponse != null) {
+                    slbHostInfo = data.responseContext[i].describeHealthStatusResponse.backendServers;
                 }
-                var hostInfoString="";
-                var loadBalancerStatus="";
-                for(var j= 0,leng=slbHostInfo.length;j<leng;j++){
-                    var serverHealthStatus="";
-                    switch (slbHostInfo[j].serverHealthStatus){
-                        case "normal":serverHealthStatus+="<span class='label label-success'>"+slbHostInfo[j].serverHealthStatus+"</span>";break;
-                        case "abnormal":serverHealthStatus+="<span class='label label-danger'>"+slbHostInfo[j].serverHealthStatus+"</span>";break;
-                        default:serverHealthStatus+="<span class='label label-default'>"+slbHostInfo[j].serverHealthStatus+"</span>";
+                var hostInfoString = "";
+                var loadBalancerStatus = "";
+                for (var j = 0, leng = slbHostInfo.length; j < leng; j++) {
+                    var serverHealthStatus = "";
+                    switch (slbHostInfo[j].serverHealthStatus) {
+                        case "normal":
+                            serverHealthStatus += "<span class='label label-success'>" + slbHostInfo[j].serverHealthStatus + "</span>";
+                            break;
+                        case "abnormal":
+                            serverHealthStatus += "<span class='label label-danger'>" + slbHostInfo[j].serverHealthStatus + "</span>";
+                            break;
+                        default:
+                            serverHealthStatus += "<span class='label label-default'>" + slbHostInfo[j].serverHealthStatus + "</span>";
                     }
-                    if(j!=0){
-                        hostInfoString+="<br/>";
+                    if (j != 0) {
+                        hostInfoString += "<br/>";
                     }
-                    hostInfoString+="<div class='col-md-7'>"+slbHostInfo[j].serverId+":</div><div class='col-md-5'>"+serverHealthStatus+"</div>";
+                    hostInfoString += "<div class='col-md-7'>" + slbHostInfo[j].serverId + ":</div><div class='col-md-5'>" + serverHealthStatus + "</div>";
                 }
                 //hostInfoString=hostInfoString+"<br/>"+"sdsd"+":"+"bbb";
-                switch (slbInfo.loadBalancerStatus){
-                    case "inactive":loadBalancerStatus+="<span class='label label-danger'>"+slbInfo.loadBalancerStatus+"</span>";break;
-                    case "active":loadBalancerStatus+="<span class='label label-success'>"+slbInfo.loadBalancerStatus+"</span>";break;
-                    default:loadBalancerStatus+="<span class='label label-default'>"+slbInfo.loadBalancerStatus+"</span>";
+                switch (slbInfo.loadBalancerStatus) {
+                    case "inactive":
+                        loadBalancerStatus += "<span class='label label-danger'>" + slbInfo.loadBalancerStatus + "</span>";
+                        break;
+                    case "active":
+                        loadBalancerStatus += "<span class='label label-success'>" + slbInfo.loadBalancerStatus + "</span>";
+                        break;
+                    default:
+                        loadBalancerStatus += "<span class='label label-default'>" + slbInfo.loadBalancerStatus + "</span>";
                 }
-                slbTbString+="<tr>"+
-                    "<td>"+slbInfo.loadBalancerName+"</td>"+
-                    "<td>"+slbInfo.loadBalancerAddress+"</td>"+
-                    "<td>"+slbInfo.loadBalancerId+"</td>"+
-                    "<td>"+loadBalancerStatus+"</td>"+
-                    "<td class='col-md-4'>"+hostInfoString+"</td>";
+                slbTbString += "<tr>" +
+                    "<td>" + slbInfo.loadBalancerName + "</td>" +
+                    "<td>" + slbInfo.loadBalancerAddress + "</td>" +
+                    "<td>" + slbInfo.loadBalancerId + "</td>" +
+                    "<td>" + loadBalancerStatus + "</td>" +
+                    "<td class='col-md-4'>" + hostInfoString + "</td>";
                 "</tr>"
             }
             $("#slbInfo_tb").html(slbTbString);
@@ -1121,40 +1133,46 @@ function getSlbInfo(){
 }
 
 //查看下一发布阶段
-function checkNextPublish(eventId){
+function checkNextPublish(eventId) {
     location.href = "/publish/process.htm?id=" + eventId;
 }
 
 //查看上一发布阶段
-function checkLastPublish(){
+function checkLastPublish() {
     $.ajax({
-        type:"POST",
-        url:"/publish/getLastPublishId",
+        type: "POST",
+        url: "/publish/getLastPublishId",
         async: false,
-        data:{
-            eventId:$("#eventId").val()
+        data: {
+            eventId: $("#eventId").val()
         },
-        success:function(data){
+        success: function (data) {
             location.href = "/publish/process.htm?id=" + data.responseContext;
         },
-        error:function(errorThrown){
-            nebula.common.alert.danger("获取事件Id失败，原因："+errorThrown, 1000);
+        error: function (errorThrown) {
+            nebula.common.alert.danger("获取事件Id失败，原因：" + errorThrown, 1000);
         }
     });
 }
 //查看发布阶段按钮名称控制
-function checkPublishBtnSet(){
-    switch ($("#publishEnv").text()){
+function checkPublishBtnSet() {
+    switch ($("#publishEnv").text()) {
         case "test1":
         case "test2":
-        case "test3":$("#checkNext_btn").text("查看准生产环境");break;
-        case "stage":$("#checkNext_btn").text("查看生产环境");$("#checkLast_btn").text("查看测试环境");break;
-        default:$("#checkLast_btn").text("查看准生产环境");
+        case "test3":
+            $("#checkNext_btn").text("查看准生产环境");
+            break;
+        case "stage":
+            $("#checkNext_btn").text("查看生产环境");
+            $("#checkLast_btn").text("查看测试环境");
+            break;
+        default:
+            $("#checkLast_btn").text("查看准生产环境");
     }
 }
 
 //验证动态验证码
-function verificationCodeBtn(){
+function verificationCodeBtn() {
     $.ajax({
         async: false,
         type: "post",
@@ -1164,10 +1182,10 @@ function verificationCodeBtn(){
         url: "/publish/isTotpCodeValid",
         datatype: "json",
         success: function (data) {
-            if(!data.callbackMsg){
-                data=JSON.parse(data);
+            if (!data.callbackMsg) {
+                data = JSON.parse(data);
             }
-            if(data.callbackMsg=="Error") {
+            if (data.callbackMsg == "Error") {
                 nebula.common.alert.danger(data.responseContext, 1000);
                 return;
             }
@@ -1194,7 +1212,7 @@ function verificationCodeBtn(){
 }
 
 //发布变更
-function showChangeListModal(){
+function showChangeListModal() {
     $('#changeModal').modal('show');
 }
 
